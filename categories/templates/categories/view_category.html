@@ -1,0 +1,33 @@
+{% extends 'categories/base.html' %}
+{% block title %} Category {% endblock title %}
+
+{% block searchbar %}
+<form class="form-inline" action="{% url 'results_qa' %}" method="GET">
+    <input class="form-control mr-sm-2" type="search" name="q" placeholder="Search" aria-label="Search">
+    <input class="btn btn-outline-success my-2 my-sm-0" type="submit" value="Search">
+</form>
+{% endblock searchbar %}
+
+{% block content %}
+<style>
+    a {
+        text-decoration: none !important;
+    }
+</style>
+<h1 class="text-center">{{category.title}}</h1>
+<br>
+
+    {% for q_and_a in q_and_as %}
+    <br>
+<div class="card w-75">
+    <div class="card-body">
+        <a href="{% url 'view_qanda' q_and_a.id %}">
+            <h3 class="card-title">{{q_and_a.title}}</h3>
+        </a>
+        <small
+            class="text-break form-text text-muted card-text">{{q_and_a.description|striptags|truncatechars:40}}</small>
+
+    </div>
+</div>
+    {% endfor %}
+{% endblock content %}

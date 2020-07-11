@@ -1,0 +1,36 @@
+{% extends 'categories/base.html' %}
+{% block title %}View Comment {% endblock title %}
+
+
+
+{% block content %}
+
+<h1 class="text-left">{{comment.title}}</h1>
+<div class="container">
+    <p>{{comment.description}}</p>
+</div>
+<hr>
+<form method="POST">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="description">Add Answer</label>
+        <textarea type="text" name="description" class="form-control" required></textarea>
+    </div>
+    <!-- {{form.as_p}} -->
+    <input class="btn btn-primary" type="submit">
+</form>
+<br>
+{{replies.count}} Answer{{replies.count|pluralize}}
+<hr>
+{% for reply in replies %}
+<div class="card w-75">
+    <div class="card-body">
+        <h5 style="display: inline;" class="card-title">{{reply.user}}</h5> 
+        <small style="display: inline;" class="form-text text-muted">{{ reply.reply_date }}</small>
+        <br>
+        <p class="card-text">{{reply.description}}</p>
+    </div>
+</div>
+{% endfor %}
+<!-- reply button, replies -->
+{% endblock content %}

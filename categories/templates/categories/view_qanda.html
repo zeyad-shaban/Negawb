@@ -1,0 +1,11 @@
+{% extends 'categories/base.html' %}
+{% block title %} Q and A {% endblock title %}
+
+{% block content %}
+<div class="text-left">
+    <h1>{{qanda.title}}</h1>
+<div class="container">
+    <p class="text-break">{{qanda.description|safe}}</p>
+</div>
+</div>
+{% endblock content %}

@@ -1,0 +1,38 @@
+{% extends 'categories/base.html' %}
+{% block title %} Home Page {% endblock title %}
+
+{% block searchbar %}
+<form class="form-inline" action="{% url 'results' %}" method="GET">
+    <input class="form-control mr-sm-2" type="search" name="q" placeholder="Search" aria-label="Search">
+    <input class="btn btn-outline-success my-2 my-sm-0" type="submit" value="Search">
+</form>
+{% endblock searchbar %}
+{% block content %}
+
+<div class="jumbotron">
+    <h1>All Categories</h1>
+    <p class="form-text text-muted">We have {{categories.count}} categories and more soon</p>
+    <div class="text-right">
+    <h4>About</h4>
+    <p>مجموعه من المتخصصين في شتي المجالات.. خبرات مهنيه ومعرفيه.. مستعدون طوال الوقت لتقديم المشوره والاجابه علي الأسئله وانجاز أي عمل او مهمه او فكره..</p>
+</div>
+</div>
+<div class="row row-cols-1 row-cols-md-3">
+    {% for category in categories %}
+    <div class="col mb-4">
+        <div class="card">
+            <a href="{% url 'view_category' category.id %}">
+                <img src="{{ category.image.url }}" class="card-img-top" alt="Couldn't upload category image">
+            </a>
+            <div class="card-body">
+                <h5 class="card-title">{{ category.title }}</h5>
+                {% if category.description %}
+                <p class="card-text">{{ category.description }}</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock content %}

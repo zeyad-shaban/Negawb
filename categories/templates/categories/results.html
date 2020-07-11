@@ -1,0 +1,26 @@
+{% extends 'categories/base.html' %}
+{% block title %} Results {% endblock title %}
+{% block content %}
+</div>
+<div class="card mb-3" style="max-width: 540px;">
+{% for result in results %}
+    <div class="row no-gutters">
+        <div class="col-md-4">
+            <a href="{% url 'view_category' result.id %}">
+            <img src="{{result.image.url}}" class="card-img" alt="...">
+            </a>
+        </div>
+        <div class="col-md-8">
+            <div class="card-body">
+                <h5 class="card-title">{{result.title}}</h5>
+                {% if result.description %}
+                <p class="card-text">{{result.description}}</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endfor %}
+</div>
+
+
+{% endblock content %}
