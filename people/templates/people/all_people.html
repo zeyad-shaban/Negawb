@@ -1,0 +1,15 @@
+{% extends 'categories/base.html' %}
+
+{% block title %}All People{% endblock title %}
+
+{% block searchbar %}
+<!-- todo add Search Bar -->
+{% endblock searchbar %}
+    
+{% block content %}
+    <!-- todo style users -->
+    {% for user in users %}
+        {{user.username}}
+    {% endfor %}
+        
+{% endblock content %}

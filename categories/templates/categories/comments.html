@@ -36,7 +36,9 @@
 {% for comment in comments %}
 <div class="card">
     <div class="card-header">
-        {{ comment.user}}
+        <a href="{% url 'people:people' comment.user.id %}">
+            {{ comment.user}}
+        </a>
         <small class="form-text text-muted">{{ comment.comment_date }}</small>
     </div>
     <div class="card-body">
@@ -44,7 +46,7 @@
         <h5 class="card-title">{{comment.title}}</h5>
         {% endif %}
         <p class="card-text text-break">{{ comment.description|truncatechars:300 }}</p>
-        <a href="{% url 'view_comment' comment.id %}" class="btn btn-primary" target="_blank">View Comment, Reply</a>
+        <a href="{% url 'view_comment' comment.id %}" class="btn btn-primary">View Comment, Reply</a>
     </div>
 </div>
 {% endfor %}

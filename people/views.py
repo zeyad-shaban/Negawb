@@ -8,7 +8,11 @@ def people(request, people_id):
     user = get_object_or_404(User, pk = people_id)
     return render(request, 'people/index.html', {'user': user})
 
-#todo add people comment
-def people_questions(request, people_questions_id):
-    questions = Comment.objects.filter(User = people_questions_id)
-    return render(request, 'people/peoplequestions.html')
+def people_questions(request, peoplequestions_id):
+    user = get_object_or_404(User, pk=peoplequestions_id)
+    questions = Comment.objects.filter(user = user)
+    return render(request, 'people/peoplequestions.html',{'questions':questions})
+
+def all_people(request):
+    users = User.objects.all()
+    return render(request,'people/all_people.html', {'users':users})

@@ -6,6 +6,7 @@ from django.conf import settings
 app_name = 'people'
 
 urlpatterns = [
+    path('',views.all_people,name='all_people'),
     path('<int:people_id>/', views.people, name='people'),
     path('questions/<int:peoplequestions_id>/', views.people_questions, name='people_questions'),
 ]

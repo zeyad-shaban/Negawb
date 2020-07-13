@@ -49,6 +49,9 @@
                 <li class="nav-item">
                     <a href="{% url 'comments' %}">Ask Question</a>
                 </li>
+                <li class="nav-item">
+                    <a href="{% url 'people:all_people' %}">All Users</a>
+                </li>
                 {% if user.is_authenticated %}
                 <li class="nav-item">
                     <a href="{% url 'userpage:home' %}">User Page</a>

@@ -125,8 +125,7 @@
                 <div class="fb-profile-block-menu">
                     <div class="block-menu">
                         <ul>
-                            <!-- todo edit this to redirect user to people page -->
-                            <li><a href="#">Questions Asked</a></li>
+                            <li><a href="{% url 'people:people_questions' user.id %}">Questions Asked</a></li>
                             <li><a href="#">Questions Answered</a></li>
                         </ul>
                     </div>
