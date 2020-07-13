@@ -1,19 +1,19 @@
 {% extends 'categories/base.html' %}
 
-{% block title %}All People{% endblock title %}
 
+{% block title %}Search User | {{query}}{% endblock title %}
 {% block searchbar %}
 <form class="form-inline" action="{% url 'people:all_peopleresults' %}" method="GET">
     <input class="form-control mr-sm-2" type="search" name="q" placeholder="Search" aria-label="Search">
     <input class="btn btn-outline-success my-2 my-sm-0" type="submit" value="Search">
 </form>
 {% endblock searchbar %}
-
 {% block content %}
-<!-- todo style users -->
-{% for user in users %}
-{{user.username}}
-<br><br>
-{% endfor %}
-
+    
+    {% for result in results %}
+        {{result.username}}
+        <br>
+    {% endfor %}
+        
 {% endblock content %}
+    

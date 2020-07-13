@@ -7,6 +7,7 @@ app_name = 'people'
 
 urlpatterns = [
     path('',views.all_people,name='all_people'),
+    path('results',views.all_peopleresults, name='all_peopleresults'),
     path('<int:people_id>/', views.people, name='people'),
     path('questions/<int:peoplequestions_id>/', views.people_questions, name='people_questions'),
 ]
