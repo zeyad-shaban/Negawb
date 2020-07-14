@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Category, QAndA, Comment, Reply
+from .models import Category, Comment, Reply
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
@@ -18,12 +18,13 @@ def home(request):
 def view_category(request, category_id):
     global category
     category = get_object_or_404(Category, pk=category_id)
-    q_and_as = QAndA.objects.filter(category=category)
-    return render(request, 'categories/view_category.html', {'category': category, 'q_and_as': q_and_as})
+    comments = Comment.objects.filter(category=category)
+    return render(request, 'categories/view_category.html', {'category': category, 'comments': comments})
 
+@login_required
 def view_qanda(request, qanda_id):
-    qanda = get_object_or_404(QAndA, pk=qanda_id)
-    return render(request, 'categories/view_qanda.html', {'qanda': qanda})
+    comment = get_object_or_404(Comment, pk=qanda_id)
+    return render(request, 'categories/view_qanda.html', {'comment': comment})
 
 
 def comments(request):
@@ -61,7 +62,7 @@ def results(request):
 
 def results_qa(request):
     query = request.GET.get('q')
-    results = QAndA.objects.filter(Q(title__icontains=query) | Q(description__icontains=query), category=category)
+    results = Comment.objects.filter(Q(title__icontains=query) | Q(description__icontains=query), category=category)
     return render(request, 'categories/results_qa.html', {'results':results})
 
 

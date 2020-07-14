@@ -17,15 +17,15 @@
 <h1 class="text-center">{{category.title}}</h1>
 <br>
 
-    {% for q_and_a in q_and_as %}
+    {% for comment in comments %}
     <br>
 <div class="card w-75">
     <div class="card-body">
-        <a href="{% url 'view_qanda' q_and_a.id %}">
-            <h3 class="card-title">{{q_and_a.title}}</h3>
+        <a href="{% url 'view_qanda' comment.id %}">
+            <h3 class="card-title">{{comment.title}}</h3>
         </a>
         <small
-            class="text-break form-text text-muted card-text">{{q_and_a.description|striptags|truncatechars:40}}</small>
+            class="text-break form-text text-muted card-text">{{comment.description|striptags|truncatechars:40}}</small>
 
     </div>
 </div>

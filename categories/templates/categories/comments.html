@@ -28,7 +28,10 @@
         <label for="description">Description</label>
         <textarea name='description' class="form-control" id="description" required></textarea>
     </div>
-    <!-- {{form.as_p}} -->
+    <div class="form-group">
+        <label for="category">Category</label>
+        {{form.category}}
+    </div>
     <input class="btn btn-success" type="submit" value="Add Comment">
 </form>
 <br>

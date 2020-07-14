@@ -1,12 +1,8 @@
 from django.contrib import admin
-from .models import Category, QAndA, Comment, Reply
+from .models import Category, Comment, Reply
 
 
 admin.site.register(Category)
-class QAndAAdmin(admin.ModelAdmin):
-    readonly_fields = ('published',)
-admin.site.register(QAndA)
-
 class CommentAdmin(admin.ModelAdmin):
     readonly_fields= ('comment_date',)
 
