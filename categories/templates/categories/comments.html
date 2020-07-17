@@ -42,7 +42,8 @@
         <a href="{% url 'people:people' comment.user.id %}">
             {{ comment.user}}
         </a>
-        <small class="form-text text-muted">{{ comment.comment_date }}</small>
+        <small class="form-text text-muted">{{ comment.comment_date }}
+            <a href="{% url 'view_category' comment.category.id %}">{{comment.category}}</a></small>
     </div>
     <div class="card-body">
         {% if comment.title %}

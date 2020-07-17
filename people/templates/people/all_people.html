@@ -12,7 +12,19 @@
 {% block content %}
 <!-- todo style users -->
 {% for user in users %}
-{{user.username}}
+<div class="card" style="width: 18rem;">
+    <div class="card-body">
+        <a href="{% url 'people:people' user.id %}">
+            <h5 class="card-title float-left">{{user.username}}</h5>
+        </a>
+        {% if user.about %}
+        <p class="card-text">{{user.about}}</p>
+        {% endif %}
+        <!-- Todo add friends -->
+        <a href="#" class="btn btn-primary btn-sm float-right">Add Friend</a>
+    </div>
+</div>
+
 <br><br>
 {% endfor %}
 

@@ -7,7 +7,7 @@ class Category(models.Model):
     image = models.ImageField(upload_to='images')
 
     def __str__(self):
-        return f'title: {self.title}'
+        return self.title
 
 
 class Comment(models.Model):
