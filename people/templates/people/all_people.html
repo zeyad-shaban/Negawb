@@ -21,11 +21,10 @@
         <p class="card-text">{{user.about}}</p>
         {% endif %}
         <!-- Todo add friends -->
-        <a href="#" class="btn btn-primary btn-sm float-right">Add Friend</a>
+        <a href="{% url 'people:addfriend' user.id %}" class="btn btn-primary btn-sm float-right">Add Friend</a>
     </div>
 </div>
 
 <br><br>
 {% endfor %}
-
 {% endblock content %}

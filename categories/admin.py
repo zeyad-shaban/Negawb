@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Comment, Reply
+from .models import Category, Comment, Reply, FriendRequest
 
 
 admin.site.register(Category)
@@ -12,3 +12,5 @@ class ReplyAdmin(admin.ModelAdmin):
     readonly_fields = ('reply_date',)
 
 admin.site.register(Reply, ReplyAdmin)
+
+admin.site.register(FriendRequest)

@@ -10,6 +10,7 @@ urlpatterns = [
     path('results',views.all_peopleresults, name='all_peopleresults'),
     path('<int:people_id>/', views.people, name='people'),
     path('questions/<int:peoplequestions_id>/', views.people_questions, name='people_questions'),
+    path('addfriend/<int:user_id>', views.addfriend, name='addfriend')
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
