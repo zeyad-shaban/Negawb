@@ -6,13 +6,20 @@
 
 {{requests.count}} Friend Request{{requests.count|pluralize}}
 <br>
-{% for request in requests %}
-{{request.from_user}}
 <br>
-{{request.message}}
-<a class="btn btn-danger" href="{% url 'userpage:denyrequest' request.id%}">Deny</a>
-<hr>
+<br>
+<br>
+<br>
+{% for request in requests %}
+from: {{ request.from_user }}
+<br>
+to: {{ request.to_user }}
+<br>
+<a class="btn btn-danger float-left" href="{% url 'userpage:denyrequest' request.id%}">Deny</a>
+<form action="{% url 'userpage:acceptrequest' request.id %}" method="post">
+    {% csrf_token %}
+    <input type="submit" value="Accept" name="acceptrequest," class="btn btn-success ml-2">
+</form>
 {% endfor %}
-
 
 {% endblock content %}

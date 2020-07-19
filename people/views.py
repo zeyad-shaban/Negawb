@@ -2,8 +2,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from categories.models import Comment, Reply
 from django.contrib.auth.models import User
+from .models import FriendRequest
 from django.db.models import Q
-from .forms import FriendRequestForm
+
 
 def people(request, people_id):
     """ View Other Users Accounts """
@@ -19,14 +20,25 @@ def people_questions(request, peoplequestions_id):
 
 def all_people(request):
     users = User.objects.all()
-    return render(request, 'people/all_people.html', {'users': users, 'form':FriendRequestForm})
+    return render(request, 'people/all_people.html', {'users': users})
 
 
 def all_peopleresults(request):
     query = request.GET.get('q')
     results = User.objects.filter(Q(username__icontains=query))
-    return render(request, 'people/all_peopleresults.html', {'results':results, 'query':query, 'form':FriendRequestForm})
+    return render(request, 'people/all_peopleresults.html', {'results': results, 'query': query })
 
-def addfriend(request, user_id):
+def addfriend(request,user_id):
+    from_user = request.user
     to_user = get_object_or_404(User, pk=user_id)
-    return render(request, 'people/addfriend.html', {'to_user':to_user, 'form':FriendRequestForm})
+    if user_id==request.user.id:
+        users = User.objects.all()
+        return render(request, 'people/all_people.html', {'users': users, 'error': "Adding yourself 😭😿" })
+    else:
+        try:
+            friend_request = FriendRequest(from_user = from_user, to_user = to_user)
+            friend_request.save()
+            return redirect('people:all_people')
+        except:
+            users = User.objects.all()
+            return render(request, 'people/all_people.html', {'users': users})

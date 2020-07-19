@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Comment, Reply, FriendRequest
+from .models import Category, Comment, Reply
 
 
 admin.site.register(Category)
@@ -13,4 +13,3 @@ class ReplyAdmin(admin.ModelAdmin):
 
 admin.site.register(Reply, ReplyAdmin)
 
-admin.site.register(FriendRequest)

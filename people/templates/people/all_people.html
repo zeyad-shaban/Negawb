@@ -20,8 +20,11 @@
         {% if user.about %}
         <p class="card-text">{{user.about}}</p>
         {% endif %}
-        <!-- Todo add friends -->
-        <a href="{% url 'people:addfriend' user.id %}" class="btn btn-primary btn-sm float-right">Add Friend</a>
+        <!-- Todo add friends  lass="btn btn-primary btn-sm float-right"  -->
+        <form action="{% url 'people:addfriend' user.id%}" method="post">
+            {% csrf_token %}
+            <input type="submit" value="Add Friend" name="addfriend," class="btn btn-primary btn-sm float-right">
+        </form>
     </div>
 </div>
 

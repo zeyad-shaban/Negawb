@@ -11,8 +11,20 @@
 {% block content %}
     
     {% for result in results %}
-        {{result.username}}
-        <br>
+    <div class="card" style="width: 18rem;">
+        <div class="card-body">
+            <a href="{% url 'people:people' result.id %}">
+                <h5 class="card-title float-left">{{result.username}}</h5>
+            </a>
+            {% if result.about %}
+            <p class="card-text">{{result.about}}</p>
+            {% endif %}
+            <!-- Todo add friends -->
+            <a href="{% url 'people:addfriend' result.id %}" class="btn btn-primary btn-sm float-right">Add Friend</a>
+        </div>
+    </div>
+    
+    <br><br>
     {% endfor %}
         
 {% endblock content %}

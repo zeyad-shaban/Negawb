@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from categories.models import Comment, Reply, FriendRequest
+from categories.models import Comment, Reply
+from people.models import FriendRequest
 from django.contrib.auth.models import User
 
 
@@ -24,3 +25,10 @@ def denyrequest(request, request_id):
     denied_request = get_object_or_404(FriendRequest, pk=request_id)
     denied_request.delete()
     return redirect('userpage:friendrequests')
+
+def requestssent(request):
+    requests = FriendRequest.objects.filter(from_user= request.user)
+    return render(request, 'userpage/requestssent.html', {'requests': requests})
+
+def acceptrequest(request, request_id):
+    return redirect('home')
