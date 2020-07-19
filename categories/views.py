@@ -1,11 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Category, Comment, Reply
 from django.http import HttpResponse
-from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from .forms import CommentForm, ReplyForm
 from django.db.models import Q
+from django.contrib.auth import get_user_model as user_model
+User  = user_model()
 
 category=1
 

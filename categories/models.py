@@ -1,9 +1,10 @@
 from django.db import models
-from django.contrib.auth.models import User, AbstractUser
+from django.contrib.auth.models import AbstractUser
 
 
-# class CustomUser(AbstractUser):
-#     friends = models.ManyToManyField('CustomUser', blank=True)
+class User(AbstractUser):
+    # friends = models.ManyToManyField('CustomUser', blank=True)
+    about = models.CharField(max_length=200, default='Hey! This website is so cool and Free Of Distraction!')
 
 
 class Category(models.Model):
