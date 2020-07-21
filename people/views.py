@@ -29,7 +29,7 @@ def all_peopleresults(request):
     results = User.objects.filter(Q(username__icontains=query))
     return render(request, 'people/all_peopleresults.html', {'results': results, 'query': query})
 
-
+@login_required
 def addfriend(request, user_id):
     from_user = request.user
     to_user = get_object_or_404(User, pk=user_id)
@@ -44,4 +44,4 @@ def addfriend(request, user_id):
             return redirect('people:all_people')
         except:
             users = User.objects.all()
-            return render(request, 'people/all_people.html', {'users': users})
+            return render(request, 'people/all_people.html', {'users': users, 'error': 'something went wrong'})

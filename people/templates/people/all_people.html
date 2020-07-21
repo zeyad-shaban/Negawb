@@ -15,10 +15,10 @@
 <div class="card" style="width: 18rem;">
     <div class="card-body">
         <a href="{% url 'people:people' user.id %}">
-            <h5 class="card-title float-left">{{user.username}}</h5>
+            <h4 class="card-title ">{{user.username}}</h4>
         </a>
         {% if user.about %}
-        <p class="card-text">{{user.about}}</p>
+        <p class="form-text text-muted card-text">{{user.about}}</p>
         {% endif %}
         <!-- Todo add friends  lass="btn btn-primary btn-sm float-right"  -->
         <form action="{% url 'people:addfriend' user.id%}" method="post">

@@ -3,8 +3,8 @@ from django.contrib.auth.models import AbstractUser
 
 
 class User(AbstractUser):
-    # friends = models.ManyToManyField('CustomUser', blank=True)
-    about = models.CharField(max_length=200, default='Hey! This website is so cool and Free Of Distraction!')
+    friends = models.ManyToManyField('User', blank=True)
+    about = models.CharField(max_length=400, default='I love this website!')
 
 
 class Category(models.Model):

@@ -14,11 +14,11 @@
     <div class="card" style="width: 18rem;">
         <div class="card-body">
             <a href="{% url 'people:people' result.id %}">
-                <h5 class="card-title float-left">{{result.username}}</h5>
+                <h5 class="card-title">{{result.username}}</h5>
             </a>
-            {% if result.about %}
-            <p class="card-text">{{result.about}}</p>
-            {% endif %}
+            {% if user.about %}
+        <p class="form-text text-muted card-text">{{user.about}}</p>
+        {% endif %}
             <!-- Todo add friends -->
             <a href="{% url 'people:addfriend' result.id %}" class="btn btn-primary btn-sm float-right">Add Friend</a>
         </div>

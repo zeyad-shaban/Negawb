@@ -1,0 +1,13 @@
+{% extends 'categories/base.html' %}
+
+{% block title %}Friends{% endblock title %}
+
+
+{% block content %}
+    
+{{friends.count}}
+    {% for friend in friends %}
+        {{friend.username}}
+    {% endfor %}
+
+{% endblock content %}

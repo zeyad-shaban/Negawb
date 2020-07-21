@@ -16,6 +16,10 @@ def questions(request):
     questions = Comment.objects.filter(user=request.user)
     return render(request, 'userpage/questions.html', {'questions': questions})
 
+def friends(request):
+    friends = User.objects.filter(friends= request.user)
+    return render(request, 'userpage/friends.html', {'friends': friends})
+
 
 def friendrequests(request):
     requests = FriendRequest.objects.filter(to_user=request.user)
@@ -35,4 +39,12 @@ def requestssent(request):
 
 
 def acceptrequest(request, request_id):
-    return redirect('home')
+    friend_request = get_object_or_404(FriendRequest, pk=request_id)
+    from_user = request.user
+    to_user = friend_request.from_user
+
+    from_user.friends.add(to_user)
+    to_user.friends.add(from_user)
+    friend_request.delete()
+
+    return redirect('userpage:friendrequests')

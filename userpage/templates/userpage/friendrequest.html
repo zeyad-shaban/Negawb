@@ -16,7 +16,7 @@ from: {{ request.from_user }}
 to: {{ request.to_user }}
 <br>
 <a class="btn btn-danger float-left" href="{% url 'userpage:denyrequest' request.id%}">Deny</a>
-<form action="{% url 'userpage:acceptrequest' request.id %}" method="post">
+<form action="{% url 'userpage:acceptrequest' request.id %}" method="POST">
     {% csrf_token %}
     <input type="submit" value="Accept" name="acceptrequest," class="btn btn-success ml-2">
 </form>
