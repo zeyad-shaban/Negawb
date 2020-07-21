@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from categories.models import Comment, Reply
 from people.models import FriendRequest
+from django.contrib import messages
 from django.contrib.auth import get_user_model as user_model
 User = user_model()
 
@@ -48,3 +49,10 @@ def acceptrequest(request, request_id):
     friend_request.delete()
 
     return redirect('userpage:friendrequests')
+
+def update_avatar(request):
+    request.user.avatar = request.POST['avatar']
+    request.user.save()
+    messages.success(request, 'Updated Avatar Successfuly')
+    messages.info(request, request.user.avatar)
+    return redirect('userpage:home')
