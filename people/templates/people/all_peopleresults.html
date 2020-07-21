@@ -14,7 +14,7 @@
     <div class="card" style="width: 18rem;">
         <div class="card-body">
             <a href="{% url 'people:people' result.id %}">
-                <h5 class="card-title">{{result.username}}</h5>
+                <h4 class="card-title">{{result.username}}</h4>
             </a>
             {% if user.about %}
         <p class="form-text text-muted card-text">{{user.about}}</p>
