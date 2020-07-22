@@ -4,6 +4,8 @@ from categories.models import Comment, Reply
 from people.models import FriendRequest
 from django.contrib import messages
 from .forms import UserForm
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model as user_model
 User = user_model()
 
@@ -15,10 +17,20 @@ def home(request):
     if request.method == 'GET':
         return render(request, 'userpage/index.html', {'user': user, 'form': form})
     else:
-        form = UserForm(request.POST, instance=request.user)
-        form.save()
-        messages.success(request, request.POST['avatar'])
-        return redirect('userpage:home')
+        try:
+            validate_email(request.POST['email'])
+            form = UserForm(data=request.POST,
+                            files=request.FILES, instance=request.user)
+            form.save()
+            messages.success(request, 'Updated successfully')
+            return redirect('userpage:home')
+        except ValidationError:
+            messages.warning(request, 'Invalid email address')
+            return redirect('userpage:home')
+        except:
+            messages.warning(
+                request, 'unknown error occured, please make sure all your data are correct')
+            return redirect('userpage:home')
 
 
 def questions(request):
