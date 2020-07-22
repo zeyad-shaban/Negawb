@@ -41,13 +41,18 @@
             max-width: 42px;
             border-radius: 100%;
         }
+
+        .nav-item .dropdown-menu .dropdown-item {
+            color: black !important;
+        }
     </style>
 </head>
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="{% url 'home' %}">Negawb</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        <a class="navbar-brand" href="{% url 'home' %}">
+            <img src="#" width="30" height="30" alt="Website Logo" loading="lazy">
+        </a> <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -69,12 +74,27 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto ml-">
                 <li class="nav-item">
-                    <a href="{% url 'comments' %}">Ask Question</a>
+                    <a href="{% url 'comments' %}" title="All Questions and Ask">Ask Question</a>
                 </li>
 
                 <li class="nav-item">
-                    <a href="{% url 'people:all_people' %}">All Users</a>
+                    <a href="{% url 'people:all_people' %}">Find Friends</a>
                 </li>
+                {% if user.is_authenticated %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Create & Add
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{% url 'comments' %}">Question</a>
+                        <!-- Todo add chat group and feedback form -->
+                        <a class="dropdown-item" href="#">Chat Group</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">FeedBack</a>
+                    </div>
+                </li>
+                {% endif %}
                 {% if user.is_authenticated %}
                 <li class="nav-item">
                     <form action="{% url 'makeuser:logoutuser' %}" method="POST">
@@ -94,11 +114,11 @@
         </div>
     </nav>
     {% if messages %}
-    
+
     {% for message in messages %}
-        <div class="alert alert-{{message.tags}}">{{message}}</div>
+    <div class="alert alert-{{message.tags}}">{{message}}</div>
     {% endfor %}
-        
+
     {% endif %}
     {% if error %}<div class="alert alert-danger">{{ error }}</div>{% endif %}
     <div class="container">
