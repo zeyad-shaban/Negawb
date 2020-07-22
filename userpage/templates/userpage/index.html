@@ -143,19 +143,5 @@
     </div>
 </div>
 
-<form action="{% url 'userpage:update_avatar' %}" method="POST" class="form-inline">
-    {% csrf_token %}
-    <div class="input-group">
-        <div class="custom-file">
-            <label class="custom-file-label" for="id_avatarimage">Change Image</label>
-            <input type="file" name='avatar' class="custom-file-input" id="id_avatarimage"
-                aria-describedby="inputGroupFileAddon04" accept="image/*">
-        </div>
-        <div class="input-group-append">
-            <input type="submit" class="btn btn-outline-secondary" type="button" id="inputGroupFileAddon04"
-                value="Update">
-        </div>
-    </div>
 
-</form>
 {% endblock content %}
