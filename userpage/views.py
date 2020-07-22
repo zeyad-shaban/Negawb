@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from categories.models import Comment, Reply
 from people.models import FriendRequest
 from django.contrib import messages
+from .forms import UserForm
 from django.contrib.auth import get_user_model as user_model
 User = user_model()
 
@@ -10,15 +11,23 @@ User = user_model()
 @login_required
 def home(request):
     user = request.user
-    return render(request, 'userpage/index.html', {'user': user})
+    form = UserForm(instance=request.user)
+    if request.method == 'GET':
+        return render(request, 'userpage/index.html', {'user': user, 'form': form})
+    else:
+        form = UserForm(request.POST, instance=request.user)
+        form.save()
+        messages.success(request, request.POST['avatar'])
+        return redirect('userpage:home')
 
 
 def questions(request):
     questions = Comment.objects.filter(user=request.user)
     return render(request, 'userpage/questions.html', {'questions': questions})
 
+
 def friends(request):
-    friends = User.objects.filter(friends= request.user)
+    friends = User.objects.filter(friends=request.user)
     return render(request, 'userpage/friends.html', {'friends': friends})
 
 
@@ -49,6 +58,9 @@ def acceptrequest(request, request_id):
     friend_request.delete()
 
     return redirect('userpage:friendrequests')
+
+# todo delete this shit
+
 
 def update_avatar(request):
     request.user.avatar = request.POST['avatar']
