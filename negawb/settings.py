@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'makeuser',
     'userpage',
     'people',
+    'comments'
 ]
 
 MIDDLEWARE = [

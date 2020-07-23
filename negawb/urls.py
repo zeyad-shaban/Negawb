@@ -22,17 +22,18 @@ from django.conf import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home, name='home'),
+    path('comments/', include('comments.urls'), name='comments'),
     path('about/', views.about, name='about'),
     path('category/<int:category_id>/', views.view_category, name='view_category'),
     path('QA/<int:qanda_id>/', views.view_qanda, name='view_qanda'),
-    path('comments/', views.comments, name='comments'),
+    # path('comments/', views.comments, name='comments'),
     path('user/', include('makeuser.urls'), name='user'),
     path('userpage/', include('userpage.urls'), name='userpage'),
     path('people/', include('people.urls'), name='people'),
-    path('comment/<int:comment_id>/', views.view_comment, name='view_comment'),
+    # path('comment/<int:comment_id>/', views.view_comment, name='view_comment'),
     path('results/', views.results, name='results'),
     path('qaresults/', views.results_qa, name='results_qa'),
-    path('commentresults/', views.results_comment, name='results_comment'),
+    # path('commentresults/', views.results_comment, name='results_comment'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

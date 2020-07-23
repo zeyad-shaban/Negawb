@@ -16,7 +16,7 @@
         <label for="description">Add Answer</label>
         <textarea type="text" name="description" class="form-control" required></textarea>
     </div>
-    <input class="btn btn-primary" type="submit">
+    <input class="btn btn-primary" type="submit" value="Submit Answer">
 </form>
 <br>
 {{replies.count}} Answer{{replies.count|pluralize}}
@@ -31,5 +31,4 @@
     </div>
 </div>
 {% endfor %}
-<!-- reply button, replies -->
 {% endblock content %}

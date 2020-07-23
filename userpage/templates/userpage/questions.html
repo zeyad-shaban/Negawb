@@ -16,7 +16,7 @@
         {% endif %}
         <div class="card-body">
             <p class="card-text text-break">{{ question.description|truncatechars:300 }}</p>
-            <a class="btn btn-primary" href="{% url 'view_comment' question.id %}">View Question</a>
+            <a class="btn btn-primary" href="{% url 'comments:view_comment' question.id %}">View Question</a>
 
         </div>
     </div>

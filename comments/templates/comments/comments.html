@@ -2,7 +2,7 @@
 {% block title %} Comments {% endblock title %}
 
 {% block searchbar %}
-<form class="form-inline" action="{% url 'results_comment' %}" method="GET">
+<form class="form-inline" action="{% url 'comments:results_comment' %}" method="GET">
     <input class="form-control mr-sm-2" type="search" name="q" placeholder="Search" aria-label="Search">
     <input class="btn btn-outline-success my-2 my-sm-0" type="submit" value="Search">
 </form>
@@ -10,12 +10,16 @@
 
 {% block content %}
 <br>
+{% if user.is_authenticated %}
 <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#addComment" aria-expanded="false"
-    aria-controls="addComment">
-    Ask Question
-</button>
-<p>Comment{{ comments.count|pluralize }} Found: {{comments.count}}</p>
+    aria-controls="addComment">Ask Question</button>
+
+{% else %}
+<div class="alert alert-danger">you can't add or view comments unless you are logged in</div>
+{% endif %}
+<p>Comment{{ comments.count|pluralize }}: {{comments.count}}</p>
 <br>
+<!-- Add Comoment -->
 <div class="collapse" id="addComment">
     <form id="create-comment" method="POST">
         {% csrf_token %}
@@ -35,6 +39,7 @@
     </form>
     <br>
 </div>
+
 <!-- end add comment -->
 {% for comment in comments %}
 <div class="card">
@@ -42,14 +47,15 @@
         <a href="{% url 'people:people' comment.user.id %}">
             {{ comment.user}}
         </a>
-        <small class="form-text text-muted">{{ comment.comment_date }}</small>
+        <small class="form-text text-muted">{{ comment.comment_date }}
+            <a href="{% url 'view_category' comment.category.id %}">{{comment.category}}</a></small>
     </div>
     <div class="card-body">
         {% if comment.title %}
         <h5 class="card-title">{{comment.title}}</h5>
         {% endif %}
         <p class="card-text text-break">{{ comment.description|truncatechars:300 }}</p>
-        <a href="{% url 'view_comment' comment.id %}" class="btn btn-primary">View Comment, Reply</a>
+        <a href="{% url 'comments:view_comment' comment.id %}" class="btn btn-primary">View Comment, Reply</a>
     </div>
 </div>
 {% endfor %}

@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from categories.models import Comment, Reply
+from comments.models import Comment, Reply
 from .models import FriendRequest
 from django.db.models import Q
 from django.contrib import messages

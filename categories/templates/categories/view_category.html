@@ -2,7 +2,7 @@
 {% block title %} Comments {% endblock title %}
 
 {% block searchbar %}
-<form class="form-inline" action="{% url 'results_comment' %}" method="GET">
+<form class="form-inline" action="{% url 'comments:results_comment' %}" method="GET">
     <input class="form-control mr-sm-2" type="search" name="q" placeholder="Search" aria-label="Search">
     <input class="btn btn-outline-success my-2 my-sm-0" type="submit" value="Search">
 </form>
@@ -45,7 +45,7 @@
         <h5 class="card-title">{{comment.title}}</h5>
         {% endif %}
         <p class="card-text text-break">{{ comment.description|truncatechars:300 }}</p>
-        <a href="{% url 'view_comment' comment.id %}" class="btn btn-primary">View Comment, Reply</a>
+        <a href="{% url 'comments:view_comment' comment.id %}" class="btn btn-primary">View Comment, Reply</a>
     </div>
 </div>
 {% endfor %}

@@ -72,7 +72,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto ml-">
                 <li class="nav-item">
-                    <a href="{% url 'comments' %}" title="All Questions and Ask">Ask Question</a>
+                    <a href="{% url 'comments:comments' %}" title="All Questions and Ask">Ask Question</a>
                 </li>
 
                 <li class="nav-item">
@@ -85,7 +85,7 @@
                         Create & Add
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="{% url 'comments' %}">Question</a>
+                        <a class="dropdown-item" href="{% url 'comments:comments' %}">Question</a>
                         <!-- Todo add chat group and feedback form -->
                         <a class="dropdown-item" href="#">Chat Group</a>
                         <div class="dropdown-divider"></div>
