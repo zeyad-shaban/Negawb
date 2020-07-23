@@ -1,7 +1,5 @@
 {% extends 'categories/base.html' %}
-
 {% block title %} {{user.username}} {% endblock title %}
-
 {% block content %}
 <style>
     .fb-profile-block {
@@ -113,7 +111,7 @@
             <div class="fb-profile-block">
                 <div class="fb-profile-block-thumb cover-container"></div>
                 <div class="profile-img">
-                    <a href="#">
+                    <a href="{{ user.avatar.url }}">
                         <img src="{{ user.avatar.url }}" alt="User Image">
                     </a>
                 </div>
@@ -137,42 +135,50 @@
         </div>
     </div>
 </div>
-<div id="id_update_user_form">
-    <div class="row justify-content-center mt-5">
-        <div class="col-md-5">
-            <form action="" method="POST" enctype="multipart/form-data">
-                {% csrf_token %}
-                <div class="form-group">
-                    <label for="id_username">Username</label>
-                    <input type="text" class="form-control" name="username" id="id_username" maxlength=30 value="{{ user.username }}">
-                </div>
-                <div class="form-group">
-                    <label for="id_first_name">First Name</label>
-                    <input type="text" class="form-control" name="first_name" id="id_first_name" maxlength=30 value="{{ user.first_name }}">
-                </div>
-                <div class="form-group">
-                    <label for="id_last_name">Last Name</label>
-                    <input type="text" class="form-control" name="last_name" id="id_last_name" maxlength=30 value="{{ user.last_name }}">
-                </div>
-                <div class="form-group">
-                    <label for="id_email">Email</label>
-                    <input type="text" class="form-control" name="email" id="id_email" value="{{ user.email }}">
-                </div>
-                <div class="form-group">
-                    <label for="id_bio">Bio</label>
-                    <input type="text" class="form-control" name="bio" id="id_bio" value="{{ user.bio }}">
-                </div>
-                <div class="form-group">
-                    <p><label for="id_avatar">Avatar:</label>
-                        <input type="file" name="avatar" accept="image/*" id="id_avatar"></p>
+<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#editProfile" aria-expanded="false"
+    aria-controls="editProfile">
+    Edit Profile
+</button>
+<div class="collapse" id="editProfile">
+    <div id="id_update_user_form">
+        <div class="row justify-content-center mt-5">
+            <div class="col-md-5">
+                <form action="" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="id_username">Username</label>
+                        <input type="text" class="form-control" name="username" id="id_username" maxlength=30
+                            value="{{ user.username }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="id_first_name">First Name</label>
+                        <input type="text" class="form-control" name="first_name" id="id_first_name" maxlength=30
+                            value="{{ user.first_name }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="id_last_name">Last Name</label>
+                        <input type="text" class="form-control" name="last_name" id="id_last_name" maxlength=30
+                            value="{{ user.last_name }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="id_email">Email</label>
+                        <input type="text" class="form-control" name="email" id="id_email" value="{{ user.email }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="id_bio">Bio</label>
+                        <input type="text" class="form-control" name="bio" id="id_bio" value="{{ user.bio }}">
+                    </div>
+                    <div class="form-group">
+                        <p><label for="id_avatar">Avatar:</label>
+                            <input type="file" name="avatar" accept="image/*" id="id_avatar"></p>
                         <label for="id_vatar_clear">Clear Avatar</label>
                         <input type="checkbox" name="avatar-clear" id="id_avatar_clear">
-                </div>
-                    
-                <input type="submit" value="Update" class="btn btn-success" name="submit">
-            </form>
+                    </div>
+
+                    <input type="submit" value="Update" class="btn btn-success" name="submit">
+                </form>
+            </div>
         </div>
     </div>
 </div>
-
 {% endblock content %}
