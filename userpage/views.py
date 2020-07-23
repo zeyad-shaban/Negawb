@@ -52,6 +52,7 @@ def friendrequests(request):
 def denyrequest(request, request_id):
     denied_request = get_object_or_404(FriendRequest, pk=request_id)
     denied_request.delete()
+    messages.success(request, 'Friend Request denied')
     return redirect('userpage:friendrequests')
 
 
@@ -68,10 +69,9 @@ def acceptrequest(request, request_id):
     from_user.friends.add(to_user)
     to_user.friends.add(from_user)
     friend_request.delete()
-
+    messages.success(request, f'{to_user} is now a friend')
     return redirect('userpage:friendrequests')
 
-# todo delete this shit
 
 
 def update_avatar(request):

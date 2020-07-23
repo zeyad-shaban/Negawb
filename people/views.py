@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from categories.models import Comment, Reply
 from .models import FriendRequest
 from django.db.models import Q
+from django.contrib import messages
 from django.contrib.auth import get_user_model as user_model
 User = user_model()
 
@@ -41,6 +42,7 @@ def addfriend(request, user_id):
             friend_request = FriendRequest(
                 from_user=from_user, to_user=to_user)
             friend_request.save()
+            messages.success(request, f'Successfully sent Friend request to {to_user}')
             return redirect('people:all_people')
         except:
             users = User.objects.all()

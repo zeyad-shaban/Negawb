@@ -44,4 +44,3 @@ def loginuser(request):
 
 
 # TODO: add like method for comments
-# TODO: add user page
