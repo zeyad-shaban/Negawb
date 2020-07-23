@@ -5,13 +5,13 @@
 <head>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
         integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="icon" href="{% static 'categories/favicon.jpg' %}" type="image/png">
     <meta name="description" content="Want help in any field? Let our professional workers help you in it, 100% free">
     <meta name="keywords" content="negawb, ask, Question, answer, QandA, help, all, fields, free">
     <meta name="author" content="Zeyad Shaban">
     <meta charset=" UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %} {% endblock title %}</title>
-    <link rel="icon" href="{% static 'categories/favicon.jpg' %}" type="image/png">
 
     <style>
         .container {
@@ -133,17 +133,6 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
         integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous">
     </script>
-    <script>
-        $('#add-comment').on('click', function () {
-            $('#create-comment').toggle()
-            if ($('#add-comment').html() == 'Ask Question') {
-                $('#add-comment').html('Cancel')
-            } else {
-                $('#add-comment').html('Ask Question')
-            }
-        })
-    </script>
-
 </body>
 
 </html>

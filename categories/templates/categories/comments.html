@@ -11,30 +11,35 @@
 {% block content %}
 <br>
 {% if user.is_authenticated %}
-<button class="btn btn-primary" id="add-comment">Ask Question</button>
+<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#addComment" aria-expanded="false"
+    aria-controls="addComment">Ask Question</button>
+
 {% else %}
 <div class="alert alert-danger">you can't add or view comments unless you are logged in</div>
 {% endif %}
 <p>Comment{{ comments.count|pluralize }}: {{comments.count}}</p>
 <br>
 <!-- Add Comoment -->
-<form style="display:none;" id="create-comment" method="POST">
-    {% csrf_token %}
-    <div class="form-group">
-        <label for="title">Title</label>
-        <input type="text" name='title' class="form-control" id='title' placeholder="Optional">
-    </div>
-    <div class="form-group">
-        <label for="description">Description</label>
-        <textarea name='description' class="form-control" id="description" required></textarea>
-    </div>
-    <div class="form-group">
-        <label for="category">Category</label>
-        {{form.category}}
-    </div>
-    <input class="btn btn-success" type="submit" value="Add Comment">
-</form>
-<br>
+<div class="collapse" id="addComment">
+    <form id="create-comment" method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="title">Title</label>
+            <input type="text" name='title' class="form-control" id='title' placeholder="Optional">
+        </div>
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea name='description' class="form-control" id="description" required></textarea>
+        </div>
+        <div class="form-group">
+            <label for="category">Category</label>
+            {{form.category}}
+        </div>
+        <input class="btn btn-success" type="submit" value="Add Comment">
+    </form>
+    <br>
+</div>
+
 <!-- end add comment -->
 {% for comment in comments %}
 <div class="card">
