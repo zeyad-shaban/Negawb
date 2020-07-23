@@ -10,8 +10,8 @@ User = user_model()
 
 def people(request, people_id):
     """ View Other Users Accounts """
-    user = get_object_or_404(User, pk=people_id)
-    return render(request, 'people/index.html', {'user': user})
+    view_user = get_object_or_404(User, pk=people_id)
+    return render(request, 'people/index.html', {'view_user': view_user})
 
 
 def people_questions(request, peoplequestions_id):
