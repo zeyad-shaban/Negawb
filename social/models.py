@@ -17,7 +17,18 @@ class ChatBox(models.Model):
     user_2 = models.ForeignKey(
         User, related_name='user_2', on_delete=models.CASCADE)
     created_date = models.DateTimeField(auto_now_add=True)
-    messages = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return f'{self.user_1} | {self.user_2}'
+
+
+class Message(models.Model):
+    chat_box = models.ForeignKey(
+        ChatBox, related_name='chat_box', null=True, on_delete=models.CASCADE)
+    message_sender = models.ForeignKey(
+        User, related_name='message_sender', null=True, on_delete=models.CASCADE)
+    sent_date = models.DateTimeField(auto_now_add=True)
+    message = models.TextField()
+
+    def __str__(self):
+        return f'message_sender: {self.message_sender}, chat_box: {self.chat_box}'

@@ -72,26 +72,41 @@
 
 
 
-<!-- <div class="bubbleWrapper">
+
+{% for chat_message in chat_messages %}
+
+{% if chat_message.message_sender == user %}
+<div class="bubbleWrapper">
+    <div class="inlineContainer own">
+        <img class="inlineIcon" src="{{ user.avatar.url }}">
+        <div class="ownBubble own">
+            {{ chat_message.message }}
+        </div>
+    </div><span class="own">{{ chat_message.sent_date }}</span>
+</div>
+
+
+{% elif chat_message.message_sender == friend %}
+<div class="bubbleWrapper">
     <div class="inlineContainer">
         <img class="inlineIcon" src="{{ friend.avatar.url }}">
         <div class="otherBubble other">
-            No ninjas!
+            {{ chat_message.message }}
         </div>
-    </div><span class="other">08:41</span>
+    </div><span class="other">{{ chat_message.sent_date }}</span>
 </div>
-<div class="bubbleWrapper">
-    <div class="inlineContainer own">
-        <img class="inlineIcon"
-            src="{{ user.avatar.url }}">
-        <div class="ownBubble own">
-            The first rule of being a ninja is, 'Do no harm.'
-        </div>
-    </div><span class="own">08:55</span>
-</div> -->
+{% endif %}
+
+
+
+{% endfor %}
+
+
+
+
 <form action="" method="post" class="form-inline" enctype="multipart/form-data">
     {% csrf_token %}
-    <input type="text" name="messages" class="form-control" maxlength="50000" required>
+    <input type="text" name="message" class="form-control" maxlength="50000" required>
     <input type="submit" value="Send" class="btn btn-success">
 </form>
 {% endblock content %}
