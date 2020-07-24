@@ -49,8 +49,7 @@
                         <span class="small text-truncate">{{ result.bio }}</span>
 
 
-                        <form action="{% url 'social:create_ChatBox' friend.id%}" method="POST">
-                            {% csrf_token %}
+                        <form action="{% url 'social:create_ChatBox' friend.id%}" method="GET">
                             <input type="submit" value="Chat" name="displayChat" class="btn btn-primary float-right">
                         </form>
 

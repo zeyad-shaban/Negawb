@@ -47,8 +47,7 @@
                         <span class="fa fa-fw fa-envelope fa-fw text-muted" data-toggle="tooltip" title="Bio"
                             data-original-title="{{ friend.bio }}"></span>
                         <span class="small text-truncate">{{ friend.bio }}</span>
-                        <form action="{% url 'social:create_ChatBox' friend.id%}" method="POST">
-                            {% csrf_token %}
+                        <form action="{% url 'social:create_ChatBox' friend.id%}" method="GET">
                             <input type="submit" value="Chat" name="displayChat" class="btn btn-primary float-right">
                         </form>
                     </div>
