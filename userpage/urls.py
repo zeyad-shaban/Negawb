@@ -13,7 +13,9 @@ urlpatterns = [
     path('requestssent/', views.requestssent, name='requestssent'),
     path('acceptrequest/<int:request_id>/', views.acceptrequest, name='acceptrequest'),
     path('friends/', views.friends, name='friends'),
+    # todo check if updateavatar is used
     path('updateavatar/', views.update_avatar, name='update_avatar'),
+    path('friends/result', views.friendsresult, name='friendsresult'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

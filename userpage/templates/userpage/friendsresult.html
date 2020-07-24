@@ -16,41 +16,44 @@
 <div class="card card-default" id="card_contacts">
     <div id="contacts" class="panel-collapse collapse show" aria-expanded="true">
         <ul class="list-group pull-down" id="contact-list">
-            {% for friend in friends %}
+            {% for result in results %}
             <li class="list-group-item">
                 <div class="row w-100">
                     <div class="col-12 col-sm-6 col-md-3 px-0">
-                        <a href="{% url 'people:people' friend.id %}">
-                            <img src="{{ friend.avatar.url }}" alt="{{ friend.username }}"
+                        <a href="{% url 'people:people' result.id %}">
+                            <img src="{{ result.avatar.url }}" alt="{{ result.username }}"
                                 class="img-fluid rounded-circle d-block mx-auto" height="73" width="73">
                         </a>
                     </div>
 
                     <div class="col-12 col-sm-6 col-md-9 text-center text-sm-left">
-                        <a href="{% url 'people:people' friend.id %}">
-                            <label class="name lead">{{ friend.username }}</label>
+                        <a href="{% url 'people:people' result.id %}">
+                            <label class="name lead">{{ result.username }}</label>
                         </a>
                         <br>
 
-                        {% if friend.phone %}
+                        {% if result.phone %}
                         <span class="fa fa-fw fa-phone fa-fw text-muted" data-toggle="tooltip" title="Phone Number"
-                            data-original-title="{{ friend.phone }}"></span>
-                        <span class="text-muted small">{{ friend.phone }}</span>
+                            data-original-title="{{ result.phone }}"></span>
+                        <span class="text-muted small">{{ result.phone }}</span>
                         <br>
                         {% endif %}
-                        {% if friend.email %}
+                        {% if result.email %}
                         <span class="fa fa-fw fa-envelope fa-fw text-muted" data-toggle="tooltip" title="Email"
-                            data-original-title="{{ friend.email }}"></span>
-                        <span class="text-muted small text-truncate">{{ friend.email }}</span>
+                            data-original-title="{{ result.email }}"></span>
+                        <span class="text-muted small text-truncate">{{ result.email }}</span>
                         <br>
                         {% endif %}
                         <span class="fa fa-fw fa-envelope fa-fw text-muted" data-toggle="tooltip" title="Bio"
-                            data-original-title="{{ friend.bio }}"></span>
-                        <span class="small text-truncate">{{ friend.bio }}</span>
+                            data-original-title="{{ result.bio }}"></span>
+                        <span class="small text-truncate">{{ result.bio }}</span>
+
+
                         <form action="{% url 'social:create_ChatBox' friend.id%}" method="POST">
                             {% csrf_token %}
                             <input type="submit" value="Chat" name="displayChat" class="btn btn-primary float-right">
                         </form>
+
                     </div>
                 </div>
             </li>

@@ -6,6 +6,7 @@ from django.contrib import messages
 from .forms import UserForm
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
+from django.db.models import Q
 from django.contrib.auth import get_user_model as user_model
 User = user_model()
 
@@ -80,3 +81,9 @@ def update_avatar(request):
     messages.success(request, 'Updated Avatar Successfuly')
     messages.info(request, request.user.avatar)
     return redirect('userpage:home')
+
+
+def friendsresult(request):
+    query = request.GET.get('q')
+    results = User.objects.filter(Q(username__icontains = query), friends = request.user)
+    return render(request, 'userpage/friendsresult.html', {'results':results})
