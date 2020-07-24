@@ -68,6 +68,13 @@
         font-size: 14px;
         color: grey;
     }
+
+    #sendBtn {
+
+        background: transparent;
+        border: none !important;
+        font-size: 0;
+    }
 </style>
 
 
@@ -106,7 +113,10 @@
 
 <form action="" method="post" class="form-inline" enctype="multipart/form-data">
     {% csrf_token %}
-    <input type="text" name="message" class="form-control" maxlength="50000" required>
-    <input type="submit" value="Send" class="btn btn-success">
+    <input type="text" name="message" class="form-control" maxlength="50000" placeholder="Write something to send"
+        required>
+    <button type="submit" id="sendBtn"> <img src="{% static 'categories/SendButton.png' %}" width="150"
+            alt="Send" loading="lazy">
+    </button>
 </form>
 {% endblock content %}
