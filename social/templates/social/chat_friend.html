@@ -88,7 +88,7 @@
         {% if user.who_see_avatar == 'everyone' or user.who_see_avatar == 'friends' %}
         <img class="inlineIcon" src="{{ user.avatar.url }}">
         {% else %}
-        <img class="inlineIcon" src="" alt={{user.username}}>
+        <img class="inlineIcon" src="/media/profile_images/DefaultUserImage.jpg" alt={{user.username}}>
         {% endif %}
         <div class="ownBubble own">
             {{ chat_message.message }}
@@ -103,7 +103,7 @@
         {% if friend.who_see_avatar == 'everyone' or friend.who_see_avatar == 'friends' %}
         <img class="inlineIcon" src="{{ friend.avatar.url }}">
         {% else %}
-        <img class="inlineIcon" src="" alt="{{firend.username}}">
+        <img class="inlineIcon" src="/media/profile_images/DefaultUserImage.jpg" alt="{{firend.username}}">
         {% endif %}
         <div class="otherBubble other">
             {{ chat_message.message }}

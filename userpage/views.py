@@ -20,17 +20,18 @@ def home(request):
         return render(request, 'userpage/index.html', {'user': user, 'form': form, 'privacy_form': privacy_form})
     elif request.POST['submit'] == 'Update':
         try:
-            validate_email(request.POST['email'])
+            if request.POST['email']:
+                validate_email(request.POST['email'])
             form = UserForm(data=request.POST,
                             files=request.FILES, instance=request.user)
             form.save()
             messages.success(request, 'Updated successfully')
             return redirect('userpage:home')
         except ValidationError:
-            messages.warning(request, 'Invalid email address')
+            messages.error(request, 'Invalid email address')
             return redirect('userpage:home')
         except:
-            messages.warning(
+            messages.error(
                 request, 'unknown error occured, please try again and report a feedback so we can fix this error')
             return redirect('userpage:home')
     elif request.POST['submit'] == 'Update Privacy':

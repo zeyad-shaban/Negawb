@@ -11,7 +11,8 @@ User = user_model()
 def people(request, people_id):
     """ View Other Users Accounts """
     view_user = get_object_or_404(User, pk=people_id)
-    return render(request, 'people/index.html', {'view_user': view_user})
+    friends = User.objects.filter(friends=view_user)
+    return render(request, 'people/index.html', {'view_user': view_user, 'friends': friends,})
 
 
 def people_questions(request, peoplequestions_id):
@@ -22,13 +23,14 @@ def people_questions(request, peoplequestions_id):
 
 def all_people(request):
     users = User.objects.all()
-    return render(request, 'people/all_people.html', {'users': users})
+    return render(request, 'people/all_people.html', {'users': users, })
 
 
 def all_peopleresults(request):
     query = request.GET.get('q')
     results = User.objects.filter(Q(username__icontains=query))
     return render(request, 'people/all_peopleresults.html', {'results': results, 'query': query})
+
 
 @login_required
 def addfriend(request, user_id):
@@ -43,9 +45,11 @@ def addfriend(request, user_id):
             friend_request = FriendRequest(
                 from_user=from_user, to_user=to_user)
             friend_request.save()
-            messages.success(request, f'Successfully sent Friend request to {to_user}')
+            messages.success(
+                request, f'Successfully sent Friend request to {to_user}')
             return redirect('people:all_people')
         except:
             users = User.objects.all()
-            messages.error(request, 'Something went wrong, please try again and make sure to report a feedback so we can fix this error')
+            messages.error(
+                request, 'Something went wrong, please try again and make sure to report a feedback so we can fix this error')
             return redirect('people:all_people')
