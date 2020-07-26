@@ -3,6 +3,7 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, logout, authenticate
 from django.db import IntegrityError
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.contrib.auth import get_user_model as user_model
 User = user_model()
 
@@ -19,9 +20,11 @@ def signupuser(request):
                 login(request, user)
                 return redirect('home')
             except IntegrityError:
-                return render(request, 'makeuser/signupuser.html', {'form': UserCreationForm, 'error': 'Username is already taken, please choose another one'})
+                messages.error(request, 'Username is already taken, please choose another one')
+                return redirect('makeuser:signupuser')
         else:
-            return render(request, 'makeuser/signupuser.html', {'form': UserCreationForm, 'error': 'Passwords didn\'t match, please try again'})
+            messages.error(request, 'Passwords didn\'t match, please try again')
+            return redirect('makeuser:signupuser')
 
 
 def logoutuser(request):
@@ -37,7 +40,8 @@ def loginuser(request):
         user = authenticate(
             request, username=request.POST['username'], password=request.POST['password'])
         if user is None:
-            return render(request, 'makeuser/loginuser.html', {'form': AuthenticationForm, 'error': 'We couldn\'t find user or wrong password, please try again'})
+            messages.error(request, 'The username that you\'ve entered doesn\'t match any account. Or password didn\'t match')
+            return redirect('makeuser:loginuser')
         else:
             login(request, user)
             return redirect('home')

@@ -31,7 +31,7 @@ def home(request):
             return redirect('userpage:home')
         except:
             messages.warning(
-                request, 'unknown error occured, please make sure all your data are correct')
+                request, 'unknown error occured, please try again and report a feedback so we can fix this error')
             return redirect('userpage:home')
     elif request.POST['submit'] == 'Update Privacy':
         form = UserPrivacyForm(data = request.POST, files = request.FILES, instance=request.user)

@@ -36,7 +36,8 @@ def addfriend(request, user_id):
     to_user = get_object_or_404(User, pk=user_id)
     if user_id == request.user.id:
         users = User.objects.all()
-        return render(request, 'people/all_people.html', {'users': users, 'error': "Adding yourself 😭😿"})
+        messages.error(request, 'Adding yourself 😭😿')
+        return redirect('people:all_people')
     else:
         try:
             friend_request = FriendRequest(
@@ -46,4 +47,5 @@ def addfriend(request, user_id):
             return redirect('people:all_people')
         except:
             users = User.objects.all()
-            return render(request, 'people/all_people.html', {'users': users, 'error': 'something went wrong'})
+            messages.error(request, 'Something went wrong, please try again and make sure to report a feedback so we can fix this error')
+            return redirect('people:all_people')

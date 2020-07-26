@@ -3,7 +3,7 @@ from .models import Comment, Reply
 from django.contrib.auth.decorators import login_required
 from .forms import CommentForm, ReplyForm
 from django.db.models import Q
-
+from django.contrib import messages
 
 def comments(request):
     comments = Comment.objects.all().order_by('-comment_date')
@@ -17,7 +17,8 @@ def comments(request):
             comment.save()
             return redirect('comments:comments')
         except ValueError:
-            return render(request, 'comments/comments.html', {'comments': comments, 'form': CommentForm, 'error': 'Title must be 0-40 character'})
+            messages.error(request, 'Title must be 0-40 character')
+            return redirect('comments:comments')
 
 
 @login_required

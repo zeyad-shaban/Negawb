@@ -8,7 +8,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %} {% endblock title %}</title>
-    <link rel="icon" href="{% static 'categories/favicon.jpg' %}" type="image/png">>
+    <link rel="icon" href="{% static 'categories/favicon.jpg' %}" type="image/png">
 </head>
 
 <body>
@@ -16,6 +16,15 @@
     <div class="alert alert-danger" role="alert">
         {{error}}
     </div>
+    {% endif %}
+    {% if messages %}
+    {% for message in messages %}
+    {% if message.tags == 'error' %}
+    <div class="alert alert-danger">{{message}}</div>
+    {% else %}
+    <div class="alert alert-{{message.tags}}">{{message}}</div>
+    {% endif %}
+    {% endfor %}
     {% endif %}
     <div class="container">
         {% block content %}
