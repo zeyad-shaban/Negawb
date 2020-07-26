@@ -85,7 +85,11 @@
 {% if chat_message.message_sender == user %}
 <div class="bubbleWrapper">
     <div class="inlineContainer own">
+        {% if user.who_see_avatar == 'everyone' or user.who_see_avatar == 'friends' %}
         <img class="inlineIcon" src="{{ user.avatar.url }}">
+        {% else %}
+        <img class="inlineIcon" src="" alt={{user.username}}>
+        {% endif %}
         <div class="ownBubble own">
             {{ chat_message.message }}
         </div>
@@ -96,7 +100,11 @@
 {% elif chat_message.message_sender == friend %}
 <div class="bubbleWrapper">
     <div class="inlineContainer">
+        {% if friend.who_see_avatar == 'everyone' or friend.who_see_avatar == 'friends' %}
         <img class="inlineIcon" src="{{ friend.avatar.url }}">
+        {% else %}
+        <img class="inlineIcon" src="" alt="{{firend.username}}">
+        {% endif %}
         <div class="otherBubble other">
             {{ chat_message.message }}
         </div>
