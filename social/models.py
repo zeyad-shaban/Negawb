@@ -32,3 +32,14 @@ class Message(models.Model):
 
     def __str__(self):
         return f'message_sender: {self.message_sender}, chat_box: {self.chat_box}'
+
+
+class ChatGroup(models.Model):
+    image = models.ImageField(upload_to='group_images',
+                            default='static/categories/logo.png')
+    members = models.ManyToManyField(User, related_name='group_memebers')
+    title = models.CharField(max_length=75)
+    is_public = models.BooleanField(default=False)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    group_admins = models.ManyToManyField(User, related_name='gropu_admins')
+    created_date = models.DateTimeField(auto_now_add=True)
