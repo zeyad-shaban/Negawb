@@ -38,7 +38,7 @@
                         <span class="text-muted small">{{ friend.phone }}</span>
                         <br>
                         {% endif %}
-                        {% if friend.email %}
+                        {% if friend.email and friend.show_email == True %}
                         <span class="fa fa-fw fa-envelope fa-fw text-muted" data-toggle="tooltip" title="Email"
                             data-original-title="{{ friend.email }}"></span>
                         <span class="text-muted small text-truncate">{{ friend.email }}</span>

@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from comments.models import Comment, Reply
 from people.models import FriendRequest
 from django.contrib import messages
-from .forms import UserForm
+from .forms import UserForm, UserPrivacyForm
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 from django.db.models import Q
@@ -15,9 +15,10 @@ User = user_model()
 def home(request):
     user = request.user
     form = UserForm(instance=request.user)
+    privacy_form = UserPrivacyForm(instance=request.user)
     if request.method == 'GET':
-        return render(request, 'userpage/index.html', {'user': user, 'form': form})
-    else:
+        return render(request, 'userpage/index.html', {'user': user, 'form': form, 'privacy_form': privacy_form})
+    elif request.POST['submit'] == 'Update':
         try:
             validate_email(request.POST['email'])
             form = UserForm(data=request.POST,
@@ -32,6 +33,11 @@ def home(request):
             messages.warning(
                 request, 'unknown error occured, please make sure all your data are correct')
             return redirect('userpage:home')
+    elif request.POST['submit'] == 'Update Privacy':
+        form = UserPrivacyForm(data = request.POST, files = request.FILES, instance=request.user)
+        form.save()
+        messages.success(request, 'Successfully updated privacy settings')
+        return redirect('userpage:home')
 
 
 def questions(request):
@@ -75,12 +81,6 @@ def acceptrequest(request, request_id):
 
 
 
-def update_avatar(request):
-    request.user.avatar = request.POST['avatar']
-    request.user.save()
-    messages.success(request, 'Updated Avatar Successfuly')
-    messages.info(request, request.user.avatar)
-    return redirect('userpage:home')
 
 
 def friendsresult(request):

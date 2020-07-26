@@ -1,6 +1,6 @@
 from django.forms import ModelForm
-from .models import User
-
+from django.contrib.auth import get_user_model as user_model
+User = user_model()
 
 class UserForm(ModelForm):
     """Update User after creating it from user page"""
@@ -10,5 +10,10 @@ class UserForm(ModelForm):
 
         model = User
         fields = ('username', 'email', 'first_name', 'last_name', 'bio', 'avatar')
+
+class UserPrivacyForm(ModelForm):
+    class Meta:
+        model = User
+        fields = ('show_email',)
 
 # username, email, first_name, last_name, date_joined and last_login, password

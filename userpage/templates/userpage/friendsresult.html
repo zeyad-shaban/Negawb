@@ -38,7 +38,7 @@
                         <span class="text-muted small">{{ result.phone }}</span>
                         <br>
                         {% endif %}
-                        {% if result.email %}
+                        {% if result.email and result.show_email == True %}
                         <span class="fa fa-fw fa-envelope fa-fw text-muted" data-toggle="tooltip" title="Email"
                             data-original-title="{{ result.email }}"></span>
                         <span class="text-muted small text-truncate">{{ result.email }}</span>
