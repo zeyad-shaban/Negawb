@@ -19,4 +19,10 @@ class UserPrivacyForm(ModelForm):
         model = User
         fields = ('show_email', 'who_see_avatar',)
 
+class UserPasswordForm(ModelForm):
+
+    class Meta:
+        model = User
+        fields = ('password',)
+
 # username, email, first_name, last_name, date_joined and last_login, password

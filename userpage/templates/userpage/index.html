@@ -134,17 +134,22 @@
         </div>
     </div>
 </div>
-<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#editProfile" aria-expanded="false"
-    aria-controls="editProfile">
-    Edit Profile
-</button>
 
 
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editProfile"
+    data-whatever="editProfile">Edit Profile</button>
 
-<div class="collapse" id="editProfile">
-    <div id="id_update_user_form">
-        <div class="row justify-content-center mt-5">
-            <div class="col-md-5">
+<div class="modal fade " id="editProfile" tabindex="-1" role="dialog" aria-labelledby="editProfileLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Edit {{user.username}} Profile</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
                 <form action="" method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="form-group">
@@ -186,14 +191,19 @@
 
 
 
-<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#privacySettings"
-    aria-expanded="false" aria-controls="privacySettings">
-    Privacy
-</button>
-<div class="collapse" id="privacySettings">
-    <div id="id_update_user_form">
-        <div class="row justify-content-center mt-5">
-            <div class="col-md-5">
+
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#privacy"
+    data-whatever="privacy">Privacy</button>
+<div class="modal fade " id="privacy" tabindex="-1" role="dialog" aria-labelledby="privacyLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Update Privacy</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
                 <form action="" method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
                     {{privacy_form.as_p}}
@@ -203,4 +213,36 @@
         </div>
     </div>
 </div>
+
+
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#changePassword"
+    data-whatever="changePassword">Change Password</button>
+<div class="modal fade " id="changePassword" tabindex="-1" role="dialog" aria-labelledby="changePasswordLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Change Password</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- todo change password -->
+                <form action="" name="changePassword" method="post">
+                    {% csrf_token %}
+                    <label for="id_password">Old Password</label>
+                    <input type="password" name="password" id="id_password" class="form-control" required>
+                    <label for="id_password1">New Password</label>
+                    <input type="password" name="password1" id="id_password1" class="form-control" required>
+                    <label for="id_password2">Confirm Password</label>
+                    <input type="password" name="password2" id="id_password2" class="form-control" required>
+                    <input type="submit" name="submit" value="Update Password" class="btn btn-success">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 {% endblock content %}

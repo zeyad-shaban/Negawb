@@ -3,10 +3,11 @@ from django.contrib.auth.decorators import login_required
 from comments.models import Comment, Reply
 from people.models import FriendRequest
 from django.contrib import messages
-from .forms import UserForm, UserPrivacyForm
+from .forms import UserForm, UserPrivacyForm, UserPasswordForm
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 from django.db.models import Q
+from django.contrib.auth import authenticate
 from django.contrib.auth import get_user_model as user_model
 User = user_model()
 
@@ -17,7 +18,7 @@ def home(request):
     form = UserForm(instance=request.user)
     privacy_form = UserPrivacyForm(instance=request.user)
     if request.method == 'GET':
-        return render(request, 'userpage/index.html', {'user': user, 'form': form, 'privacy_form': privacy_form})
+        return render(request, 'userpage/index.html', {'user': user, 'form': form, 'privacy_form': privacy_form,'password_change_form': PasswordChangeForm})
     elif request.POST['submit'] == 'Update':
         try:
             if request.POST['email']:
@@ -35,9 +36,28 @@ def home(request):
                 request, 'unknown error occured, please try again and report a feedback so we can fix this error')
             return redirect('userpage:home')
     elif request.POST['submit'] == 'Update Privacy':
-        form = UserPrivacyForm(data = request.POST, files = request.FILES, instance=request.user)
+        form = UserPrivacyForm(
+            data=request.POST, files=request.FILES, instance=request.user)
         form.save()
         messages.success(request, 'Successfully updated privacy settings')
+        return redirect('userpage:home')
+    elif request.POST['submit'] == 'Update Password':
+        user = authenticate(
+            request, username=request.user.username, password=request.POST['password'])
+        if user:
+            if request.POST['password1'] == request.POST['password2']:
+                # try:
+                user = UserPasswordForm(request.POST, instance=request.user)
+                user.save()
+                user.set_password(request.POST['password1'])
+                messages.success(request, 'Successfully changed password')
+                # except:
+                #     messages.error(request,'Unknown error occured, please try again and report a feedback so we can fix this error')
+            else:
+                messages.error(request, 'Passwords didn\'t match')
+        else:
+            messages.error(request, 'Username and Old password didn\'t match')
+
         return redirect('userpage:home')
 
 
@@ -81,10 +101,8 @@ def acceptrequest(request, request_id):
     return redirect('userpage:friendrequests')
 
 
-
-
-
 def friendsresult(request):
     query = request.GET.get('q')
-    results = User.objects.filter(Q(username__icontains = query), friends = request.user)
-    return render(request, 'userpage/friendsresult.html', {'results':results})
+    results = User.objects.filter(
+        Q(username__icontains=query), friends=request.user)
+    return render(request, 'userpage/friendsresult.html', {'results': results})
