@@ -23,9 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'w90xi5jlxz0=1=es)_f!(_kn^gvu%rsc&j8r@f^wa4&xsw-w!d'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['localhost']
+ALLOWED_HOSTS = ['zeyadshapan.pythonanywhere.com']
 
 
 # Application definition
@@ -129,7 +129,8 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT= os.path.join(BASE_DIR, 'media')
 LOGIN_URL = '/user/login/'
 AUTH_USER_MODEL = 'userpage.User'
-# try:
-#     from .local_settings import *
-# except ImportError:
-#     print('On Production')
+
+try:
+    from .local_settings import *
+except ImportError:
+    pass
