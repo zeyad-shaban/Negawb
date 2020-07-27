@@ -18,7 +18,7 @@ def home(request):
     form = UserForm(instance=request.user)
     privacy_form = UserPrivacyForm(instance=request.user)
     if request.method == 'GET':
-        return render(request, 'userpage/index.html', {'user': user, 'form': form, 'privacy_form': privacy_form,'password_change_form': PasswordChangeForm})
+        return render(request, 'userpage/index.html', {'user': user, 'form': form, 'privacy_form': privacy_form,})
     elif request.POST['submit'] == 'Update':
         try:
             if request.POST['email']:

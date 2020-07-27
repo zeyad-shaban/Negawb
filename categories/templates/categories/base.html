@@ -3,6 +3,7 @@
 <html lang="en">
 
 <head>
+    <link rel="stylesheet" href="{% static 'categories/basestyle.css' %}">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
         integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <link rel="icon" href="{% static 'categories/favicon.jpg' %}" type="image/png">
@@ -13,37 +14,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %} {% endblock title %}</title>
 
-    <style>
-        .container {
-            font-size: 1.25em;
-        }
-
-        nav li a {
-            color: white !important;
-            margin: 5px !important;
-            padding: 5px;
-            text-align: inherit;
-            font: inherit;
-            list-style: none;
-            text-decoration: none !important;
-        }
-
-        nav li a:hover {
-            background-color: rgb(40, 30, 7);
-        }
-
-        #id_nav_avatar {
-            height: auto;
-            width: auto;
-            max-height: 42px;
-            max-width: 42px;
-            border-radius: 100%;
-        }
-
-        .nav-item .dropdown-menu .dropdown-item {
-            color: black !important;
-        }
-    </style>
 </head>
 
 <body>

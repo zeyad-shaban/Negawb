@@ -1,0 +1,29 @@
+.container {
+    font-size: 1.25em;
+}
+
+nav li a {
+    color: white !important;
+    margin: 5px !important;
+    padding: 5px;
+    text-align: inherit;
+    font: inherit;
+    list-style: none;
+    text-decoration: none !important;
+}
+
+nav li a:hover {
+    background-color: rgb(40, 30, 7);
+}
+
+#id_nav_avatar {
+    height: auto;
+    width: auto;
+    max-height: 42px;
+    max-width: 42px;
+    border-radius: 100%;
+}
+
+.nav-item .dropdown-menu .dropdown-item {
+    color: black !important;
+}
