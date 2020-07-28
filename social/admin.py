@@ -1,10 +1,11 @@
 from django.contrib import admin
-from .models import ChatBox, ChatRequest, Message, ChatGroup
+from .models import ChatBox, GroupRequest, Message, ChatGroup
 
-
-@admin.register(ChatRequest)
-class ChatRequestAdmin(admin.ModelAdmin):
-    """ Admin View for ChatRequest"""
+@admin.register(ChatGroup)
+class ChatGroupAdmin(admin.ModelAdmin):
+    readonly_fields = ('created_date',)
+@admin.register(GroupRequest)
+class GroupRequestAdmin(admin.ModelAdmin):
     readonly_fields = ('sent_date',)
 
 
@@ -16,7 +17,3 @@ class ChatBoxAdmin(admin.ModelAdmin):
 @admin.register(Message)
 class MessageAdmin(admin.ModelAdmin):
     readonly_fields = ('sent_date',)
-
-@admin.register(ChatGroup)
-class ChatGroupAdmin(admin.ModelAdmin):
-    readonly_fields = ('created_date',)
