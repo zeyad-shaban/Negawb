@@ -8,5 +8,5 @@ urlpatterns = [
     path('chat_friend/<int:friend_id>/', views.chat_friend, name='chat_friend'),
     path('createchatgroup/', views.create_chat_group, name='create_chat_group'),
     path('mygroups/', views.my_groups, name='my_groups'),
-    path('mygroups/<int:chat_group_id>', views.view_group, name='view_group'),
+    path('mygroups/<int:chatgroup_pk>', views.view_group, name='view_group'),
 ]

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import ChatBox, GroupRequest, Message, ChatGroup
+from .models import ChatBox, GroupRequest, Message, ChatGroup, GroupMessage
 
 @admin.register(ChatGroup)
 class ChatGroupAdmin(admin.ModelAdmin):
@@ -16,4 +16,8 @@ class ChatBoxAdmin(admin.ModelAdmin):
 
 @admin.register(Message)
 class MessageAdmin(admin.ModelAdmin):
+    readonly_fields = ('sent_date',)
+
+@admin.register(GroupMessage)
+class GroupMessageAdmin(admin.ModelAdmin):
     readonly_fields = ('sent_date',)
