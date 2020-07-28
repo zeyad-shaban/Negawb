@@ -1,12 +1,11 @@
+from django.http import HttpResponse as hs
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import ChatBox, Message
+from .models import ChatBox, Message, ChatGroup, GroupRequest
 from django.db.models import Q
 from .forms import ChatGroupForm
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 User = get_user_model()
-
-from django.http import HttpResponse as hs
 
 
 def create_ChatBox(request, friend_id):
@@ -43,11 +42,18 @@ def chat_friend(request, friend_id):
 
 
 def create_chat_group(request):
-    if request.method =='POST':
+    if request.method == 'POST':
         form = ChatGroupForm(request.POST)
         new_chat_group = form.save(commit=False)
         new_chat_group.author = request.user
         new_chat_group.save()
-        messages.success(request, 'Successfully created group, you can now add members')
+        new_chat_group.members.add(request.user)
+        messages.success(
+            request, 'Successfully created group, you can now add members')
         return redirect('home')
 
+
+def my_groups(request):
+    if request.method=='GET':
+        groups = ChatGroup.objects.filter(members=request.user)
+        return render(request, 'social/my_groups.html', {'groups':groups})

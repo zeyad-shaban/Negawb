@@ -78,6 +78,15 @@
                     <a href="{% url 'makeuser:loginuser' %}">Login</a>
                 </li>
                 {% endif %}
+
+                {% if user.is_authenticated %}
+
+                <li class="nav-item">
+                    <a href="{% url 'social:my_groups' %}" title="Groups" style="background:white;">
+                        <img src="{% static 'categories/GroupIcon.png' %}" width="30" height="30" alt="" loading="lazy">
+                    </a>
+                </li>
+                {% endif %}
             </ul>
             {% block searchbar %} {% endblock searchbar %}
         </div>

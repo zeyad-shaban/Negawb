@@ -1,0 +1,11 @@
+{% extends 'categories/base.html' %}
+{% block title %}My Groups {% endblock title %}
+{% block content %}
+
+
+{% for group  in groups %}
+    {{group.title}}
+{% endfor %}
+
+
+{% endblock content %}
