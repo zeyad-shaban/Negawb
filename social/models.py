@@ -3,8 +3,6 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 
-
-
 class ChatBox(models.Model):
     user_1 = models.ForeignKey(
         User, related_name='user_1', on_delete=models.CASCADE)
@@ -32,15 +30,25 @@ class ChatGroup(models.Model):
     title = models.CharField(max_length=75)
     description = models.CharField(max_length=200, null=True, blank=True)
     image = models.ImageField(upload_to='group_images',
-                            default='static/categories/logo.png')
-    members = models.ManyToManyField(User, related_name='group_memebers', blank=True)
+                              default='categories_images/FocusTimeMedia.png')
     is_public = models.BooleanField(default=False)
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
-    group_admins = models.ManyToManyField(User, related_name='gropu_admins', blank=True)
     created_date = models.DateTimeField(auto_now_add=True)
+    # USERS
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    group_admins = models.ManyToManyField(
+        User, related_name='gropu_admins', blank=True)
+    members = models.ManyToManyField(
+        User, related_name='group_memebers', blank=True)
+
+    def __str__(self):
+        return f'Title: {self.title}, author: {self.author}'
+
 
 class GroupRequest(models.Model):
     request_sender = models.ForeignKey(
         User, related_name='request_sender', on_delete=models.CASCADE)
-    recievers = models.ManyToManyField(User, related_name= 'group_request_recievers')
+    reciever = models.ForeignKey(User, on_delete=models.CASCADE)
     sent_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.request_sender} To {self.reciever}'

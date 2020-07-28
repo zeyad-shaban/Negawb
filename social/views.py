@@ -1,7 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import ChatBox, Message
 from django.db.models import Q
-from .forms import ChatGroup
+from .forms import ChatGroupForm
+from django.contrib import messages
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
@@ -43,4 +44,10 @@ def chat_friend(request, friend_id):
 
 def create_chat_group(request):
     if request.method =='POST':
-        pass
+        form = ChatGroupForm(request.POST)
+        new_chat_group = form.save(commit=False)
+        new_chat_group.author = request.user
+        new_chat_group.save()
+        messages.success(request, 'Successfully created group, you can now add members')
+        return redirect('home')
+
