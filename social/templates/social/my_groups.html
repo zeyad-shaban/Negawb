@@ -17,13 +17,13 @@
             <li class="list-group-item">
                 <div class="row w-100">
                     <div class="col-12 col-sm-6 col-md-3 px-0">
-                        <a href="{% url 'social:viewgroup' group.id %}">
+                        <a href="{% url 'social:view_group' group.id %}">
                             <img src="{{ group.image.url }}" alt="{{ group.title }}"
                                 class="img-fluid rounded-circle d-block mx-auto" height="73" width="73">
                         </a>
                     </div>
 
-                    <a href="{% url 'social:viewgroup' group.id %}">
+                    <a href="{% url 'social:view_group' group.id %}">
                         <div class="col-12 col-sm-6 col-md-9 text-center text-sm-left">
                             <label class="name lead">{{ group.title }}</label>
                             <br>

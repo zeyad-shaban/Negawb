@@ -61,6 +61,7 @@ def my_groups(request):
         return render(request, 'social/my_groups.html', {'groups':groups})
 
 
-class ViewGroup(generic.DetailView):
-    model = ChatGroup
-    template_name = 'social/viewgroup.html'
+
+def view_group(request, chat_group_id):
+    chat_group = get_object_or_404(ChatGroup, pk=chat_group_id)
+    return render(request, 'social/viewgroup.html', {'chat_group': chat_group})
