@@ -1,3 +1,5 @@
+from django.urls import reverse_lazy
+from django.views import generic
 from django.http import HttpResponse as hs
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import ChatBox, Message, ChatGroup, GroupRequest
@@ -57,3 +59,8 @@ def my_groups(request):
     if request.method=='GET':
         groups = ChatGroup.objects.filter(members=request.user)
         return render(request, 'social/my_groups.html', {'groups':groups})
+
+
+class ViewGroup(generic.DetailView):
+    model = ChatGroup
+    template_name = 'social/viewgroup.html'

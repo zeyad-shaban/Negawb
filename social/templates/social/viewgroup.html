@@ -1,0 +1,9 @@
+{% extends 'categories/base.html' %}
+{% load static %}
+{% block title %} {{friend.username}} | Chat {% endblock title %}
+{% block searchbar %}
+
+{% endblock searchbar %}
+{% block content %}
+{{ chatgroup.title }}
+{% endblock content %}

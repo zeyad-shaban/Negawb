@@ -26,6 +26,8 @@ class Message(models.Model):
         return f'message_sender: {self.message_sender}, chat_box: {self.chat_box}'
 
 
+
+
 class ChatGroup(models.Model):
     title = models.CharField(max_length=75)
     description = models.CharField(max_length=200, null=True, blank=True)
@@ -52,3 +54,14 @@ class GroupRequest(models.Model):
 
     def __str__(self):
         return f'{self.request_sender} To {self.reciever}'
+
+class GroupMessage(models.Model):
+    group = models.ForeignKey(
+        ChatGroup, related_name='chat_group', null=True, on_delete=models.CASCADE)
+    message_sender = models.ForeignKey(
+        User, related_name='group_message_sender', null=True, on_delete=models.CASCADE)
+    sent_date = models.DateTimeField(auto_now_add=True)
+    message = models.TextField()
+
+    def __str__(self):
+        return f'message_sender: {self.message_sender}, chat_box: {self.group}'
