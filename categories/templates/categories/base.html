@@ -56,7 +56,8 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="{% url 'comments:comments' %}">Question</a>
-                        <p class="dropdown-item" id='createChatGroup'>Chat Group</p>
+                        <button type="button" class="btn btn-primary dropdown-item" data-toggle="modal"
+                            data-target="#createChatGroup" data-whatever="createChatGroup">Chat Group</button>
                         <div class="dropdown-divider"></div>
                         <!-- Todo add feedback form -->
                         <a class="dropdown-item" href="#">FeedBack</a>
@@ -91,6 +92,48 @@
     {% endfor %}
     {% endif %}
     <div class="container">
+        <div class="modal fade " id="createChatGroup" tabindex="-1" role="dialog" aria-labelledby="createChatGroupLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Create Chat Group</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="{% url 'social:create_chat_group' %}" name="createChatGroup" method="post">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="id_title">Name of the group</label>
+                                <input type="text" id="id_title" value="" name="title" class="form-control"
+                                    maxlength="75" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="id_description">Description</label>
+                                <small class="form-text text-muted">optional</small>
+                                <input type="text" id="id_description" value="" name="description" class="form-control"
+                                    maxlength="200">
+                            </div>
+                            <div class="form-group">
+                                <label for="id_image">Group image</label>
+                                <small class="form-text text-muted">We will use the default image if nothing was
+                                    provided</small>
+                                <input type="file" name="image" accept="image/*" id="id_image"></p>
+                            </div>
+                            <div class="form-group">
+                                <label for="id_is_public">Do you want it public?</label>
+                                <input type="checkbox" id="id_is_public" name="is_public" class="form-control"
+                                    maxlength="200">
+                            </div>
+
+                            <input type="submit" name="submit" value="Create" class="btn btn-success">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
         {% block content %} {% endblock content %}
     </div>
 
@@ -103,7 +146,6 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
         integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous">
     </script>
-    <script src="{% static 'categories/basescript.js' %}"></script>
 </body>
 
 </html>

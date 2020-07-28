@@ -1,8 +1,11 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth import get_user_model
 from .models import ChatBox, Message
 from django.db.models import Q
+from .forms import ChatGroup
+from django.contrib.auth import get_user_model
 User = get_user_model()
+
+from django.http import HttpResponse as hs
 
 
 def create_ChatBox(request, friend_id):
@@ -36,3 +39,8 @@ def chat_friend(request, friend_id):
             chat_box=chat_box, message_sender=request.user, message=request.POST['message'])
         message.save()
         return render(request, 'social/chat_friend.html', {'friend': friend, 'chat_messages': chat_messages})
+
+
+def create_chat_group(request):
+    if request.method =='POST':
+        pass

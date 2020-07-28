@@ -22,7 +22,7 @@ def people_questions(request, peoplequestions_id):
 
 
 def all_people(request):
-    users = User.objects.all()
+    users = User.objects.all().order_by('-id')
     return render(request, 'people/all_people.html', {'users': users, })
 
 
