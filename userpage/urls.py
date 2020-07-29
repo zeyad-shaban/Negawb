@@ -14,6 +14,7 @@ urlpatterns = [
     path('acceptrequest/<int:request_id>/', views.acceptrequest, name='acceptrequest'),
     path('friends/', views.friends, name='friends'),
     path('friends/result', views.friendsresult, name='friendsresult'),
+    path('unfriend/<int:pk>', views.unfriend, name='unfriend'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

@@ -55,6 +55,34 @@
                         <form action="{% url 'social:create_ChatBox' friend.id%}" method="GET">
                             <input type="submit" value="Chat" name="displayChat" class="btn btn-primary float-right">
                         </form>
+
+                        <button type="button" class="btn btn-danger float-right" data-toggle="modal" data-target="#unfriend">
+                            UnFriend
+                        </button>
+
+
+                        <div class="modal fade" id="unfriend" tabindex="-1" role="dialog"
+                            aria-labelledby="unfriendLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="unfriendLabel">Are you sure you want to unfriend {{friend.username}}?</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-success"
+                                            data-dismiss="modal">Cancel</button>
+                                        <form method="POST" action="{% url 'userpage:unfriend' friend.id %}">
+                                            {% csrf_token %}
+                                            <input type="submit" name="submit" value="UNFRIEND" class="btn btn-danger">
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </li>

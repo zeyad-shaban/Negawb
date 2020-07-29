@@ -67,8 +67,9 @@ def questions(request):
 
 
 def friends(request):
-    friends = User.objects.filter(friends=request.user)
-    return render(request, 'userpage/friends.html', {'friends': friends})
+    if request.method == 'GET':
+        friends = User.objects.filter(friends=request.user)
+        return render(request, 'userpage/friends.html', {'friends': friends})
 
 
 def friendrequests(request):
@@ -106,3 +107,13 @@ def friendsresult(request):
     results = User.objects.filter(
         Q(username__icontains=query), friends=request.user)
     return render(request, 'userpage/friendsresult.html', {'results': results})
+
+
+def unfriend(request, pk):
+    friend = get_object_or_404(User, pk=pk)
+    if request.method == 'POST':
+        user = request.user
+        user.friends.remove(friend)
+        friend.friends.remove(user)
+        messages.success(request, f'{friend.username} is no longer a friend')
+        return redirect('userpage:friends')
