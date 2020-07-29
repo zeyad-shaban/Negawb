@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'people',
     'comments',
     'social',
+    'production',
 ]
 
 MIDDLEWARE = [
