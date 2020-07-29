@@ -3,7 +3,7 @@
 {% block title %}Friend Requests{% endblock title %}
 
 {% block content %}
-
+<h1>Friends Requests</h1>
 {{requests.count}} Friend Request{{requests.count|pluralize}}
 <br>
 <br>
@@ -14,6 +14,27 @@
 from: {{ request.from_user }}
 <br>
 to: {{ request.to_user }}
+<br>
+<a class="btn btn-danger float-left" href="{% url 'userpage:denyrequest' request.id%}">Deny</a>
+<form action="{% url 'userpage:acceptrequest' request.id %}" method="POST">
+    {% csrf_token %}
+    <input type="submit" value="Accept" name="acceptrequest," class="btn btn-success ml-2">
+</form>
+{% endfor %}
+<hr>
+<h1>Group Requests</h1>
+{{group_requests.count}} Friend Request{{group_requests.count|pluralize}}
+<br>
+<br>
+<br>
+<br>
+<br>
+{% for request in group_requests %}
+from: {{ request.request_sender }}
+<br>
+to: {{ request.reciever }}
+<br>
+for {{ request.group }}
 <br>
 <a class="btn btn-danger float-left" href="{% url 'userpage:denyrequest' request.id%}">Deny</a>
 <form action="{% url 'userpage:acceptrequest' request.id %}" method="POST">

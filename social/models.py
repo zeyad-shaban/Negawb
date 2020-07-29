@@ -50,6 +50,7 @@ class GroupRequest(models.Model):
     request_sender = models.ForeignKey(
         User, related_name='request_sender', on_delete=models.CASCADE)
     reciever = models.ForeignKey(User, on_delete=models.CASCADE)
+    group = models.ForeignKey(ChatGroup, on_delete=models.CASCADE)
     sent_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -65,3 +66,4 @@ class GroupMessage(models.Model):
 
     def __str__(self):
         return f'message_sender: {self.message_sender}, chat_box: {self.group}'
+

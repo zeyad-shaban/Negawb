@@ -3,12 +3,13 @@ from django.contrib.auth.decorators import login_required
 from comments.models import Comment, Reply
 from people.models import FriendRequest
 from django.contrib import messages
-from .forms import UserForm, UserPrivacyForm, UserPasswordForm
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.contrib.auth import authenticate
 from django.contrib.auth import get_user_model as user_model
+from .forms import UserForm, UserPrivacyForm, UserPasswordForm
+from social.models import GroupRequest
 User = user_model()
 
 
@@ -18,7 +19,7 @@ def home(request):
     form = UserForm(instance=request.user)
     privacy_form = UserPrivacyForm(instance=request.user)
     if request.method == 'GET':
-        return render(request, 'userpage/index.html', {'user': user, 'form': form, 'privacy_form': privacy_form,})
+        return render(request, 'userpage/index.html', {'user': user, 'form': form, 'privacy_form': privacy_form, })
     elif request.POST['submit'] == 'Update':
         try:
             if request.POST['email']:
@@ -74,8 +75,9 @@ def friends(request):
 
 def friendrequests(request):
     requests = FriendRequest.objects.filter(to_user=request.user)
+    group_requests = GroupRequest.objects.filter(reciever=request.user)
     if request.method == 'GET':
-        return render(request, 'userpage/friendrequest.html', {'requests': requests})
+        return render(request, 'userpage/friendrequest.html', {'requests': requests, 'group_requests': group_requests})
 
 
 def denyrequest(request, request_id):

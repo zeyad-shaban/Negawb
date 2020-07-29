@@ -2,11 +2,11 @@ from django.urls import reverse_lazy
 from django.views import generic
 from django.http import HttpResponse as hs
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import ChatBox, Message, ChatGroup, GroupRequest, GroupMessage
 from django.db.models import Q
-from .forms import ChatGroupForm
 from django.contrib import messages
 from django.contrib.auth import get_user_model
+from .forms import ChatGroupForm
+from .models import ChatBox, Message, ChatGroup, GroupRequest, GroupMessage
 User = get_user_model()
 
 
@@ -68,6 +68,24 @@ def view_group(request, chatgroup_pk):
         return render(request, 'social/viewgroup.html', {'chat_group': chat_group, 'chat_messages': chat_messages})
     else:
         chat_group = get_object_or_404(ChatGroup, pk=chatgroup_pk)
-        message = GroupMessage(group= chat_group, message_sender=request.user, message= request.POST['message'])
+        message = GroupMessage(
+            group=chat_group, message_sender=request.user, message=request.POST['message'])
         message.save()
         return redirect('social:view_group', chatgroup_pk)
+
+
+def groupinvite(request, pk):
+    group = get_object_or_404(ChatGroup, pk=pk)
+    if request.method == 'GET':
+        users = User.objects.all()
+        friends = User.objects.filter(friends=request.user)
+        return render(request, 'social/groupinvite.html', {'group': group, 'users': users, 'friends': friends})
+
+
+def create_invite(request, pk):
+    request_sender = request.user
+    reciever = get_object_or_404(User, pk=pk)
+    group_request = GroupRequest(request_sender= request_sender, reciever=reciever, group='something')
+    group_request.save()
+    messages.success(request, f'Successfully send invite to {reciever.username} ')
+    return redirect('socail:groupinvite')
