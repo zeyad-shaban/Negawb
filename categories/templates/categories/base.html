@@ -85,6 +85,14 @@
                     <a href="{% url 'social:my_groups' %}" title="Groups" style="background:white;">
                         <img src="{% static 'categories/GroupIcon.png' %}" width="30" height="30" alt="" loading="lazy">
                     </a>
+                    <!-- todo use image instead of text -->
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'social:my_groups' %}" title="Todo" style="background:red;">
+                        {% for todo in todos %}
+                            {{ todo.title }}
+                        {% endfor %}
+                    </a>
+                    {% endif %}
                 </li>
                 {% endif %}
             </ul>
