@@ -91,7 +91,8 @@ def create_invite(request, user_pk, group_pk):
     group_request.save()
     messages.success(
         request, f'Successfully invited {reciever.username} to {group.title} ')
-    return redirect('social:groupinvite')
+    return redirect('social:groupinvite', group_pk)
+
 
 def join_group(request, pk):
     group_request = get_object_or_404(GroupRequest, pk=pk)
@@ -101,5 +102,9 @@ def join_group(request, pk):
     messages.success(request, f'Welcome to {group.title}')
     return redirect('social:my_groups')
 
+
 def deny_group(request, pk):
-    pass
+    group_request = get_object_or_404(GroupRequest, pk=pk)
+    messages.success(request, f'You didn\'t join {group_request.group.title}')
+    group_request.delete()
+    return redirect('userpage:friendrequests')
