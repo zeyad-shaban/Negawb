@@ -47,13 +47,15 @@ def home(request):
             request, username=request.user.username, password=request.POST['password'])
         if user:
             if request.POST['password1'] == request.POST['password2']:
-                # try:
-                user = UserPasswordForm(request.POST, instance=request.user)
-                user.save()
-                user.set_password(request.POST['password1'])
-                messages.success(request, 'Successfully changed password')
-                # except:
-                #     messages.error(request,'Unknown error occured, please try again and report a feedback so we can fix this error')
+                try:
+                    user = UserPasswordForm(
+                        request.POST, instance=request.user)
+                    user.save()
+                    user.set_password(request.POST['password1'])
+                    messages.success(request, 'Successfully changed password')
+                except:
+                    messages.error(
+                        request, 'Unknown error occured, please try again and report a feedback so we can fix this error')
             else:
                 messages.error(request, 'Passwords didn\'t match')
         else:
@@ -62,17 +64,20 @@ def home(request):
         return redirect('userpage:home')
 
 
+@login_required
 def questions(request):
     questions = Comment.objects.filter(user=request.user)
     return render(request, 'userpage/questions.html', {'questions': questions})
 
 
+@login_required
 def friends(request):
     if request.method == 'GET':
         friends = User.objects.filter(friends=request.user)
         return render(request, 'userpage/friends.html', {'friends': friends})
 
 
+@login_required
 def friendrequests(request):
     requests = FriendRequest.objects.filter(to_user=request.user)
     group_requests = GroupRequest.objects.filter(reciever=request.user)
@@ -80,6 +85,7 @@ def friendrequests(request):
         return render(request, 'userpage/friendrequest.html', {'requests': requests, 'group_requests': group_requests})
 
 
+@login_required
 def denyrequest(request, request_id):
     denied_request = get_object_or_404(FriendRequest, pk=request_id)
     denied_request.delete()
@@ -87,11 +93,13 @@ def denyrequest(request, request_id):
     return redirect('userpage:friendrequests')
 
 
+@login_required
 def requestssent(request):
     requests = FriendRequest.objects.filter(from_user=request.user)
     return render(request, 'userpage/requestssent.html', {'requests': requests})
 
 
+@login_required
 def acceptrequest(request, request_id):
     friend_request = get_object_or_404(FriendRequest, pk=request_id)
     from_user = request.user
@@ -104,6 +112,7 @@ def acceptrequest(request, request_id):
     return redirect('userpage:friendrequests')
 
 
+@login_required
 def friendsresult(request):
     query = request.GET.get('q')
     results = User.objects.filter(
@@ -111,6 +120,7 @@ def friendsresult(request):
     return render(request, 'userpage/friendsresult.html', {'results': results})
 
 
+@login_required
 def unfriend(request, pk):
     friend = get_object_or_404(User, pk=pk)
     if request.method == 'POST':
