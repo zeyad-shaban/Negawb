@@ -1,6 +1,6 @@
 {% extends 'categories/base.html' %}
 
-{% block title %}Friend Requests{% endblock title %}
+{% block title %}Friend and Group | Requests{% endblock title %}
 
 {% block content %}
 <h1>Friends Requests</h1>
@@ -23,7 +23,7 @@ to: {{ request.to_user }}
 {% endfor %}
 <hr>
 <h1>Group Requests</h1>
-{{group_requests.count}} Friend Request{{group_requests.count|pluralize}}
+{{group_requests.count}} Group Request{{group_requests.count|pluralize}}
 <br>
 <br>
 <br>
@@ -34,12 +34,12 @@ from: {{ request.request_sender }}
 <br>
 to: {{ request.reciever }}
 <br>
-for {{ request.group }}
+for {{ request.group.title }}
 <br>
-<a class="btn btn-danger float-left" href="{% url 'userpage:denyrequest' request.id%}">Deny</a>
-<form action="{% url 'userpage:acceptrequest' request.id %}" method="POST">
+<a class="btn btn-danger float-left" href="{% url 'social:deny_group' request.id%}">Deny</a>
+<form action="{% url 'social:join_group' request.id %}" method="POST">
     {% csrf_token %}
-    <input type="submit" value="Accept" name="acceptrequest," class="btn btn-success ml-2">
+    <input type="submit" value="Join" name="joingroup," class="btn btn-success ml-2">
 </form>
 {% endfor %}
 

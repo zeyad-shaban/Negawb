@@ -82,10 +82,24 @@ def groupinvite(request, pk):
         return render(request, 'social/groupinvite.html', {'group': group, 'users': users, 'friends': friends})
 
 
-def create_invite(request, pk):
+def create_invite(request, user_pk, group_pk):
     request_sender = request.user
-    reciever = get_object_or_404(User, pk=pk)
-    group_request = GroupRequest(request_sender= request_sender, reciever=reciever, group='something')
+    reciever = get_object_or_404(User, pk=user_pk)
+    group = get_object_or_404(ChatGroup, pk=group_pk)
+    group_request = GroupRequest(
+        request_sender=request_sender, reciever=reciever, group=group)
     group_request.save()
-    messages.success(request, f'Successfully send invite to {reciever.username} ')
-    return redirect('socail:groupinvite')
+    messages.success(
+        request, f'Successfully invited {reciever.username} to {group.title} ')
+    return redirect('social:groupinvite')
+
+def join_group(request, pk):
+    group_request = get_object_or_404(GroupRequest, pk=pk)
+    group = group_request.group
+    group.members.add(request.user)
+    group_request.delete()
+    messages.success(request, f'Welcome to {group.title}')
+    return redirect('social:my_groups')
+
+def deny_group(request, pk):
+    pass
