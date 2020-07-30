@@ -156,7 +156,7 @@
         {% block content %} {% endblock content %}
 
 
-<!-- * create todo -->
+        <!-- * create todo -->
         <div class="modal fade" id="createtodo" tabindex="-1" role="dialog" aria-labelledby="createtodoLabel"
             aria-hidden="true">
             <div class="modal-dialog">
@@ -168,18 +168,16 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form action="{% url 'production:create_todo' %}" method="post">
+                        <form action="{% url 'production:create_todo' %}" method="post" id="todoForm" data-url = "{% url 'home' %}">
                             {{todo_form|crispy}}
                             {% csrf_token %}
-                            <input type="submit" value="Add" class="btn btn-success">
-                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="submit" value="Add" class="btn btn-success">
                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#todos">
                             Todos
                         </button>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -191,19 +189,29 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="todosLabel">All Todos ({{ todos.count }})</h5>
+                        <h5 class="modal-title" id="todosLabel">All Todos ({{ toods.count }})</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body" id="todosList">
                         {% for todo in todos %}
-                        {{ todo.title }}
+                        <div class="card">
+                            <div class="card-body todoItem" id="">
+                                <input type="checkbox" name="" class="float-left"
+                                    aria-label="Checkbox for following text input" id="">
+                                <div class="float-right col-lg-10 col-md-11 col-sm-10 col-10">
+                                    <h5 class="card-title">{{ todo.title }}</h5>
+                                    <p class="card-text todoNote" id="">{{ todo.note }}</p>
+                                </div>
+                            </div>
+                        </div>
                         {% endfor %}
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" id="createtodo" data-toggle="modal" data-target="#createtodo">
+                        <button type="button" class="btn btn-primary" id="createtodo" data-toggle="modal"
+                            data-target="#createtodo">
                             Add Todo
                         </button>
                     </div>
@@ -224,6 +232,29 @@
         integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous">
     </script>
     <script src="{% static 'categories/basescript.js' %}"></script>
+    <script>
+        $('#todoForm').submit(function (event) {
+            event.preventDefault()
+            let data = $('#todoForm').serialize()
+            $.ajax({
+                url: $('#todoForm').data('url'),
+                data = data,
+                type = 'post',
+                success: function (response) {
+                    $('#todosList').append(`<div class="card">
+            <div class="card-body todoItem" id="">
+                <input type="checkbox" name="" class="float-left"
+                    aria-label="Checkbox for following text input" id="">
+                <div class="float-right col-lg-10 col-md-11 col-sm-10 col-10">
+                    <h5 class="card-title">${ response.todo.title }</h5>
+                    <p class="card-text todoNote" id="">${ response.todo.note }</p>
+                </div>
+            </div>
+        </div>`)
+                },
+            })
+        })
+    </script>
 </body>
 
 </html>
