@@ -6,4 +6,4 @@ class TodoForm(forms.ModelForm):
     class Meta:
         model = Todo
         fields = ('title', 'note', 'is_important',)
-        labels = {'is_important': 'Important?', }
+        labels = {'is_important': 'Is Important', }

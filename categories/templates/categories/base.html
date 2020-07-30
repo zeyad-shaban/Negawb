@@ -1,4 +1,5 @@
 {% load static %}
+{% load crispy_forms_tags %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -164,9 +165,12 @@
         <!-- * Create Todo -->
         <div class="collapse" id="createTodo">
             <div class="card card-body">
-                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil
-                anim
-                keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
+                <form action="{% url 'production:create_todo' %}" method="post">
+                    {% csrf_token %}
+                    {{todo_form|crispy}}
+                    <input type="submit" value="Add" class="btn btn-success">
+                </form>
+                
             </div>
         </div>
 
@@ -182,6 +186,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
         integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous">
     </script>
+    <script src="{% static 'categories/basescript.js' %}"></script>
 </body>
 
 </html>
