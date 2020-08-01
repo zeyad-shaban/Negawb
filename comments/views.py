@@ -23,16 +23,7 @@ def comments(request):
         except ValueError:
             messages.error(request, 'Title must be 0-40 character')
             return redirect('comments:comments')
-    # Like
-    elif request.POST['submit'] == 'like':
-        
-        messages.success(request, "liked!")
-        return redirect('comments:comments')
-    # Dislike
-    elif request.POST['submit'] == 'dislike':
-        messages.success(request, "Disliked!")
-        return redirect('comments:comments')
-        
+
 
 @login_required
 def view_comment(request, comment_id):
@@ -55,3 +46,36 @@ def results_comment(request):
     comments = Comment.objects.filter(
         Q(title__icontains=query) | Q(description__icontains=query))
     return render(request, 'comments/results_comment.html', {'comments': comments, 'form': CommentForm})
+
+
+@login_required
+def like_dislike(request, comment_id):
+    comment = get_object_or_404(Comment, pk=comment_id)
+    # Like
+    if request.POST['submit'] == 'like':
+        if request.user in comment.dislikes.all():
+            comment.dislikes.remove(request.user)
+            comment.likes.add(request.user)
+            messages.success(request, 'liked')
+        elif request.user in comment.likes.all():
+            comment.likes.remove(request.user)
+            messages.success(request, 'removed like')
+        else:
+            comment.likes.add(request.user)
+            messages.success(request, 'liked')
+        return redirect('comments:comments')
+    # Dislike
+    elif request.POST['submit'] == 'dislike':
+        if request.user in comment.likes.all():
+            comment.likes.remove(request.user)
+            comment.dislikes.add(request.user)
+            messages.success(request, 'Disliked')
+            return redirect('comments:comments')
+        elif request.user in comment.dislikes.all():
+            comment.dislikes.remove(request.user)
+            messages.success(request, 'Removed Disliked')
+            return redirect('comments:comments')
+        else:
+            comment.dislikes.add(request.user)
+            messages.success(request, 'Disliked')
+            return redirect('comments:comments')

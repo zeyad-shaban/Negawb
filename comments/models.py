@@ -11,6 +11,7 @@ class Comment(models.Model):
     comment_date = models.DateTimeField(auto_now_add=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, blank=True)
     likes = models.ManyToManyField(User,related_name= 'comment_like')
+    dislikes = models.ManyToManyField(User,related_name= 'comment_dislike')
 
     def __str__(self):
         return f'comment by user: {self.user}'
