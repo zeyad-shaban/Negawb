@@ -1,0 +1,39 @@
+{% extends 'categories/base.html' %}
+{% load crispy_forms_tags %}
+{% block title %}FeedBack{% endblock title %}
+
+
+{% block content %}
+<h4>Add FeedBack</h4>
+<small class="form-text text-muted">We wil read it as soon as possible</small>
+<form action="" method="post" class="">
+    {% csrf_token %}
+    <textarea class="form-control float-left col-md-9 col-lg-7 col-sm-12 col-12" aria-label="With textarea"
+        name="review" required></textarea>
+    <span class=" col-lg-3 col-md-3 col-sm-6 col-12">
+        <select name="stars" id="id_stars">
+
+            <option value="1">Very Bad</option>
+
+            <option value="2">Bad</option>
+
+            <option value="3" selected>Ok</option>
+
+            <option value="4">Good</option>
+
+            <option value="5">Very Good</option>
+
+        </select>
+    </span>
+    <input type="submit" value="Submit FeedBack" class="btn btn-success col-lg-2 col-md-12 col-sm-6 col-12">
+</form>
+<br><br>
+<hr>
+<h3>Others Feedbacks</h3>
+<small class="text-muted form-text">{{feedbacks.count}}</small>
+{% for feedback in feedbacks %}
+{{feedback.review}}
+<br>
+{% endfor %}
+
+{% endblock content %}

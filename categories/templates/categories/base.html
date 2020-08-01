@@ -61,7 +61,7 @@
                             data-target="#createChatGroup" data-whatever="createChatGroup">Chat Group</button>
                         <div class="dropdown-divider"></div>
                         <!-- Todo add feedback form -->
-                        <a class="dropdown-item" href="#">FeedBack</a>
+                        <a class="dropdown-item" href="{% url 'production:feedback' %}">FeedBack</a>
                     </div>
                 </li>
                 {% endif %}
@@ -173,10 +173,10 @@
                             {% csrf_token %}
                     </div>
                     <div class="modal-footer">
-                        <input type="submit" value="Add" class="btn btn-success">
                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#todos">
                             Todos
                         </button>
+                        <input type="submit" value="Add" class="btn btn-success">
                         </form>
                     </div>
                 </div>

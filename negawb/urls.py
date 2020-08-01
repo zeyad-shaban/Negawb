@@ -32,7 +32,7 @@ urlpatterns = [
     path('userpage/', include('userpage.urls'), name='userpage'),
     path('people/', include('people.urls'), name='people'),
     path('social/',include('social.urls'), name='social'),
-    path('social/',include('production.urls'), name='social'),
+    path('production/',include('production.urls'), name='production'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
