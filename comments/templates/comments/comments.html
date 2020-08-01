@@ -1,4 +1,5 @@
 {% extends 'categories/base.html' %}
+{% load static %}
 {% block title %} Comments {% endblock title %}
 
 {% block searchbar %}
@@ -35,7 +36,7 @@
             <label for="category">Category</label>
             {{form.category}}
         </div>
-        <input class="btn btn-success" type="submit" value="Add Comment">
+        <input class="btn btn-success" type="submit" value="Add Comment" name="submit">
     </form>
     <br>
 </div>
@@ -50,7 +51,7 @@
         <small class="form-text text-muted">{{ comment.comment_date }}
             {% if comment.category %}
             <a href="{% url 'view_category' comment.category.id %}">{{comment.category}}</a></small>
-            {% endif %}
+        {% endif %}
     </div>
     <div class="card-body">
         {% if comment.title %}
@@ -59,6 +60,23 @@
         <p class="card-text text-break">{{ comment.description|truncatechars:300 }}</p>
         <a href="{% url 'comments:view_comment' comment.id %}" class="btn btn-primary">View Comment, Reply</a>
     </div>
+    <span class="row justify-content-center">
+        <!-- Like -->
+        <form action="" method="post" class="form-inline">
+            {% csrf_token %}
+            <button type="submit" name="submit" value="like" title="Like">
+                <img src="{% static 'categories/like.png' %}" width="30" height="30" alt="Like">
+            </button>
+        </form>
+        <!-- Dislike -->
+            <form action="" method="post" class="form-inline">
+                {% csrf_token %}
+                <button type="submit" name="submit" value="dislike" title="Dislike">
+                    <img src="{% static 'categories/dislike.png' %}" width="30" height="30" alt="Dislike">
+                </button>
+            </form>
+    </span>
 </div>
+
 {% endfor %}
 {% endblock content %}

@@ -5,21 +5,34 @@ from .forms import CommentForm, ReplyForm
 from django.db.models import Q
 from django.contrib import messages
 
+
 def comments(request):
     comments = Comment.objects.all().order_by('-comment_date')
     if request.method == 'GET':
         return render(request, 'comments/comments.html', {'comments': comments, 'form': CommentForm})
-    else:
+    # Add Comment
+
+    elif request.POST['submit'] == 'Add Comment':
         try:
             form = CommentForm(request.POST)
             comment = form.save(commit=False)
             comment.user = request.user
+            messages.success(request, "created comment successfully")
             comment.save()
             return redirect('comments:comments')
         except ValueError:
             messages.error(request, 'Title must be 0-40 character')
             return redirect('comments:comments')
-
+    # Like
+    elif request.POST['submit'] == 'like':
+        
+        messages.success(request, "liked!")
+        return redirect('comments:comments')
+    # Dislike
+    elif request.POST['submit'] == 'dislike':
+        messages.success(request, "Disliked!")
+        return redirect('comments:comments')
+        
 
 @login_required
 def view_comment(request, comment_id):
