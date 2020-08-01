@@ -1,0 +1,13 @@
+{% extends 'categories/base.html' %}
+{% block title %}View Comment {% endblock title %}
+
+
+
+{% block content %}
+
+<h1 class="text-left">{{feedback.user.username}}</h1>
+<div class="container">
+    <p>{{feedback.review}}</p>
+</div>
+<hr>
+{% endblock content %}

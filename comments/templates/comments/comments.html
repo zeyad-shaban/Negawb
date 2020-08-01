@@ -48,7 +48,9 @@
             {{ comment.user}}
         </a>
         <small class="form-text text-muted">{{ comment.comment_date }}
+            {% if comment.category %}
             <a href="{% url 'view_category' comment.category.id %}">{{comment.category}}</a></small>
+            {% endif %}
     </div>
     <div class="card-body">
         {% if comment.title %}

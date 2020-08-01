@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.views import generic
 from django.http import JsonResponse
 from django.forms.models import model_to_dict
 from django.contrib import messages
@@ -27,3 +28,7 @@ def feedback(request):
         feedback.save()
         messages.success(request, 'Thank you for your feedback, we promise we will read it as soon as possible')
         return redirect('production:feedback')
+
+class ViewFeedback(generic.DetailView):
+    model = Feedback
+    template_name = 'production/ViewFeedback.html'

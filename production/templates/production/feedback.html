@@ -31,9 +31,53 @@
 <hr>
 <h3>Others Feedbacks</h3>
 <small class="text-muted form-text">{{feedbacks.count}}</small>
-{% for feedback in feedbacks %}
-{{feedback.review}}
-<br>
-{% endfor %}
+
+<div class="card card-default" id="card_contacts">
+    <div id="contacts" class="panel-collapse collapse show" aria-expanded="true">
+        <ul class="list-group pull-down" id="contact-list">
+            {% for feedback in feedbacks %}
+            <li class="list-group-item">
+                <div class="row w-100">
+                    <div class="col-12 col-sm-6 col-md-3 px-0">
+                        <a href="{% url 'people:people' feedback.user.id %}">
+                            {% if feedback.user.who_see_avatar == 'everyone' %}
+                            <img src="{{ feedback.user.avatar.url }}" alt="{{ feedback.user.username }}"
+                                class="img-fluid rounded-circle d-block mx-auto" height="73" width="73">
+                            {% elif feedback.user.who_see_avatar == 'friends' and user in feedback.user.friends %}
+                            <img src="{{ feedback.user.avatar.url }}" alt="{{ feedback.user.username }}"
+                                class="img-fluid rounded-circle d-block mx-auto" height="73" width="73">
+                            {% else %}
+                            <img src="/media/profile_images/DefaultUserImage.jpg" alt="{{ feedback.user.username }}"
+                                class="img-fluid rounded-circle d-block mx-auto" height="73" width="73">
+                            {% endif %}
+                        </a>
+                    </div>
+
+                    <div class="col-12 col-sm-6 col-md-9 text-center text-sm-left">
+                        <a href="{% url 'people:people' feedback.user.id %}">
+                            <label class="name lead">{{ feedback.user.username }}</label>
+                        </a>
+                        <br>
+                        <span class="fa fa-fw fa-envelope fa-fw text-muted" data-toggle="tooltip" title="Bio"
+                            data-original-title="{{ feedback.user.bio }}"></span>
+                        <span class="small text-break">{{ feedback.review|truncatechars:500 }}</span>
+                        {% if feedback.review|length > 500 %}
+                        <a href="{% url 'production:ViewFeedback' feedback.id %}" class="btn btn-link">Read More</a>
+                        {% endif %}
+                        <!-- <form action="{% url 'social:create_ChatBox' feedback.user.id%}" method="GET">
+                            <input type="submit" value="Chat" name="displayChat" class="btn btn-primary float-right">
+                        </form>
+
+                        <button type="button" class="btn btn-danger float-right" data-toggle="modal"
+                            data-target="#unfeedback.user">
+                            UnFriend
+                        </button> -->
+                    </div>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
 
 {% endblock content %}

@@ -31,6 +31,6 @@ class Feedback(models.Model):
         blank=True,
         null=True, choices=stars_choices)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-
+    
     def __str__(self):
         return f'{self.stars}, {self.user}'
