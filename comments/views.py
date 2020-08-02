@@ -81,24 +81,12 @@ def comment_like_dislike(request, comment_id):
             return redirect('comments:comments')
 
 
+# todo fix MultiDictValue
 @login_required
 def reply_like_dislike(request, reply_id):
     reply = get_object_or_404(Reply, pk=reply_id)
-    # Like
-    if request.POST['submit']== 'like':
-        if request.user in reply.dislikes.all():
-            reply.dislikes.remove(request.user)
-            reply.likes.add(request.user)
-            messages.success(request, 'liked')
-        elif request.user in reply.likes.all():
-            reply.likes.remove(request.user)
-            messages.success(request, 'removed like')
-        else:
-            reply.likes.add(request.user)
-            messages.success(request, 'liked')
-        return redirect('comments:reply_like_dislike', reply_id)
     # Dislike
-    elif request.POST['submit'] == 'dislike':
+    if request.POST['submit'] == 'dislike':
         if request.user in reply.likes.all():
             reply.likes.remove(request.user)
             reply.dislikes.add(request.user)
@@ -112,3 +100,16 @@ def reply_like_dislike(request, reply_id):
             reply.dislikes.add(request.user)
             messages.success(request, 'Disliked')
             return redirect('comments:reply_like_dislike', reply_id)
+    # Like
+    else:
+        if request.user in reply.dislikes.all():
+            reply.dislikes.remove(request.user)
+            reply.likes.add(request.user)
+            messages.success(request, 'liked')
+        elif request.user in reply.likes.all():
+            reply.likes.remove(request.user)
+            messages.success(request, 'removed like')
+        else:
+            reply.likes.add(request.user)
+            messages.success(request, 'liked')
+        return redirect('comments:reply_like_dislike', reply_id)

@@ -16,7 +16,8 @@ class User(AbstractUser):
         ('everyone', 'Every One'),
     ]
     who_see_avatar = models.CharField(
-        max_length= 30,
+        max_length=30,
         choices=who_see_avatar_choices,
         default='friends',
     )
+    followers = models.ManyToManyField('User', related_name='user_followers')
