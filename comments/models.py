@@ -23,6 +23,8 @@ class Reply(models.Model):
     reply_date = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, null=True, blank=True)
+    likes = models.ManyToManyField(User,related_name= 'reply_like')
+    dislikes = models.ManyToManyField(User,related_name= 'reply_dislike')
 
     def __str__(self):
         return f'user: {self.user}'

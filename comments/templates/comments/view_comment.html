@@ -1,4 +1,5 @@
 {% extends 'categories/base.html' %}
+{% load static %}
 {% block title %}View Comment {% endblock title %}
 
 
@@ -30,5 +31,28 @@
         <p class="card-text">{{reply.description}}</p>
     </div>
 </div>
+<!-- Likes and Dislikes -->
+<span class="row justify-content-center">
+    <!-- Like -->
+    <form action="{% url 'comments:reply_like_dislike' reply.id %}" method="post" class="form-inline">
+        {% csrf_token %}
+        <button type="submit" name="submit" value="like" title="Like">
+            <img src="{% static 'categories/like.png' %}" width="30" height="30" alt="Like">
+        </button>
+    </form>
+    <span class="m-3">
+        {{reply.likes.count}}
+    </span>
+    <!-- Dislike -->
+    <form action="{% url 'comments:reply_like_dislike' reply.id %}" method="post" class="form-inline">
+        {% csrf_token %}
+        <button type="submit" name="submit" value="dislike" title="Dislike">
+            <img src="{% static 'categories/dislike.png' %}" width="30" height="30" alt="Dislike">
+        </button>
+    </form>
+    <span class="m-3">
+        {{reply.dislikes.count}}
+    </span>
+</span>
 {% endfor %}
 {% endblock content %}

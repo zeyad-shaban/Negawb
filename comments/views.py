@@ -49,7 +49,7 @@ def results_comment(request):
 
 
 @login_required
-def like_dislike(request, comment_id):
+def comment_like_dislike(request, comment_id):
     comment = get_object_or_404(Comment, pk=comment_id)
     # Like
     if request.POST['submit'] == 'like':
@@ -79,3 +79,36 @@ def like_dislike(request, comment_id):
             comment.dislikes.add(request.user)
             messages.success(request, 'Disliked')
             return redirect('comments:comments')
+
+
+@login_required
+def reply_like_dislike(request, reply_id):
+    reply = get_object_or_404(Reply, pk=reply_id)
+    # Like
+    if request.POST['submit']== 'like':
+        if request.user in reply.dislikes.all():
+            reply.dislikes.remove(request.user)
+            reply.likes.add(request.user)
+            messages.success(request, 'liked')
+        elif request.user in reply.likes.all():
+            reply.likes.remove(request.user)
+            messages.success(request, 'removed like')
+        else:
+            reply.likes.add(request.user)
+            messages.success(request, 'liked')
+        return redirect('comments:reply_like_dislike', reply_id)
+    # Dislike
+    elif request.POST['submit'] == 'dislike':
+        if request.user in reply.likes.all():
+            reply.likes.remove(request.user)
+            reply.dislikes.add(request.user)
+            messages.success(request, 'Disliked')
+            return redirect('comments:reply_like_dislike', reply_id)
+        elif request.user in reply.dislikes.all():
+            reply.dislikes.remove(request.user)
+            messages.success(request, 'Removed Disliked')
+            return redirect('comments:reply_like_dislike', reply_id)
+        else:
+            reply.dislikes.add(request.user)
+            messages.success(request, 'Disliked')
+            return redirect('comments:reply_like_dislike', reply_id)
