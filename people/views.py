@@ -14,7 +14,7 @@ def people(request, people_id):
     """ View Other Users Accounts """
     view_user = get_object_or_404(User, pk=people_id)
     friends = User.objects.filter(friends=view_user)
-    return render(request, 'people/index.html', {'view_user': view_user, 'friends': friends,})
+    return render(request, 'people/index.html', {'view_user': view_user, 'friends': friends, })
 
 
 def people_questions(request, peoplequestions_id):
@@ -31,7 +31,8 @@ def all_people(request):
 def all_peopleresults(request):
     query = request.GET.get('q')
     # todo add phone number query
-    results = User.objects.filter(Q(username__icontains=query)|Q(email__icontains=query))
+    results = User.objects.filter(
+        Q(username__icontains=query) | Q(email__icontains=query))
     return JsonResponse({'results': serialize('json', results)})
 
 
@@ -41,18 +42,25 @@ def addfriend(request, user_id):
     to_user = get_object_or_404(User, pk=user_id)
     if user_id == request.user.id:
         users = User.objects.all()
-        messages.error(request, 'Adding yourself 😭😿')
-        return redirect('people:all_people')
+        message = {
+            'text': 'Adding yourself 😭😿',
+            'tags': 'error'
+        }
+        return JsonResponse({'message': message})
     else:
         try:
             friend_request = FriendRequest(
                 from_user=from_user, to_user=to_user)
             friend_request.save()
-            messages.success(
-                request, f'Successfully sent Friend request to {to_user}')
-            return redirect('people:all_people')
+            message = {
+                'text': f'Successfully sent Friend request to {to_user}',
+                'tags': 'success',
+            }
+            return JsonResponse({'message': message})
         except:
             users = User.objects.all()
-            messages.error(
-                request, 'Something went wrong, please try again and make sure to report a feedback so we can fix this error')
-            return redirect('people:all_people')
+            message = {
+                'text': 'Unknown error, please try again and make sure to report a feedback so we can fix this error',
+                'tags': 'success',
+            }
+            return JsonResponse({'message': message})

@@ -49,40 +49,68 @@
                         <span class="fa fa-fw fa-envelope fa-fw text-muted" data-toggle="tooltip" title="Bio"
                             data-original-title="{{ user.bio }}"></span>
                         <span class="small text-truncate">{{ user.bio }}</span>
-                        <form action="{% url 'people:addfriend' user.id%}" method="POST">
-                            {% csrf_token %}
-                            <input type="submit" value="Add Friend" name="addfriend,"
-                                class="btn btn-primary float-right">
+                        <form action="{% url 'people:addfriend' user.id%}" method="GET" id="idAddFriendForm">
+                            <input type="button" value="Add Friend" name="addfriend,"
+                                class="btn btn-primary float-right" id='idAddFriendButton{{ user.id }}'>
                         </form>
                     </div>
                 </div>
             </li>
+            <script>
+                // * Add Friend Button
+                $('#idAddFriendForm').submit(function (event) {
+                    event.preventDefault()
+                })
+                $('#idAddFriendButton{{ user.id }}').click(function () {
+                    $.ajax({
+                        url: "{% url 'people:addfriend' user.id %}",
+                        data: {
+                            'user_id': "{{ user.id }}"
+                        },
+                        dataType: 'json',
+                        success: function (data) {
+                            $('#message_area').html('')
+                            if (data.message.tags === 'error') {
+                                $('#message_area').append(`
+                            <div class="alert alert-danger">${data.message.text}</div>
+                            `)
+                            } else {
+                                $('#message_area').append(`
+        <div class="alert alert-${data.message.tags}">${data.message.text}</div>
+                                `)
+                            }
+                        }
+                    })
+                })
+            </script>
             {% endfor %}
         </ul>
     </div>
 </div>
+<!-- Search people -->
 <script>
+    // Search people
     $('#idSearchForm').submit(function (event) {
         event.preventDefault()
     })
     $('#idSearchInput').keyup(function (event) {
-                $.ajax({
-                            url: "{% url 'people:all_peopleresults' %}",
-                            data: {
-                                'q': $('#idSearchInput').val(),
-                            },
-                            dataType: 'json',
-                            success: function (data) {
-                                    let results = JSON.parse(data.results)
-                                    let output = ''
+        $.ajax({
+            url: "{% url 'people:all_peopleresults' %}",
+            data: {
+                'q': $('#idSearchInput').val(),
+            },
+            dataType: 'json',
+            success: function (data) {
+                let results = JSON.parse(data.results)
+                let output = ''
 
-                                    if (results.length === 0) {
-                                        $('#contact-list').html('<h4>User not found</h4>')
-                                    } else {
+                if (results.length === 0) {
+                    $('#contact-list').html('<h4>User not found</h4>')
+                } else {
 
-                                        for (result of results) {
-                                            // !DOESN'T USE [DJANGO URL
-                                            output += `
+                    for (result of results) {
+                        // !DOESN'T USE [DJANGO URL
+                        output += `
                         <li class="list-group-item">
                 <div class="row w-100">
                     <div class="col-12 col-sm-6 col-md-3 px-0">
