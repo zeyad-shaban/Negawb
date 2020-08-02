@@ -4,6 +4,8 @@ from comments.models import Comment, Reply
 from .models import FriendRequest
 from django.db.models import Q
 from django.contrib import messages
+from django.http import JsonResponse
+from django.core.serializers import serialize
 from django.contrib.auth import get_user_model as user_model
 User = user_model()
 
@@ -28,8 +30,9 @@ def all_people(request):
 
 def all_peopleresults(request):
     query = request.GET.get('q')
-    results = User.objects.filter(Q(username__icontains=query))
-    return render(request, 'people/all_peopleresults.html', {'results': results, 'query': query})
+    # todo add phone number query
+    results = User.objects.filter(Q(username__icontains=query)|Q(email__icontains=query))
+    return JsonResponse({'results': serialize('json', results)})
 
 
 @login_required
