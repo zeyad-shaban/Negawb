@@ -94,14 +94,14 @@
                             let likes = "{{comment.likes.count}}";
                             let dislikes = "{{ comment.dislikes.count }}"
                             if (data.action == 'undislike_and_like') {
-                                dislikes--
+                                dislikes -=1
                                 likes++
                                 $('#id_dislikes').html('<p style="color:black;">' +
                                     dislikes + '</p>')
                                 $('#id_likes').html('<p style="color:#065FD4;"><b>' +
                                     likes + '</b></p>')
                             } else if (data.action == 'unlike') {
-                                likes--
+                                likes -=1
                                 $('#id_likes').html('<p style="color:#black;"' + likes +
                                     '</p>')
                             } else {
@@ -149,13 +149,13 @@
                             let dislikes = "{{ comment.dislikes.count }}"
                             if (data.action == 'unlike_and_dislike') {
                                 dislikes++
-                                likes--
+                                likes -=1
                                 $('#id_dislikes').html('<p style="color:#065FD4;"><b>' +
                                     dislikes + '</b></p>')
                                 $('#id_likes').html('<p style="color:black;">' +
                                     likes + '</p>')
                             } else if (data.action == 'undislike') {
-                                dislikes--
+                                dislikes -=1
                                 $('#id_dislikes').html('<p style="color:#black;"' + dislikes +
                                     '</p>')
                             } else {
