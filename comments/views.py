@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.http import JsonResponse
 from .models import Comment, Reply
 from django.contrib.auth.decorators import login_required
 from .forms import CommentForm, ReplyForm
@@ -52,33 +53,29 @@ def results_comment(request):
 def comment_like_dislike(request, comment_id):
     comment = get_object_or_404(Comment, pk=comment_id)
     # Like
-    if request.POST['submit'] == 'like':
+    if request.GET.get('submit') == 'like':
         if request.user in comment.dislikes.all():
             comment.dislikes.remove(request.user)
             comment.likes.add(request.user)
-            messages.success(request, 'liked')
+            return JsonResponse({'action':'undislike_and_like'})
         elif request.user in comment.likes.all():
             comment.likes.remove(request.user)
-            messages.success(request, 'removed like')
+            return JsonResponse({'action':'unlike'})
         else:
             comment.likes.add(request.user)
-            messages.success(request, 'liked')
-        return redirect('comments:comments')
+            return JsonResponse({'action': 'like_only'})
     # Dislike
-    elif request.POST['submit'] == 'dislike':
+    elif request.GET.get('submit') == 'dislike':
         if request.user in comment.likes.all():
             comment.likes.remove(request.user)
             comment.dislikes.add(request.user)
-            messages.success(request, 'Disliked')
-            return redirect('comments:comments')
+            return JsonResponse({'action': 'unlike_and_dislike'})
         elif request.user in comment.dislikes.all():
             comment.dislikes.remove(request.user)
-            messages.success(request, 'Removed Disliked')
-            return redirect('comments:comments')
+            return JsonResponse({'action': 'undislike'})
         else:
             comment.dislikes.add(request.user)
-            messages.success(request, 'Disliked')
-            return redirect('comments:comments')
+            return JsonResponse({'action': 'dislike_only'})
 
 
 # todo fix MultiDictValue
