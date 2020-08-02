@@ -57,29 +57,32 @@
                 </div>
             </li>
             <script>
-                // * Add Friend Button
-                $('#idAddFriendForm').submit(function (event) {
-                    event.preventDefault()
-                })
-                $('#idAddFriendButton{{ user.id }}').click(function () {
-                    $.ajax({
-                        url: "{% url 'people:addfriend' user.id %}",
-                        data: {
-                            'user_id': "{{ user.id }}"
-                        },
-                        dataType: 'json',
-                        success: function (data) {
-                            $('#message_area').html('')
-                            if (data.message.tags === 'error') {
-                                $('#message_area').append(`
+                $(document).ready(function () {
+
+                    // * Add Friend Button
+                    $('#idAddFriendForm').submit(function (event) {
+                        event.preventDefault()
+                    })
+                    $('#idAddFriendButton{{ user.id }}').click(function () {
+                        $.ajax({
+                            url: "{% url 'people:addfriend' user.id %}",
+                            data: {
+                                'user_id': "{{ user.id }}"
+                            },
+                            dataType: 'json',
+                            success: function (data) {
+                                $('#message_area').html('')
+                                if (data.message.tags === 'error') {
+                                    $('#message_area').append(`
                             <div class="alert alert-danger">${data.message.text}</div>
                             `)
-                            } else {
-                                $('#message_area').append(`
+                                } else {
+                                    $('#message_area').append(`
         <div class="alert alert-${data.message.tags}">${data.message.text}</div>
                                 `)
+                                }
                             }
-                        }
+                        })
                     })
                 })
             </script>
@@ -89,28 +92,30 @@
 </div>
 <!-- Search people -->
 <script>
-    // Search people
-    $('#idSearchForm').submit(function (event) {
-        event.preventDefault()
-    })
-    $('#idSearchInput').keyup(function (event) {
-        $.ajax({
-            url: "{% url 'people:all_peopleresults' %}",
-            data: {
-                'q': $('#idSearchInput').val(),
-            },
-            dataType: 'json',
-            success: function (data) {
-                let results = JSON.parse(data.results)
-                let output = ''
+    $(document).ready(function () {
 
-                if (results.length === 0) {
-                    $('#contact-list').html('<h4>User not found</h4>')
-                } else {
+        // Search people
+        $('#idSearchForm').submit(function (event) {
+            event.preventDefault()
+        })
+        $('#idSearchInput').keyup(function (event) {
+            $.ajax({
+                url: "{% url 'people:all_peopleresults' %}",
+                data: {
+                    'q': $('#idSearchInput').val(),
+                },
+                dataType: 'json',
+                success: function (data) {
+                    let results = JSON.parse(data.results)
+                    let output = ''
 
-                    for (result of results) {
-                        // !DOESN'T USE [DJANGO URL
-                        output += `
+                    if (results.length === 0) {
+                        $('#contact-list').html('<h4>User not found</h4>')
+                    } else {
+
+                        for (result of results) {
+                            // !DOESN'T USE [DJANGO URL
+                            output += `
                         <li class="list-group-item">
                 <div class="row w-100">
                     <div class="col-12 col-sm-6 col-md-3 px-0">
@@ -155,11 +160,12 @@
                 </div>
             </li>
             `
-                    }
+                        }
 
+                    }
+                    $('#contact-list').html(output)
                 }
-                $('#contact-list').html(output)
-            }
+            })
         })
     })
 </script>

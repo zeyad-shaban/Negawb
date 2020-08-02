@@ -100,7 +100,7 @@
         </div>
     </nav>
     <span id="message_area">
-    {% if messages %}
+        {% if messages %}
         {% for message in messages %}
         {% if message.tags == 'error' %}
         <div class="alert alert-danger">{{message}}</div>
@@ -233,15 +233,17 @@
     </script>
     <script src="{% static 'categories/basescript.js' %}"></script>
     <script>
-        $('#todoForm').submit(function (event) {
-            event.preventDefault()
-            let data = $('#todoForm').serialize()
-            $.ajax({
-                url: $('#todoForm').data('url'),
-                data = data,
-                type = 'post',
-                success: function (response) {
-                    $('#todosList').append(`<div class="card">
+        $(document).ready(function () {
+
+            $('#todoForm').submit(function (event) {
+                event.preventDefault()
+                let data = $('#todoForm').serialize()
+                $.ajax({
+                    url: $('#todoForm').data('url'),
+                    data = data,
+                    type = 'post',
+                    success: function (response) {
+                        $('#todosList').append(`<div class="card">
             <div class="card-body todoItem" id="">
                 <input type="checkbox" name="" class="float-left"
                     aria-label="Checkbox for following text input" id="">
@@ -251,7 +253,8 @@
                 </div>
             </div>
         </div>`)
-                },
+                    },
+                })
             })
         })
     </script>
