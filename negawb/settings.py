@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'crispy_forms',
+    'six',
     'categories',
     'makeuser',
     'userpage',
@@ -133,6 +134,13 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 LOGIN_URL = '/user/login/'
 AUTH_USER_MODEL = 'userpage.User'
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+# Email Messaging
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'zeyadyousefshapan@gmail.com'
+EMAIL_HOST_PASSWORD = 'Python44200444'
+EMAIL_PORT = 587
 
 try:
     from .local_settings import *
