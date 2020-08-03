@@ -170,17 +170,28 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form action="{% url 'production:create_todo' %}" method="post" id="todoForm"
-                            data-url="{% url 'home' %}">
-                            {{todo_form|crispy}}
-                            {% csrf_token %}
+                        <form method="GET" id="todoForm">
+                            <div class="form-group">
+                                <label for="id_todo_title">Title</label>
+                                <input type="text" name="title" id="TodoTitle" class="form-control" maxlength="30"
+                                    required>
+                            </div>
+                            <div class="form-group">
+                                <label for="id_todo_note">Note</label>
+                                <input type="text" name="note" id="TodoNote" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label class="inline" for="id_todo_is_important">Important</label>
+                                <input type="checkbox" name="is_important" id="TodoIsImportant"
+                                    class="form-control float-right">
+                            </div>
+                        </form>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#todos">
                             Todos
                         </button>
-                        <input type="submit" value="Add" class="btn btn-success">
-                        </form>
+                        <input type="submit" value="Add" class="btn btn-success" id="addTodoButton">
                     </div>
                 </div>
             </div>
@@ -237,25 +248,29 @@
 
             $('#todoForm').submit(function (event) {
                 event.preventDefault()
-                let data = $('#todoForm').serialize()
+            })
+            $('#addTodoButton').click(function () {
+                let check_box
+                let isImportant = $('#TodoIsImportant').is(":checked")
+                if (isImportant){
+                    check_box = 'True'
+                } else{
+                    check_box = 'False'
+                }
                 $.ajax({
-                    url: $('#todoForm').data('url'),
-                    data = data,
-                    type = 'post',
-                    success: function (response) {
-                        $('#todosList').append(`<div class="card">
-            <div class="card-body todoItem" id="">
-                <input type="checkbox" name="" class="float-left"
-                    aria-label="Checkbox for following text input" id="">
-                <div class="float-right col-lg-10 col-md-11 col-sm-10 col-10">
-                    <h5 class="card-title">${ response.todo.title }</h5>
-                    <p class="card-text todoNote" id="">${ response.todo.note }</p>
-                </div>
-            </div>
-        </div>`)
+                    url: "{% url 'production:create_todo' %}",
+                    data: {
+                        'title': $('#TodoTitle').val(),
+                        'note': $('#TodoNote').val(),
+                        'is_important': check_box,
                     },
+                    dataType: 'json',
+                    success: function (data) {
+                        $('#').prepend()
+                    }
                 })
             })
+
         })
     </script>
 </body>

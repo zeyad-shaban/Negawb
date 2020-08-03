@@ -4,17 +4,14 @@ from django.http import JsonResponse
 from django.forms.models import model_to_dict
 from django.contrib import messages
 from .forms import TodoForm, FeedbackForm
-from .models import Feedback
+from .models import Feedback, Todo
 
 
 def create_todo(request):
-    if request.method == 'POST':
-        form = TodoForm(request.POST)
-        todo = form.save(commit=False)
-        todo.user = request.user
+    if request.method == 'GET':
+        todo = Todo(title = request.GET.get('title'), note=request.GET.get('note'), is_important = request.GET.get('is_important'), user=request.user)
         todo.save()
-        messages.success(request, 'Creted Todo, Good Luck!')
-        return JsonResponse({'todo': model_to_dict(todo)}, status=200)
+        return JsonResponse({'todo': model_to_dict(todo)})
 
 
 def feedback(request):
