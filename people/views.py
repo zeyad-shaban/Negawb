@@ -40,6 +40,9 @@ def all_peopleresults(request):
 def addfriend(request, user_id):
     from_user = request.user
     to_user = get_object_or_404(User, pk=user_id)
+    friend_request_check_1 = FriendRequest.objects.filter(
+        from_user=from_user, to_user=to_user)
+    friend_request_check_2 = FriendRequest.objects.filter(from_user = to_user, to_user = from_user)
     if user_id == request.user.id:
         users = User.objects.all()
         message = {
@@ -47,6 +50,19 @@ def addfriend(request, user_id):
             'tags': 'error'
         }
         return JsonResponse({'message': message})
+    elif friend_request_check_1:
+        message = {
+            'text': f'You already send a friend request to {to_user}',
+            'tags': 'warning',
+        }
+        return JsonResponse({'message': message})
+    elif friend_request_check_2:
+        message = {
+            'text': f'{to_user} has already send a you a <a href="/userpage/friendrequests/" >friend request Here</a>',
+            'tags': 'warning',
+        }
+        return JsonResponse({'message': message})
+
     else:
         try:
             friend_request = FriendRequest(
