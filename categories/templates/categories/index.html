@@ -27,7 +27,7 @@
             <div class="card-body">
                 <h5 class="card-title">{{ category.title }}</h5>
                 {% if category.description %}
-                <p class="card-text">{{ category.description }}</p>
+                <p class="card-text">{{ category.description|safe }}</p>
                 {% endif %}
             </div>
         </div>
