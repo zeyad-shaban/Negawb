@@ -42,7 +42,10 @@ def signupuser(request):
 
                 user.save()
                 login(request, user)
-                return redirect('home')
+                if request.GET.get('next'):
+                    return redirect(request.GET.get('next'))
+                else:
+                    return redirect('home')
             except IntegrityError:
                 messages.error(
                     request, 'Username is already taken, please choose another one')
@@ -63,7 +66,10 @@ def activate(request, uidb64, token):
         user.is_active = True
         user.save()
         login(request, user)
-        # return redirect('home')
+        if request.GET.get('next'):
+            return redirect(request.GET.get('next'))
+        else:
+            return redirect('home')
         return HttpResponse('Thank you for your email confirmation. Now you can login your account.')
     else:
         return HttpResponse('Activation link is invalid!')
@@ -72,7 +78,10 @@ def activate(request, uidb64, token):
 def logoutuser(request):
     if request.method == 'POST':
         logout(request)
-        return redirect('home')
+        if request.GET.get('next'):
+            return redirect(request.GET.get('next'))
+        else:
+            return redirect('home')
 
 
 def loginuser(request):
@@ -87,7 +96,10 @@ def loginuser(request):
             return redirect('makeuser:loginuser')
         else:
             login(request, user)
-            return redirect('home')
+            if request.GET.get('next'):
+                return redirect(request.GET.get('next'))
+            else:
+                return redirect('home')
 
 
 # TODO: add like method for comments

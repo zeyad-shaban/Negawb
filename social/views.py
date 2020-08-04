@@ -1,5 +1,5 @@
 from django.urls import reverse_lazy
-from django.http import JsonResponse
+from django.http import JsonResponse, Http404
 from django.views import generic
 from django.http import HttpResponse as hs
 from django.shortcuts import render, get_object_or_404, redirect
@@ -70,16 +70,19 @@ def my_groups(request):
 
 @login_required
 def view_group(request, chatgroup_pk):
-    if request.method == 'GET':
-        chat_group = get_object_or_404(ChatGroup, pk=chatgroup_pk)
-        chat_messages = GroupMessage.objects.filter(group=chat_group)
-        return render(request, 'social/viewgroup.html', {'chat_group': chat_group, 'chat_messages': chat_messages})
+    chat_group = get_object_or_404(ChatGroup, pk=chatgroup_pk)
+    if not request.user in chat_group.members.all():
+        raise Http404
     else:
-        chat_group = get_object_or_404(ChatGroup, pk=chatgroup_pk)
-        message = GroupMessage(
-            group=chat_group, message_sender=request.user, message=request.POST['message'])
-        message.save()
-        return redirect('social:view_group', chatgroup_pk)
+        if request.method == 'GET':
+            chat_messages = GroupMessage.objects.filter(group=chat_group)
+            return render(request, 'social/viewgroup.html', {'chat_group': chat_group, 'chat_messages': chat_messages})
+        else:
+            chat_group = get_object_or_404(ChatGroup, pk=chatgroup_pk)
+            message = GroupMessage(
+                group=chat_group, message_sender=request.user, message=request.POST['message'])
+            message.save()
+            return redirect('social:view_group', chatgroup_pk)
 
 
 @login_required
