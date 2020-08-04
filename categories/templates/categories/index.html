@@ -9,14 +9,7 @@
 {% endblock searchbar %}
 {% block content %}
 
-<div class="jumbotron">
-    <h1>All Categories</h1>
-    <p class="form-text text-muted">We have {{categories.count}} categories and more soon</p>
-    <div class="text-right">
-    <h4>About</h4>
-    <p>مجموعه من المتخصصين في شتي المجالات.. خبرات مهنيه ومعرفيه.. مستعدون طوال الوقت لتقديم المشوره والاجابه علي الأسئله وانجاز أي عمل او مهمه او فكره..</p>
-</div>
-</div>
+
 <div class="row row-cols-1 row-cols-md-3">
     {% for category in categories %}
     <div class="col mb-4">
