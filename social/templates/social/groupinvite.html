@@ -73,16 +73,19 @@
                         $('#message_area').html('')
                         if (data.message.tags === 'error') {
                             $('#message_area').append(`
-                            <div class="alert alert-danger">${data.message.text}</div>
+                            <div class="alert alert-danger fixed-top">${data.message.text}</div>
                             `)
                         } else {
                             $('#message_area').append(`
-        <div class="alert alert-${data.message.tags}">${data.message.text}</div>
+        <div class="alert alert-${data.message.tags} fixed-top">${data.message.text}</div>
                                 `)
                         }
                     }
                 }
             })
+            setTimeout(() => {
+                $('#message_area').html('')
+            }, 5200);
         })
 
     })
@@ -146,20 +149,21 @@
                     'group_pk': "{{ group.id }}",
                 },
                 success: function (data) {
-                    {
-                        $('#message_area').html('')
-                        if (data.message.tags === 'error') {
-                            $('#message_area').append(`
-                            <div class="alert alert-danger">${data.message.text}</div>
+                    $('#message_area').html('')
+                    if (data.message.tags === 'error') {
+                        $('#message_area').append(`
+                            <div class="alert alert-danger fixed-top">${data.message.text}</div>
                             `)
-                        } else {
-                            $('#message_area').append(`
-        <div class="alert alert-${data.message.tags}">${data.message.text}</div>
+                    } else {
+                        $('#message_area').append(`
+        <div class="alert alert-${data.message.tags} fixed-top">${data.message.text}</div>
                                 `)
-                        }
                     }
                 }
             })
+            setTimeout(() => {
+                $('#message_area').html('')
+            }, 5200);
         })
 
     })

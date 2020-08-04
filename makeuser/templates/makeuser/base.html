@@ -12,17 +12,13 @@
 </head>
 
 <body>
-    {% if error %}
-    <div class="alert alert-danger" role="alert">
-        {{error}}
-    </div>
     {% endif %}
     {% if messages %}
     {% for message in messages %}
     {% if message.tags == 'error' %}
-    <div class="alert alert-danger">{{message}}</div>
+    <div class="alert alert-danger fixed-top">{{message}}</div>
     {% else %}
-    <div class="alert alert-{{message.tags}}">{{message}}</div>
+    <div class="alert alert-{{message.tags}} fixed-top">{{message}}</div>
     {% endif %}
     {% endfor %}
     {% endif %}
