@@ -1,12 +1,14 @@
 from django.urls import reverse_lazy
+from django.http import JsonResponse
 from django.views import generic
 from django.http import HttpResponse as hs
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Q
 from django.contrib import messages
 from django.contrib.auth import get_user_model
-from .forms import ChatGroupForm
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
+from .forms import ChatGroupForm
 from .models import ChatBox, Message, ChatGroup, GroupRequest, GroupMessage
 User = get_user_model()
 
@@ -56,7 +58,7 @@ def create_chat_group(request):
         new_chat_group.members.add(request.user)
         messages.success(
             request, 'Successfully created group, you can now add members')
-        return redirect('home')
+        return redirect('social:view_group', new_chat_group.id)
 
 
 @login_required
@@ -84,21 +86,42 @@ def view_group(request, chatgroup_pk):
 def groupinvite(request, pk):
     group = get_object_or_404(ChatGroup, pk=pk)
     if request.method == 'GET':
-        users = User.objects.all()
+        users = User.objects.filter(~Q(friends=request.user))
         friends = User.objects.filter(friends=request.user)
         return render(request, 'social/groupinvite.html', {'group': group, 'users': users, 'friends': friends})
 
 
 def create_invite(request, user_pk, group_pk):
+    user_pk = request.GET.get('user_pk')
+    group_pk = request.GET.get('group_pk')
     request_sender = request.user
     reciever = get_object_or_404(User, pk=user_pk)
     group = get_object_or_404(ChatGroup, pk=group_pk)
+    if request_sender == reciever:
+        message = {
+            'text': f'You can\'t invite yourself, go find some friends please 😭 ',
+            'tags': 'error',
+        }
+        return JsonResponse({'message': message})
+
     group_request = GroupRequest(
         request_sender=request_sender, reciever=reciever, group=group)
-    group_request.save()
-    messages.success(
-        request, f'Successfully invited {reciever.username} to {group.title} ')
-    return redirect('social:groupinvite', group_pk)
+    group_request_check = GroupRequest.objects.filter(
+        request_sender=request_sender, reciever=reciever)
+    if group_request_check:
+        message = {
+            'text': f'You already send a friend request to {reciever}',
+            'tags': 'warning',
+        }
+        return JsonResponse({'message': message})
+
+    else:
+        group_request.save()
+        message = {
+            'text': f'Successfully invited {reciever}',
+            'tags': 'success',
+        }
+        return JsonResponse({'message': message})
 
 
 def join_group(request, pk):

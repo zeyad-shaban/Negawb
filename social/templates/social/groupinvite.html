@@ -2,6 +2,15 @@
 {% block title %}Invite to {{group.title}} {% endblock title %}
 
 {% block content %}
+<script>
+    $(document).ready(function () {
+
+        $('.id_inviteForm').submit(function (event) {
+            event.preventDefault()
+        })
+
+    })
+</script>
 <h1>Friends</h1>
 
 {% for friend in friends %}
@@ -40,13 +49,44 @@
             <span class="fa fa-fw fa-envelope fa-fw text-muted" data-toggle="tooltip" title="Bio"
                 data-original-title="{{ friend.bio }}"></span>
             <span class="small text-truncate">{{ friend.bio }}</span>
-            <form action="{% url 'social:create_invite' friend.id%}" method="POST">
+            <form class="id_inviteForm" method="GET">
                 {% csrf_token %}
-                <input type="submit" value="Invite" name="invite," class="btn btn-primary float-right">
+                <input type="submit" value="Invite" name="invite," class="btn btn-primary float-right"
+                    id="id_inviteButton{{friend.id}}">
             </form>
         </div>
     </div>
 </li>
+<!-- invite friend ajax script -->
+<script>
+    $(document).ready(function () {
+
+        $('#id_inviteButton{{friend.id}}').click(function () {
+            $.ajax({
+                url: "{% url 'social:create_invite' friend.id group.id %}",
+                data: {
+                    'user_pk': "{{friend.id}}",
+                    'group_pk': "{{ group.id }}",
+                },
+                success: function (data) {
+                    {
+                        $('#message_area').html('')
+                        if (data.message.tags === 'error') {
+                            $('#message_area').append(`
+                            <div class="alert alert-danger">${data.message.text}</div>
+                            `)
+                        } else {
+                            $('#message_area').append(`
+        <div class="alert alert-${data.message.tags}">${data.message.text}</div>
+                                `)
+                        }
+                    }
+                }
+            })
+        })
+
+    })
+</script>
 {% endfor %}
 <hr>
 <h1>All Users</h1>
@@ -86,13 +126,44 @@
             <span class="fa fa-fw fa-envelope fa-fw text-muted" data-toggle="tooltip" title="Bio"
                 data-original-title="{{ view_user.bio }}"></span>
             <span class="small text-truncate">{{ view_user.bio }}</span>
-            <form action="{% url 'social:create_invite' view_user.id group.id %}" method="POST">
+            <form class="id_inviteForm" method="GET">
                 {% csrf_token %}
-                <input type="submit" value="Invite" name="invite" class="btn btn-primary float-right">
+                <input type="submit" value="Invite" name="invite" class="btn btn-primary float-right id_inviteButton"
+                    id="id_inviteButton{{view_user.id}}">
             </form>
         </div>
     </div>
 </li>
+<!-- invite user script -->
+<script>
+    $(document).ready(function () {
+        $('#id_inviteButton{{view_user.id}}').click(function () {
+            console.log("{{ view_user.username }}" + "{{ view_user.id }}")
+            $.ajax({
+                url: "{% url 'social:create_invite' view_user.id group.id %}",
+                data: {
+                    'user_pk': "{{view_user.id}}",
+                    'group_pk': "{{ group.id }}",
+                },
+                success: function (data) {
+                    {
+                        $('#message_area').html('')
+                        if (data.message.tags === 'error') {
+                            $('#message_area').append(`
+                            <div class="alert alert-danger">${data.message.text}</div>
+                            `)
+                        } else {
+                            $('#message_area').append(`
+        <div class="alert alert-${data.message.tags}">${data.message.text}</div>
+                                `)
+                        }
+                    }
+                }
+            })
+        })
+
+    })
+</script>
 {% endfor %}
 
 

@@ -24,12 +24,14 @@
                     </div>
 
                     <a href="{% url 'social:view_group' group.id %}">
-                        <div class="col-12 col-sm-6 col-md-9 text-center text-sm-left">
+                        <div class="col-12 col-sm-12 col-md-12 text-center text-sm-left">
                             <label class="name lead">{{ group.title }}</label>
+                            {% if group.description %}
                             <br>
                             <span class="fa fa-fw fa-envelope fa-fw text-muted" data-toggle="tooltip" title="Bio"
                                 data-original-title="{{ group.description }}"></span>
                             <span class="small text-truncate">{{ group.description|striptags|truncatechars:100 }}</span>
+                            {% endif %}
                         </div>
                     </a>
                 </div>
