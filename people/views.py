@@ -22,7 +22,7 @@ def people_questions(request, peoplequestions_id):
     questions = Comment.objects.filter(user=user)
     return render(request, 'people/peoplequestions.html', {'questions': questions})
 
-
+@login_required
 def all_people(request):
     users = User.objects.all().order_by('-id')
     user_friends = User.objects.filter(friends=request.user)
