@@ -137,12 +137,19 @@ def join_group(request, pk):
     group = group_request.group
     group.members.add(request.user)
     group_request.delete()
-    messages.success(request, f'Welcome to {group.title}')
-    return redirect('social:my_groups')
+    message = {
+        'text': f'Welome to {group.title}',
+        'tags': 'success',
+    }
+    return JsonResponse({'message': message})
+
 
 
 def deny_group(request, pk):
     group_request = get_object_or_404(GroupRequest, pk=pk)
-    messages.success(request, f'You didn\'t join {group_request.group.title}')
     group_request.delete()
-    return redirect('userpage:friendrequests')
+    message = {
+        'text': f'You didn\'t join {group_request.group.title}',
+        'tags': 'success'
+    }
+    return JsonResponse({'message':message,})

@@ -10,6 +10,11 @@
 {% endblock searchbar %}
 
 {% block content %}
+
+{% if user.is_authenticated %}
+<small class="from-text text-muted">view <a href="{% url 'userpage:friendrequests' %}">Friend requests</a></small>
+{% endif %}
+    
 <div class="card card-default" id="card_contacts">
     <div id="contacts" class="panel-collapse collapse show" aria-expanded="true">
         <ul class="list-group pull-down" id="contact-list">

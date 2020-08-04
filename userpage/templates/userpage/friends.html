@@ -12,7 +12,8 @@
 
 
 {% block content %}
-
+{{friends.count}} Friend{{ friends.count|pluralize }}
+<small class="form-text text-mute">{% if friends.count == 0 %}<a href="{% url 'people:all_people' %}">Find Friend</a> or{% endif %} view <a href="{% url 'userpage:friendrequests' %}">Friend requests</a></small>
 <div class="card card-default" id="card_contacts">
     <div id="contacts" class="panel-collapse collapse show" aria-expanded="true">
         <ul class="list-group pull-down" id="contact-list">

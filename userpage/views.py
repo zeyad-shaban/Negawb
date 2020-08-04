@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 from comments.models import Comment, Reply
 from people.models import FriendRequest
 from django.contrib import messages
@@ -90,8 +91,11 @@ def friendrequests(request):
 def denyrequest(request, request_id):
     denied_request = get_object_or_404(FriendRequest, pk=request_id)
     denied_request.delete()
-    messages.success(request, 'Friend Request denied')
-    return redirect('userpage:friendrequests')
+    message = {
+        'text': f'Friend Request denied',
+        'tags': 'success'
+    }
+    return JsonResponse({'message': message})
 
 
 @login_required
@@ -110,7 +114,11 @@ def acceptrequest(request, request_id):
     to_user.friends.add(from_user)
     friend_request.delete()
     messages.success(request, f'{to_user} is now a friend')
-    return redirect('userpage:friendrequests')
+    message = {
+        'text': f'{to_user} is now a friend 😄',
+        'tags': 'success'
+    }
+    return JsonResponse({'message': message})
 
 
 @login_required

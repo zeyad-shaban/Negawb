@@ -3,12 +3,13 @@
 {% block title %}Friend and Group | Requests{% endblock title %}
 
 {% block content %}
+<small class="from-text text-muted"><a href="{% url 'people:all_people' %}">Find Friend</a></small>
 <h1>Friends Requests</h1>
 <p>{{requests.count}} Friend Request{{requests.count|pluralize}}</p>
 <br>
 
 {% for request in requests %}
-<div class="media">
+<div class="media" id="{{request.id}}Friend">
 
     {% if request.from_user.who_see_avatar == 'everyone' %}
     <img src="{{ request.from_user.avatar.url }}" class="mr-3" alt="{{ request.from_user.username }}" widht="64"
@@ -24,19 +25,90 @@
                 {{request.date|date:"j b o"}}</small></small></h5>
 
     </div>
+    <form method="GET" class="float-left ml-4" id="acceptFriendForm{{request.id}}">
+        {% csrf_token %}
+        <input type="submit" value="Accept" name="acceptrequest," class="btn btn-success ml-2"
+            id="acceptFriend{{request.id}}">
+    </form>
+    <a class="btn btn-danger" id="denyRequest{{request.id}}" style="color: white;">Deny</a>
 </div>
-<form action="{% url 'userpage:acceptrequest' request.id %}" method="POST" class="float-left ml-4">
-    {% csrf_token %}
-    <input type="submit" value="Accept" name="acceptrequest," class="btn btn-success ml-2">
-</form>
-<a class="btn btn-danger" href="{% url 'userpage:denyrequest' request.id%}">Deny</a>
+<!-- ACCEPT AND DENY FRIEND REQUEST -->
+<script>
+    $(document).ready(function () {
+
+        // ACCEPT 
+        $('#acceptFriendForm{{request.id}}').submit(function (event) {
+            event.preventDefault()
+        })
+        $('#acceptFriend{{request.id}}').click(function (event) {
+            event.preventDefault();
+            $.ajax({
+                type: "get",
+                url: "{% url 'userpage:acceptrequest' request.id %}",
+                data: {
+                    'request_id': "{{ request.id }}"
+                },
+                dataType: "json",
+                success: function (data) {
+                    $('#message_area').html('')
+                    if (data.message.tags === 'error') {
+                        $('#message_area').append(`
+                            <div class="alert alert-danger fixed-top">${data.message.text}</div>
+                            `)
+                    } else {
+                        $('#message_area').append(`
+        <div class="alert alert-${data.message.tags} fixed-top">${data.message.text}</div>
+                                `)
+                    }
+                    setTimeout(() => {
+                        $('#{{request.id}}Friend').fadeOut()
+                    }, 900);
+                    setTimeout(() => {
+                        $('#message_area').fadeOut()
+                    }, 3200);
+                }
+            });
+        });
+        // DENNY
+        $('#denyRequest{{request.id}}').click(function (event) {
+            event.preventDefault();
+            $.ajax({
+                type: "get",
+                url: "{% url 'userpage:denyrequest' request.id%}",
+                data: {
+                    'request_id': "{{ request.id }}"
+                },
+                dataType: "json",
+                success: function (data) {
+                    $('#message_area').html('')
+                    if (data.message.tags === 'error') {
+                        $('#message_area').append(`
+                            <div class="alert alert-danger fixed-top">${data.message.text}</div>
+                            `)
+                    } else {
+                        $('#message_area').append(`
+        <div class="alert alert-${data.message.tags} fixed-top">${data.message.text}</div>
+                                `)
+                    }
+                    setTimeout(() => {
+                        $('#{{request.id}}Friend').fadeOut()
+                    }, 900);
+                    setTimeout(() => {
+                        $('#message_area').fadeOut()
+                    }, 3200);
+                }
+            });
+        });
+
+    })
+</script>
 {% endfor %}
 <hr>
 <h1>Group Requests</h1>
 <p>{{group_requests.count}} Group Request{{group_requests.count|pluralize}}</p>
 <br>
 {% for request in group_requests %}
-<div class="media">
+<div class="media" id="{{request.id}}Group">
     {% if request.request_sender.who_see_avatar == 'everyone' %}
     <img src="{{ request.request_sender.avatar.url }}" class="mr-3" alt="{{ request.request_sender.username }}"
         widht="64" height="64">
@@ -54,12 +126,81 @@
                 {{request.date|date:"j b o"}}</small></small></h5>
 
     </div>
+    <a class="btn btn-danger float-left" href="{% url 'social:deny_group' request.id%}"
+        id="denyGroup{{request.id}}">Deny</a>
+    <form method="GET" id="AcceptGroup{{request.id}}">
+        {% csrf_token %}
+        <input type="submit" value="Join" name="joingroup," class="btn btn-success ml-2" id="joinGroup{{request.id}}">
+    </form>
 </div>
-<a class="btn btn-danger float-left" href="{% url 'social:deny_group' request.id%}">Deny</a>
-<form action="{% url 'social:join_group' request.id %}" method="POST">
-    {% csrf_token %}
-    <input type="submit" value="Join" name="joingroup," class="btn btn-success ml-2">
-</form>
+<!-- join and deny group requests Script-->
+<script>
+    $(document).ready(function () {
+        // ACCEPT INVITE
+        $('#AcceptGroup{{request.id}}').submit(function (event) {
+            event.preventDefault()
+        })
+        $('#joinGroup{{request.id}}').click(function () {
+            $.ajax({
+                url: "{% url 'social:join_group' request.id %}",
+                data: {
+                    'pk': '{{ request.id }}',
+                },
+                dataType: 'json',
+                success: function (data) {
+                    $('#message_area').html('')
+                    if (data.message.tags === 'error') {
+                        $('#message_area').append(`
+                            <div class="alert alert-danger fixed-top">${data.message.text}</div>
+                            `)
+                    } else {
+                        $('#message_area').append(`
+        <div class="alert alert-${data.message.tags} fixed-top">${data.message.text}</div>
+                                `)
+                    }
+                    setTimeout(() => {
+                        $('#{{request.id}}Group').fadeOut()
+                    }, 900);
+                    setTimeout(() => {
+                        $('#message_area').fadeOut()
+                    }, 3200);
+                }
+
+            })
+        })
+        // DENY INVITE
+        $('#denyGroup{{request.id}}').click(function (event) {
+            event.preventDefault();
+            $.ajax({
+                type: "get",
+                url: "{% url 'social:deny_group' request.id%}",
+                data: {
+                    'pk': '{{ request.id }}'
+                },
+                dataType: "json",
+                success: function (data) {
+                    $('#message_area').html('')
+                    if (data.message.tags === 'error') {
+                        $('#message_area').append(`
+                            <div class="alert alert-danger fixed-top">${data.message.text}</div>
+                            `)
+                    } else {
+                        $('#message_area').append(`
+        <div class="alert alert-${data.message.tags} fixed-top">${data.message.text}</div>
+                                `)
+                    }
+                    setTimeout(() => {
+                        $('#{{request.id}}Group').fadeOut()
+                    }, 900);
+                    setTimeout(() => {
+                        $('#message_area').fadeOut()
+                    }, 3200);
+                },
+            });
+        });
+
+    })
+</script>
 {% endfor %}
 
 {% endblock content %}
