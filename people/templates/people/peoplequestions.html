@@ -7,16 +7,16 @@
     {% if question.title %}
     <div class="card-header">
         {{ question.title }}
-        <small class="form-text text-muted">{{ question.comment_date }}</small>
+        <small class="form-text text-muted">{{ question.post_date }}</small>
     </div>
     {% else %}
     <div class="card-header">
-        <small class="form-text text-muted">{{ question.comment_date }}</small>
+        <small class="form-text text-muted">{{ question.post_date }}</small>
     </div>
     {% endif %}
     <div class="card-body">
         <p class="card-text text-break">{{ question.description|truncatechars:300 }}</p>
-        <a class="btn btn-primary" href="{% url 'comments:view_comment' question.id %}">View Question</a>
+        <a class="btn btn-primary" href="{% url 'comments:view_post' question.id %}">View Question</a>
 
     </div>
 </div>

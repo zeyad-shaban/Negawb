@@ -1,80 +1,80 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse
-from .models import Comment, Reply
+from .models import Post, Reply
 from django.contrib.auth.decorators import login_required
-from .forms import CommentForm, ReplyForm
+from .forms import PostForm, ReplyForm
 from django.db.models import Q
 from django.contrib import messages
 
 
-def comments(request):
-    comments = Comment.objects.all().order_by('-comment_date')
+def posts(request):
+    posts = Post.objects.all().order_by('-post_date')
     if request.method == 'GET':
-        return render(request, 'comments/comments.html', {'comments': comments, 'form': CommentForm})
-    # Add Comment
+        return render(request, 'comments/posts.html', {'posts': posts, 'form': PostForm})
+    # Add Post
 
     elif request.POST['submit'] == 'Add Comment':
         try:
-            form = CommentForm(request.POST)
-            comment = form.save(commit=False)
-            comment.user = request.user
-            messages.success(request, "created comment successfully")
-            comment.save()
-            return redirect('comments:comments')
+            form = PostForm(request.POST)
+            post = form.save(commit=False)
+            post.user = request.user
+            messages.success(request, "created post successfully")
+            post.save()
+            return redirect('comments:posts')
         except ValueError:
             messages.error(request, 'Title must be 0-40 character')
-            return redirect('comments:comments')
+            return redirect('comments:posts')
 
 
 @login_required
-def view_comment(request, comment_id):
-    comment = get_object_or_404(Comment, pk=comment_id)
+def view_post(request, post_id):
+    post = get_object_or_404(Post, pk=post_id)
     replies = Reply.objects.filter(
-        comment=comment).order_by('-reply_date')[:150]
+        post=post).order_by('-reply_date')[:150]
     if request.method == 'GET':
-        return render(request, 'comments/view_comment.html', {'comment': comment, 'replies': replies, 'form': ReplyForm})
+        return render(request, 'comments/view_post.html', {'post': post, 'replies': replies, 'form': ReplyForm})
     else:
         form = ReplyForm(request.POST)
         reply = form.save(commit=False)
         reply.user = request.user
-        reply.comment = comment
+        reply.post = post
         reply.save()
-        return redirect('comments:view_comment', comment_id=comment_id)
+        return redirect('comments:view_post', post_id=post_id)
 
 
-def results_comment(request):
+def results_post(request):
     query = request.GET.get('q')
-    comments = Comment.objects.filter(
+    posts = Post.objects.filter(
         Q(title__icontains=query) | Q(description__icontains=query))
-    return render(request, 'comments/results_comment.html', {'comments': comments, 'form': CommentForm})
+    return render(request, 'comments/results_post.html', {'posts': posts, 'form': PostForm})
 
 
 @login_required
-def comment_like_dislike(request, comment_id):
-    comment = get_object_or_404(Comment, pk=comment_id)
+def post_like_dislike(request, post_id):
+    post = get_object_or_404(Post, pk=post_id)
     # Like
     if request.GET.get('submit') == 'like':
-        if request.user in comment.dislikes.all():
-            comment.dislikes.remove(request.user)
-            comment.likes.add(request.user)
+        if request.user in post.dislikes.all():
+            post.dislikes.remove(request.user)
+            post.likes.add(request.user)
             return JsonResponse({'action':'undislike_and_like'})
-        elif request.user in comment.likes.all():
-            comment.likes.remove(request.user)
+        elif request.user in post.likes.all():
+            post.likes.remove(request.user)
             return JsonResponse({'action':'unlike'})
         else:
-            comment.likes.add(request.user)
+            post.likes.add(request.user)
             return JsonResponse({'action': 'like_only'})
     # Dislike
     elif request.GET.get('submit') == 'dislike':
-        if request.user in comment.likes.all():
-            comment.likes.remove(request.user)
-            comment.dislikes.add(request.user)
+        if request.user in post.likes.all():
+            post.likes.remove(request.user)
+            post.dislikes.add(request.user)
             return JsonResponse({'action': 'unlike_and_dislike'})
-        elif request.user in comment.dislikes.all():
-            comment.dislikes.remove(request.user)
+        elif request.user in post.dislikes.all():
+            post.dislikes.remove(request.user)
             return JsonResponse({'action': 'undislike'})
         else:
-            comment.dislikes.add(request.user)
+            post.dislikes.add(request.user)
             return JsonResponse({'action': 'dislike_only'})
 
 

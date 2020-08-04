@@ -1,12 +1,12 @@
 from django.contrib import admin
-from .models import Comment, Reply
+from .models import Post, Reply
 
 
-class CommentAdmin(admin.ModelAdmin):
-    readonly_fields = ('comment_date',)
+class PostAdmin(admin.ModelAdmin):
+    readonly_fields = ('post_date',)
 
 
-admin.site.register(Comment, CommentAdmin)
+admin.site.register(Post, PostAdmin)
 
 
 class ReplyAdmin(admin.ModelAdmin):

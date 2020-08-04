@@ -44,7 +44,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto ml-">
                 <li class="nav-item">
-                    <a href="{% url 'comments:comments' %}" title="All Questions and Ask">Ask Question</a>
+                    <a href="{% url 'comments:posts' %}" title="All Questions and Ask">Post</a>
                 </li>
 
                 <li class="nav-item">
@@ -57,7 +57,7 @@
                         Create & Add
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="{% url 'comments:comments' %}">Question</a>
+                        <a class="dropdown-item" href="{% url 'comments:posts' %}">Question</a>
                         <button type="button" class="btn btn-primary dropdown-item" data-toggle="modal"
                             data-target="#createChatGroup" data-whatever="createChatGroup">Chat Group</button>
                         <div class="dropdown-divider"></div>

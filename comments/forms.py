@@ -1,9 +1,9 @@
 from django.forms import ModelForm
-from .models import Comment, Reply
+from .models import Post, Reply
 
-class CommentForm(ModelForm):
+class PostForm(ModelForm):
     class Meta:
-        model = Comment
+        model = Post
         fields =['description','title', 'category']
 
 class ReplyForm(ModelForm):

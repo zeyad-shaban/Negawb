@@ -2,7 +2,7 @@
 {% block title %} Comments {% endblock title %}
 
 {% block searchbar %}
-<form class="form-inline" action="{% url 'comments:results_comment' %}" method="GET">
+<form class="form-inline" action="{% url 'posts:results_post' %}" method="GET">
     <input class="form-control mr-sm-2" type="search" name="q" placeholder="Search" aria-label="Search">
     <input class="btn btn-outline-success my-2 my-sm-0" type="submit" value="Search">
 </form>
@@ -10,10 +10,10 @@
 
 {% block content %}
 <br>
-<p>Comment{{ comments.count|pluralize }}: {{comments.count}}</p>
+<p>Comment{{ posts.count|pluralize }}: {{posts.count}}</p>
 <br>
 <!-- Add Comoment -->
-<form style="display:none;" id="create-comment" method="POST">
+<form style="display:none;" id="create-post" method="POST">
     {% csrf_token %}
     <div class="form-group">
         <label for="title">Title</label>
@@ -30,22 +30,22 @@
     <input class="btn btn-success" type="submit" value="Add Comment">
 </form>
 <br>
-<!-- end add comment -->
-{% for comment in comments %}
+<!-- end add post -->
+{% for post in posts %}
 <div class="card">
     <div class="card-header">
-        <a href="{% url 'people:people' comment.user.id %}">
-            {{ comment.user}}
+        <a href="{% url 'people:people' post.user.id %}">
+            {{ post.user}}
         </a>
-        <small class="form-text text-muted">{{ comment.comment_date }}
-            <a href="{% url 'view_category' comment.category.id %}">{{comment.category}}</a></small>
+        <small class="form-text text-muted">{{ post.post_date }}
+            <a href="{% url 'categories:view_category' post.category.id %}">{{post.category}}</a></small>
     </div>
     <div class="card-body">
-        {% if comment.title %}
-        <h5 class="card-title">{{comment.title}}</h5>
+        {% if post.title %}
+        <h5 class="card-title">{{post.title}}</h5>
         {% endif %}
-        <p class="card-text text-break">{{ comment.description|truncatechars:300 }}</p>
-        <a href="{% url 'comments:view_comment' comment.id %}" class="btn btn-primary">View Comment, Reply</a>
+        <p class="card-text text-break">{{ post.description|truncatechars:300 }}</p>
+        <a href="{% url 'posts:view_post' post.id %}" class="btn btn-primary">View Comment, Reply</a>
     </div>
 </div>
 {% endfor %}

@@ -100,6 +100,3 @@ def loginuser(request):
                 return redirect(request.GET.get('next'))
             else:
                 return redirect('home')
-
-
-# TODO: add like method for comments

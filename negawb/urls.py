@@ -24,6 +24,7 @@ urlpatterns = [
     path('', views.home, name='home'),
     # CATEGORIES
     path('category/', include('categories.urls'), name='category'),
+    # !this wasn't changed to posts
     path('comments/', include('comments.urls'), name='comments'),
     path('user/', include('makeuser.urls'), name='user'),
     path('userpage/', include('userpage.urls'), name='userpage'),

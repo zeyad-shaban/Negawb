@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from comments.models import Comment, Reply
+from comments.models import Post, Reply
 from .models import FriendRequest
 from django.db.models import Q
 from django.contrib import messages
@@ -19,7 +19,7 @@ def people(request, people_id):
 
 def people_questions(request, peoplequestions_id):
     user = get_object_or_404(User, pk=peoplequestions_id)
-    questions = Comment.objects.filter(user=user)
+    questions = Post.objects.filter(user=user)
     return render(request, 'people/peoplequestions.html', {'questions': questions})
 
 @login_required

@@ -3,7 +3,7 @@
 {% block title %} Comments {% endblock title %}
 
 {% block searchbar %}
-<form class="form-inline" action="{% url 'comments:results_comment' %}" method="GET">
+<form class="form-inline" action="{% url 'comments:results_post' %}" method="GET">
     <input class="form-control mr-sm-2" type="search" name="q" placeholder="Search" aria-label="Search">
     <input class="btn btn-outline-success my-2 my-sm-0" type="submit" value="Search">
 </form>
@@ -13,16 +13,16 @@
 <br>
 {% if user.is_authenticated %}
 <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#addComment" aria-expanded="false"
-    aria-controls="addComment">Ask Question</button>
+    aria-controls="addComment">Create Post</button>
 
 {% else %}
-<div class="alert alert-danger">you can't add or view comments unless you are logged in</div>
+<div class="alert alert-danger">you can't add or view posts unless you are logged in</div>
 {% endif %}
-<p>Comment{{ comments.count|pluralize }}: {{comments.count}}</p>
+<p>Comment{{ posts.count|pluralize }}: {{posts.count}}</p>
 <br>
 <!-- Add Comoment -->
 <div class="collapse" id="addComment">
-    <form id="create-comment" method="POST">
+    <form id="create-post" method="POST">
         {% csrf_token %}
         <div class="form-group">
             <label for="title">Title</label>
@@ -41,24 +41,24 @@
     <br>
 </div>
 
-<!-- end add comment -->
-{% for comment in comments %}
+<!-- end add post -->
+{% for post in posts %}
 <div class="card">
     <div class="card-header">
-        <a href="{% url 'people:people' comment.user.id %}">
-            {{ comment.user}}
+        <a href="{% url 'people:people' post.user.id %}">
+            {{ post.user}}
         </a>
-        <small class="form-text text-muted">{{ comment.comment_date }}
-            {% if comment.category %}
-            <a href="{% url 'view_category' comment.category.id %}">{{comment.category}}</a></small>
+        <small class="form-text text-muted">{{ post.post_date }}
+            {% if post.category %}
+            <a href="{% url 'categories:view_category' post.category.id %}">{{post.category}}</a></small>
         {% endif %}
     </div>
     <div class="card-body">
-        {% if comment.title %}
-        <h5 class="card-title">{{comment.title}}</h5>
+        {% if post.title %}
+        <h5 class="card-title">{{post.title}}</h5>
         {% endif %}
-        <p class="card-text text-break">{{ comment.description|truncatechars:300 }}</p>
-        <a href="{% url 'comments:view_comment' comment.id %}" class="btn btn-primary">View Comment, Reply</a>
+        <p class="card-text text-break">{{ post.description|truncatechars:300 }}</p>
+        <a href="{% url 'comments:view_post' post.id %}" class="btn btn-primary">View Comment, Reply</a>
     </div>
     <span class="row justify-content-center">
         <!-- Like -->
@@ -70,10 +70,10 @@
 
 
         <span class="m-3" id="id_likes">
-            {% if user in comment.likes.all %}
-            <p style="color:#065FD4;"><b>{{comment.likes.count}}</b></p>
+            {% if user in post.likes.all %}
+            <p style="color:#065FD4;"><b>{{post.likes.count}}</b></p>
             {% else %}
-            <p style="color:black;">{{comment.likes.count}}</p>
+            <p style="color:black;">{{post.likes.count}}</p>
             {% endif %}
         </span>
         <!-- add like script -->
@@ -85,23 +85,23 @@
                 })
                 $('#likeButton').click(function (event) {
                     $.ajax({
-                        url: "{% url 'comments:comment_like_dislike' comment.id %}",
+                        url: "{% url 'comments:post_like_dislike' post.id %}",
                         data: {
                             'submit': 'like',
                         },
                         dataType: 'json',
                         success: function (data) {
-                            let likes = "{{comment.likes.count}}";
-                            let dislikes = "{{ comment.dislikes.count }}"
+                            let likes = "{{post.likes.count}}";
+                            let dislikes = "{{ post.dislikes.count }}"
                             if (data.action == 'undislike_and_like') {
-                                dislikes -=1
+                                dislikes -= 1
                                 likes++
                                 $('#id_dislikes').html('<p style="color:black;">' +
                                     dislikes + '</p>')
                                 $('#id_likes').html('<p style="color:#065FD4;"><b>' +
                                     likes + '</b></p>')
                             } else if (data.action == 'unlike') {
-                                likes -=1
+                                likes -= 1
                                 $('#id_likes').html('<p style="color:#black;"' + likes +
                                     '</p>')
                             } else {
@@ -117,17 +117,18 @@
         </script>
 
         <!-- Dislike -->
-        <form action="{% url 'comments:comment_like_dislike' comment.id %}" method="post" class="form-inline" id="dislikeForm">
+        <form action="{% url 'comments:post_like_dislike' post.id %}" method="post" class="form-inline"
+            id="dislikeForm">
             {% csrf_token %}
             <button type="submit" id="dislikeButton" name="submit" value="dislike" title="Dislike">
                 <img src="{% static 'categories/dislike.png' %}" width="30" height="30" alt="Dislike">
             </button>
         </form>
         <span class="m-3" id="id_dislikes">
-            {% if user in comment.dislikes.all %}
-            <p style="color:#065FD4;"><b>{{comment.dislikes.count}}</b></p>
+            {% if user in post.dislikes.all %}
+            <p style="color:#065FD4;"><b>{{post.dislikes.count}}</b></p>
             {% else %}
-            <p style="color:black;">{{comment.dislikes.count}}</p>
+            <p style="color:black;">{{post.dislikes.count}}</p>
             {% endif %}
         </span>
         <!-- add like script -->
@@ -139,24 +140,25 @@
                 })
                 $('#dislikeButton').click(function (event) {
                     $.ajax({
-                        url: "{% url 'comments:comment_like_dislike' comment.id %}",
+                        url: "{% url 'comments:post_like_dislike' post.id %}",
                         data: {
                             'submit': 'dislike',
                         },
                         dataType: 'json',
                         success: function (data) {
-                            let likes = "{{comment.likes.count}}";
-                            let dislikes = "{{ comment.dislikes.count }}"
+                            let likes = "{{post.likes.count}}";
+                            let dislikes = "{{ post.dislikes.count }}"
                             if (data.action == 'unlike_and_dislike') {
                                 dislikes++
-                                likes -=1
+                                likes -= 1
                                 $('#id_dislikes').html('<p style="color:#065FD4;"><b>' +
                                     dislikes + '</b></p>')
                                 $('#id_likes').html('<p style="color:black;">' +
                                     likes + '</p>')
                             } else if (data.action == 'undislike') {
-                                dislikes -=1
-                                $('#id_dislikes').html('<p style="color:#black;"' + dislikes +
+                                dislikes -= 1
+                                $('#id_dislikes').html('<p style="color:#black;"' +
+                                    dislikes +
                                     '</p>')
                             } else {
                                 dislikes++
