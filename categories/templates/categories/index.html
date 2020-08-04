@@ -2,10 +2,11 @@
 {% block title %} Home Page {% endblock title %}
 
 {% block searchbar %}
-<form class="form-inline" action="{% url 'results' %}" method="GET">
+<!-- todo -->
+<!-- <form class="form-inline" method="GET">
     <input class="form-control mr-sm-2" type="search" name="q" placeholder="Search" aria-label="Search">
     <input class="btn btn-outline-success my-2 my-sm-0" type="submit" value="Search">
-</form>
+</form> -->
 {% endblock searchbar %}
 {% block content %}
 
@@ -14,7 +15,7 @@
     {% for category in categories %}
     <div class="col mb-4">
         <div class="card">
-            <a href="{% url 'view_category' category.id %}">
+            <a href="{% url 'categories:view_category' category.id %}">
                 <img src="{{ category.image.url }}" class="card-img-top" alt="Couldn't upload category image">
             </a>
             <div class="card-body">
