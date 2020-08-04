@@ -114,7 +114,12 @@ def create_invite(request, user_pk, group_pk):
             'tags': 'warning',
         }
         return JsonResponse({'message': message})
-
+    elif reciever.who_add_group == 'none' or (reciever.who_add_group == 'friends' and not request_sender in reciever.friends.all()):
+        message = {
+            'text': f'You can\'t add {reciever.username} because he disables that feature',
+            'tags': 'warning',
+        }
+        return JsonResponse({'message': message})
     else:
         group_request.save()
         message = {

@@ -25,7 +25,8 @@ def people_questions(request, peoplequestions_id):
 
 def all_people(request):
     users = User.objects.all().order_by('-id')
-    return render(request, 'people/all_people.html', {'users': users, })
+    user_friends = User.objects.filter(friends=request.user)
+    return render(request, 'people/all_people.html', {'users': users, 'user_friends': user_friends, })
 
 
 def all_peopleresults(request):
@@ -42,7 +43,8 @@ def addfriend(request, user_id):
     to_user = get_object_or_404(User, pk=user_id)
     friend_request_check_1 = FriendRequest.objects.filter(
         from_user=from_user, to_user=to_user)
-    friend_request_check_2 = FriendRequest.objects.filter(from_user = to_user, to_user = from_user)
+    friend_request_check_2 = FriendRequest.objects.filter(
+        from_user=to_user, to_user=from_user)
     if user_id == request.user.id:
         users = User.objects.all()
         message = {

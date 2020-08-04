@@ -20,4 +20,13 @@ class User(AbstractUser):
         choices=who_see_avatar_choices,
         default='friends',
     )
+    who_add_group_choices = [
+        ('none', 'No One'),
+        ('friends', 'Friends Only'),
+        ('everyone', 'Every One'),
+    ]
+    who_add_group = models.CharField(
+        max_length=30,
+        choices = who_add_group_choices,
+        default= 'friends')
     followers = models.ManyToManyField('User', related_name='user_followers')

@@ -1,5 +1,6 @@
 {% extends 'categories/base.html' %}
 {% load static %}
+{% load crispy_forms_tags %}
 {% block title %} {{user.username}} {% endblock title %}
 {% block content %}
     
@@ -105,7 +106,7 @@
             <div class="modal-body">
                 <form action="" method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
-                    {{privacy_form.as_p}}
+                    {{privacy_form|crispy}}
                     <input type="submit" value="Update Privacy" class="btn btn-success" name="submit">
                 </form>
             </div>
