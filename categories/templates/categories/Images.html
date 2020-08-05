@@ -1,10 +1,40 @@
 {% extends 'categories/base.html' %}
 
 {% block title %}
-    {{category.title}}
+{{category.title}}
 {% endblock title %}
 {% block content %}
+<style>
+    .card.bg-dark.text-white {
+        width: 397px;
+        height: 262;
+    }
 
-    <h1>something</h1>
+    .card-img-overlay {
+        display: none;
+    }
+</style>
 
+<div class="card bg-dark text-white">
+    <img src="{{category.image.url}}" width="397" height="262" class="card-img" alt="">
+    <div class="card-img-overlay">
+        <h5 class="card-title">Card title</h5>
+        <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content.
+            This content is a little bit longer.</p>
+        <small class="form-text float-right" class="card-text">Last updated 3 mins ago</small>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        $('.card.bg-dark.text-white').mouseenter(function () {
+            $('.card-img-overlay').fadeIn()
+            $('.card-img-overlay').mouseleave(() => {
+                $('.card-img-overlay').fadeOut()
+            })
+        });
+
+    })
+</script>
 {% endblock content %}
