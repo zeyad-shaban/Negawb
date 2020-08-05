@@ -4,7 +4,7 @@ from django.forms.models import model_to_dict
 from categories.models import Category
 from .models import Post, Comment
 from django.contrib.auth.decorators import login_required
-from .forms import CommentForm
+from .forms import CommentForm, PostForm
 from django.db.models import Q
 from django.contrib import messages
 
@@ -30,8 +30,8 @@ def posts(request):
 
 
 @login_required
-def view_post(request, post_id):
-    post = get_object_or_404(Post, pk=post_id)
+def view_post(request, pk):
+    post = get_object_or_404(Post, pk=pk)
     replies = Comment.objects.filter(
         post=post).order_by('-reply_date')[:150]
     if request.method == 'GET':
@@ -42,7 +42,7 @@ def view_post(request, post_id):
         reply.user = request.user
         reply.post = post
         reply.save()
-        return redirect('comments:view_post', post_id=post_id)
+        return redirect('comments:view_post', pk=pk)
 
 
 def results_post(request):
@@ -117,9 +117,38 @@ def reply_like_dislike(request, reply_id):
 
 def create_post(request, pk):
     category = get_object_or_404(Category, pk=pk)
+    #! NOT SERIALIZING IMAGES
     # Images category
-    if category.title == 'Image':
-        post = Post(description = request.GET.get('description'), image = request.GET.get('image'), user=request.user, category = category)
-        post.save()
-        # return JsonResponse({'post': model_to_dict(post)})
-        return JsonResponse({'something': category})
+    if pk == 1:
+        image = request.GET.get('image')
+        description = request.GET.get('description')
+        if image:
+            if description:
+                post = Post(description = description, image = image, user=request.user, category = category)
+                post.save()
+            else:
+                post = Post(description = description, user=request.user, category = category)
+                post.save()
+        else:
+            #todo return error
+            pass
+    #  Fun Hall Category
+    elif pk == 2:
+        description = request.GET.get('description')
+        image = request.GET.get('image')
+        post_file = request.GET.get('post_file')
+        post = Post(user=request.user, category = category)
+        
+        #todo fix checker
+        if description:
+            post.description = description
+        if image and post_file:
+            #todo return error, and prevent from html page
+            pass
+        elif image:
+            post.image = image
+        elif post_file:
+            post.post_file = post_file
+        if post.description or post.image or post.post_file:
+            post.save()
+        return JsonResponse({'post': model_to_dict(post)})

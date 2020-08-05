@@ -1,10 +1,68 @@
 {% extends 'categories/base.html' %}
 
 {% block title %}
-    {{category.title}}
+{{category.title}}
 {% endblock title %}
 {% block content %}
+<style>
+    .card.bg-dark.text-white {
+        width: 397px;
+        height: 262;
+    }
 
-    <h1>something</h1>
+    .card-img-overlay {
+        display: none;
+    }
+</style>
 
+
+<form method="get" id="postForm" class="mb-4" enctype="multipart/form-data">
+    <div class="form-group">
+        <label for="id_post_description">Description</label>
+        <textarea type="text" name="description" id="id_post_description" class="form-control"></textarea>
+    </div>
+    <div class="form-group">
+        <p><label for="id_post_image">Optional Image</label>
+            <input type="file" name="image" accept="image/*" id="id_image"></p>
+    </div>
+    <div class="form-group">
+        <p><label for="id_post_image">Or Video</label>
+            <input type="file" name="post_file" accept="*" id="id_post_file"></p>
+    </div>
+    <small class="form-text text-muted">You don't have to specify image or video, but if you do then only one of
+        them</small>
+
+    <input type="submit" value="Add Post" class="btn btn-primary" id="addPostButton">
+</form>
+<!-- <progress></progress> -->
+<!-- Add post Script -->
+
+<script>
+    $(document).ready(function () {
+
+        $('#postForm').submit(function (event) {
+            event.preventDefault()
+        })
+        $('#addPostButton').click(function (event) {
+            // !fix not uploading images
+            $.ajax({
+                url: "{% url 'comments:create_post' category.id %}",
+                data: {
+                    'description': $('#id_post_description').val(),
+                },
+                dataType: 'json',
+                success: function (response) {
+                    alert('success')
+                }
+            })
+        });
+
+    })
+</script>
+{{posts.count}}
+{% for post in posts %}
+
+
+{{post.description}}
+{% endfor %}
 {% endblock content %}
