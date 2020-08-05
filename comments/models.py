@@ -8,12 +8,12 @@ class Post(models.Model):
     title = models.CharField(max_length=40, blank=True, null=True)
     description = models.TextField(null=True, blank=True)
     image = models.ImageField(upload_to='comments/posts_images/', null=True, blank=True)
-    file = models.FileField(upload_to='comments/file_uploades/')
+    file = models.FileField(upload_to='comments/file_uploades/', blank=True, null=True)
     category = models.ForeignKey(
-        Category, on_delete=models.CASCADE, null=True, blank=True)
+        Category, on_delete=models.CASCADE,)
     # Voting
-    likes = models.ManyToManyField(User, related_name='post_like')
-    dislikes = models.ManyToManyField(User, related_name='post_dislike')
+    likes = models.ManyToManyField(User, related_name='post_like', blank=True)
+    dislikes = models.ManyToManyField(User, related_name='post_dislike', blank=True)
     # AUTO
     post_date = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)

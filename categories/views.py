@@ -16,4 +16,5 @@ def home(request):
 def view_category(request, pk):
     category = get_object_or_404(Category, pk=pk)
     posts = Post.objects.filter(category=category)
+    
     return render(request, f'categories/{category.title}.html', {'category': category, 'posts': posts})

@@ -15,15 +15,38 @@
     }
 </style>
 
+<div class="collapse" id="addComment">
+    <form id="create-post" method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="title">Title</label>
+            <input type="text" name='title' class="form-control" id='title' placeholder="Optional" maxlength="40">
+        </div>
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea name='description' class="form-control" id="description" required></textarea>
+        </div>
+        <div class="form-group">
+            <label for="category">Category</label>
+            {{form.category}}
+        </div>
+        <input class="btn btn-success" type="submit" value="Add Comment" name="submit">
+    </form>
+    <br>
+</div>
+
+
+{% for post in posts %}
+
+
 <div class="card bg-dark text-white">
-    <img src="{{category.image.url}}" width="397" height="262" class="card-img" alt="">
+    <img src="{{post.image.url}}" width="397" height="262" class="card-img" alt="">
     <div class="card-img-overlay">
-        <h5 class="card-title">Card title</h5>
-        <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content.
-            This content is a little bit longer.</p>
-        <small class="form-text float-right" class="card-text">Last updated 3 mins ago</small>
+        <p class="card-text">{{ post.description }}</p>
+        <small class="form-text float-right" class="card-text">{{ post.date }}</small>
     </div>
 </div>
+{% endfor %}
 
 <script>
     $(document).ready(function () {
