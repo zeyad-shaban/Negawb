@@ -58,7 +58,7 @@
         <h5 class="card-title">{{post.title}}</h5>
         {% endif %}
         <p class="card-text text-break">{{ post.description|truncatechars:300 }}</p>
-        <a href="{% url 'comments:view_post' post.id %}" class="btn btn-primary">View Comment, Reply</a>
+        <a href="{% url 'comments:view_post' post.id %}" class="btn btn-primary">View</a>
     </div>
     <span class="row justify-content-center">
         <!-- Like -->

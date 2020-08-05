@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
-from comments.models import Post, Reply
+from comments.models import Post, Comment
 from people.models import FriendRequest
 from django.contrib import messages
 from django.core.validators import validate_email

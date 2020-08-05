@@ -1,8 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse
-from .models import Post, Reply
+from .models import Post, Comment
 from django.contrib.auth.decorators import login_required
-from .forms import PostForm, ReplyForm
+from .forms import PostForm, CommentForm
 from django.db.models import Q
 from django.contrib import messages
 
@@ -29,12 +29,12 @@ def posts(request):
 @login_required
 def view_post(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
-    replies = Reply.objects.filter(
+    replies = Comment.objects.filter(
         post=post).order_by('-reply_date')[:150]
     if request.method == 'GET':
-        return render(request, 'comments/view_post.html', {'post': post, 'replies': replies, 'form': ReplyForm})
+        return render(request, 'comments/view_post.html', {'post': post, 'replies': replies, 'form': CommentForm})
     else:
-        form = ReplyForm(request.POST)
+        form = CommentForm(request.POST)
         reply = form.save(commit=False)
         reply.user = request.user
         reply.post = post
@@ -81,7 +81,7 @@ def post_like_dislike(request, post_id):
 # todo fix MultiDictValue
 @login_required
 def reply_like_dislike(request, reply_id):
-    reply = get_object_or_404(Reply, pk=reply_id)
+    reply = get_object_or_404(Comment, pk=reply_id)
     # Dislike
     if request.POST['submit'] == 'dislike':
         if request.user in reply.likes.all():

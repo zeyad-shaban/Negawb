@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from .models import Category
-from comments.models import Post, Reply
+from comments.models import Post, Comment
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 

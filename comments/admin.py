@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Post, Reply
+from .models import Post, Comment
 
 
 class PostAdmin(admin.ModelAdmin):
@@ -9,8 +9,8 @@ class PostAdmin(admin.ModelAdmin):
 admin.site.register(Post, PostAdmin)
 
 
-class ReplyAdmin(admin.ModelAdmin):
-    readonly_fields = ('reply_date',)
+class CommentAdmin(admin.ModelAdmin):
+    readonly_fields = ('comment_date',)
 
 
-admin.site.register(Reply, ReplyAdmin)
+admin.site.register(Comment, CommentAdmin)

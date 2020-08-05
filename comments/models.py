@@ -22,14 +22,23 @@ class Post(models.Model):
         return f'Post by user: {self.user}'
 
 
-class Reply(models.Model):
+class Comment(models.Model):
     description = models.TextField()
     post = models.ForeignKey(Post, on_delete=models.CASCADE, null=True)
-    reply_date = models.DateTimeField(auto_now_add=True)
+    comment_date = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, null=True, blank=True)
-    likes = models.ManyToManyField(User, related_name='reply_like')
-    dislikes = models.ManyToManyField(User, related_name='reply_dislike')
+    likes = models.ManyToManyField(User, related_name='comment_like')
+    dislikes = models.ManyToManyField(User, related_name='comment_dislike')
 
     def __str__(self):
         return f'user: {self.user}'
+
+class Reply(models.Model):
+    description = models.TextField()
+    date = models.DateTimeField(auto_now_add=True)
+    comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.comment}, {self.user}'
