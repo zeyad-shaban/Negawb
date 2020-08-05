@@ -30,3 +30,4 @@ class User(AbstractUser):
         choices = who_add_group_choices,
         default= 'friends')
     followers = models.ManyToManyField('User', related_name='user_followers')
+    is_confirmed = models.BooleanField(default=False)

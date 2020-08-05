@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import JsonResponse, Http404
+from django.http import JsonResponse, Http404, HttpResponse
 from django.forms.models import model_to_dict
 from categories.models import Category
 from .models import Post, Comment
@@ -152,3 +152,8 @@ def create_post(request, pk):
         if post.description or post.image or post.post_file:
             post.save()
         return JsonResponse({'post': model_to_dict(post)})
+
+    #TRUSTED NEWS
+    elif pk == 4:
+        if not request.user.is_confirmed:
+            return HttpResponse('You are not a confirmed source, IF YOU FOUND A GLITCH THAT ALLOWS YOU TO MAKE POSTS HERE REPORT IT AS SOON AS POSSIBLE AND DO NOT MAKE ANY USE OF IT!')

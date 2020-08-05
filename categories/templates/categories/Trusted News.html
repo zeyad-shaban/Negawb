@@ -1,10 +1,14 @@
 {% extends 'categories/base.html' %}
 
 {% block title %}
-    {{category.title}}
+{{category.title}}
 {% endblock title %}
 {% block content %}
 
-    <h1>something</h1>
+{% if user.is_confirmed %}
+<h1>YOU ARE  CONFIRMED</h1>
+{% elif not user.is_ %}
+<small class="form-text text-muted">you can't make posts, but you can comment, reply, and view!</small>
+{% endif %}
 
 {% endblock content %}
