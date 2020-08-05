@@ -9,7 +9,7 @@ from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.contrib.auth import authenticate
 from django.contrib.auth import get_user_model as user_model
-from .forms import UserForm, UserPrivacyForm, UserPasswordForm
+from .forms import UserForm, UserPrivacyForm, UserPasswordForm, DistractionFreeForm
 from social.models import GroupRequest
 User = user_model()
 
@@ -19,8 +19,9 @@ def home(request):
     user = request.user
     form = UserForm(instance=request.user)
     privacy_form = UserPrivacyForm(instance=request.user)
+    distraction_free_form = DistractionFreeForm(instance = request.user)
     if request.method == 'GET':
-        return render(request, 'userpage/index.html', {'user': user, 'form': form, 'privacy_form': privacy_form, })
+        return render(request, 'userpage/index.html', {'user': user, 'form': form, 'privacy_form': privacy_form, 'distraction_free_form':distraction_free_form})
     elif request.POST['submit'] == 'Update':
         try:
             if request.POST['email']:
@@ -62,6 +63,11 @@ def home(request):
         else:
             messages.error(request, 'Username and Old password didn\'t match')
 
+        return redirect('userpage:home')
+    elif request.POST['submit'] == 'DFree':
+        form = DistractionFreeForm(request.POST, instance = request.user)
+        form.save()
+        messages.success(request, 'DistractionFreeMedia 💪🏻')
         return redirect('userpage:home')
 
 
