@@ -42,8 +42,6 @@
         $('#addPostButton').click(function (event) {
             // !fix not uploading images
             let image = new FormData($('#postForm')[0])
-            console.log(description)
-            console.log(image)
             $.ajax({
                 url: "{% url 'comments:create_post' category.id %}",
                 data: {
@@ -52,7 +50,6 @@
                 },
                 dataType: 'json',
                 success: function (response) {
-                    console.log(response.something.title)
                 }
             })
         });

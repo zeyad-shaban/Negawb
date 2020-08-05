@@ -8,7 +8,19 @@
     <div class="row">
         <div class="col-md-12">
             <div class="fb-profile-block">
-                <div class="fb-profile-block-thumb cover-container"></div>
+                <!-- *The Image -->
+                <div class="fb-profile-block-thumb cover-container">
+                    {% if user in view_user.followers.all %}
+                    <input id="followUser" type="submit" name='submit' value="{{view_user.followers.count}} Unfollow"
+                        class="btn btn-primary" title="UnFollow">
+                    {% else %}
+                    <input id="followUser" type="submit" name='submit' value="{{view_user.followers.count}} Follow"
+                        class="btn btn-primary" title="Follow">
+                    {% endif %}
+                    {% if user.allow_friend_request %}
+                    <input id="addFriendRequest" type="submit" name='submit' value="Add Friend" class="btn btn-primary">
+                    {% endif %}
+                </div>
                 <div class="profile-img">
                     <a href="#">
                         {% if view_user.who_see_avatar == 'everyone' %}
@@ -28,8 +40,7 @@
                 <div class="fb-profile-block-menu">
                     <div class="block-menu">
                         <ul>
-                            <li><a href="{% url 'people:people_questions' view_user.id %}">Questions Asked</a></li>
-                            <li><a href="#">Questions Answered</a></li>
+                            <li><a href="{% url 'people:people_questions' view_user.id %}">Posts</a></li>
                         </ul>
                     </div>
                 </div>
@@ -37,4 +48,65 @@
         </div>
     </div>
 </div>
+<!-- Adding Friend and Follow -->
+<script>
+    $(document).ready(function () {
+
+        // Add Friend
+        $('#addFriendRequest').click(function () {
+            $.ajax({
+                url: "{% url 'people:addfriend' view_user.id %}",
+                data: {
+                    'user_id': "{{ view_user.id }}"
+                },
+                dataType: 'json',
+                success: function (data) {
+                    $('#message_area').html('')
+                    if (data.message.tags === 'error') {
+                        $('#message_area').append(`
+                            <div class="alert alert-danger fixed-top">${data.message.text}</div>
+                            `)
+                    } else {
+                        $('#message_area').append(`
+        <div class="alert alert-${data.message.tags} fixed-top">${data.message.text}</div>
+                                `)
+                    }
+                }
+            })
+            setTimeout(() => {
+                $('#message_area').fadeOut()
+            }, 3200);
+        })
+    })
+    // Follow User
+    $('#followUser').click(function () {
+        $.ajax({
+            url: "{% url 'people:follow' view_user.id %}",
+            dataType: 'json',
+            success: function (data) {
+                let followers = "{{view_user.followers.count}}"
+                if (data.action == 'follow'){
+                    followers++
+                    $('#followUser').val(followers+' Unfollow')
+                } else if (data.action == 'unfollow'){
+                    followers--
+                    $('#followUser').val(followers+' Follow')
+                }
+                $('#message_area').html('')
+                if (data.message.tags === 'error') {
+                    $('#message_area').append(`
+                            <div class="alert alert-danger fixed-top">${data.message.text}</div>
+                            `)
+                } else {
+                    $('#message_area').append(`
+        <div class="alert alert-${data.message.tags} fixed-top">${data.message.text}</div>
+                                `)
+                }
+            }
+        })
+        setTimeout(() => {
+            $('#message_area').fadeOut()
+        }, 800);
+    })
+</script>
 {% endblock content %}

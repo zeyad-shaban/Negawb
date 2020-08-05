@@ -19,6 +19,7 @@
     <div id="contacts" class="panel-collapse collapse show" aria-expanded="true">
         <ul class="list-group pull-down" id="contact-list">
             {% for view_user in users %}
+            {% if not view_user == user %}
             <li class="list-group-item">
                 <div class="row w-100">
                     <div class="col-12 col-sm-6 col-md-3 px-0">
@@ -97,6 +98,7 @@
                     })
                 })
             </script>
+            {% endif %}
             {% endfor %}
         </ul>
     </div>

@@ -82,3 +82,22 @@ def addfriend(request, user_id):
                 'tags': 'success',
             }
             return JsonResponse({'message': message})
+
+
+def follow(request, pk):
+    user = get_object_or_404(User, pk=pk)
+    if request.user in user.followers.all():
+        user.followers.remove(request.user)
+        message = {
+            'text': f'You unfollowed {user.username}',
+            'tags': 'success',
+        }
+        action='unfollow'
+    else:
+        user.followers.add(request.user)
+        message = {
+            'text': f'You are now following {user.username}',
+            'tags': 'success'
+        }
+        action = 'follow'
+    return JsonResponse({'message':message, 'action': action})

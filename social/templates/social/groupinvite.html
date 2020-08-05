@@ -141,7 +141,6 @@
 <script>
     $(document).ready(function () {
         $('#id_inviteButton{{view_user.id}}').click(function () {
-            console.log("{{ view_user.username }}" + "{{ view_user.id }}")
             $.ajax({
                 url: "{% url 'social:create_invite' view_user.id group.id %}",
                 data: {
