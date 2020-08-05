@@ -1,12 +1,15 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import JsonResponse
+from django.http import JsonResponse, Http404
+from django.forms.models import model_to_dict
+from categories.models import Category
 from .models import Post, Comment
 from django.contrib.auth.decorators import login_required
-from .forms import PostForm, CommentForm
+from .forms import CommentForm
 from django.db.models import Q
 from django.contrib import messages
 
 
+# todo make this view only function (NO CREATING)
 def posts(request):
     posts = Post.objects.all().order_by('-post_date')
     if request.method == 'GET':
@@ -57,10 +60,10 @@ def post_like_dislike(request, post_id):
         if request.user in post.dislikes.all():
             post.dislikes.remove(request.user)
             post.likes.add(request.user)
-            return JsonResponse({'action':'undislike_and_like'})
+            return JsonResponse({'action': 'undislike_and_like'})
         elif request.user in post.likes.all():
             post.likes.remove(request.user)
-            return JsonResponse({'action':'unlike'})
+            return JsonResponse({'action': 'unlike'})
         else:
             post.likes.add(request.user)
             return JsonResponse({'action': 'like_only'})
@@ -110,3 +113,13 @@ def reply_like_dislike(request, reply_id):
             reply.likes.add(request.user)
             messages.success(request, 'liked')
         return redirect('comments:reply_like_dislike', reply_id)
+
+
+def create_post(request, pk):
+    category = get_object_or_404(Category, pk=pk)
+    # Images category
+    if category.title == 'Image':
+        post = Post(description = request.GET.get('description'), image = request.GET.get('image'), user=request.user, category = category)
+        post.save()
+        # return JsonResponse({'post': model_to_dict(post)})
+        return JsonResponse({'something': category})

@@ -15,25 +15,50 @@
     }
 </style>
 
-<div class="collapse" id="addComment">
-    <form id="create-post" method="POST">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="title">Title</label>
-            <input type="text" name='title' class="form-control" id='title' placeholder="Optional" maxlength="40">
-        </div>
-        <div class="form-group">
-            <label for="description">Description</label>
-            <textarea name='description' class="form-control" id="description" required></textarea>
-        </div>
-        <div class="form-group">
-            <label for="category">Category</label>
-            {{form.category}}
-        </div>
-        <input class="btn btn-success" type="submit" value="Add Comment" name="submit">
-    </form>
-    <br>
-</div>
+
+<form method="get" id="postForm" class="mb-4" enctype="multipart/form-data">
+    <div class="form-group">
+        <label for="id_post_description">Image Description</label>
+        <textarea type="text" name="description" id="id_post_description" class="form-control" maxlength="200"
+            required></textarea>
+    </div>
+    <div class="form-group">
+        <p><label for="id_post_image">Image</label>
+            <input type="file" name="image" accept="image/*" id="id_image" required></p>
+        <small class="form-text text-muted">We are not responsible for any copyright images, so please avoid
+            them.</small>
+    </div>
+    <input type="submit" value="Add Post" class="btn btn-primary" id="addPostButton">
+</form>
+<!-- <progress></progress> -->
+<!-- Add post Script -->
+
+<script>
+    $(document).ready(function () {
+
+        $('#postForm').submit(function (event) {
+            event.preventDefault()
+        })
+        $('#addPostButton').click(function (event) {
+            // !fix not uploading images
+            let image = new FormData($('#postForm')[0])
+            console.log(description)
+            console.log(image)
+            $.ajax({
+                url: "{% url 'comments:create_post' category.id %}",
+                data: {
+                    'description': $('#id_post_description').val(),
+                    'image': image,
+                },
+                dataType: 'json',
+                success: function (response) {
+                    console.log(response.something.title)
+                }
+            })
+        });
+
+    })
+</script>
 
 
 {% for post in posts %}

@@ -8,22 +8,22 @@ class Post(models.Model):
     title = models.CharField(max_length=40, blank=True, null=True)
     description = models.TextField(null=True, blank=True)
     image = models.ImageField(upload_to='comments/posts_images/', null=True, blank=True)
-    file = models.FileField(upload_to='comments/file_uploades/', blank=True, null=True)
+    post_file = models.FileField(upload_to='comments/file_uploades/', blank=True, null=True)
     category = models.ForeignKey(
         Category, on_delete=models.CASCADE,)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     # Voting
     likes = models.ManyToManyField(User, related_name='post_like', blank=True)
     dislikes = models.ManyToManyField(User, related_name='post_dislike', blank=True)
     # AUTO
     post_date = models.DateTimeField(auto_now_add=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return f'Post by user: {self.user}'
 
 
 class Comment(models.Model):
-    description = models.TextField()
+    description = models.CharField(max_length=200, null=True, blank=True)
     post = models.ForeignKey(Post, on_delete=models.CASCADE, null=True)
     comment_date = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(
