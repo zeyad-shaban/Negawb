@@ -1,10 +1,14 @@
 {% extends 'categories/base.html' %}
 
 {% block title %}
-    {{category.title}}
+{{category.title}}
 {% endblock title %}
 {% block content %}
 
-    <h1>something</h1>
+{% if user.followers.count >= 50000 %}
+<h1>YOU AREA FAMOUSE!</h1>
+{% else %}
+<small class="form-text text-muted">You must have +50K followers to add posts, but you can comment, reply, and view.</small>
+{% endif %}
 
 {% endblock content %}
