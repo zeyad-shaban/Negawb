@@ -6,11 +6,18 @@
 
 {% block content %}
 
+
+{% if post.title %}
 <h1 class="text-left">{{post.title}}</h1>
+{% endif %}
+
+{% if post.description %}
 <div class="container">
     <p>{{post.description}}</p>
 </div>
 <hr>
+{% endif %}
+    
 <form method="POST">
     {% csrf_token %}
     <div class="form-group">
@@ -20,39 +27,43 @@
     <input class="btn btn-primary" type="submit" value="Submit Answer">
 </form>
 <br>
-{{replies.count}} Answer{{replies.count|pluralize}}
+{{comments.count}} Answer{{comments.count|pluralize}}
 <hr>
-{% for reply in replies %}
+{% if user.hide_comments == False %}
+{% for comment in comments %}
 <div class="card w-75">
     <div class="card-body">
-        <h5 style="display: inline;" class="card-title">{{reply.user}}</h5> 
-        <small style="display: inline;" class="form-text text-muted">{{ reply.reply_date }}</small>
+        <h5 style="display: inline;" class="card-title">{{comment.user}}</h5> 
+        <small style="display: inline;" class="form-text text-muted">{{ comment.comment_date }}</small>
         <br>
-        <p class="card-text">{{reply.description}}</p>
+        <p class="card-text">{{comment.description}}</p>
     </div>
 </div>
 <!-- Likes and Dislikes -->
 <span class="row justify-content-center">
     <!-- Like -->
-    <form action="{% url 'comments:reply_like_dislike' reply.id %}" method="post" class="form-inline">
+    <form action="{% url 'comments:reply_like_dislike' comment.id %}" method="post" class="form-inline">
         {% csrf_token %}
         <button type="submit" name="submit" value="like" title="Like">
             <img src="{% static 'categories/like.png' %}" width="30" height="30" alt="Like">
         </button>
     </form>
     <span class="m-3">
-        {{reply.likes.count}}
+        {{comment.likes.count}}
     </span>
     <!-- Dislike -->
-    <form action="{% url 'comments:reply_like_dislike' reply.id %}" method="post" class="form-inline">
+    <form action="{% url 'comments:reply_like_dislike' comment.id %}" method="post" class="form-inline">
         {% csrf_token %}
         <button type="submit" name="submit" value="dislike" title="Dislike">
             <img src="{% static 'categories/dislike.png' %}" width="30" height="30" alt="Dislike">
         </button>
     </form>
     <span class="m-3">
-        {{reply.dislikes.count}}
+        {{comment.dislikes.count}}
     </span>
 </span>
 {% endfor %}
+{% else %}
+<small class="form-text text-muted">You choosed to hide comments😍</small>
+{% endif %}
 {% endblock content %}

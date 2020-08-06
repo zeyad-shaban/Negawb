@@ -32,16 +32,16 @@ def posts(request):
 @login_required
 def view_post(request, pk):
     post = get_object_or_404(Post, pk=pk)
-    replies = Comment.objects.filter(
-        post=post).order_by('-reply_date')[:150]
+    comments = Comment.objects.filter(
+        post=post).order_by('-comment_date')[:150]
     if request.method == 'GET':
-        return render(request, 'comments/view_post.html', {'post': post, 'replies': replies, 'form': CommentForm})
+        return render(request, 'comments/view_post.html', {'post': post, 'comments': comments, 'form': CommentForm})
     else:
         form = CommentForm(request.POST)
-        reply = form.save(commit=False)
-        reply.user = request.user
-        reply.post = post
-        reply.save()
+        comment = form.save(commit=False)
+        comment.user = request.user
+        comment.post = post
+        comment.save()
         return redirect('comments:view_post', pk=pk)
 
 

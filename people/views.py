@@ -20,7 +20,7 @@ def people(request, people_id):
 def people_questions(request, peoplequestions_id):
     user = get_object_or_404(User, pk=peoplequestions_id)
     questions = Post.objects.filter(user=user)
-    return render(request, 'people/peoplequestions.html', {'questions': questions})
+    return render(request, 'people/posts.html', {'questions': questions})
 
 @login_required
 def all_people(request):

@@ -37,8 +37,8 @@
 </form>
 
 {% for post in posts %}
+<a href="{% url 'comments:view_post' post.id %}">{{post.description}}</a>
 
 
-{{post.description}}
 {% endfor %}
 {% endblock content %}
