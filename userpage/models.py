@@ -36,7 +36,7 @@ class User(AbstractUser):
 
     # DISTRACTION FREE!!!!!!!!!!!!!!!
     hide_comments = models.BooleanField(default=False)
-    blocked_categories = models.ManyToManyField(Category, related_name = 'blocked_categories')
+    blocked_categories = models.ManyToManyField(Category, related_name = 'blocked_categories', blank=True)
     full_focus_mode = models.BooleanField(default=False)
     chat_only_mode = models.BooleanField(default=False)
     #todo add notifications

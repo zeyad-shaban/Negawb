@@ -16,7 +16,8 @@
 </style>
 
 
-<form method="get" id="postForm" class="mb-4" enctype="multipart/form-data">
+<form method="POST" class="mb-4" enctype="multipart/form-data" action="{% url 'comments:create_post' category.id %}">
+    {% csrf_token %}
     <div class="form-group">
         <label for="id_post_description">Description</label>
         <textarea type="text" name="description" id="id_post_description" class="form-control"></textarea>
@@ -34,32 +35,7 @@
 
     <input type="submit" value="Add Post" class="btn btn-primary" id="addPostButton">
 </form>
-<!-- <progress></progress> -->
-<!-- Add post Script -->
 
-<script>
-    $(document).ready(function () {
-
-        $('#postForm').submit(function (event) {
-            event.preventDefault()
-        })
-        $('#addPostButton').click(function (event) {
-            // !fix not uploading images
-            $.ajax({
-                url: "{% url 'comments:create_post' category.id %}",
-                data: {
-                    'description': $('#id_post_description').val(),
-                },
-                dataType: 'json',
-                success: function (response) {
-                    alert('success')
-                }
-            })
-        });
-
-    })
-</script>
-{{posts.count}}
 {% for post in posts %}
 
 

@@ -132,26 +132,22 @@ def create_post(request, pk):
         else:
             #todo return error
             pass
-    #  Fun Hall Category
+    #  Fun Area Category
     elif pk == 2:
-        description = request.GET.get('description')
-        image = request.GET.get('image')
-        post_file = request.GET.get('post_file')
         post = Post(user=request.user, category = category)
-        
-        #todo fix checker
-        if description:
-            post.description = description
-        if image and post_file:
-            #todo return error, and prevent from html page
-            pass
-        elif image:
-            post.image = image
-        elif post_file:
-            post.post_file = post_file
-        if post.description or post.image or post.post_file:
+        if request.POST['description']:
+            post.description = request.POST['description']
             post.save()
-        return JsonResponse({'post': model_to_dict(post)})
+        if request.POST['image'] and request.POST['post_file']:
+            message.error(request, 'You can\'t have both image and file')
+        elif request.POST['image']:
+            post.image = request.POST['image']
+            post.save(instance=post)
+        elif request.POST['post_file']:
+            post.post_file = request.POST['post_file']
+            post.save(instance=post)
+        
+        return redirect('categories:view_category', pk=category.id)
 
     #TRUSTED NEWS
     elif pk == 4:
