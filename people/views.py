@@ -10,17 +10,14 @@ from django.contrib.auth import get_user_model as user_model
 User = user_model()
 
 
-def people(request, people_id):
+def people(request, pk):
     """ View Other Users Accounts """
-    view_user = get_object_or_404(User, pk=people_id)
+    view_user = get_object_or_404(User, pk=pk)
     friends = User.objects.filter(friends=view_user)
-    return render(request, 'people/index.html', {'view_user': view_user, 'friends': friends, })
+    user = get_object_or_404(User, pk=pk)
+    posts = Post.objects.filter(user=user)
+    return render(request, 'people/index.html', {'view_user': view_user, 'friends': friends, 'posts':posts})
 
-
-def people_questions(request, peoplequestions_id):
-    user = get_object_or_404(User, pk=peoplequestions_id)
-    questions = Post.objects.filter(user=user)
-    return render(request, 'people/posts.html', {'questions': questions})
 
 @login_required
 def all_people(request):
