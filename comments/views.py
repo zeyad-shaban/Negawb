@@ -120,50 +120,28 @@ def reply_like_dislike(request, reply_id):
 
 def create_post(request, pk):
     category = get_object_or_404(Category, pk=pk)
-    posts_in_last_day = request.user.post_set.filter(post_date__gt=now() - datetime.timedelta(days=1))
+    posts_in_last_day = request.user.post_set.filter(
+        post_date__gt=now() - datetime.timedelta(days=1))
     if posts_in_last_day.count() >= 3:
         messages.error(
             request, f'You can only make 3 posts a day, please wait till tommorow')
         return redirect('categories:view_category', pk=pk)
     else:
-        #! NOT SERIALIZING IMAGES
-        # Images category
-        # if pk == 1:
-        #     image = request.GET.get('image')
-        #     description = request.GET.get('description')
-        #     if image:
-        #         if description:
-        #             post = Post(description=description, image=image,
-        #                         user=request.user, category=category)
-        #             post.save()
-        #         else:
-        #             post = Post(description=description,
-        #                         user=request.user, category=category)
-        #             post.save()
-        #     else:
-        #         # todo return error
-        #         pass
-        #  Fun Area Category
-        if pk == 2:
-            post=Post(user=request.user, category=category)
-            if request.POST['description']:
-                post.description=request.POST['description']
-                post.save()
-                request.user.save()
-            if request.POST['image'] and request.POST['post_file']:
-                messages.error(request, 'You can\'t have both image and file')
-            elif request.POST['image']:
-                post.image=request.POST['image']
-                post.save(instance=post)
 
-            elif request.POST['post_file']:
-                post.post_file=request.POST['post_file']
-                post.save(instance=post)
-
-
-            return redirect('categories:view_category', pk=category.id)
+        if pk != 4 and pk != 1 and pk != 6:
+            form = PostForm(data=request.POST, files=request.FILES)
+            post = form.save(commit=False)
+            post.user = request.user
+            post.category = category
+            post.save()
+            messages.success(
+                request, 'Your post was uploaded, thanks for growing up our DFreeMedia community 💪🏻')
+            return redirect('categories:view_category', pk=pk)
 
         # TRUSTED NEWS
         elif pk == 4:
             if not request.user.is_confirmed:
                 return HttpResponse('You are not a confirmed source, IF YOU FOUND A GLITCH THAT ALLOWS YOU TO MAKE POSTS HERE REPORT IT AS SOON AS POSSIBLE AND DO NOT MAKE ANY USE OF IT!')
+        elif pk == 6:
+            if request.user.followers.count() < 50000:
+                return HttpResponse('You must have +50,000K followers')
