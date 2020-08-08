@@ -34,7 +34,7 @@ class ChatGroup(models.Model):
     title = models.CharField(max_length=75)
     description = models.CharField(max_length=200, null=True, blank=True)
     image = models.ImageField(upload_to='group_images',
-                              default='categories_images/FocusTimeMedia.png')
+                              default='categories_images/FocusTimeMedia.WebP')
     is_public = models.BooleanField(default=False)
     created_date = models.DateTimeField(auto_now_add=True)
     # USERS
