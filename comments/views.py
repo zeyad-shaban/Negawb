@@ -119,10 +119,10 @@ def create_post(request, pk):
     category = get_object_or_404(Category, pk=pk)
     #! NOT SERIALIZING IMAGES
     # Images category
-    if request.user.max_posts >= 2:
+    if request.user.max_posts >= 3:
         messages.error(
-            request, f'You can only make 2 posts a day, please wait till tommorow')
-        return redirect('view_category', pk=pk)
+            request, f'You can only make 3 posts a day, please wait till tommorow')
+        return redirect('categories:view_category', pk=pk)
     else:
         # if pk == 1:
         #     image = request.GET.get('image')
@@ -145,14 +145,18 @@ def create_post(request, pk):
             if request.POST['description']:
                 post.description = request.POST['description']
                 post.save()
+                request.user.max_posts += 1
+                messages.warning(request, request.user.max_posts)
             if request.POST['image'] and request.POST['post_file']:
-                message.error(request, 'You can\'t have both image and file')
+                messages.error(request, 'You can\'t have both image and file')
             elif request.POST['image']:
                 post.image = request.POST['image']
                 post.save(instance=post)
+                
             elif request.POST['post_file']:
                 post.post_file = request.POST['post_file']
                 post.save(instance=post)
+                
 
             return redirect('categories:view_category', pk=category.id)
 
