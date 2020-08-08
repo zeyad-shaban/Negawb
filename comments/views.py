@@ -7,6 +7,9 @@ from django.contrib.auth.decorators import login_required
 from .forms import CommentForm, PostForm
 from django.db.models import Q
 from django.contrib import messages
+# DATES
+from django.utils.timezone import now
+import datetime
 
 
 # todo make this view only function (NO CREATING)
@@ -117,13 +120,14 @@ def reply_like_dislike(request, reply_id):
 
 def create_post(request, pk):
     category = get_object_or_404(Category, pk=pk)
-    #! NOT SERIALIZING IMAGES
-    # Images category
-    if request.user.max_posts >= 3:
+    posts_in_last_day = request.user.post_set.filter(post_date__gt=now() - datetime.timedelta(days=1))
+    if posts_in_last_day.count() >= 3:
         messages.error(
             request, f'You can only make 3 posts a day, please wait till tommorow')
         return redirect('categories:view_category', pk=pk)
     else:
+        #! NOT SERIALIZING IMAGES
+        # Images category
         # if pk == 1:
         #     image = request.GET.get('image')
         #     description = request.GET.get('description')
@@ -141,23 +145,21 @@ def create_post(request, pk):
         #         pass
         #  Fun Area Category
         if pk == 2:
-            post = Post(user=request.user, category=category)
+            post=Post(user=request.user, category=category)
             if request.POST['description']:
-                post.description = request.POST['description']
+                post.description=request.POST['description']
                 post.save()
-                request.user.max_posts += 1
                 request.user.save()
-                messages.warning(request, request.user.max_posts)
             if request.POST['image'] and request.POST['post_file']:
                 messages.error(request, 'You can\'t have both image and file')
             elif request.POST['image']:
-                post.image = request.POST['image']
+                post.image=request.POST['image']
                 post.save(instance=post)
-                
+
             elif request.POST['post_file']:
-                post.post_file = request.POST['post_file']
+                post.post_file=request.POST['post_file']
                 post.save(instance=post)
-                
+
 
             return redirect('categories:view_category', pk=category.id)
 

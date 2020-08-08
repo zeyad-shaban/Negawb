@@ -34,9 +34,6 @@ class User(AbstractUser):
     is_confirmed = models.BooleanField(default=False)
     allow_friend_request = models.BooleanField(default=True)
 
-    # MAX SENDING
-    max_posts = models.IntegerField(default=0)
-    
     # DISTRACTION FREE!!!!!!!!!!!!!!!
     hide_comments = models.BooleanField(default=False)
     blocked_categories = models.ManyToManyField(Category, related_name = 'blocked_categories', blank=True)

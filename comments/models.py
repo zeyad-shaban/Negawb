@@ -7,16 +7,24 @@ User = user_model()
 class Post(models.Model):
     title = models.CharField(max_length=40, blank=True, null=True)
     description = models.TextField(null=True, blank=True)
-    image = models.ImageField(upload_to='comments/posts_images/', null=True, blank=True)
-    post_file = models.FileField(upload_to='comments/file_uploades/', blank=True, null=True)
+    image = models.ImageField(
+        upload_to='comments/posts_images/', null=True, blank=True)
+    post_file = models.FileField(
+        upload_to='comments/file_uploades/', blank=True, null=True)
     category = models.ForeignKey(
         Category, on_delete=models.CASCADE,)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     # Voting
     likes = models.ManyToManyField(User, related_name='post_like', blank=True)
-    dislikes = models.ManyToManyField(User, related_name='post_dislike', blank=True)
+    dislikes = models.ManyToManyField(
+        User, related_name='post_dislike', blank=True)
     # AUTO
     post_date = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['user', 'post_date']),
+        ]
 
     def __str__(self):
         return f'Post by user: {self.user}'
@@ -33,6 +41,7 @@ class Comment(models.Model):
 
     def __str__(self):
         return f'user: {self.user}'
+
 
 class Reply(models.Model):
     description = models.TextField()
