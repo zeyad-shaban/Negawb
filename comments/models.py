@@ -30,7 +30,7 @@ class Post(models.Model):
     def __str__(self):
         return f'Post by user: {self.user}'
 
-    def save(self):
+    def save(self, *args, **kwargs):
         super().save()
         if self.image:
             img = Image.open(self.image.path)

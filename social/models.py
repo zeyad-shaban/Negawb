@@ -47,7 +47,7 @@ class ChatGroup(models.Model):
     def __str__(self):
         return f'Title: {self.title}, author: {self.author}'
 
-    def save(self):
+    def save(self, *args, **kwargs):
         super().save()
         img = Image.open(self.image.path)
         if img.width > 140 or img.height > 140:
