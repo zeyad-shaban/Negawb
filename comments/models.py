@@ -1,5 +1,6 @@
 from django.db import models
 from categories.models import Category
+from PIL import Image
 from django.contrib.auth import get_user_model as user_model
 User = user_model()
 
@@ -28,6 +29,14 @@ class Post(models.Model):
 
     def __str__(self):
         return f'Post by user: {self.user}'
+
+    def save(self):
+        super().save()
+        img = Image.open(self.image.path)
+        if img.width > 250 or img.height > 250:
+            output_size = (250, 250)
+            img.thumbnail(output_size)
+            img.save(self.image.path)
 
 
 class Comment(models.Model):

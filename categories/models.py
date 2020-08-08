@@ -1,4 +1,5 @@
 from django.db import models
+from PIL import Image
 
 
 class Category(models.Model):
@@ -8,6 +9,14 @@ class Category(models.Model):
 
     def __str__(self):
         return self.title
+
+    def save(self):
+        super().save()
+        img = Image.open(self.image.path)
+        if img.width > 348 or img.height > 217:
+            output_size = (348, 217)
+            img.thumbnail(output_size)
+            img.save(self.image.path)
 
 
 

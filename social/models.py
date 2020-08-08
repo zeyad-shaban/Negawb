@@ -1,4 +1,5 @@
 from django.db import models
+from PIL import Image
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
@@ -45,6 +46,14 @@ class ChatGroup(models.Model):
 
     def __str__(self):
         return f'Title: {self.title}, author: {self.author}'
+
+    def save(self):
+        super().save()
+        img = Image.open(self.image.path)
+        if img.width > 140 or img.height > 140:
+            output_size = (140, 140)
+            img.thumbnail(output_size)
+            img.save(self.image.path)
 
 
 class GroupRequest(models.Model):
