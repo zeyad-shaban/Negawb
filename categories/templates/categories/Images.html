@@ -1,85 +1,11 @@
-<!-- {% extends 'categories/base.html' %}
+{% extends 'categories/base.html' %}
 
 {% block title %}
 {{category.title}}
 {% endblock title %}
 {% block content %}
-<style>
-    .card.bg-dark.text-white {
-        width: 397px;
-        height: 262;
-    }
 
-    .card-img-overlay {
-        display: none;
-    }
-</style>
+<h1>WOHOO, you found the secret category!</h1>
+<p>sadly we are still working on it, but hey it will be out soon ;)</p> 
 
-
-<form method="get" id="postForm" class="mb-4" enctype="multipart/form-data">
-    <div class="form-group">
-        <label for="id_post_description">Image Description</label>
-        <textarea type="text" name="description" id="id_post_description" class="form-control" maxlength="200"
-            required></textarea>
-    </div>
-    <div class="form-group">
-        <p><label for="id_post_image">Image</label>
-            <input type="file" name="image" accept="image/*" id="id_image" required></p>
-        <small class="form-text text-muted">We are not responsible for any copyright images, so please avoid
-            them.</small>
-    </div>
-    <input type="submit" value="Add Post" class="btn btn-primary" id="addPostButton">
-</form>
-<!-- <progress></progress> -->
-<!-- Add post Script -->
-
-<script>
-    $(document).ready(function () {
-
-        $('#postForm').submit(function (event) {
-            event.preventDefault()
-        })
-        $('#addPostButton').click(function (event) {
-            // !fix not uploading images
-            let image = new FormData($('#postForm')[0])
-            $.ajax({
-                url: "{% url 'comments:create_post' category.id %}",
-                data: {
-                    'description': $('#id_post_description').val(),
-                    'image': image,
-                },
-                dataType: 'json',
-                success: function (response) {
-                }
-            })
-        });
-
-    })
-</script>
-
-
-{% for post in posts %}
-
-
-<div class="card bg-dark text-white">
-    <img src="{{post.image.url}}" width="397" height="262" class="card-img" alt="">
-    <div class="card-img-overlay">
-        <p class="card-text">{{ post.description }}</p>
-        <small class="form-text float-right" class="card-text">{{ post.date }}</small>
-    </div>
-</div>
-{% endfor %}
-
-<script>
-    $(document).ready(function () {
-
-        $('.card.bg-dark.text-white').mouseenter(function () {
-            $('.card-img-overlay').fadeIn()
-            $('.card-img-overlay').mouseleave(() => {
-                $('.card-img-overlay').fadeOut()
-            })
-        });
-
-    })
-</script>
-{% endblock content %} -->
+{% endblock content %}
