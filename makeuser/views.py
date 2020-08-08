@@ -17,7 +17,11 @@ User = user_model()
 
 def signupuser(request):
     if request.method == 'GET':
-        return render(request, 'makeuser/signupuser.html', {'form': UserCreationForm})
+        if request.user.is_authenticated:
+            messages.warning(request, 'You are already logged in')
+            return redirect('home')
+        else:
+            return render(request, 'makeuser/signupuser.html', {'form': UserCreationForm})
     else:
         if request.POST['password1'] == request.POST['password2']:
             try:
@@ -86,7 +90,11 @@ def logoutuser(request):
 
 def loginuser(request):
     if request.method == 'GET':
-        return render(request, 'makeuser/loginuser.html', {'form': AuthenticationForm})
+        if request.user.is_authenticated:
+            messages.warning(request, 'You are already logged in')
+            return redirect('home')
+        else:
+            return render(request, 'makeuser/loginuser.html', {'form': AuthenticationForm})
     else:
         user = authenticate(
             request, username=request.POST['username'], password=request.POST['password'])
