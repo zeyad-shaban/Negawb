@@ -1,4 +1,5 @@
 {% extends 'categories/base.html' %}
+{% load static %}
 {% block title %} Home Page {% endblock title %}
 
 {% block searchbar %}
@@ -29,6 +30,66 @@
         </div>
     </div>
     {% endif %}
+    {% endif %}
+    {% endfor %}
+</div>
+
+<div class="m-4">
+
+    {% for post in all_posts %}
+    {% if not post.category in user.blocked_categories.all %}
+    <div class="card">
+        <div class="card-header">
+            <a href="{% url 'people:people' post.user.id %}">
+                {{ post.user}}
+            </a>
+            <small class="form-text text-muted">{{ post.post_date }}
+                {% if post.category %}
+                <a href="{% url 'categories:view_category' post.category.id %}">{{post.category}}</a></small>
+            {% endif %}
+        </div>
+        <div class="card-body">
+            {% if post.title %}
+            <h5 class="card-title">{{post.title}}</h5>
+            {% endif %}
+            <p class="card-text text-break">{{ post.description|truncatechars:300 }}</p>
+            <a href="{% url 'comments:view_post' post.id %}" class="btn btn-primary">View</a>
+        </div>
+        <span class="row justify-content-center">
+            <!-- Like -->
+            <form method="GET" id="likeForm" class="form-inline">
+                <button type="submit" name="submit" value="like" title="Like">
+                    <img src="{% static 'categories/like.png' %}" id="likeButton" width="30" height="30" alt="Like">
+                </button>
+            </form>
+
+
+            <span class="m-3" id="id_likes">
+                {% if user in post.likes.all %}
+                <p style="color:#065FD4;"><b>{{post.likes.count}}</b></p>
+                {% else %}
+                <p style="color:black;">{{post.likes.count}}</p>
+                {% endif %}
+            </span>
+
+            <!-- Dislike -->
+            <form action="{% url 'comments:post_like_dislike' post.id %}" method="post" class="form-inline"
+                id="dislikeForm">
+                {% csrf_token %}
+                <button type="submit" id="dislikeButton" name="submit" value="dislike" title="Dislike">
+                    <img src="{% static 'categories/dislike.png' %}" width="30" height="30" alt="Dislike">
+                </button>
+            </form>
+            <span class="m-3" id="id_dislikes">
+                {% if user in post.dislikes.all %}
+                <p style="color:#065FD4;"><b>{{post.dislikes.count}}</b></p>
+                {% else %}
+                <p style="color:black;">{{post.dislikes.count}}</p>
+                {% endif %}
+            </span>
+
+        </span>
+    </div>
     {% endif %}
     {% endfor %}
 </div>

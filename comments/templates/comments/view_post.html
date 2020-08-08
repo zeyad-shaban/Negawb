@@ -17,7 +17,8 @@
 </div>
 <hr>
 {% endif %}
-    
+
+{% if user.hide_comments == False %}
 <form method="POST">
     {% csrf_token %}
     <div class="form-group">
@@ -29,11 +30,10 @@
 <br>
 {{comments.count}} Answer{{comments.count|pluralize}}
 <hr>
-{% if user.hide_comments == False %}
 {% for comment in comments %}
 <div class="card w-75">
     <div class="card-body">
-        <h5 style="display: inline;" class="card-title">{{comment.user}}</h5> 
+        <h5 style="display: inline;" class="card-title">{{comment.user}}</h5>
         <small style="display: inline;" class="form-text text-muted">{{ comment.comment_date }}</small>
         <br>
         <p class="card-text">{{comment.description}}</p>

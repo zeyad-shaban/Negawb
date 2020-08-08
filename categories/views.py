@@ -12,7 +12,8 @@ def home(request):
         return redirect('results')
     else:
         categories = Category.objects.all()
-        return render(request, 'categories/index.html', {'categories': categories})
+        all_posts = Post.objects.all().order_by('-likes')
+        return render(request, 'categories/index.html', {'categories': categories, 'all_posts':all_posts})
 
 def view_category(request, pk):
     category = get_object_or_404(Category, pk=pk)
