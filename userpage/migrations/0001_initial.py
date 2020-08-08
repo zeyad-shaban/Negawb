@@ -31,7 +31,7 @@ class Migration(migrations.Migration):
                 ('is_active', models.BooleanField(default=True, help_text='Designates whether this user should be treated as active. Unselect this instead of deleting accounts.', verbose_name='active')),
                 ('date_joined', models.DateTimeField(default=django.utils.timezone.now, verbose_name='date joined')),
                 ('bio', models.CharField(blank=True, default='I love this website!', max_length=400, null=True)),
-                ('avatar', models.ImageField(default='profile_images/DefaultUserImage.jpg', upload_to='profile_images')),
+                ('avatar', models.ImageField(default='profile_images/DefaultUserImage.png', upload_to='profile_images')),
                 ('show_email', models.BooleanField(default=False)),
                 ('who_see_avatar', models.CharField(choices=[('none', 'No One'), ('friends', 'Friends Only'), ('everyone', 'Every One')], default='friends', max_length=30)),
                 ('followers', models.ManyToManyField(related_name='user_followers', to=settings.AUTH_USER_MODEL)),
