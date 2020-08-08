@@ -32,11 +32,12 @@ class Post(models.Model):
 
     def save(self):
         super().save()
-        img = Image.open(self.image.path)
-        if img.width > 250 or img.height > 250:
-            output_size = (250, 250)
-            img.thumbnail(output_size)
-            img.save(self.image.path)
+        if self.image:
+            img = Image.open(self.image.path)
+            if img.width > 250 or img.height > 250:
+                output_size = (250, 250)
+                img.thumbnail(output_size)
+                img.save(self.image.path)
 
 
 class Comment(models.Model):

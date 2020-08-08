@@ -64,7 +64,7 @@
         <!-- Like -->
         <form method="GET" id="likeForm" class="form-inline">
             <button type="submit" name="submit" value="like" title="Like">
-                <img src="{% static 'categories/like.png' %}" id="likeButton" width="30" height="30" alt="Like">
+                <img src="{% static 'categories/like.WebP' %}" id="likeButton" width="30" height="30" alt="Like">
             </button>
         </form>
 
@@ -121,7 +121,7 @@
             id="dislikeForm">
             {% csrf_token %}
             <button type="submit" id="dislikeButton" name="submit" value="dislike" title="Dislike">
-                <img src="{% static 'categories/dislike.png' %}" width="30" height="30" alt="Dislike">
+                <img src="{% static 'categories/dislike.WebP' %}" width="30" height="30" alt="Dislike">
             </button>
         </form>
         <span class="m-3" id="id_dislikes">

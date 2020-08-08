@@ -9,7 +9,7 @@ class User(AbstractUser):
     bio = models.CharField(
         max_length=400, default='I love this website!', blank=True, null=True,)
     avatar = models.ImageField(
-        upload_to='profile_images', default='profile_images/DefaultUserImage.png',)
+        upload_to='profile_images', default='profile_images/DefaultUserImage.WebP',)
     # PRIVACY
     show_email = models.BooleanField(default=False)
     who_see_avatar_choices = [

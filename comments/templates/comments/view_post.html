@@ -45,7 +45,7 @@
     <form action="{% url 'comments:reply_like_dislike' comment.id %}" method="post" class="form-inline">
         {% csrf_token %}
         <button type="submit" name="submit" value="like" title="Like">
-            <img src="{% static 'categories/like.png' %}" width="30" height="30" alt="Like">
+            <img src="{% static 'categories/like.WebP' %}" width="30" height="30" alt="Like">
         </button>
     </form>
     <span class="m-3">
@@ -55,7 +55,7 @@
     <form action="{% url 'comments:reply_like_dislike' comment.id %}" method="post" class="form-inline">
         {% csrf_token %}
         <button type="submit" name="submit" value="dislike" title="Dislike">
-            <img src="{% static 'categories/dislike.png' %}" width="30" height="30" alt="Dislike">
+            <img src="{% static 'categories/dislike.WebP' %}" width="30" height="30" alt="Dislike">
         </button>
     </form>
     <span class="m-3">
