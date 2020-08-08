@@ -37,9 +37,23 @@
 </form>
 
 {% for post in posts %}
-<a href="{% url 'comments:view_post' post.id %}">{{post.description}}</a>
-<br>
-
-
+{% if post.image %}
+<a href="{% url 'people:people' post.user.id %}">
+    <img src="{{ post.user.avatar.url }}" alt="{{ post.user.username }}" widht="64" height="64" class="mr-3 float-left">
+    <span>{{post.user.username}}</span>
+</a>
+<div class="mb-3">
+    <div class="card-body">
+        {% if post.description %}
+        <p class="card-text">{{post.description}}</p>
+        {% endif %}
+        <img src="{{ post.image.url }}" alt="{{ post.user.username }}" height="250" width="40%">
+        <p class="card-text"><small class="form-text text-muted">Published at {{ post.post_date|date:'d M Y' }} mins
+                ago</small></p>
+    </div>
+</div>
+{% elif post.description and not post.image %}
+{{post.description}}
+{% endif %}
 {% endfor %}
 {% endblock content %}
