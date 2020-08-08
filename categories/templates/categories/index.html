@@ -35,7 +35,7 @@
 </div>
 
 <div class="m-4">
-
+    {% if user.show_posts_in_homepage %}
     {% for post in all_posts %}
     {% if not post.category in user.blocked_categories.all %}
     <div class="card">
@@ -92,6 +92,9 @@
     </div>
     {% endif %}
     {% endfor %}
+    {% else %}
+    <small class="from-text text-muted">Your Distraction Free settings doesn't allow posts to show in home page</small>
+    {% endif %}
 </div>
 
 {% endblock content %}

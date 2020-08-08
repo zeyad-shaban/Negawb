@@ -39,4 +39,5 @@ class User(AbstractUser):
     blocked_categories = models.ManyToManyField(Category, related_name = 'blocked_categories', blank=True)
     full_focus_mode = models.BooleanField(default=False)
     chat_only_mode = models.BooleanField(default=False)
+    show_posts_in_homepage = models.BooleanField(default=False)
     #todo add notifications

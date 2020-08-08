@@ -33,5 +33,7 @@ class UserPasswordForm(ModelForm):
 class DistractionFreeForm(ModelForm):
     class Meta:
         model = User
-        fields = ('hide_comments','blocked_categories','full_focus_mode','chat_only_mode',)
-        labels = {'full_focus_mode': 'Full focus mode <small class="form-text text-muted">Turns DFreeMedia into Todo only app</small>', 'chat_only_mode': 'Chat only mode <small class="form-text text-muted">Turns DFreeMedia into Chatting and todo app only</small>'}
+        fields = ('hide_comments', 'show_posts_in_homepage', 'blocked_categories',
+                  'full_focus_mode', 'chat_only_mode',)
+        labels = {'full_focus_mode': 'Full focus mode <small class="form-text text-muted">Turns DFreeMedia into Todo only app</small>',
+                  'chat_only_mode': 'Chat only mode <small class="form-text text-muted">Turns DFreeMedia into Chatting and todo app only</small>'}
