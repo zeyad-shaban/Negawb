@@ -12,7 +12,6 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from .forms import ChatGroupForm
 from .models import ChatBox, Message, ChatGroup, GroupRequest, GroupMessage
-from notifications.signals import notify
 User = get_user_model()
 # DATE
 
@@ -57,11 +56,6 @@ def chat_friend(request, friend_id):
             else:
                 message.is_important = request.POST.get('is_important', False)
         message.save()
-        if message.is_important:
-            notify.send(request.user, recipient=request.user, verb='Important message')
-        else:
-            notify.send(request.user, recipient=request.user, verb='Normal message')
-
         return render(request, 'social/chat_friend.html', {'friend': friend, 'chat_messages': chat_messages})
 
 
