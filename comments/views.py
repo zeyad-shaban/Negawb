@@ -119,37 +119,44 @@ def create_post(request, pk):
     category = get_object_or_404(Category, pk=pk)
     #! NOT SERIALIZING IMAGES
     # Images category
-    if pk == 1:
-        image = request.GET.get('image')
-        description = request.GET.get('description')
-        if image:
-            if description:
-                post = Post(description = description, image = image, user=request.user, category = category)
+    if request.user.max_posts >= 2:
+        messages.error(
+            request, f'You can only make 2 posts a day, please wait till tommorow')
+        return redirect('view_category', pk=pk)
+    else:
+        # if pk == 1:
+        #     image = request.GET.get('image')
+        #     description = request.GET.get('description')
+        #     if image:
+        #         if description:
+        #             post = Post(description=description, image=image,
+        #                         user=request.user, category=category)
+        #             post.save()
+        #         else:
+        #             post = Post(description=description,
+        #                         user=request.user, category=category)
+        #             post.save()
+        #     else:
+        #         # todo return error
+        #         pass
+        #  Fun Area Category
+        if pk == 2:
+            post = Post(user=request.user, category=category)
+            if request.POST['description']:
+                post.description = request.POST['description']
                 post.save()
-            else:
-                post = Post(description = description, user=request.user, category = category)
-                post.save()
-        else:
-            #todo return error
-            pass
-    #  Fun Area Category
-    elif pk == 2:
-        post = Post(user=request.user, category = category)
-        if request.POST['description']:
-            post.description = request.POST['description']
-            post.save()
-        if request.POST['image'] and request.POST['post_file']:
-            message.error(request, 'You can\'t have both image and file')
-        elif request.POST['image']:
-            post.image = request.POST['image']
-            post.save(instance=post)
-        elif request.POST['post_file']:
-            post.post_file = request.POST['post_file']
-            post.save(instance=post)
-        
-        return redirect('categories:view_category', pk=category.id)
+            if request.POST['image'] and request.POST['post_file']:
+                message.error(request, 'You can\'t have both image and file')
+            elif request.POST['image']:
+                post.image = request.POST['image']
+                post.save(instance=post)
+            elif request.POST['post_file']:
+                post.post_file = request.POST['post_file']
+                post.save(instance=post)
 
-    #TRUSTED NEWS
-    elif pk == 4:
-        if not request.user.is_confirmed:
-            return HttpResponse('You are not a confirmed source, IF YOU FOUND A GLITCH THAT ALLOWS YOU TO MAKE POSTS HERE REPORT IT AS SOON AS POSSIBLE AND DO NOT MAKE ANY USE OF IT!')
+            return redirect('categories:view_category', pk=category.id)
+
+        # TRUSTED NEWS
+        elif pk == 4:
+            if not request.user.is_confirmed:
+                return HttpResponse('You are not a confirmed source, IF YOU FOUND A GLITCH THAT ALLOWS YOU TO MAKE POSTS HERE REPORT IT AS SOON AS POSSIBLE AND DO NOT MAKE ANY USE OF IT!')
