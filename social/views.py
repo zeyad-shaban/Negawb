@@ -1,3 +1,5 @@
+from django.utils.timezone import now
+import datetime
 from django.urls import reverse_lazy
 from django.http import JsonResponse, Http404
 from django.views import generic
@@ -11,6 +13,7 @@ from django.db.models import Q
 from .forms import ChatGroupForm
 from .models import ChatBox, Message, ChatGroup, GroupRequest, GroupMessage
 User = get_user_model()
+# DATE
 
 
 @login_required
@@ -36,7 +39,7 @@ def chat_friend(request, friend_id):
         user_1=request.user, user_2=friend).first()
     if not chat_box:
         chat_box = ChatBox.objects.filter(
-            user_1=friend, user_2=request.user). first()
+            user_1=friend, user_2=request.user).first()
     chat_messages = Message.objects.filter(
         chat_box=chat_box).order_by('sent_date')
     if request.method == 'GET':
@@ -44,6 +47,14 @@ def chat_friend(request, friend_id):
     else:
         message = Message(
             chat_box=chat_box, message_sender=request.user, message=request.POST['message'])
+        if 'is_important' in request.POST:
+            important_messages_in_last_day = Message.objects.filter(sent_date__gt=now(
+            ) - datetime.timedelta(days=1), is_important=True, chat_box=chat_box, message_sender=request.user)
+            if important_messages_in_last_day.count() >= 3:
+                messages.error(
+                    request, 'You can only send 3 important messages each day for each chat')
+            else:
+                message.is_important = request.POST.get('is_important', False)
         message.save()
         return render(request, 'social/chat_friend.html', {'friend': friend, 'chat_messages': chat_messages})
 
@@ -144,7 +155,6 @@ def join_group(request, pk):
     return JsonResponse({'message': message})
 
 
-
 def deny_group(request, pk):
     group_request = get_object_or_404(GroupRequest, pk=pk)
     group_request.delete()
@@ -152,4 +162,4 @@ def deny_group(request, pk):
         'text': f'You didn\'t join {group_request.group.title}',
         'tags': 'success'
     }
-    return JsonResponse({'message':message,})
+    return JsonResponse({'message': message, })
