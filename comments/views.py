@@ -146,6 +146,7 @@ def create_post(request, pk):
                 post.description = request.POST['description']
                 post.save()
                 request.user.max_posts += 1
+                request.user.save()
                 messages.warning(request, request.user.max_posts)
             if request.POST['image'] and request.POST['post_file']:
                 messages.error(request, 'You can\'t have both image and file')
