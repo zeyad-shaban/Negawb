@@ -16,12 +16,16 @@ def home(request):
         return redirect('results')
     else:
         categories = Category.objects.all()
-        friends = User.objects.filter(friends=request.user)
-        followed = User.objects.filter(followers=request.user)
-        friends_posts = Post.objects.filter(
-            Q(user__in=friends), ~Q(user=request.user)).order_by('-post_date')
-        followed_posts = Post.objects.filter(
-            Q(user__in=followed), ~Q(user=request.user)).order_by('-post_date')
+        if request.user.is_authenticated:
+            friends = User.objects.filter(friends=request.user)
+            followed = User.objects.filter(followers=request.user)
+            friends_posts = Post.objects.filter(
+                Q(user__in=friends), ~Q(user=request.user)).order_by('-post_date')
+            followed_posts = Post.objects.filter(
+                Q(user__in=followed), ~Q(user=request.user)).order_by('-post_date')
+        else:
+            friends_posts = None
+            followed_posts = None
         return render(request, 'categories/index.html', {'categories': categories, 'friends_posts': friends_posts, 'followed_posts': followed_posts, })
 
 
