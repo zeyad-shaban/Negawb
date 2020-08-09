@@ -22,8 +22,7 @@ def home(request):
 def view_category(request, pk):
     category = get_object_or_404(Category, pk=pk)
     post_list = Post.objects.filter(category=category).order_by('-post_date')
-    # Todo 2 => 7
-    paginator = Paginator(post_list, 2)
+    paginator = Paginator(post_list, 7)
     page = request.GET.get('page')
     try:
         posts = paginator.page(page)
