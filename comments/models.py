@@ -36,7 +36,7 @@ class Post(models.Model):
             if img.width > 250 or img.height > 250:
                 output_size = (250, 250)
                 img.thumbnail(output_size)
-                img.save(self.image.path)
+                img.save(self.image.path, 'WebP')
 
 
 class Comment(models.Model):

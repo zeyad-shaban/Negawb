@@ -17,7 +17,7 @@ class Category(models.Model):
             if img.width > 348 or img.height > 217:
                 output_size = (348, 217)
                 img.thumbnail(output_size)
-                img.save(self.image.path)
+                img.save(self.image.path, 'WebP')
 
 
 

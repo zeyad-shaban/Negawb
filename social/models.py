@@ -54,7 +54,7 @@ class ChatGroup(models.Model):
             if img.width > 140 or img.height > 140:
                 output_size = (140, 140)
                 img.thumbnail(output_size)
-                img.save(self.image.path)
+                img.save(self.image.path, 'WebP')
 
 
 class GroupRequest(models.Model):
