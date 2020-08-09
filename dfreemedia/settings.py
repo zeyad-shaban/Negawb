@@ -21,7 +21,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'w90xi5jlxz0=1=es)_f!(_kn^gvu%rsc&j8r@f^wa4&xsw-w!d'
+SECRET_KEY = os.environ.get('DFREEMEDIA_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -137,11 +137,15 @@ AUTH_USER_MODEL = 'userpage.User'
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 # Email Messaging
-EMAIL_USE_TLS = True
+EMAIL_BACKEND = 'django.core.mail.backends.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'zeyadyousefshapan@gmail.com'
-EMAIL_HOST_PASSWORD = 'Python44200444'
 EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.environ.get('EMAIL_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASS')
+
+
+# HEROKU
 django_heroku.settings(locals())
 
 try:
