@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import login_required
 from comments.models import Post, Comment
 from .models import FriendRequest
@@ -15,8 +16,16 @@ def people(request, pk):
     view_user = get_object_or_404(User, pk=pk)
     friends = User.objects.filter(friends=view_user)
     user = get_object_or_404(User, pk=pk)
-    posts = Post.objects.filter(user=user)
-    return render(request, 'people/index.html', {'view_user': view_user, 'friends': friends, 'posts':posts})
+    post_list = Post.objects.filter(user=user).order_by('-post_date')
+    paginator = Paginator(post_list, 7)
+    page = request.GET.get('page')
+    try:
+        posts = paginator.page(page)
+    except PageNotAnInteger:
+        posts = paginator.page(1)
+    except EmptyPage:
+        posts = paginator.page(paginator.num_pages)
+    return render(request, 'people/index.html', {'view_user': view_user, 'friends': friends, 'posts': posts})
 
 
 @login_required
@@ -89,7 +98,7 @@ def follow(request, pk):
             'text': f'You unfollowed {user.username}',
             'tags': 'success',
         }
-        action='unfollow'
+        action = 'unfollow'
     else:
         user.followers.add(request.user)
         message = {
@@ -97,4 +106,4 @@ def follow(request, pk):
             'tags': 'success'
         }
         action = 'follow'
-    return JsonResponse({'message':message, 'action': action})
+    return JsonResponse({'message': message, 'action': action})
