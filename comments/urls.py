@@ -5,7 +5,6 @@ app_name = 'comments'
 
 
 urlpatterns = [
-    path('', views.posts, name='posts'),
     path('<int:pk>/', views.view_post, name='view_post'),
     path('results/', views.results_post, name='results_post'),
     path('createpost/<int:pk>/', views.create_post, name='create_post'),

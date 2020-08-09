@@ -11,27 +11,6 @@ from django.contrib import messages
 from django.utils.timezone import now
 import datetime
 
-
-# todo make this view only function (NO CREATING)
-def posts(request):
-    posts = Post.objects.all().order_by('-post_date')
-    if request.method == 'GET':
-        return render(request, 'comments/posts.html', {'posts': posts, 'form': PostForm})
-    # Add Post
-
-    elif request.POST['submit'] == 'Add Comment':
-        try:
-            form = PostForm(request.POST)
-            post = form.save(commit=False)
-            post.user = request.user
-            messages.success(request, "created post successfully")
-            post.save()
-            return redirect('comments:posts')
-        except ValueError:
-            messages.error(request, 'Title must be 0-40 character')
-            return redirect('comments:posts')
-
-
 @login_required
 def view_post(request, pk):
     post = get_object_or_404(Post, pk=pk)
