@@ -1,4 +1,4 @@
-{% extends 'makeuser/base.html' %}
+{% extends 'users/base.html' %}
 {% block title %} Login {% endblock title %}
 {% block content %}
 <div class="row justify-content-center mt-5">
@@ -22,12 +22,12 @@
         </form>
         <hr>
         <div class="text-center">
-            Need an account? <a href="{% url 'makeuser:signupuser' %}">Sign Up here</a>
+            Need an account? <a href="{% url 'signupuser' %}">Sign Up here</a>
         </div>
         <hr>
         <hr>
         <div class="text-center">
-            Forgot password? If your account was linked with an email then no worries, <a href="{% url 'makeuser:password_reset' %}">Reset Password</a>
+            Forgot password? If your account was linked with an email then no worries, <a href="{% url 'password_reset' %}">Reset Password</a>
         </div>
     </div>
 </div>

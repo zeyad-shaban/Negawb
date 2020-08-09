@@ -21,7 +21,7 @@ def signupuser(request):
             messages.warning(request, 'You are already logged in')
             return redirect('home')
         else:
-            return render(request, 'makeuser/signupuser.html', {'form': UserCreationForm})
+            return render(request, 'users/signupuser.html', {'form': UserCreationForm})
     else:
         if request.POST['password1'] == request.POST['password2']:
             try:
@@ -31,7 +31,7 @@ def signupuser(request):
                     user.is_active = False
                     current_site = get_current_site(request)
                     mail_subject = 'Activate your blog account.'
-                    message = render_to_string('makeuser/acc_active_email.html', {
+                    message = render_to_string('users/acc_active_email.html', {
                         'user': user,
                         'domain': current_site.domain,
                         'uid': urlsafe_base64_encode(force_bytes(user.pk)),
@@ -53,11 +53,11 @@ def signupuser(request):
             except IntegrityError:
                 messages.error(
                     request, 'Username is already taken, please choose another one')
-                return redirect('makeuser:signupuser')
+                return redirect('users:signupuser')
         else:
             messages.error(
                 request, 'Passwords didn\'t match, please try again')
-            return redirect('makeuser:signupuser')
+            return redirect('users:signupuser')
 
 
 def activate(request, uidb64, token):
@@ -94,14 +94,14 @@ def loginuser(request):
             messages.warning(request, 'You are already logged in')
             return redirect('home')
         else:
-            return render(request, 'makeuser/loginuser.html', {'form': AuthenticationForm})
+            return render(request, 'users/loginuser.html', {'form': AuthenticationForm})
     else:
         user = authenticate(
             request, username=request.POST['username'], password=request.POST['password'])
         if user is None:
             messages.error(
                 request, 'The username that you\'ve entered doesn\'t match any account. Or password didn\'t match')
-            return redirect('makeuser:loginuser')
+            return redirect('users:loginuser')
         else:
             login(request, user)
             if request.GET.get('next'):

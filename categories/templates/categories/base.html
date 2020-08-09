@@ -64,16 +64,16 @@
                 {% endif %}
                 {% if user.is_authenticated %}
                 <li class="nav-item">
-                    <form action="{% url 'makeuser:logoutuser' %}" method="POST">
+                    <form action="{% url 'logoutuser' %}" method="POST">
                         {% csrf_token %}
                         <input class="btn btn-danger" type="submit" value="Logout">
                     </form>
                 </li>
                 {% else %}
-                <li class="nav-item"><a href="{% url 'makeuser:signupuser' %}">SignUp</a>
+                <li class="nav-item"><a href="{% url 'signupuser' %}">SignUp</a>
                 </li>
                 <li class="nav-item">
-                    <a href="{% url 'makeuser:loginuser' %}">Login</a>
+                    <a href="{% url 'loginuser' %}">Login</a>
                 </li>
                 {% endif %}
 

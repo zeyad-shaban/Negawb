@@ -1,4 +1,4 @@
-{% extends 'makeuser/base.html' %}
+{% extends 'users/base.html' %}
 {% block title %} Sign Up {% endblock title %}
 {% block content %}
 <div class="row justify-content-center mt-5">
@@ -31,7 +31,7 @@
         </form>
         <hr>
         <div class="text-center">
-            Do you already have an account? <a href="{% url 'makeuser:loginuser' %}">Login here</a>
+            Do you already have an account? <a href="{% url 'loginuser' %}">Login here</a>
         </div>
     </div>
 </div>

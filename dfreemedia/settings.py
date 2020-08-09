@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'six',
     'categories',
-    'makeuser',
+    'users',
     'userpage',
     'people',
     'comments',

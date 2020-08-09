@@ -18,19 +18,31 @@ from django.urls import path, include
 from categories import views
 from django.conf.urls.static import static
 from django.conf import settings
+from users import views as users_views
+from django.contrib.auth import views as auth_views
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home, name='home'),
     # CATEGORIES
     path('category/', include('categories.urls'), name='category'),
-    # !this wasn't changed to posts
     path('comments/', include('comments.urls'), name='comments'),
-    path('user/', include('makeuser.urls'), name='user'),
     path('userpage/', include('userpage.urls'), name='userpage'),
     path('people/', include('people.urls'), name='people'),
-    path('social/',include('social.urls'), name='social'),
-    path('production/',include('production.urls'), name='production'),
+    path('social/', include('social.urls'), name='social'),
+    path('production/', include('production.urls'), name='production'),
+    # CREATING USER
+    path('signup/', users_views.signupuser, name='signupuser'),
+    path('logout/', users_views.logoutuser, name='logoutuser'),
+    path('login/', users_views.loginuser, name='loginuser'),
+    path('password-reset/', auth_views.PasswordResetView.as_view(
+        template_name='users/password_reset.html'), name='password_reset'),
+
+    path('password-reset/done/', auth_views.PasswordResetDoneView.as_view(
+        template_name='users/password_reset_done.html'), name='password_reset_done'),
+    path('password-reset-confirm/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(
+        template_name='users/password_reset_confirm.html'), name='password_reset_confirm'),
 ]
 
-urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
