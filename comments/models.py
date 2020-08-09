@@ -6,14 +6,13 @@ User = user_model()
 
 
 class Post(models.Model):
-    title = models.CharField(max_length=40, blank=True, null=True)
     description = models.TextField(null=True, blank=True)
     image = models.ImageField(
         upload_to='comments/posts_images/', null=True, blank=True)
     post_file = models.FileField(
         upload_to='comments/file_uploades/', blank=True, null=True)
     category = models.ForeignKey(
-        Category, on_delete=models.CASCADE,)
+        Category, on_delete=models.CASCADE, null=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     # Voting
     likes = models.ManyToManyField(User, related_name='post_like', blank=True)

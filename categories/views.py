@@ -1,3 +1,4 @@
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from .models import Category
@@ -5,9 +6,9 @@ from comments.models import Post, Comment
 from comments.forms import PostForm
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
+from django.contrib.auth import get_user_model
+User = get_user_model()
 # PAGINATION
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-
 
 
 def home(request):
@@ -15,8 +16,13 @@ def home(request):
         return redirect('results')
     else:
         categories = Category.objects.all()
-        all_posts = Post.objects.all().order_by('-likes')
-        return render(request, 'categories/index.html', {'categories': categories, 'all_posts': all_posts})
+        friends = User.objects.filter(friends=request.user)
+        followed = User.objects.filter(followers=request.user)
+        friends_posts = Post.objects.filter(
+            Q(user__in=friends), ~Q(user=request.user)).order_by('-post_date')
+        followed_posts = Post.objects.filter(
+            Q(user__in=followed), ~Q(user=request.user)).order_by('-post_date')
+        return render(request, 'categories/index.html', {'categories': categories, 'friends_posts': friends_posts, 'followed_posts': followed_posts, })
 
 
 def view_category(request, pk):

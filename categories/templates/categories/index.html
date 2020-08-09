@@ -36,7 +36,13 @@
 
 <div class="m-4">
     {% if user.show_posts_in_homepage %}
-    {% for post in all_posts %}
+    <p>
+        <span><a href="#" class="mr-3">Friends</a></span>
+        <span><a href="#" class="ml-3">Followed</a></span>
+    </p>
+
+<!-- FRIENDS POSTS -->
+    {% for post in friends_posts %}
     {% if not post.category in user.blocked_categories.all %}
     <div class="card">
         <div class="card-header">
