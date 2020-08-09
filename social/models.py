@@ -49,11 +49,12 @@ class ChatGroup(models.Model):
 
     def save(self, *args, **kwargs):
         super().save()
-        img = Image.open(self.image.path)
-        if img.width > 140 or img.height > 140:
-            output_size = (140, 140)
-            img.thumbnail(output_size)
-            img.save(self.image.path)
+        if self.image:
+            img = Image.open(self.image.path)
+            if img.width > 140 or img.height > 140:
+                output_size = (140, 140)
+                img.thumbnail(output_size)
+                img.save(self.image.path)
 
 
 class GroupRequest(models.Model):

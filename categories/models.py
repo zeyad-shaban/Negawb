@@ -12,11 +12,12 @@ class Category(models.Model):
 
     def save(self, *args, **kwargs):
         super().save()
-        img = Image.open(self.image.path)
-        if img.width > 348 or img.height > 217:
-            output_size = (348, 217)
-            img.thumbnail(output_size)
-            img.save(self.image.path)
+        if self.image:
+            img = Image.open(self.image.path)
+            if img.width > 348 or img.height > 217:
+                output_size = (348, 217)
+                img.thumbnail(output_size)
+                img.save(self.image.path)
 
 
 

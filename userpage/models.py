@@ -48,8 +48,9 @@ class User(AbstractUser):
 
     def save(self, *args, **kwargs):
         super().save()
-        img = Image.open(self.avatar.path)
-        if img.width > 160 or img.height > 160:
-            output_size = (160, 160)
-            img.thumbnail(output_size)
-            img.save(self.avatar.path)
+        if self.avatar:
+            img = Image.open(self.avatar.path)
+            if img.width > 160 or img.height > 160:
+                output_size = (160, 160)
+                img.thumbnail(output_size)
+                img.save(self.avatar.path)
