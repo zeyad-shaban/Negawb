@@ -10,38 +10,6 @@
 {% endblock searchbar %}
 
 {% block content %}
-<br>
-{% if user.is_authenticated %}
-<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#addComment" aria-expanded="false"
-    aria-controls="addComment">Create Post</button>
-
-{% else %}
-<div class="alert alert-danger">you can't add or view posts unless you are logged in</div>
-{% endif %}
-<p>Comment{{ posts.count|pluralize }}: {{posts.count}}</p>
-<br>
-<!-- Add Post -->
-<div class="collapse" id="addComment">
-    <form id="create-post" method="POST">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="title">Title</label>
-            <input type="text" name='title' class="form-control" id='title' placeholder="Optional" maxlength="40">
-        </div>
-        <div class="form-group">
-            <label for="description">Description</label>
-            <textarea name='description' class="form-control" id="description" required></textarea>
-        </div>
-        <div class="form-group">
-            <label for="category">Category</label>
-            {{form.category}}
-        </div>
-        <input class="btn btn-success" type="submit" value="Add Comment" name="submit">
-    </form>
-    <br>
-</div>
-
-<!-- end add Post -->
 {% for post in posts %}
 <div class="card">
     <div class="card-header">
