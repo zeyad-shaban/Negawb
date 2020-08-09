@@ -72,9 +72,9 @@ def home(request):
 
 
 @login_required
-def questions(request):
-    questions = Post.objects.filter(user=request.user)
-    return render(request, 'userpage/questions.html', {'questions': questions})
+def posts(request):
+    posts = Post.objects.filter(user=request.user)
+    return render(request, 'userpage/posts.html', {'posts': posts})
 
 
 @login_required

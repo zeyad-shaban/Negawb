@@ -1,0 +1,67 @@
+{% extends 'categories/base.html' %}
+{% block title %} User Questions {% endblock title %}
+{% block content %}
+
+{% for post in posts %}
+{% if post.image %}
+<a href="{% url 'people:people' post.user.id %}">
+    <img src="{{ post.user.avatar.url }}" alt="{{ post.user.username }}" widht="64" height="64" class="mr-3 float-left">
+    <span>{{post.user.username}}</span>
+</a>
+<div class="mb-3">
+    <div class="card-body">
+        {% if post.description %}
+        <p class="card-text">{{post.description|truncatechars:200}}{% if post.description|length > 200%}<a
+                href="{% url 'comments:view_post' post.id %}">Read
+                More</a>{% endif %}</p>
+        {% endif %}
+        <img src="{{ post.image.url }}" alt="{{ post.user.username }}" height="250" width="40%">
+        <p class="card-text"><small class="form-text text-muted">Published at {{ post.post_date|date:'d M Y' }}</small>
+        </p>
+    </div>
+</div>
+<!-- Descriptin only post -->
+{% elif post.description and not post.image and not post.post_file %}
+<div class="card">
+    <div class="card-header">
+        <a href="{% url 'people:people' post.user.id %}">
+            <img src="{{ post.user.avatar.url }}" alt="{{ post.user.username }}" widht="64" height="64"
+                class="mr-3 float-left">
+            {{user.username}}
+        </a>
+    </div>
+    <div class="card-body">
+        <blockquote class="blockquote mb-0">
+            <p class="text-break">{{post.description|truncatechars:450}} {% if post.description|length > 450%}<a
+                    href="{% url 'comments:view_post' post.id %}">Read
+                    More</a>{% endif %}</p>
+            <small class="form-text text-muted">Published at {{ post.post_date|date:'d M Y' }}</small>
+        </blockquote>
+    </div>
+</div>
+<!-- File post -->
+{% elif post.post_file %}
+<a href="{% url 'people:people' post.user.id %}">
+    <img src="{{ post.user.avatar.url }}" alt="{{ post.user.username }}" widht="64" height="64" class="mr-3 float-left">
+    <span>{{post.user.username}}</span>
+</a>
+<div class="mb-3">
+    <div class="card-body">
+        {% if post.description %}
+        <p class="card-text">{{post.description|truncatechars:200}}{% if post.description|length > 200%}<a
+                href="{% url 'comments:view_post' post.id %}">Read
+                More</a>{% endif %}</p>
+        {% endif %}
+        <video width="400" height="320" controls>
+            <source src="{{ post.post_file.url }}" type="video/mp4">
+            <source src="{{ post.post_file.url }}" type="video/ogg">
+            Your browser does not support the video tag.
+        </video>
+        <p class="card-text"><small class="form-text text-muted">Published at {{ post.post_date|date:'d M Y' }}</small>
+        </p>
+    </div>
+</div>
+{% endif %}
+{% endfor %}
+
+{% endblock content %}
