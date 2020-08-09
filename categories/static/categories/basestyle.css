@@ -2,7 +2,7 @@
     font-size: 1.25em;
 }
 
-nav li a {
+.navbar .nav-item a {
     color: white !important;
     margin: 5px !important;
     padding: 5px;
