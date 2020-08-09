@@ -53,7 +53,9 @@
                         Create & Add
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="{% url 'comments:posts' %}">Post</a>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createPost">
+                            Post
+                        </button>
                         <button type="button" class="btn btn-primary dropdown-item" data-toggle="modal"
                             data-target="#createChatGroup" data-whatever="createChatGroup">Chat Group</button>
                         <div class="dropdown-divider"></div>
@@ -81,7 +83,8 @@
 
                 <li class="nav-item">
                     <a href="{% url 'social:my_groups' %}" title="Groups" style="background:white;">
-                        <img src="{% static 'categories/GroupIcon.WebP' %}" width="30" height="30" alt="" loading="lazy">
+                        <img src="{% static 'categories/GroupIcon.WebP' %}" width="30" height="30" alt=""
+                            loading="lazy">
                     </a>
                     <!-- todo use image instead of text -->
                     {% if user.is_authenticated %}
@@ -248,9 +251,9 @@
             $('#addTodoButton').click(function () {
                 let check_box
                 let isImportant = $('#TodoIsImportant').is(":checked")
-                if (isImportant){
+                if (isImportant) {
                     check_box = 'True'
-                } else{
+                } else {
                     check_box = 'False'
                 }
                 $.ajax({
@@ -269,6 +272,64 @@
 
         })
     </script>
+
+    <!-- * CREATE POST MODAL -->
+    <div class="modal fade" id="createPost" tabindex="-1" role="dialog" aria-labelledby="createPostLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createPostLabel">Create Post</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    {% if user.is_authenticated %}
+                    <form method="POST" class="mb-4" enctype="multipart/form-data"
+                        action="{% url 'comments:create_post' 0 %}" id="createPostForm">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="id_post_description">Description</label>
+                            <textarea type="text" name="description" id="id_post_description"
+                                class="form-control"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <p><label for="id_post_image">Optional Image</label>
+                                <input type="file" name="image" accept="image/*" id="id_image"></p>
+                        </div>
+                        <div class="form-group">
+                            <p><label for="id_post_image">Or Video</label>
+                                <input type="file" name="post_file" accept="video/*" id="id_post_file"></p>
+                        </div>
+                        <small class="form-text text-muted">You don't have to specify image or video, but if you do then
+                            only one of
+                            them</small>
+                    </form>
+                    {% else %}
+                    <div class="alert alert-danger">You must be logged in to add posts</div>
+                    {% endif %}
+                    <small class="form-text text-muted">This will be visible for friends and followers only. If you want
+                        to make it public then consider adding it from a category </a></small>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="addPostButton">Add Post</button>
+                </div>
+                <script>
+                    $(document).ready(function () {
+
+                        $('#addPostButton').click(function (e) {
+                            e.preventDefault();
+                            $('#createPostForm').submit()
+                        });
+
+                    })
+                </script>
+            </div>
+        </div>
+    </div>
+
 </body>
 
 </html>

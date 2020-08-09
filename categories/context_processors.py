@@ -1,7 +1,6 @@
 from production.models import Todo
 from production.forms import TodoForm
 
-
 def add_variable_to_context(request):
     try:
         if request.user.is_authenticated:

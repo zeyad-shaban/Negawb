@@ -73,7 +73,7 @@ def home(request):
 
 @login_required
 def posts(request):
-    posts = Post.objects.filter(user=request.user)
+    posts = Post.objects.filter(user=request.user).order_by('-post_date')
     return render(request, 'userpage/posts.html', {'posts': posts})
 
 

@@ -119,13 +119,20 @@ def reply_like_dislike(request, reply_id):
 
 
 def create_post(request, pk):
-    category = get_object_or_404(Category, pk=pk)
+    if pk == 0:
+        category = None
+    else:
+        category = get_object_or_404(Category, pk=pk)
     posts_in_last_day = request.user.post_set.filter(
         post_date__gt=now() - datetime.timedelta(days=1))
     if posts_in_last_day.count() >= 3:
         messages.error(
             request, f'You can only make 3 posts a day, please wait till tommorow')
-        return redirect('categories:view_category', pk=pk)
+
+        if pk == 0:
+            return redirect('home')
+        else:
+            return redirect('categories:view_category', pk=pk)
     else:
 
         if pk != 4 and pk != 1 and pk != 6:
@@ -136,7 +143,11 @@ def create_post(request, pk):
             post.save()
             messages.success(
                 request, 'Your post was uploaded, thanks for growing up our DFreeMedia community 💪🏻')
-            return redirect('categories:view_category', pk=pk)
+            if pk == 0:
+                return redirect('home')
+            else:
+                return redirect('categories:view_category', pk=pk)
+                
 
         # TRUSTED NEWS
         elif pk == 4:
