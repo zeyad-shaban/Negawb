@@ -18,7 +18,7 @@ def home(request):
         categories = Category.objects.all()
         if request.user.is_authenticated:
             friends = User.objects.filter(friends=request.user)
-            followed = User.objects.filter(followers=request.user)
+            followed = User.objects.filter(Q(followers=request.user), ~Q(friends = request.user))
             friends_posts = Post.objects.filter(
                 Q(user__in=friends), ~Q(user=request.user)).order_by('-post_date')
             followed_posts = Post.objects.filter(

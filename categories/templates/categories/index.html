@@ -37,67 +37,156 @@
 <div class="m-4">
     {% if user.show_posts_in_homepage %}
     <p>
-        <span><a href="#" class="mr-3">Friends</a></span>
-        <span><a href="#" class="ml-3">Followed</a></span>
+        <span><a href="#" class="m-3 btn btn-primary" id="toggleFriendsPosts">Friends</a></span>
+        <span><a href="#" class="m-3 btn btn-primary" id="toggleFollowedPosts">Followed</a></span>
     </p>
 
-<!-- FRIENDS POSTS -->
-    {% for post in friends_posts %}
-    {% if not post.category in user.blocked_categories.all %}
-    <div class="card">
-        <div class="card-header">
-            <a href="{% url 'people:people' post.user.id %}">
-                {{ post.user}}
-            </a>
-            <small class="form-text text-muted">{{ post.post_date }}
-                {% if post.category %}
-                <a href="{% url 'categories:view_category' post.category.id %}">{{post.category}}</a></small>
-            {% endif %}
-        </div>
-        <div class="card-body">
-            {% if post.title %}
-            <h5 class="card-title">{{post.title}}</h5>
-            {% endif %}
-            <p class="card-text text-break">{{ post.description|truncatechars:300 }}</p>
-            <a href="{% url 'comments:view_post' post.id %}" class="btn btn-primary">View</a>
-        </div>
-        <span class="row justify-content-center">
-            <!-- Like -->
-            <form method="GET" id="likeForm" class="form-inline">
-                <button type="submit" name="submit" value="like" title="Like">
-                    <img src="{% static 'categories/like.WebP' %}" id="likeButton" width="30" height="30" alt="Like">
-                </button>
-            </form>
-
-
-            <span class="m-3" id="id_likes">
-                {% if user in post.likes.all %}
-                <p style="color:#065FD4;"><b>{{post.likes.count}}</b></p>
-                {% else %}
-                <p style="color:black;">{{post.likes.count}}</p>
+    <!-- FRIENDS POSTS -->
+    <div id="friendsPosts">
+        <p> {{ friends_posts.count }} Friend{{ friends_posts.count|pluralize }} Post{{ friends_posts.count|pluralize }}</p>
+        <hr>
+        {% for post in friends_posts %}
+        {% if not post.category in user.blocked_categories.all %}
+        <div class="card">
+            <div class="card-header">
+                <a href="{% url 'people:people' post.user.id %}">
+                    {{ post.user}}
+                </a>
+                <small class="form-text text-muted">{{ post.post_date }}
+                    {% if post.category %}
+                    <a href="{% url 'categories:view_category' post.category.id %}">{{post.category}}</a></small>
                 {% endif %}
-            </span>
-
-            <!-- Dislike -->
-            <form action="{% url 'comments:post_like_dislike' post.id %}" method="post" class="form-inline"
-                id="dislikeForm">
-                {% csrf_token %}
-                <button type="submit" id="dislikeButton" name="submit" value="dislike" title="Dislike">
-                    <img src="{% static 'categories/dislike.WebP' %}" width="30" height="30" alt="Dislike">
-                </button>
-            </form>
-            <span class="m-3" id="id_dislikes">
-                {% if user in post.dislikes.all %}
-                <p style="color:#065FD4;"><b>{{post.dislikes.count}}</b></p>
-                {% else %}
-                <p style="color:black;">{{post.dislikes.count}}</p>
+            </div>
+            <div class="card-body">
+                {% if post.title %}
+                <h5 class="card-title">{{post.title}}</h5>
                 {% endif %}
-            </span>
+                <p class="card-text text-break">{{ post.description|truncatechars:300 }}</p>
+                <a href="{% url 'comments:view_post' post.id %}" class="btn btn-primary">View</a>
+            </div>
+            <span class="row justify-content-center">
+                <!-- Like -->
+                <form method="GET" id="likeForm" class="form-inline">
+                    <button type="submit" name="submit" value="like" title="Like">
+                        <img src="{% static 'categories/like.WebP' %}" id="likeButton" width="30" height="30"
+                            alt="Like">
+                    </button>
+                </form>
 
-        </span>
+
+                <span class="m-3" id="id_likes">
+                    {% if user in post.likes.all %}
+                    <p style="color:#065FD4;"><b>{{post.likes.count}}</b></p>
+                    {% else %}
+                    <p style="color:black;">{{post.likes.count}}</p>
+                    {% endif %}
+                </span>
+
+                <!-- Dislike -->
+                <form action="{% url 'comments:post_like_dislike' post.id %}" method="post" class="form-inline"
+                    id="dislikeForm">
+                    {% csrf_token %}
+                    <button type="submit" id="dislikeButton" name="submit" value="dislike" title="Dislike">
+                        <img src="{% static 'categories/dislike.WebP' %}" width="30" height="30" alt="Dislike">
+                    </button>
+                </form>
+                <span class="m-3" id="id_dislikes">
+                    {% if user in post.dislikes.all %}
+                    <p style="color:#065FD4;"><b>{{post.dislikes.count}}</b></p>
+                    {% else %}
+                    <p style="color:black;">{{post.dislikes.count}}</p>
+                    {% endif %}
+                </span>
+
+            </span>
+        </div>
+        {% endif %}
+        {% endfor %}
     </div>
-    {% endif %}
-    {% endfor %}
+
+
+
+
+    <!-- FOLLOWED POSTS -->
+    <div id="followedPosts">
+        <p>{{ followed_posts.count }} Followed Post{{ followed_posts.count|pluralize }}</p>
+        <hr>
+        {% for post in followed_posts %}
+        {% if not post.category in user.blocked_categories.all %}
+        <div class="card">
+            <div class="card-header">
+                <a href="{% url 'people:people' post.user.id %}">
+                    {{ post.user}}
+                </a>
+                <small class="form-text text-muted">{{ post.post_date }}
+                    {% if post.category %}
+                    <a href="{% url 'categories:view_category' post.category.id %}">{{post.category}}</a></small>
+                {% endif %}
+            </div>
+            <div class="card-body">
+                {% if post.title %}
+                <h5 class="card-title">{{post.title}}</h5>
+                {% endif %}
+                <p class="card-text text-break">{{ post.description|truncatechars:300 }}</p>
+                <a href="{% url 'comments:view_post' post.id %}" class="btn btn-primary">View</a>
+            </div>
+            <span class="row justify-content-center">
+                <!-- Like -->
+                <form method="GET" id="likeForm" class="form-inline">
+                    <button type="submit" name="submit" value="like" title="Like">
+                        <img src="{% static 'categories/like.WebP' %}" id="likeButton" width="30" height="30"
+                            alt="Like">
+                    </button>
+                </form>
+
+
+                <span class="m-3" id="id_likes">
+                    {% if user in post.likes.all %}
+                    <p style="color:#065FD4;"><b>{{post.likes.count}}</b></p>
+                    {% else %}
+                    <p style="color:black;">{{post.likes.count}}</p>
+                    {% endif %}
+                </span>
+
+                <!-- Dislike -->
+                <form action="{% url 'comments:post_like_dislike' post.id %}" method="post" class="form-inline"
+                    id="dislikeForm">
+                    {% csrf_token %}
+                    <button type="submit" id="dislikeButton" name="submit" value="dislike" title="Dislike">
+                        <img src="{% static 'categories/dislike.WebP' %}" width="30" height="30" alt="Dislike">
+                    </button>
+                </form>
+                <span class="m-3" id="id_dislikes">
+                    {% if user in post.dislikes.all %}
+                    <p style="color:#065FD4;"><b>{{post.dislikes.count}}</b></p>
+                    {% else %}
+                    <p style="color:black;">{{post.dislikes.count}}</p>
+                    {% endif %}
+                </span>
+
+            </span>
+        </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $('#followedPosts').fadeOut()
+            $('#friendsPosts').fadeOut()
+            $('#toggleFollowedPosts').click(function (e) {
+                e.preventDefault();
+                $('#friendsPosts').fadeOut()
+                $('#followedPosts').fadeToggle()
+            });
+            $('#toggleFriendsPosts').click(function (e) {
+                e.preventDefault();
+                $('#followedPosts').fadeOut()
+                $('#friendsPosts').fadeToggle()
+            });
+        })
+    </script>
+
     {% else %}
     <small class="from-text text-muted">Your Distraction Free settings doesn't allow posts to show in home page</small>
     {% endif %}
