@@ -11,7 +11,7 @@ class Category(models.Model):
         return self.title
 
     def save(self, *args, **kwargs):
-        super().save()
+        super().save(*args, **kwargs)
         if self.image:
             img = Image.open(self.image.path)
             if img.width > 348 or img.height > 217:

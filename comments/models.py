@@ -30,7 +30,7 @@ class Post(models.Model):
         return f'Post by user: {self.user}'
 
     def save(self, *args, **kwargs):
-        super().save()
+        super().save(*args, **kwargs)
         if self.image:
             img = Image.open(self.image.path)
             if img.width > 250 or img.height > 250:

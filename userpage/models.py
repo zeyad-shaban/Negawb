@@ -47,7 +47,7 @@ class User(AbstractUser):
     # IMAGE RESIZING
 
     def save(self, *args, **kwargs):
-        super().save()
+        super().save(*args, **kwargs)
         if self.avatar:
             img = Image.open(self.avatar.path)
             if img.width > 160 or img.height > 160:
