@@ -2,6 +2,16 @@
 {% block title %} User Posts {% endblock title %}
 {% block content %}
 
+<style>
+    .card.bg-dark.text-white {
+        width: 397px;
+        height: 262;
+    }
+
+    .card-img-overlay {
+        display: none;
+    }
+</style>
 {% for post in posts %}
 {% if post.image %}
 <a href="{% url 'people:people' post.user.id %}">
