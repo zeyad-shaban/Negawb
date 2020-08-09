@@ -1,5 +1,8 @@
+from .utils import account_activation_token
+from django.urls import reverse
+from django.utils.encoding import force_bytes, force_text, DjangoUnicodeDecodeError
 from django.core.mail import EmailMessage
-from .tokens import account_activation_token
+from django.views import generic
 from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_text
@@ -12,7 +15,6 @@ from django.db import IntegrityError
 from django.contrib import messages
 from django.contrib.auth import get_user_model as user_model
 User = user_model()
-# email stuff
 
 
 def signupuser(request):
@@ -29,23 +31,24 @@ def signupuser(request):
                     request.POST['username'], password=request.POST['password1'])
                 if request.POST['email']:
                     user.is_active = False
-                    current_site = get_current_site(request)
-                    mail_subject = 'Activate your blog account.'
-                    message = render_to_string('users/acc_active_email.html', {
-                        'user': user,
-                        'domain': current_site.domain,
-                        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-                        'token': account_activation_token.make_token(user),
-                    })
-                    to_email = request.POST['email']
+                    uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
+                    domain = get_current_site(request).domain
+                    link = reverse('activate', kwargs={
+                        'uidb64': uidb64, 'token': account_activation_token.make_token(user)})
+                    #! CHANGE TO HTTPS WHEN DEVELOPMENT
+                    # TODO TO HTTPS WHEN DEVELOPMENT
+                    activate_url = f'http://{domain}{link}'
+                    email_body = f'{user.username} You are one step away from activating your account, just click this link to vertify your account \n {activate_url} \n Thanks for joining DFreeMedia Community'
                     email = EmailMessage(
-                        mail_subject, message, to=[to_email]
+                        subject='Activate Your DFreeMedia Account',
+                        body=email_body,
+                        from_email='dfreemedia@gmail.com',
+                        to=(request.POST.get('email'),),
                     )
-                    email.send()
-                    return HttpResponse('Please confirm your email address to complete the registration')
-
-                user.save()
-                login(request, user)
+                    email.send(fail_silently=False)
+                else:
+                    user.save()
+                    login(request, user)
                 if request.GET.get('next'):
                     return redirect(request.GET.get('next'))
                 else:
@@ -53,30 +56,16 @@ def signupuser(request):
             except IntegrityError:
                 messages.error(
                     request, 'Username is already taken, please choose another one')
-                return redirect('users:signupuser')
+                return redirect('signupuser')
         else:
             messages.error(
                 request, 'Passwords didn\'t match, please try again')
-            return redirect('users:signupuser')
+            return redirect('signupuser')
 
 
-def activate(request, uidb64, token):
-    try:
-        uid = force_text(urlsafe_base64_decode(uidb64))
-        user = User.objects.get(pk=uid)
-    except(TypeError, ValueError, OverflowError, User.DoesNotExist):
-        user = None
-    if user is not None and account_activation_token.check_token(user, token):
-        user.is_active = True
-        user.save()
-        login(request, user)
-        if request.GET.get('next'):
-            return redirect(request.GET.get('next'))
-        else:
-            return redirect('home')
-        return HttpResponse('Thank you for your email confirmation. Now you can login your account.')
-    else:
-        return HttpResponse('Activation link is invalid!')
+class VertificationView(generic.View):
+    def get(self, request, uidb64, token):
+        return redirect('loginuser')
 
 
 def logoutuser(request):
@@ -101,7 +90,7 @@ def loginuser(request):
         if user is None:
             messages.error(
                 request, 'The username that you\'ve entered doesn\'t match any account. Or password didn\'t match')
-            return redirect('users:loginuser')
+            return redirect('loginuser')
         else:
             login(request, user)
             if request.GET.get('next'):
