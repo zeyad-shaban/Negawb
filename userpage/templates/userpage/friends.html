@@ -10,7 +10,7 @@
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-    <script
+    <!-- <script
         src='//production-assets.codepen.io/assets/editor/live/console_runner-079c09a0e3b9ff743e39ee2d5637b9216b3545af0de366d4b9aad9dc87e26bfd.js'>
     </script>
     <script
@@ -18,7 +18,7 @@
     </script>
     <script
         src='//production-assets.codepen.io/assets/editor/live/css_live_reload_init-2c0dc5167d60a5af3ee189d570b1835129687ea2a61bee3513dee3a50c115a77.js'>
-    </script>
+    </script> -->
     <meta charset='UTF-8'>
     <meta name="robots" content="noindex">
     <link rel="canonical" href="https://codepen.io/emilcarlsson/pen/ZOQZaV?limit=all&page=74&q=contact+" />
@@ -134,6 +134,32 @@
                             });
                         })
                     </script>
+                    <!-- SEND MESSAGE -->
+                    <script>
+                        $(document).ready(function () {
+
+                            $('#sendMessageForm').submit(function (event) {
+                                event.preventDefault()
+                            })
+                            $('#sendMessageButton').click(function () {
+                                // TODO FIX BEING UNABLE TO GET USER INPUT
+                                // !
+                                if ($('#inputMessage').val()) {
+                                    $.ajax({
+                                        url: "{% url 'social:send_message' %}",
+                                        data: {
+                                            "pk": "{{friend.id}}",
+                                            "message": $("#inputMessage").val()
+                                        },
+                                        dataType: 'json',
+                                        success: function (response) {
+                                            console.log('SUCCESS!')
+                                        }
+                                    })
+                                }
+                            })
+                        })
+                    </script>
                     {% endfor %}
                 </ul>
             </div>
@@ -165,9 +191,12 @@
             </div>
             <div class="message-input">
                 <div class="wrap">
-                    <input type="text" placeholder="Write your message..." />
-                    <i class="fa fa-paperclip attachment" aria-hidden="true"></i>
-                    <button class="submit"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+                    <form action="" method="get" id="sendMessageForm">
+                        <input type="text" placeholder="Write your message..." id="inputMessage" required />
+                        <i class="fa fa-paperclip attachment" aria-hidden="true"></i>
+                        <button id="sendMessageButton" class="submit"><i class="fa fa-paper-plane"
+                                aria-hidden="true"></i></button>
+                    </form>
                 </div>
             </div>
         </div>
