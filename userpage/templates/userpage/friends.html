@@ -1,8 +1,9 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 
 <head>
-    {% load static %}
+    <link rel='shortcut icon' href="{% static 'categories/favicon.WebP' %}" type="image/WebP">
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -88,7 +89,10 @@
                                     },
                                     dataType: 'json',
                                     success: function (response) {
-                                        $('#chatFriendBox').html(response.hi)
+                                        $('#friendProfile').html(
+                                            `<img src="${response.friend.avatar}"/>
+                                            <p>${response.friend.username}</p>`
+                                        )
                                     }
                                 })
                             });
@@ -103,8 +107,8 @@
                 <button id="settings"><i class="fa fa-cog fa-fw" aria-hidden="true"></i> <span>Settings</span></button>
             </div>
         </div>
-        <div class="content" id="chatFriendBox">
-            <div class="contact-profile">
+        <div class="content">
+            <div class="contact-profile" id="friendProfile">
                 <img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
                 <p>Harvey Specter</p>
             </div>

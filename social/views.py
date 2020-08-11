@@ -8,6 +8,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Q
 from django.contrib import messages
 from django.contrib.auth import get_user_model
+from django.forms.models import model_to_dict
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from .forms import ChatGroupForm
@@ -45,8 +46,7 @@ def chat_friend(request, friend_id):
     # if request.method == 'GET':
     #     return render(request, 'social/chat_friend.html', {'friend': friend, 'chat_messages': chat_messages})
     # else:
-    
-    return JsonResponse({'hi': 'ZEYAD SHAPAN'})
+    return JsonResponse({'friend': model_to_dict(friend)})
 
 
 def send_message(request, pk):
