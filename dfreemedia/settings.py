@@ -132,7 +132,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-LOGIN_URL = '/user/login/'
+LOGIN_URL = '/login/'
 AUTH_USER_MODEL = 'userpage.User'
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
