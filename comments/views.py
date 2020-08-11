@@ -97,7 +97,7 @@ def reply_like_dislike(request, reply_id):
 
 
 def create_post(request, pk):
-    if pk == 0:
+    if request.POST.get('friendsOnlyPost') == 'Add Post':
         category = None
     else:
         category = get_object_or_404(Category, pk=pk)
@@ -107,7 +107,7 @@ def create_post(request, pk):
         messages.error(
             request, f'You can only make 3 posts a day, please wait till tommorow')
 
-        if pk == 0:
+        if request.POST.get('friendsOnlyPost') == 'Add Post':
             return redirect('home')
         else:
             return redirect('categories:view_category', pk=pk)
@@ -121,7 +121,7 @@ def create_post(request, pk):
             post.save()
             messages.success(
                 request, 'Your post was uploaded, thanks for growing up our DFreeMedia community 💪🏻')
-            if pk == 0:
+            if request.POST.get('friendsOnlyPost') == 'Add Post':
                 return redirect('home')
             else:
                 return redirect('categories:view_category', pk=pk)

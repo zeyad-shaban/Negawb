@@ -288,7 +288,7 @@
                 <div class="modal-body">
                     {% if user.is_authenticated %}
                     <form method="POST" class="mb-4" enctype="multipart/form-data"
-                        action="{% url 'comments:create_post' 0 %}" id="createPostForm">
+                        action="{% url 'comments:create_post' 2%}" id="createPostForm">
                         {% csrf_token %}
                         <div class="form-group">
                             <label for="id_post_description">Description</label>
@@ -316,7 +316,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="addPostButton">Add Post</button>
+                    <button type="button" class="btn btn-primary" id="addPostButton" name="friendsOnlyPost">Add Post</button>
                 </div>
                 <script>
                     $(document).ready(function () {
