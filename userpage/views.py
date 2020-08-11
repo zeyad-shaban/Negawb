@@ -1,3 +1,5 @@
+from django.dispatch import receiver
+from django.contrib.auth.signals import user_logged_in, user_logged_out
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
@@ -144,3 +146,16 @@ def unfriend(request, pk):
         friend.friends.remove(user)
         messages.success(request, f'{friend.username} is no longer a friend')
         return redirect('userpage:friends')
+
+
+# Is online?
+@receiver(user_logged_in)
+def got_online(sender, user, request, **kwargs):
+    user.is_online = True
+    user.save()
+
+
+@receiver(user_logged_out)
+def got_offline(sender, user, request, **kwargs):
+    user.is_online = False
+    user.save()

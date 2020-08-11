@@ -10,6 +10,7 @@ class User(AbstractUser):
         max_length=400, default='I love this website!', blank=True, null=True,)
     avatar = models.ImageField(
         upload_to='profile_images', default='profile_images/DefaultUserImage.WebP',)
+    is_online = models.BooleanField(default=False)
     # PRIVACY
     show_email = models.BooleanField(default=False)
     who_see_avatar_choices = [
