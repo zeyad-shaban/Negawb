@@ -11,13 +11,7 @@
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
     <!-- <script
-        src='//production-assets.codepen.io/assets/editor/live/console_runner-079c09a0e3b9ff743e39ee2d5637b9216b3545af0de366d4b9aad9dc87e26bfd.js'>
-    </script>
-    <script
         src='//production-assets.codepen.io/assets/editor/live/events_runner-73716630c22bbc8cff4bd0f07b135f00a0bdc5d14629260c3ec49e5606f98fdd.js'>
-    </script>
-    <script
-        src='//production-assets.codepen.io/assets/editor/live/css_live_reload_init-2c0dc5167d60a5af3ee189d570b1835129687ea2a61bee3513dee3a50c115a77.js'>
     </script> -->
     <meta charset='UTF-8'>
     <meta name="robots" content="noindex">
@@ -82,6 +76,7 @@
                         $(document).ready(function () {
 
                             $('#chatFriendButton{{friend.id}}').click(function (e) {
+                                let friend_id = "{{friend.id}}"
                                 $.ajax({
                                     url: "{% url 'social:chat_friend' friend.id %}",
                                     data: {
@@ -140,20 +135,17 @@
 
                             $('#sendMessageForm').submit(function (event) {
                                 event.preventDefault()
-                            })
-                            $('#sendMessageButton').click(function () {
-                                // TODO FIX BEING UNABLE TO GET USER INPUT
-                                // !
-                                if ($('#inputMessage').val()) {
+                                let userInput = document.getElementById('inputMessage').value;
+                                if (userInput) {
                                     $.ajax({
                                         url: "{% url 'social:send_message' %}",
                                         data: {
                                             "pk": "{{friend.id}}",
-                                            "message": $("#inputMessage").val()
+                                            "message": userInput,
                                         },
                                         dataType: 'json',
                                         success: function (response) {
-                                            console.log('SUCCESS!')
+                                            $('#inputMessage').val('')
                                         }
                                     })
                                 }
