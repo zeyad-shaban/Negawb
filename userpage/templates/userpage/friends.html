@@ -89,10 +89,46 @@
                                     },
                                     dataType: 'json',
                                     success: function (response) {
+                                        let friend_image
+                                        if (response.friend.who_see_avatar == 'everyone' ||
+                                            response.friend.who_see_avatar == 'friends') {
+                                            friend_image = response.friend.avatar
+                                        } else {
+                                            friend_image =
+                                                '/media/profile_images/DefaultUserImage.WebP'
+                                        }
                                         $('#friendProfile').html(
-                                            `<img src="${response.friend.avatar}"/>
+                                            // ! STATIC URL todo
+                                            `<a href="/people/${response.friend.id}/">
+                                            <img src="${friend_image}" width="40" height="40"/>
+                                            </a>
                                             <p>${response.friend.username}</p>`
                                         )
+                                        let outputMessages = ''
+                                        let chat_messages = JSON.parse(response
+                                            .chat_messages)
+                                        console.log()
+                                        for (message of chat_messages) {
+                                            let messageStyle = "null"
+                                            if (message.fields.is_important) {
+                                                messageStyle = 'style="background: #d10c0c"'
+                                            }
+                                            if (message.fields.message_sender == response
+                                                .friend.id) {
+                                                outputMessages += `<li class="replies">
+                                    <img src="${friend_image}" alt="" width="22" height="22"/>
+                                    <p>${message.fields.message}</p>
+                                </li>`
+                                            } else {
+                                                outputMessages += `
+                                            <li class="sent">
+                        <img src="{{user.avatar.url}}" alt="" width="22" height="22"/>
+                        <p ${messageStyle}>${message.fields.message}</p>
+                    </li>
+                                            `
+                                            }
+                                        }
+                                        $('#chatMessages').html(outputMessages)
                                     }
                                 })
                             });
@@ -104,24 +140,26 @@
             <div id="bottom-bar">
                 <a href="{% url 'people:all_people' %}"><button id="addcontact"><i class="fa fa-user-plus fa-fw"
                             aria-hidden="true"></i> <span>Find Friends</span></button></a>
-                <button id="settings"><i class="fa fa-cog fa-fw" aria-hidden="true"></i> <span>Settings</span></button>
+                <a href="{% url 'home' %}">
+                    <button id="settings"><i class="fa fa-home fa-fw" aria-hidden="true"></i> <span>Home</span></button>
+                </a>
             </div>
         </div>
         <div class="content">
             <div class="contact-profile" id="friendProfile">
-                <img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
-                <p>Harvey Specter</p>
+                <img src="{% static 'categories/favicon.WebP' %}" width="40" height="40" alt="" />
+                <p>DFreeMedia</p>
             </div>
             <div class="messages">
-                <ul>
+                <ul id="chatMessages">
                     <li class="sent">
-                        <img src="http://emilcarlsson.se/assets/mikeross.png" alt="" />
-                        <p>How the hell am I supposed to get a jury to believe you when I am not even sure that I do?!
+                        <img src="{{user.avatar.url}}" alt="" width="22" height="22" />
+                        <p>How can i unfriend someone here?
                         </p>
                     </li>
                     <li class="replies">
-                        <img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
-                        <p>When you're backed against the wall, break the god damn thing down.</p>
+                        <img src="{% static 'categories/favicon.WebP' %}" alt="" width="22" height="22" />
+                        <p>Just hold his profile image in the side bar and click unfriend</p>
                     </li>
                 </ul>
             </div>

@@ -48,6 +48,7 @@ def chat_friend(request, friend_id):
         'id': friend.id,
         'username': friend.username,
         'avatar': friend.avatar.url,
+        'who_see_avatar': friend.who_see_avatar,
     }
     return JsonResponse({'friend': json_friend, 'chat_messages': serialize('json', chat_messages)})
 
