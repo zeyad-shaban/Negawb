@@ -63,15 +63,13 @@
                             {% else %}
                             <span class="contact-status offline"></span>
                             {% endif %}
-                            <a href="{% url 'people:people' friend.id %}">
-                                {% if friend.who_see_avatar == 'everyone' %}
-                                <img src="{{ friend.avatar.url }}" alt="{{ friend.username }}"
-                                    class="img-fluid rounded-circle d-block mx-auto" height="73" width="73">
-                                {% else %}
-                                <img src="/media/profile_images/DefaultUserImage.WebP" alt="{{ friend.username }}"
-                                    class="img-fluid rounded-circle d-block mx-auto" height="73" width="73">
-                                {% endif %}
-                            </a>
+                            {% if friend.who_see_avatar == 'everyone' %}
+                            <img src="{{ friend.avatar.url }}" alt="{{ friend.username }}"
+                                class="img-fluid rounded-circle d-block mx-auto" height="73" width="73">
+                            {% else %}
+                            <img src="/media/profile_images/DefaultUserImage.WebP" alt="{{ friend.username }}"
+                                class="img-fluid rounded-circle d-block mx-auto" height="73" width="73">
+                            {% endif %}
                             <div class="meta">
                                 <p class="name">{{ friend.username }}</p>
                                 <p class="preview"></p>
@@ -82,20 +80,15 @@
                 </ul>
             </div>
             <div id="bottom-bar">
-                <button id="addcontact"><i class="fa fa-user-plus fa-fw" aria-hidden="true"></i> <span>Add
-                        contact</span></button>
+                <a href="{% url 'people:all_people' %}"><button id="addcontact"><i class="fa fa-user-plus fa-fw"
+                            aria-hidden="true"></i> <span>Find Friends</span></button></a>
                 <button id="settings"><i class="fa fa-cog fa-fw" aria-hidden="true"></i> <span>Settings</span></button>
             </div>
         </div>
-        <div class="content">
+        <div class="content" id="chatFriend">
             <div class="contact-profile">
                 <img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
                 <p>Harvey Specter</p>
-                <div class="social-media">
-                    <i class="fa fa-facebook" aria-hidden="true"></i>
-                    <i class="fa fa-twitter" aria-hidden="true"></i>
-                    <i class="fa fa-instagram" aria-hidden="true"></i>
-                </div>
             </div>
             <div class="messages">
                 <ul>
