@@ -97,7 +97,7 @@
                                             `<a href="/people/${response.friend.id}/">
                                             <img src="${friend_image}" width="40" height="40"/>
                                             </a>
-                                            <p>${response.friend.username}</p>`
+                                            <p id="currFriendName">${response.friend.username}</p>`
                                         )
                                         let outputMessages = ''
                                         let chat_messages = JSON.parse(response
@@ -129,6 +129,7 @@
                             });
                         })
                     </script>
+                    {% endfor %}
                     <!-- SEND MESSAGE -->
                     <script>
                         $(document).ready(function () {
@@ -137,10 +138,11 @@
                                 event.preventDefault()
                                 let userInput = document.getElementById('inputMessage').value;
                                 if (userInput) {
+                                    console.log($('#currFriendName').html())
                                     $.ajax({
                                         url: "{% url 'social:send_message' %}",
                                         data: {
-                                            "pk": "{{friend.id}}",
+                                            "friend_username": $('#currFriendName').html(),
                                             "message": userInput,
                                         },
                                         dataType: 'json',
@@ -152,7 +154,6 @@
                             })
                         })
                     </script>
-                    {% endfor %}
                 </ul>
             </div>
             <div id="bottom-bar">
@@ -166,7 +167,7 @@
         <div class="content">
             <div class="contact-profile" id="friendProfile">
                 <img src="{% static 'categories/favicon.WebP' %}" width="40" height="40" alt="" />
-                <p>DFreeMedia</p>
+                <p id="currFriendName">DFreeMedia</p>
             </div>
             <div class="messages">
                 <ul id="chatMessages">

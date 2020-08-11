@@ -41,8 +41,8 @@ def chat_friend(request, friend_id):
 
 
 def send_message(request):
-    pk = request.GET.get('pk')
-    friend = get_object_or_404(User, pk=pk)
+    friend_username = request.GET.get('friend_username')
+    friend = User.objects.get(username=friend_username)
     chat_box = ChatBox.objects.filter(
         user_1=request.user, user_2=friend).first()
     if not chat_box:
