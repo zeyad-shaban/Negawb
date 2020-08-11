@@ -1,5 +1,6 @@
 from django.utils.timezone import now
 import datetime
+from django.forms.models import model_to_dict
 from django.urls import reverse_lazy
 from django.http import JsonResponse, Http404
 from django.views import generic
@@ -8,12 +9,12 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Q
 from django.contrib import messages
 from django.contrib.auth import get_user_model
-from django.forms.models import model_to_dict
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from .forms import ChatGroupForm
 from .models import ChatBox, Message, ChatGroup, GroupRequest, GroupMessage
 User = get_user_model()
+from django.core.serializers import serialize
 # DATE
 
 
@@ -43,10 +44,12 @@ def chat_friend(request, friend_id):
             user_1=friend, user_2=request.user).first()
     chat_messages = Message.objects.filter(
         chat_box=chat_box).order_by('sent_date')
-    # if request.method == 'GET':
-    #     return render(request, 'social/chat_friend.html', {'friend': friend, 'chat_messages': chat_messages})
-    # else:
-    return JsonResponse({'friend': model_to_dict(friend)})
+    json_friend = {
+        'id': friend.id,
+        'username': friend.username,
+        'avatar': friend.avatar.url,
+    }
+    return JsonResponse({'friend': json_friend, 'chat_messages': serialize('json', chat_messages)})
 
 
 def send_message(request, pk):
