@@ -44,8 +44,8 @@
     <!-- Like -->
     <form action="{% url 'comments:reply_like_dislike' comment.id %}" method="post" class="form-inline">
         {% csrf_token %}
-        <button type="submit" name="submit" value="like" title="Like">
-            <i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
+        <button type="submit" name="submit" value="like" title="Like" class="btn btn-link">
+            <i class="fa fa-thumbs-o-up" aria-hidden="true" style="font-size:36px"></i>
         </button>
     </form>
     <span class="m-3">
@@ -54,8 +54,8 @@
     <!-- Dislike -->
     <form action="{% url 'comments:reply_like_dislike' comment.id %}" method="post" class="form-inline">
         {% csrf_token %}
-        <button type="submit" name="submit" value="dislike" title="Dislike">
-            <i class="fa fa-thumbs-o-down" aria-hidden="true"></i>
+        <button type="submit" name="submit" value="dislike" title="Dislike" class="btn">
+            <i class="fa fa-thumbs-o-down" aria-hidden="true" style="font-size:36px"></i>
         </button>
     </form>
     <span class="m-3">

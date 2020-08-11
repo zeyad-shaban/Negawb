@@ -102,8 +102,8 @@
 <span class="row justify-content-center">
     <!-- Like -->
     <form method="GET" id="likeForm{{post.id}}" class="form-inline">
-        <button type="submit" name="submit" value="like" title="Like">
-            <i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
+        <button type="submit" name="submit" value="like" title="Like" class="btn btn-link">
+            <i class="fa fa-thumbs-o-up" aria-hidden="true" style="font-size:36px"></i>
         </button>
     </form>
 
@@ -158,8 +158,8 @@
     <form action="{% url 'comments:post_like_dislike' post.id %}" method="post" class="form-inline"
         id="dislikeForm{{post.id}}">
         {% csrf_token %}
-        <button type="submit" id="dislikeButton{{post.id}}" name="submit" value="dislike" title="Dislike">
-            <i class="fa fa-thumbs-o-down" aria-hidden="true"></i>
+        <button type="submit" id="dislikeButton{{post.id}}" name="submit" value="dislike" title="Dislike" class="btn">
+            <i class="fa fa-thumbs-o-down" aria-hidden="true" style="font-size:36px"></i>
         </button>
     </form>
     <span class="m-3" id="id_dislikes">
