@@ -57,7 +57,7 @@
                 <ul>
                     {% for friend in friends %}
                     <li class="contact">
-                        <div class="wrap">
+                        <div class="wrap" id="chatFriendButton{{friend.id}}">
                             {% if friend.is_online %}
                             <span class="contact-status online"></span>
                             {% else %}
@@ -76,6 +76,24 @@
                             </div>
                         </div>
                     </li>
+                    <!-- LOAD FRIEND CHAT -->
+                    <script>
+                        $(document).ready(function () {
+
+                            $('#chatFriendButton{{friend.id}}').click(function (e) {
+                                $.ajax({
+                                    url: "{% url 'social:chat_friend' friend.id %}",
+                                    data: {
+                                        'friend_id': "{{friend.id}}"
+                                    },
+                                    dataType: 'json',
+                                    success: function (response) {
+                                        $('#chatFriendBox').html(response.hi)
+                                    }
+                                })
+                            });
+                        })
+                    </script>
                     {% endfor %}
                 </ul>
             </div>
@@ -85,7 +103,7 @@
                 <button id="settings"><i class="fa fa-cog fa-fw" aria-hidden="true"></i> <span>Settings</span></button>
             </div>
         </div>
-        <div class="content" id="chatFriend">
+        <div class="content" id="chatFriendBox">
             <div class="contact-profile">
                 <img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
                 <p>Harvey Specter</p>
@@ -100,31 +118,6 @@
                     <li class="replies">
                         <img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
                         <p>When you're backed against the wall, break the god damn thing down.</p>
-                    </li>
-                    <li class="replies">
-                        <img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
-                        <p>Excuses don't win championships.</p>
-                    </li>
-                    <li class="sent">
-                        <img src="http://emilcarlsson.se/assets/mikeross.png" alt="" />
-                        <p>Oh yeah, did Michael Jordan tell you that?</p>
-                    </li>
-                    <li class="replies">
-                        <img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
-                        <p>No, I told him that.</p>
-                    </li>
-                    <li class="replies">
-                        <img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
-                        <p>What are your choices when someone puts a gun to your head?</p>
-                    </li>
-                    <li class="sent">
-                        <img src="http://emilcarlsson.se/assets/mikeross.png" alt="" />
-                        <p>What are you talking about? You do what they say or they shoot you.</p>
-                    </li>
-                    <li class="replies">
-                        <img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
-                        <p>Wrong. You take the gun, or you pull out a bigger one. Or, you call their bluff. Or, you do
-                            any one of a hundred and forty six other things.</p>
                     </li>
                 </ul>
             </div>

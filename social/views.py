@@ -42,21 +42,26 @@ def chat_friend(request, friend_id):
             user_1=friend, user_2=request.user).first()
     chat_messages = Message.objects.filter(
         chat_box=chat_box).order_by('sent_date')
-    if request.method == 'GET':
-        return render(request, 'social/chat_friend.html', {'friend': friend, 'chat_messages': chat_messages})
-    else:
-        message = Message(
-            chat_box=chat_box, message_sender=request.user, message=request.POST['message'])
-        if 'is_important' in request.POST:
-            important_messages_in_last_day = Message.objects.filter(sent_date__gt=now(
-            ) - datetime.timedelta(days=1), is_important=True, chat_box=chat_box, message_sender=request.user)
-            if important_messages_in_last_day.count() >= 3:
-                messages.error(
-                    request, 'You can only send 3 important messages each day for each chat')
-            else:
-                message.is_important = request.POST.get('is_important', False)
-        message.save()
-        return render(request, 'social/chat_friend.html', {'friend': friend, 'chat_messages': chat_messages})
+    # if request.method == 'GET':
+    #     return render(request, 'social/chat_friend.html', {'friend': friend, 'chat_messages': chat_messages})
+    # else:
+    
+    return JsonResponse({'hi': 'ZEYAD SHAPAN'})
+
+
+def send_message(request, pk):
+    message = Message(
+        chat_box=chat_box, message_sender=request.user, message=request.POST.get('message'))
+    if 'is_important' in request.POST:
+        important_messages_in_last_day = Message.objects.filter(sent_date__gt=now(
+        ) - datetime.timedelta(days=1), is_important=True, chat_box=chat_box, message_sender=request.user)
+        if important_messages_in_last_day.count() >= 3:
+            messages.error(
+                request, 'You can only send 3 important messages each day for each chat')
+        else:
+            message.is_important = request.POST.get('is_important', False)
+    message.save()
+    # return render(request, 'social/chat_friend.html', {'friend': friend, 'chat_messages': chat_messages})
 
 
 @login_required
@@ -91,7 +96,7 @@ def view_group(request, chatgroup_pk):
         else:
             chat_group = get_object_or_404(ChatGroup, pk=chatgroup_pk)
             message = GroupMessage(
-                group=chat_group, message_sender=request.user, message=request.POST['message'])
+                group=chat_group, message_sender=request.user, message=request.POST.get('message'))
             message.save()
             return redirect('social:view_group', chatgroup_pk)
 
