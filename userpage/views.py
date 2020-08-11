@@ -19,9 +19,9 @@ def home(request):
     user = request.user
     form = UserForm(instance=request.user)
     privacy_form = UserPrivacyForm(instance=request.user)
-    distraction_free_form = DistractionFreeForm(instance = request.user)
+    distraction_free_form = DistractionFreeForm(instance=request.user)
     if request.method == 'GET':
-        return render(request, 'userpage/index.html', {'user': user, 'form': form, 'privacy_form': privacy_form, 'distraction_free_form':distraction_free_form})
+        return render(request, 'userpage/index.html', {'user': user, 'form': form, 'privacy_form': privacy_form, 'distraction_free_form': distraction_free_form})
     elif request.POST['submit'] == 'Update':
         try:
             if request.POST['email']:
@@ -65,7 +65,7 @@ def home(request):
 
         return redirect('userpage:home')
     elif request.POST['submit'] == 'DFree':
-        form = DistractionFreeForm(request.POST, instance = request.user)
+        form = DistractionFreeForm(request.POST, instance=request.user)
         form.save()
         messages.success(request, 'DistractionFreeMedia 💪🏻')
         return redirect('userpage:home')
@@ -85,12 +85,26 @@ def friends(request):
 
 
 @login_required
+def friendsresult(request):
+    query = request.GET.get('q')
+    results = User.objects.filter(
+        Q(username__icontains=query), friends=request.user)
+    return render(request, 'userpage/friendsresult.html', {'results': results})
+
+
+@login_required
 def friendrequests(request):
     requests = FriendRequest.objects.filter(to_user=request.user)
     group_requests = GroupRequest.objects.filter(reciever=request.user)
-    user_friends = User.objects.filter(friends = request.user)
+    user_friends = User.objects.filter(friends=request.user)
     if request.method == 'GET':
         return render(request, 'userpage/friendrequest.html', {'requests': requests, 'group_requests': group_requests, 'user_friends': user_friends})
+
+
+@login_required
+def requestssent(request):
+    requests = FriendRequest.objects.filter(from_user=request.user)
+    return render(request, 'userpage/requestssent.html', {'requests': requests})
 
 
 @login_required
@@ -102,12 +116,6 @@ def denyrequest(request, request_id):
         'tags': 'success'
     }
     return JsonResponse({'message': message})
-
-
-@login_required
-def requestssent(request):
-    requests = FriendRequest.objects.filter(from_user=request.user)
-    return render(request, 'userpage/requestssent.html', {'requests': requests})
 
 
 @login_required
@@ -125,14 +133,6 @@ def acceptrequest(request, request_id):
         'tags': 'success'
     }
     return JsonResponse({'message': message})
-
-
-@login_required
-def friendsresult(request):
-    query = request.GET.get('q')
-    results = User.objects.filter(
-        Q(username__icontains=query), friends=request.user)
-    return render(request, 'userpage/friendsresult.html', {'results': results})
 
 
 @login_required
