@@ -55,7 +55,7 @@
     <form action="{% url 'comments:reply_like_dislike' comment.id %}" method="post" class="form-inline">
         {% csrf_token %}
         <button type="submit" name="submit" value="dislike" title="Dislike">
-            <i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
+            <i class="fa fa-thumbs-o-down" aria-hidden="true"></i>
         </button>
     </form>
     <span class="m-3">
