@@ -27,11 +27,6 @@ def view_post(request, pk):
         return redirect('comments:view_post', pk=pk)
 
 
-def results_post(request):
-    query = request.GET.get('q')
-    posts = Post.objects.filter(
-        Q(title__icontains=query) | Q(description__icontains=query))
-    return render(request, 'comments/results_post.html', {'posts': posts, 'form': PostForm})
 
 
 @login_required
