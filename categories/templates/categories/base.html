@@ -83,9 +83,8 @@
                 {% if user.is_authenticated %}
 
                 <li class="nav-item">
-                    <a href="{% url 'social:my_groups' %}" title="Groups" style="background:white;">
-                        <img src="{% static 'categories/GroupIcon.WebP' %}" width="30" height="30" alt=""
-                            loading="lazy">
+                    <a href="{% url 'userpage:friends' %}" title="Chat">
+                        <i class="fa fa-comments" style="font-size:36px;"></i>
                     </a>
                     <!-- todo use image instead of text -->
                     {% if user.is_authenticated %}
@@ -316,7 +315,8 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="addPostButton" name="friendsOnlyPost">Add Post</button>
+                    <button type="button" class="btn btn-primary" id="addPostButton" name="friendsOnlyPost">Add
+                        Post</button>
                 </div>
                 <script>
                     $(document).ready(function () {
