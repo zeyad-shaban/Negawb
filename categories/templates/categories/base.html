@@ -87,10 +87,10 @@
                     <a href="{% url 'userpage:friends' %}" title="Chat">
                         <i class="fa fa-comments" style="font-size:36px;"></i>
                     </a>
-                    <!-- todo use image instead of text -->
+                    <!-- todo use image instead of  -->
                     {% if user.is_authenticated %}
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#todos">
-                        Todo
+                    <button type="button" class="btn btn-link" data-toggle="modal" data-target="#todos">
+                        <i class="fas fa-tasks" style="font-size:36px; color:white"></i>
                     </button>
                     {% endif %}
                 </li>
@@ -127,8 +127,8 @@
                         <form action="{% url 'social:create_chat_group' %}" name="createChatGroup" method="post">
                             {% csrf_token %}
                             <div class="form-group">
-                                <label for="id_title">Name of the group</label>
-                                <input type="text" id="id_title" value="" name="title" class="form-control"
+                                <label for="id_group_title">Name of the group</label>
+                                <input type="text" id="id_group_title" value="" name="title" class="form-control"
                                     maxlength="75" required>
                             </div>
                             <div class="form-group">
@@ -172,21 +172,50 @@
                     <div class="modal-body">
                         <form method="GET" id="todoForm">
                             {{todo_form|crispy}}
-                            <!-- <div class="form-group">
-                                <label for="id_todo_title">Title</label>
-                                <input type="text" name="title" id="TodoTitle" class="form-control" maxlength="30"
-                                    required>
-                            </div>
-                            <div class="form-group">
-                                <label for="id_todo_note">Note</label>
-                                <input type="text" name="note" id="TodoNote" class="form-control">
-                            </div>
-                            <div class="form-group">
-                                <label class="inline" for="id_todo_is_important">Important</label>
-                                <input type="checkbox" name="is_important" id="TodoIsImportant"
-                                    class="form-control float-right">
-                            </div> -->
                         </form>
+                        <hr>
+                        <hr>
+                        <hr>
+                        <hr>
+                        <form id="TodoTagForm" action="" method="get" class="form-inline">
+                            <div class="from-group">
+                                <small class="form-text text-muted">Only if you want to add a new tag</small>
+                                <label for="id_tag_title">Add Tag</label>
+                                <input type="text" name="title" id="id_tag_title" class="from-control" maxlength="18">
+                            </div>
+                            <input type="submit" value="Add" name="submit" class="btn btn-success">
+                        </form>
+                        <script>
+                            $(document).ready(function () {
+
+                                $('#TodoTagForm').submit(function (event) {
+                                    event.preventDefault();
+                                    $.ajax({
+                                        url: "{% url 'production:add_tag' %}",
+                                        data: {
+                                            'title': $('#id_tag_title').val()
+                                        },
+                                        dataType: 'json',
+                                        success: function (data) {
+                                            $('#message_area').html('')
+                                            if (data.message.tags === 'error') {
+                                                $('#message_area').append(`
+                            <div class="alert alert-danger fixed-top">${data.message.text}</div>
+                            `)
+                                            } else {
+                                                $('#message_area').append(`
+        <div class="alert alert-${data.message.tags} fixed-top">${data.message.text}</div>
+                                `)
+                                            }
+                                        }
+                                    })
+                                    setTimeout(() => {
+                                        $('#message_area').html('')
+                                    }, 4500);
+                                })
+
+                            })
+                        </script>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#todos">
@@ -212,128 +241,167 @@
                     <div class="modal-body" id="todosList">
                         {% for todo in todos %}
                         <div class="card">
-                            <div class="card-body todoItem" id="">
+                            {% if todo.is_important %}
+                            <div class="card-body todoItem" id="" style="background: rgb(226, 29, 29);">
+                                {% else %}
+                                <div class="card-body todoItem" id="">
+                                    {% endif %}
+                                    <input type="checkbox" name="" class="float-left"
+                                        aria-label="Checkbox for following text input" id="">
+                                    <div class="float-right col-lg-10 col-md-11 col-sm-10 col-10">
+                                        <h5 class="card-title float-left">{{ todo.title }}--</h5><small
+                                            class="form-text text-muted">{{todo.tag}}</small>
+                                        <br>
+                                        <p class="card-text todoNote text-left" id="">{{ todo.note }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" id="createtodo" data-toggle="modal"
+                                data-target="#createtodo">
+                                Add Todo
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+            integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+        </script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+            integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous">
+        </script>
+        <script src="{% static 'categories/basescript.js' %}"></script>
+        <script>
+            $(document).ready(function () {
+
+                $('#todoForm').submit(function (event) {
+                    event.preventDefault()
+                })
+                $('#addTodoButton').click(function (event) {
+                    let check_box
+                    let isImportant = $('#id_is_important').is(":checked")
+                    if (isImportant) {
+                        check_box = 'True'
+                    } else {
+                        check_box = 'False'
+                    }
+                    $.ajax({
+                        url: "{% url 'production:create_todo' %}",
+                        data: {
+                            'title': $('#id_title').val(),
+                            'note': $('#id_note').val(),
+                            'is_important': check_box,
+                            'tag': $('#id_tag').val()
+                        },
+                        dataType: 'json',
+                        success: function (data) {
+                            let todoStyle = 'style="'
+                            if (data.todo.is_important) {
+                                todoStyle += "background: rgb(226, 29, 29)"
+                            }
+                            todoStyle += '"'
+                            let newTodoOutput = `
+                        <div class="card">
+                            <div class="card-body todoItem" id="" ${todoStyle}>
                                 <input type="checkbox" name="" class="float-left"
                                     aria-label="Checkbox for following text input" id="">
                                 <div class="float-right col-lg-10 col-md-11 col-sm-10 col-10">
-                                    <h5 class="card-title">{{ todo.title }}</h5>
-                                    <p class="card-text todoNote" id="">{{ todo.note }}</p>
+                                    <h5 class="card-title float-left">${ data.todo.title }--</h5><small
+                                        class="form-text text-muted">${data.todo.tag.title}</small>
+                                        <br>
+                                    <p class="card-text todoNote text-left" id="">${ data.todo.note }</p>
                                 </div>
                             </div>
                         </div>
-                        {% endfor %}
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" id="createtodo" data-toggle="modal"
-                            data-target="#createtodo">
-                            Add Todo
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
-    </script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
-        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous">
-    </script>
-    <script src="{% static 'categories/basescript.js' %}"></script>
-    <script>
-        $(document).ready(function () {
-
-            $('#todoForm').submit(function (event) {
-                event.preventDefault()
-            })
-            $('#addTodoButton').click(function () {
-                let check_box
-                let isImportant = $('#TodoIsImportant').is(":checked")
-                if (isImportant) {
-                    check_box = 'True'
-                } else {
-                    check_box = 'False'
-                }
-                $.ajax({
-                    url: "{% url 'production:create_todo' %}",
-                    data: {
-                        'title': $('#TodoTitle').val(),
-                        'note': $('#TodoNote').val(),
-                        'is_important': check_box,
-                    },
-                    dataType: 'json',
-                    success: function (data) {
-                        $('#').prepend()
-                    }
+                        `
+                            $('#todosList').append(newTodoOutput)
+                            $('#message_area').html('')
+                            if (data.message.tags === 'error') {
+                                $('#message_area').append(`
+                            <div class="alert alert-danger fixed-top">${data.message.text}</div>
+                            `)
+                            } else {
+                                $('#message_area').append(`
+        <div class="alert alert-${data.message.tags} fixed-top">${data.message.text}</div>
+                                `)
+                            }
+                        }
+                    })
+                    setTimeout(() => {
+                        $('#message_area').html('')
+                    }, 2000);
                 })
             })
+        </script>
 
-        })
-    </script>
+        <!-- todo fix how stupid this is -->
+        //
+        <!-- * CREATE POST MODAL
+    // <div class="modal fade" id="createPost" tabindex="-1" role="dialog" aria-labelledby="createPostLabel"
+    //     aria-hidden="true">
+    //     <div class="modal-dialog modal-dialog-scrollable">
+    //         <div class="modal-content">
+    //             <div class="modal-header">
+    //                 <h5 class="modal-title" id="createPostLabel">Create Post</h5>
+    //                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    //                     <span aria-hidden="true">&times;</span>
+    //                 </button>
+    //             </div>
+    //             <div class="modal-body">
+    //                 {% if user.is_authenticated %}
+    //                 <form method="POST" class="mb-4" enctype="multipart/form-data"
+    //                     action="{% url 'comments:create_post' 2%}" id="createPostForm">
+    //                     {% csrf_token %}
+    //                     <div class="form-group">
+    //                         <label for="id_post_description">Description</label>
+    //                         <textarea type="text" name="description" id="id_post_description"
+    //                             class="form-control"></textarea>
+    //                     </div>
+    //                     <div class="form-group">
+    //                         <p><label for="id_post_image">Optional Image</label>
+    //                             <input type="file" name="image" accept="image/*" id="id_image"></p>
+    //                     </div>
+    //                     <div class="form-group">
+    //                         <p><label for="id_post_image">Or Video</label>
+    //                             <input type="file" name="post_file" accept="video/*" id="id_post_file"></p>
+    //                     </div>
+    //                     <small class="form-text text-muted">You don't have to specify image or video, but if you do then
+    //                         only one of
+    //                         them</small>
+    //                 </form>
+    //                 {% else %}
+    //                 <div class="alert alert-danger">You must be logged in to add posts</div>
+    //                 {% endif %}
+    //                 <div class="alert alert-warning">This will be visible for friends and followers only. If you want to
+    //                     make it public then consider adding it from a category.
+    //                 </div>
+    //             </div>
+    //             <div class="modal-footer">
+    //                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+    //                 <button type="button" class="btn btn-primary" id="addPostButton" name="friendsOnlyPost">Add
+    //                     Post</button>
+    //             </div>
+    //             <script>
+    //                 $(document).ready(function () {
 
-    <!-- todo fix how stupid this is -->
-    <!-- * CREATE POST MODAL
-    <div class="modal fade" id="createPost" tabindex="-1" role="dialog" aria-labelledby="createPostLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="createPostLabel">Create Post</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    {% if user.is_authenticated %}
-                    <form method="POST" class="mb-4" enctype="multipart/form-data"
-                        action="{% url 'comments:create_post' 2%}" id="createPostForm">
-                        {% csrf_token %}
-                        <div class="form-group">
-                            <label for="id_post_description">Description</label>
-                            <textarea type="text" name="description" id="id_post_description"
-                                class="form-control"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <p><label for="id_post_image">Optional Image</label>
-                                <input type="file" name="image" accept="image/*" id="id_image"></p>
-                        </div>
-                        <div class="form-group">
-                            <p><label for="id_post_image">Or Video</label>
-                                <input type="file" name="post_file" accept="video/*" id="id_post_file"></p>
-                        </div>
-                        <small class="form-text text-muted">You don't have to specify image or video, but if you do then
-                            only one of
-                            them</small>
-                    </form>
-                    {% else %}
-                    <div class="alert alert-danger">You must be logged in to add posts</div>
-                    {% endif %}
-                    <div class="alert alert-warning">This will be visible for friends and followers only. If you want to
-                        make it public then consider adding it from a category.
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="addPostButton" name="friendsOnlyPost">Add
-                        Post</button>
-                </div>
-                <script>
-                    $(document).ready(function () {
+    //                     $('#addPostButton').click(function (e) {
+    //                         e.preventDefault();
+    //                         $('#createPostForm').submit()
+    //                     });
 
-                        $('#addPostButton').click(function (e) {
-                            e.preventDefault();
-                            $('#createPostForm').submit()
-                        });
-
-                    })
-                </script>
-            </div>
-        </div>
-    </div> -->
+    //                 })
+    //             </script>
+    //         </div>
+    //     </div>
+    // </div>
 
 </body>
 

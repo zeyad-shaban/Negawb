@@ -4,17 +4,22 @@ from django.http import JsonResponse
 from django.forms.models import model_to_dict
 from django.contrib import messages
 from .forms import TodoForm, FeedbackForm
-from .models import Feedback, Todo
+from .models import Feedback, Todo, Tag
 import datetime
 from django.utils.timezone import now
 
 
 def create_todo(request):
     if request.method == 'GET':
-        todo = Todo(title=request.GET.get('title'), note=request.GET.get(
-            'note'), is_important=request.GET.get('is_important'), user=request.user)
+        form = TodoForm(request.GET)
+        todo = form.save(commit=False)
+        todo.user = request.user
         todo.save()
-        return JsonResponse({'todo': model_to_dict(todo)})
+        message = {
+            'text': 'Successfully created todo',
+            'tags': 'success',
+        }
+        return JsonResponse({'todo': model_to_dict(todo), 'message': message})
 
 
 def feedback(request):
@@ -40,3 +45,21 @@ def feedback(request):
 class ViewFeedback(generic.DetailView):
     model = Feedback
     template_name = 'production/ViewFeedback.html'
+
+
+def add_tag(request):
+    title = request.GET.get('title')
+    if title == '':
+        message = {
+            'text': 'The tag title can\'t be emtpy',
+            'tags': 'error'
+        }
+        return JsonResponse({'message': message})
+    else:
+        tag = Tag(title= request.GET.get('title'), user=request.user)
+        tag.save()
+        message = {
+            'text': 'Successfully created the tag, please refresh the page to see changes',
+            'tags': 'success'
+        }
+        return JsonResponse({'message': message})
