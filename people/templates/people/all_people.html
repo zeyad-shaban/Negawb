@@ -12,7 +12,7 @@
 {% block content %}
 
 {% if user.is_authenticated %}
-<small class="from-text text-muted">view <a href="{% url 'userpage:friendrequests' %}">Friend requests</a></small>
+<small class="from-text text-muted">view <a href="{% url 'userpage:friendrequest' %}">Friend requests</a></small>
 {% endif %}
     
 <div class="card card-default" id="card_contacts">

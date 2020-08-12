@@ -66,7 +66,7 @@ def addfriend(request, user_id):
         return JsonResponse({'message': message})
     elif friend_request_check_2:
         message = {
-            'text': f'{to_user} has already send a you a <a href="/userpage/friendrequests/" >friend request Here</a>',
+            'text': f'{to_user} has already send a you a <a href="/userpage/friendrequest/" >friend request Here</a>',
             'tags': 'warning',
         }
         return JsonResponse({'message': message})
