@@ -46,13 +46,16 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto ml-">
                 <li class="nav-item">
-                    <a href="{% url 'people:all_people' %}">Find Friends</a>
+                    <a href="{% url 'people:all_people' %}">
+                        <i class="fas fa-users" style="font-size: 24px; color: white;"></i><span
+                            style="color:white;">Find Friends</span>
+                    </a>
                 </li>
                 {% if user.is_authenticated %}
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Create & Add
+                        <i class="fas fa-plus" style="font-size:24"></i><span style="color:white;">Create</span>
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createPost">
@@ -233,19 +236,26 @@
             <div class="modal-dialog modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title col-md-6 col-lg-6 col-sm-6 col-6 text-center" id="todosLabel">{{todos.count}} Todo{{ todos.count|pluralize }}</h5>
-                        <h5 class="modal-title col-md-6 col-lg-6 col-sm-6 col-6 text-center" id="doneLabel">Done</h5>
+                        <h5 class="modal-title col-md-6 col-lg-6 col-sm-6 col-6 text-center" id="todosLabel">
+                            {{todos.count}} Todo{{ todos.count|pluralize }}</h5>
+                        <button class="btn" id="doneTodosButton">
+                            <h5 class="modal-title col-md-6 col-lg-6 col-sm-6 col-6 text-center" id="doneLabel">Done
+                            </h5>
+                        </button>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
-                    </div>
-                    <div class="modal-body" id="todosList">
-                        {% for todo in todos %}
+                        <script>
+                            $(document).ready(function () {
+                                $('#doneTodosButton').click(function (event) {
+                                    event.preventDefault();
+                                    $('#todosList').html(`
+                                    {% for todo in done_todos %}
                         <div class="card">
                             {% if todo.is_important %}
                             <div class="card-body todoItem" id="" style="background: rgb(226, 29, 29);">
                                 {% else %}
-                                <div class="card-body todoItem" id="">
+                                <div class="card-body todoItem" id="todosList">
                                     {% endif %}
                                     <input type="checkbox" name="" class="float-left"
                                         aria-label="Checkbox for following text input" id="">
@@ -257,8 +267,34 @@
                                     </div>
                                 </div>
                             </div>
-                            {% endfor %}
                         </div>
+                        {% endfor %}
+                                    `)
+                                })
+
+                            })
+                        </script>
+                    </div>
+                    <div class="modal-body" id="todosList">
+                        {% for todo in todos %}
+                        <div class="card">
+                            {% if todo.is_important %}
+                            <div class="card-body todoItem" id="" style="background: rgb(226, 29, 29);">
+                                {% else %}
+                                <div class="card-body todoItem">
+                                    {% endif %}
+                                    <input type="checkbox" name="" class="float-left"
+                                        aria-label="Checkbox for following text input" id="">
+                                    <div class="float-right col-lg-10 col-md-11 col-sm-10 col-10">
+                                        <h5 class="card-title float-left">{{ todo.title }}--</h5><small
+                                            class="form-text text-muted">{{todo.tag}}</small>
+                                        <br>
+                                        <p class="card-text todoNote text-left" id="">{{ todo.note }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                             <button type="button" class="btn btn-primary" id="createtodo" data-toggle="modal"
