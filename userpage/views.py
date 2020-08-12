@@ -12,6 +12,7 @@ from django.db.models import Q
 from django.contrib.auth import authenticate
 from django.contrib.auth import get_user_model as user_model
 from .forms import UserForm, UserPrivacyForm, UserPasswordForm, DistractionFreeForm
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from social.models import GroupRequest
 User = user_model()
 
@@ -75,7 +76,15 @@ def home(request):
 
 @login_required
 def posts(request):
-    posts = Post.objects.filter(user=request.user).order_by('-post_date')
+    post_list = Post.objects.filter(user=request.user).order_by('-post_date')
+    paginator = Paginator(post_list, 7)
+    page = request.GET.get('page')
+    try:
+        posts = paginator.page(page)
+    except PageNotAnInteger:
+        posts = paginator.page(1)
+    except EmptyPage:
+        posts = paginator.page(paginator.num_pages)
     return render(request, 'userpage/posts.html', {'posts': posts})
 
 
