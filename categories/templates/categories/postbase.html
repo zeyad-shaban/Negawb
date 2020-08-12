@@ -100,15 +100,15 @@
 </div>
 {% endif %}
 <span class="row justify-content-center">
+    <span><a href="{% url 'comments:view_post' post.id %}" style="text-decoration: none; color:black;"><i
+                class="far fa-comment-dots" style="font-size:36px;"></i></a></span>
     <!-- Like -->
     <form method="GET" id="likeForm{{post.id}}" class="form-inline">
         <button type="submit" name="submit" value="like" title="Like" class="btn btn-link">
-            <i class="fa fa-thumbs-o-up" aria-hidden="true" style="font-size:36px"></i>
+            <i class="fa fa-thumbs-o-up" aria-hidden="true" style="font-size:36px" id="likeButton{{post.id}}"></i>
         </button>
     </form>
-
-
-    <span class="m-3" id="id_likes">
+    <span class="m-3" id="id_likes{{post.id}}">
         {% if user in post.likes.all %}
         <p style="color:#065FD4;"><b>{{post.likes.count}}</b></p>
         {% else %}
@@ -128,6 +128,7 @@
                     data: {
                         'submit': 'like',
                     },
+                    method: 'get',
                     dataType: 'json',
                     success: function (data) {
                         let likes = "{{post.likes.count}}";
@@ -135,17 +136,17 @@
                         if (data.action == 'undislike_and_like') {
                             dislikes -= 1
                             likes++
-                            $('#id_dislikes').html('<p style="color:black;">' +
+                            $('#id_dislikes{{post.id}}').html('<p style="color:black;">' +
                                 dislikes + '</p>')
-                            $('#id_likes').html('<p style="color:#065FD4;"><b>' +
+                            $('#id_likes{{post.id}}').html('<p style="color:#065FD4;"><b>' +
                                 likes + '</b></p>')
                         } else if (data.action == 'unlike') {
                             likes -= 1
-                            $('#id_likes').html('<p style="color:#black;"' + likes +
+                            $('#id_likes{{post.id}}').html('<p style="color:#black;"' + likes +
                                 '</p>')
                         } else {
                             likes++
-                            $('#id_likes').html('<p style="color:#065FD4;"><b>' +
+                            $('#id_likes{{post.id}}').html('<p style="color:#065FD4;"><b>' +
                                 likes + '</b></p>')
                         }
                     }
@@ -162,7 +163,7 @@
             <i class="fa fa-thumbs-o-down" aria-hidden="true" style="font-size:36px"></i>
         </button>
     </form>
-    <span class="m-3" id="id_dislikes">
+    <span class="m-3" id="id_dislikes{{post.id}}">
         {% if user in post.dislikes.all %}
         <p style="color:#065FD4;"><b>{{post.dislikes.count}}</b></p>
         {% else %}
@@ -189,18 +190,18 @@
                         if (data.action == 'unlike_and_dislike') {
                             dislikes++
                             likes -= 1
-                            $('#id_dislikes').html('<p style="color:#065FD4;"><b>' +
+                            $('#id_dislikes{{post.id}}').html('<p style="color:#065FD4;"><b>' +
                                 dislikes + '</b></p>')
-                            $('#id_likes').html('<p style="color:black;">' +
+                            $('#id_likes{{post.id}}').html('<p style="color:black;">' +
                                 likes + '</p>')
                         } else if (data.action == 'undislike') {
                             dislikes -= 1
-                            $('#id_dislikes').html('<p style="color:#black;"' +
+                            $('#id_dislikes{{post.id}}').html('<p style="color:#black;"' +
                                 dislikes +
                                 '</p>')
                         } else {
                             dislikes++
-                            $('#id_dislikes').html('<p style="color:#065FD4;"><b>' +
+                            $('#id_dislikes{{post.id}}').html('<p style="color:#065FD4;"><b>' +
                                 dislikes + '</b></p>')
                         }
                     }
