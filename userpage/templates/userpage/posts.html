@@ -72,6 +72,151 @@
     </div>
 </div>
 {% endif %}
+<span class="row justify-content-center">
+    <span><a href="{% url 'comments:view_post' post.id %}" style="text-decoration: none; color:black;"><i
+                class="far fa-comment-dots" style="font-size:36px;"></i></a></span>
+    <!-- Like -->
+    <form method="GET" id="likeForm{{post.id}}" class="form-inline">
+        <button type="submit" name="submit" value="like" title="Like" class="btn btn-link">
+            <i class="fa fa-thumbs-o-up" aria-hidden="true" style="font-size:36px" id="likeButton{{post.id}}"></i>
+        </button>
+    </form>
+    <span class="m-3" id="id_likes{{post.id}}">
+        {% if user in post.likes.all %}
+        <p style="color:#065FD4;"><b>{{post.likes.count}}</b></p>
+        {% else %}
+        <p style="color:black;">{{post.likes.count}}</p>
+        {% endif %}
+    </span>
+    <!-- add like script -->
+    <script>
+        $(document).ready(function () {
+
+            $('#likeForm{{post.id}}').click((event) => {
+                event.preventDefault()
+            })
+            $('#likeButton{{post.id}}').click(function (event) {
+                $.ajax({
+                    url: "{% url 'comments:post_like_dislike' post.id %}",
+                    data: {
+                        'submit': 'like',
+                    },
+                    method: 'get',
+                    dataType: 'json',
+                    success: function (data) {
+                        let likes = "{{post.likes.count}}";
+                        let dislikes = "{{ post.dislikes.count }}"
+                        if (data.action == 'undislike_and_like') {
+                            dislikes -= 1
+                            likes++
+                            $('#id_dislikes{{post.id}}').html('<p style="color:black;">' +
+                                dislikes + '</p>')
+                            $('#id_likes{{post.id}}').html('<p style="color:#065FD4;"><b>' +
+                                likes + '</b></p>')
+                        } else if (data.action == 'unlike') {
+                            likes -= 1
+                            $('#id_likes{{post.id}}').html('<p style="color:#black;"' +
+                                likes +
+                                '</p>')
+                        } else {
+                            likes++
+                            $('#id_likes{{post.id}}').html('<p style="color:#065FD4;"><b>' +
+                                likes + '</b></p>')
+                        }
+                    }
+                })
+            })
+
+        })
+    </script>
+    <!-- Dislike -->
+    <form action="{% url 'comments:post_like_dislike' post.id %}" method="post" class="form-inline"
+        id="dislikeForm{{post.id}}">
+        {% csrf_token %}
+        <button type="submit" id="dislikeButton{{post.id}}" name="submit" value="dislike" title="Dislike" class="btn">
+            <i class="fa fa-thumbs-o-down" aria-hidden="true" style="font-size:36px"></i>
+        </button>
+    </form>
+    <span class="m-3" id="id_dislikes{{post.id}}">
+        {% if user in post.dislikes.all %}
+        <p style="color:#065FD4;"><b>{{post.dislikes.count}}</b></p>
+        {% else %}
+        <p style="color:black;">{{post.dislikes.count}}</p>
+        {% endif %}
+    </span>
+    <!-- add like script -->
+    <script>
+        $(document).ready(function () {
+
+            $('#dislikeForm{{post.id}}').click((event) => {
+                event.preventDefault()
+            })
+            $('#dislikeButton{{post.id}}').click(function (event) {
+                $.ajax({
+                    url: "{% url 'comments:post_like_dislike' post.id %}",
+                    data: {
+                        'submit': 'dislike',
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        let likes = "{{post.likes.count}}";
+                        let dislikes = "{{ post.dislikes.count }}"
+                        if (data.action == 'unlike_and_dislike') {
+                            dislikes++
+                            likes -= 1
+                            $('#id_dislikes{{post.id}}').html(
+                                '<p style="color:#065FD4;"><b>' +
+                                dislikes + '</b></p>')
+                            $('#id_likes{{post.id}}').html('<p style="color:black;">' +
+                                likes + '</p>')
+                        } else if (data.action == 'undislike') {
+                            dislikes -= 1
+                            $('#id_dislikes{{post.id}}').html('<p style="color:#black;"' +
+                                dislikes +
+                                '</p>')
+                        } else {
+                            dislikes++
+                            $('#id_dislikes{{post.id}}').html(
+                                '<p style="color:#065FD4;"><b>' +
+                                dislikes + '</b></p>')
+                        }
+                    }
+                })
+            })
+
+        })
+    </script>
+</span>
 {% endfor %}
+
+
+<!-- PAGINATOR -->
+<nav aria-label="...">
+    <ul class="pagination">
+        {% if posts.has_previous %}
+        <li class="page-item">
+            <a href="?page={{ posts.previous_page_number }}" class="page-link">&laquo</a>
+        </li>
+        {% endif %}
+
+
+        {% for page in posts.paginator.page_range %}
+        {% if posts.number == page %}
+        <li class="page-item active">
+            <a href="?page={{ page }}" class="page-link">{{ page }}</a>
+        </li>
+        {% else %}
+        <li class="page-item">
+            <a href="?page={{ page }}" class="page-link">{{ page }}</a>
+        </li>
+        {% endif %}
+        {% endfor %}
+        {% if posts.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ posts.next_page_number }}">&raquo</a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
 
 {% endblock content %}
