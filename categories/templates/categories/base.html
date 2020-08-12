@@ -233,7 +233,7 @@
             <div class="modal-dialog modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="todosLabel">All Todos ({{ toods.count }})</h5>
+                        <h5 class="modal-title" id="todosLabel">{{todos.count}} Todo{{ todos.count|pluralize }}</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -343,65 +343,63 @@
         </script>
 
         <!-- todo fix how stupid this is -->
-        //
-        <!-- * CREATE POST MODAL
-    // <div class="modal fade" id="createPost" tabindex="-1" role="dialog" aria-labelledby="createPostLabel"
-    //     aria-hidden="true">
-    //     <div class="modal-dialog modal-dialog-scrollable">
-    //         <div class="modal-content">
-    //             <div class="modal-header">
-    //                 <h5 class="modal-title" id="createPostLabel">Create Post</h5>
-    //                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-    //                     <span aria-hidden="true">&times;</span>
-    //                 </button>
-    //             </div>
-    //             <div class="modal-body">
-    //                 {% if user.is_authenticated %}
-    //                 <form method="POST" class="mb-4" enctype="multipart/form-data"
-    //                     action="{% url 'comments:create_post' 2%}" id="createPostForm">
-    //                     {% csrf_token %}
-    //                     <div class="form-group">
-    //                         <label for="id_post_description">Description</label>
-    //                         <textarea type="text" name="description" id="id_post_description"
-    //                             class="form-control"></textarea>
-    //                     </div>
-    //                     <div class="form-group">
-    //                         <p><label for="id_post_image">Optional Image</label>
-    //                             <input type="file" name="image" accept="image/*" id="id_image"></p>
-    //                     </div>
-    //                     <div class="form-group">
-    //                         <p><label for="id_post_image">Or Video</label>
-    //                             <input type="file" name="post_file" accept="video/*" id="id_post_file"></p>
-    //                     </div>
-    //                     <small class="form-text text-muted">You don't have to specify image or video, but if you do then
-    //                         only one of
-    //                         them</small>
-    //                 </form>
-    //                 {% else %}
-    //                 <div class="alert alert-danger">You must be logged in to add posts</div>
-    //                 {% endif %}
-    //                 <div class="alert alert-warning">This will be visible for friends and followers only. If you want to
-    //                     make it public then consider adding it from a category.
-    //                 </div>
-    //             </div>
-    //             <div class="modal-footer">
-    //                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-    //                 <button type="button" class="btn btn-primary" id="addPostButton" name="friendsOnlyPost">Add
-    //                     Post</button>
-    //             </div>
-    //             <script>
-    //                 $(document).ready(function () {
+        <!-- CREATE POST MODAL -->
+        <!-- <div class="modal fade" id="createPost" tabindex="-1" role="dialog" aria-labelledby="createPostLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createPostLabel">Create Post</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                {% if user.is_authenticated %}
+                <form method="POST" class="mb-4" enctype="multipart/form-data"
+                    action="{% url 'comments:create_post' 2%}" id="createPostForm">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="id_post_description">Description</label>
+                        <textarea type="text" name="description" id="id_post_description"
+                            class="form-control"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <p><label for="id_post_image">Optional Image</label>
+                            <input type="file" name="image" accept="image/*" id="id_image"></p>
+                    </div>
+                    <div class="form-group">
+                        <p><label for="id_post_image">Or Video</label>
+                            <input type="file" name="post_file" accept="video/*" id="id_post_file"></p>
+                    </div>
+                    <small class="form-text text-muted">You don't have to specify image or video, but if you do then
+                        only one of
+                        them</small>
+                </form>
+                {% else %}
+                <div class="alert alert-danger">You must be logged in to add posts</div>
+                {% endif %}
+                <div class="alert alert-warning">This will be visible for friends and followers only. If you want to
+                    make it public then consider adding it from a category.
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="addPostButton" name="friendsOnlyPost">Add
+                    Post</button>
+            </div>
+            <script>
+                $(document).ready(function () {
+                    $('#addPostButton').click(function (e) {
+                        e.preventDefault();
+                        $('#createPostForm').submit()
+                    });
+                })
+            </script>
+        </div>
+    </div>
+</div> -->
 
-    //                     $('#addPostButton').click(function (e) {
-    //                         e.preventDefault();
-    //                         $('#createPostForm').submit()
-    //                     });
-
-    //                 })
-    //             </script>
-    //         </div>
-    //     </div>
-    // </div>
 
 </body>
 
