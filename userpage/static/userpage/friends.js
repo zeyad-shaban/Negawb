@@ -28,14 +28,22 @@
 //     }
 // });
 // //# sourceURL=pen.js
+// function getMessages() {
+//     $.get("/userpage/friends/", function (chat_messages) {
+//         $('#chatMessages').html(chat_messages);
+//         var objDiv = document.getElementById("chatMessagesContainer");
+//         objDiv.scrollTop = objDiv.scrollHeight;
+//         console.log(chat_messages)
+//     });
+// }
+// setInterval(function () {
+//     getMessages()
+// }, 3000);
+
 function getMessages() {
-    $.get("/userpage/friends", function (chat_messages) {
-        $('#chatMessages').html(chat_messages);
-        var objDiv = document.getElementById("chatMessagesContainer");
-        objDiv.scrollTop = objDiv.scrollHeight;
-        console.log(chat_messages)
-    });
+    $.get("/userpage/friends/", function(chat_messages){
+        let parsedChatMessages = $.parseHTML(chat_messages)
+        console.log(parsedChatMessages[25])
+    })
 }
-setInterval(function () {
-    getMessages()
-}, 3000);
+getMessages()
