@@ -27,3 +27,11 @@ nav li a:hover {
 .nav-item .dropdown-menu .dropdown-item {
     color: black !important;
 }
+
+#todosLabel:hover {
+    background-color: grey;
+}
+
+#doneLabel:hover {
+    background-color: grey;
+}
