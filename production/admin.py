@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Todo, Feedback
+from .models import Todo, Feedback, Tag
 
 @admin.register(Todo)
 class TodoAdmin(admin.ModelAdmin):
@@ -8,3 +8,5 @@ class TodoAdmin(admin.ModelAdmin):
 @admin.register(Feedback)
 class FeedbackAdmin(admin.ModelAdmin):
     readonly_fields = ('created_date',)
+
+admin.site.register(Tag)
