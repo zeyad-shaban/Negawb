@@ -14,6 +14,7 @@
         href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.2/css/font-awesome.min.css'>
     <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css'>
     <script src="https://use.typekit.net/hoy3lrg.js"></script>
+    <title>Chat</title>
     <script>
         try {
             Typekit.load({
@@ -165,7 +166,7 @@
                 <img src="{% static 'categories/favicon.WebP' %}" width="40" height="40" alt="" />
                 <p id="currFriendName">DFreeMedia</p>
             </div>
-            <div class="messages">
+            <div class="messages" id="chatMessagesContainer">
                 <ul id="chatMessages">
                     <li class="sent">
                         <img src="{{user.avatar.url}}" alt="" width="22" height="22" />

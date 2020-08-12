@@ -28,3 +28,14 @@
 //     }
 // });
 // //# sourceURL=pen.js
+function getMessages() {
+    $.get("/userpage/friends", function (chat_messages) {
+        $('#chatMessages').html(chat_messages);
+        var objDiv = document.getElementById("chatMessagesContainer");
+        objDiv.scrollTop = objDiv.scrollHeight;
+        console.log(chat_messages)
+    });
+}
+setInterval(function () {
+    getMessages()
+}, 3000);
