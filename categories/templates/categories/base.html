@@ -161,7 +161,7 @@
         <!-- * create todo -->
         <div class="modal fade" id="createtodo" tabindex="-1" role="dialog" aria-labelledby="createtodoLabel"
             aria-hidden="true">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="createtodoLabel">Create Todo</h5>
@@ -171,7 +171,8 @@
                     </div>
                     <div class="modal-body">
                         <form method="GET" id="todoForm">
-                            <div class="form-group">
+                            {{todo_form|crispy}}
+                            <!-- <div class="form-group">
                                 <label for="id_todo_title">Title</label>
                                 <input type="text" name="title" id="TodoTitle" class="form-control" maxlength="30"
                                     required>
@@ -184,7 +185,7 @@
                                 <label class="inline" for="id_todo_is_important">Important</label>
                                 <input type="checkbox" name="is_important" id="TodoIsImportant"
                                     class="form-control float-right">
-                            </div>
+                            </div> -->
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -200,7 +201,7 @@
 
         <!-- * todos list -->
         <div class="modal fade" id="todos" tabindex="-1" role="dialog" aria-labelledby="todosLabel" aria-hidden="true">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="todosLabel">All Todos ({{ toods.count }})</h5>
@@ -278,7 +279,7 @@
     <!-- * CREATE POST MODAL
     <div class="modal fade" id="createPost" tabindex="-1" role="dialog" aria-labelledby="createPostLabel"
         aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="createPostLabel">Create Post</h5>
