@@ -236,10 +236,12 @@
             <div class="modal-dialog modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title col-md-6 col-lg-6 col-sm-6 col-6 text-center" id="todosLabel">
-                            {{todos.count}} Todo{{ todos.count|pluralize }}</h5>
-                        <button class="btn" id="doneTodosButton">
-                            <h5 class="modal-title col-md-6 col-lg-6 col-sm-6 col-6 text-center" id="doneLabel">Done
+                        <button class="btn modal-title col-md-6 col-lg-6 col-sm-6 col-6 " id="showTodosButton">
+                            <h5 class="text-center" id="todosLabel">
+                                {{todos.count}} Todo{{ todos.count|pluralize }}</h5>
+                        </button>
+                        <button class="btn modal-title col-md-6 col-lg-6 col-sm-6 col-6" id="doneTodosButton">
+                            <h5 class="text-center" id="doneLabel">Done
                             </h5>
                         </button>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -271,7 +273,30 @@
                         {% endfor %}
                                     `)
                                 })
-
+                                $('#showTodosButton').click(function (event) {
+                                    event.preventDefault();
+                                    $('#todosList').html(`
+                                    {% for todo in todos %}
+                        <div class="card">
+                            {% if todo.is_important %}
+                            <div class="card-body todoItem" id="" style="background: rgb(226, 29, 29);">
+                                {% else %}
+                                <div class="card-body todoItem" id="todosList">
+                                    {% endif %}
+                                    <input type="checkbox" name="" class="float-left"
+                                        aria-label="Checkbox for following text input" id="">
+                                    <div class="float-right col-lg-10 col-md-11 col-sm-10 col-10">
+                                        <h5 class="card-title float-left">{{ todo.title }}--</h5><small
+                                            class="form-text text-muted">{{todo.tag}}</small>
+                                        <br>
+                                        <p class="card-text todoNote text-left" id="">{{ todo.note }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                                    `)
+                                })
                             })
                         </script>
                     </div>

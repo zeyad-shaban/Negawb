@@ -98,7 +98,6 @@
                                         let outputMessages = ''
                                         let chat_messages = JSON.parse(response
                                             .chat_messages)
-                                        console.log()
                                         for (message of chat_messages) {
                                             let messageStyle = "null"
                                             if (message.fields.is_important) {
@@ -136,7 +135,6 @@
                                 event.preventDefault()
                                 let userInput = document.getElementById('inputMessage').value;
                                 if (userInput) {
-                                    console.log($('#currFriendName').html())
                                     $.ajax({
                                         url: "{% url 'social:send_message' %}",
                                         data: {
