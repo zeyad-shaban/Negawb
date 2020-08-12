@@ -10,6 +10,7 @@ from django.contrib import messages
 from django.utils.timezone import now
 import datetime
 
+
 @login_required
 def view_post(request, pk):
     post = get_object_or_404(Post, pk=pk)
@@ -111,8 +112,13 @@ def create_post(request, pk):
             return redirect('home')
         else:
             return redirect('categories:view_category', pk=pk)
+    elif request.POST.get('description') == '' and request.FILES.get('image') == None and request.FILES.get('post_file') == None:
+        messages.error(request, 'Please spicify at leat one field')
+        return redirect('categories:view_category', pk=pk)
+    elif request.FILES.get('image') != None and request.FILES.get('post_file') != None:
+        messages.error(request, 'You can\'t have both image and video in the same field')
+        return redirect('categories:view_category', pk=pk)
     else:
-
         if pk != 4 and pk != 1 and pk != 6:
             form = PostForm(data=request.POST, files=request.FILES)
             post = form.save(commit=False)
@@ -125,7 +131,6 @@ def create_post(request, pk):
                 return redirect('home')
             else:
                 return redirect('categories:view_category', pk=pk)
-                
 
         # TRUSTED NEWS
         elif pk == 4:
