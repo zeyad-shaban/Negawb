@@ -22,11 +22,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('DFREEMEDIA_SECRET_KEY')
+print(SECRET_KEY)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['zeyadshapan.pythonanywhere.com', 'dfreemedia.herokuapp.com']
+ALLOWED_HOSTS = ['zeyadshapan.pythonanywhere.com', 'dfreemedia.herokuapp.com', 'www.dfreemedia.com', 'dfreemedia.com']
 
 
 # Application definition
