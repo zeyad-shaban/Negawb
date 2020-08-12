@@ -5,7 +5,7 @@ from .models import Todo, Feedback
 class TodoForm(forms.ModelForm):
     class Meta:
         model = Todo
-        fields = ('title', 'note', 'is_important',)
+        fields = ('title', 'note', 'is_important', 'tag')
         labels = {'is_important': 'Is Important', }
 
 class FeedbackForm(forms.ModelForm):

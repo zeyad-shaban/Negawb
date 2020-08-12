@@ -14,7 +14,7 @@ class Tag(models.Model):
 class Todo(models.Model):
     title = models.CharField(max_length=30)
     note = models.TextField(null=True, blank=True)
-    tags = models.ManyToManyField(Tag, related_name='todo_tag')
+    tag = models.ForeignKey(Tag, on_delete=models.CASCADE)
     is_important = models.BooleanField(default=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     date_created = models.DateTimeField(auto_now_add=True)
