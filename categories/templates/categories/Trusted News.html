@@ -5,7 +5,7 @@
 {% endblock title %}
 {% block content %}
 
-{% if user.is_confirmed %}
+{% if user.is_trusted %}
 <h1>YOU ARE  CONFIRMED</h1>
 {% else %}
 <small class="form-text text-muted">you can't make posts, but you can comment, reply, and view!</small>

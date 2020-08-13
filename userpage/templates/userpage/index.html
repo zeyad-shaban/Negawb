@@ -3,7 +3,7 @@
 {% load crispy_forms_tags %}
 {% block title %} {{user.username}} {% endblock title %}
 {% block content %}
-    
+
 <link rel="stylesheet" href="{% static 'userpage/index.css' %}">
 <div class="container">
     <div class="row">
@@ -77,16 +77,16 @@
                     <div class="form-group">
                         <p><label for="id_avatar">Avatar:</label>
                             <input type="file" name="avatar" accept="image/*" id="id_avatar"></p>
-                        <label for="id_vatar_clear">Clear Avatar</label>
-                        <input type="checkbox" name="avatar-clear" id="id_avatar_clear">
+                        <!-- <label for="id_vatar_clear">Clear Avatar</label>
+                        <input type="checkbox" name="avatar-clear" id="id_avatar_clear"> -->
+                    </div>
+                    <div class="from-group">
+                        <a href="{% url 'password_reset' %}" target="_blank">Reset Password</a>
                     </div>
 
                     <input type="submit" value="Update" class="btn btn-success" name="submit">
                     <br>
                     <hr>
-                    <div class="from-group">
-                        <a href="{% url 'password_reset' %}">Reset Password</a>
-                    </div>
                 </form>
             </div>
         </div>
@@ -121,7 +121,8 @@
 
 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#distractionFree"
     data-whatever="distractionFree">Distraction Free</button>
-<div class="modal fade " id="distractionFree" tabindex="-1" role="dialog" aria-labelledby="distractionFreeLabel" aria-hidden="true">
+<div class="modal fade " id="distractionFree" tabindex="-1" role="dialog" aria-labelledby="distractionFreeLabel"
+    aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">

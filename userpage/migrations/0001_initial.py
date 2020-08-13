@@ -37,7 +37,7 @@ class Migration(migrations.Migration):
                 ('show_email', models.BooleanField(default=False)),
                 ('who_see_avatar', models.CharField(choices=[('none', 'No One'), ('friends', 'Friends Only'), ('everyone', 'Every One')], default='friends', max_length=30)),
                 ('who_add_group', models.CharField(choices=[('none', 'No One'), ('friends', 'Friends Only'), ('everyone', 'Every One')], default='friends', max_length=30)),
-                ('is_confirmed', models.BooleanField(default=False)),
+                ('is_trusted', models.BooleanField(default=False)),
                 ('allow_friend_request', models.BooleanField(default=True)),
                 ('hide_comments', models.BooleanField(default=False)),
                 ('full_focus_mode', models.BooleanField(default=False)),

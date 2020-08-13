@@ -129,7 +129,7 @@ def create_post(request, pk):
 
         # TRUSTED NEWS
         elif pk == 4:
-            if not request.user.is_confirmed:
+            if not request.user.is_trusted:
                 return HttpResponse('You are not a confirmed source, IF YOU FOUND A GLITCH THAT ALLOWS YOU TO MAKE POSTS HERE REPORT IT AS SOON AS POSSIBLE AND DO NOT MAKE ANY USE OF IT!')
         elif pk == 6:
             if request.user.followers.count() < 50000:
