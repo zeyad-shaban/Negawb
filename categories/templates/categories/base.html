@@ -93,7 +93,7 @@
                     <!-- todo use image instead of  -->
                     {% if user.is_authenticated %}
                     <button type="button" class="btn btn-link" data-toggle="modal" data-target="#todos" title="Tasks">
-                        <i class="fas fa-tasks" style="font-size:36px; color:white"></i>
+                        <i class="fas fa-clipboard-check" style="font-size:36px; color:white"></i>
                     </button>
                     {% endif %}
                 </li>
@@ -222,8 +222,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#todos">
-                            Todos
-                        </button>
+                            Todos</button>
                         <input type="submit" value="Add" class="btn btn-success" id="addTodoButton">
                     </div>
                 </div>
@@ -241,8 +240,7 @@
                                 {{todos.count}} Todo{{ todos.count|pluralize }}</h5>
                         </button>
                         <button class="btn modal-title col-md-6 col-lg-6 col-sm-6 col-6" id="doneTodosButton">
-                            <h5 class="text-center" id="doneLabel">Done
-                            </h5>
+                            <h5 class="text-center" id="doneLabel">Done</h5>
                         </button>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
@@ -259,8 +257,11 @@
                                 {% else %}
                                 <div class="card-body todoItem" id="todosList">
                                     {% endif %}
-                                    <input type="checkbox" name="" class="float-left"
-                                        aria-label="Checkbox for following text input" id="">
+                                    {% if not todo.is_completed %}
+                                    <i class="far fa-circle" id="checkTodo" style="font-size: 24px;"></i>
+                                    {% else %}
+                                    <i class="fas fa-check-circle" id="checkTodo" style="font-size: 24px;"></i>
+                                    {% endif %}
                                     <div class="float-right col-lg-10 col-md-11 col-sm-10 col-10">
                                         <h5 class="card-title float-left">{{ todo.title }}--</h5><small
                                             class="form-text text-muted">{{todo.tag}}</small>
@@ -283,8 +284,11 @@
                                 {% else %}
                                 <div class="card-body todoItem" id="todosList">
                                     {% endif %}
-                                    <input type="checkbox" name="" class="float-left"
-                                        aria-label="Checkbox for following text input" id="">
+                                    {% if not todo.is_completed %}
+                                    <i class="far fa-circle" id="checkTodo" style="font-size: 24px;"></i>
+                                    {% else %}
+                                    <i class="fas fa-check-circle" id="checkTodo" style="font-size: 24px;"></i>
+                                    {% endif %}
                                     <div class="float-right col-lg-10 col-md-11 col-sm-10 col-10">
                                         <h5 class="card-title float-left">{{ todo.title }}--</h5><small
                                             class="form-text text-muted">{{todo.tag}}</small>
@@ -302,15 +306,36 @@
                     </div>
                     <div class="modal-body" id="todosList">
                         {% for todo in todos %}
-                        <div class="card">
+                        <div class="card" id="todoItem{{todo.id}}">
                             {% if todo.is_important %}
-                            <div class="card-body todoItem" id="" style="background: rgb(226, 29, 29);">
+                            <div class="card-body" id="" style="background: rgb(226, 29, 29);">
                                 {% else %}
-                                <div class="card-body todoItem">
+                                <div class="card-body">
                                     {% endif %}
-                                    <input type="checkbox" name="" class="float-left"
-                                        aria-label="Checkbox for following text input" id="">
-                                    <div class="float-right col-lg-10 col-md-11 col-sm-10 col-10">
+                                    {% if not todo.is_completed %}
+                                    <i class="far fa-circle" id="checkTodo{{todo.id}}" style="font-size: 24px;"></i>
+                                    <script>
+                                        $(document).ready(function () {
+                                            $('#checkTodo{{todo.id}}').click(function (event) {
+                                                event.preventDefault();
+                                                $.ajax({
+                                                    url: "{% url 'production:update_todo' todo.id %}",
+                                                    data: {
+                                                        'action': 'check_todo',
+                                                    },
+                                                    dataType: 'json',
+                                                    success: function (response) {
+                                                        $('#todoItem{{todo.id}}').toggle()
+                                                    }
+                                                })
+                                            })
+                                        })
+                                    </script>
+                                    {% else %}
+                                    <i class="fas fa-check-circle" id="uncheckTodo{{todo.id}}"
+                                        style="font-size: 24px;"></i>
+                                    {% endif %}
+                                    <div class="float-right col-lg-10 col-md-11 col-sm-10 col-10 todoItem">
                                         <h5 class="card-title float-left">{{ todo.title }}--</h5><small
                                             class="form-text text-muted">{{todo.tag}}</small>
                                         <br>
@@ -322,9 +347,9 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary" id="createtodo" data-toggle="modal"
+                            <button type="button" class="btn btn-info" id="createtodo" data-toggle="modal"
                                 data-target="#createtodo">
-                                Add Todo
+                                <i class="fas fa-plus"></i>Add</span>
                             </button>
                         </div>
                     </div>
@@ -365,6 +390,8 @@
                         },
                         dataType: 'json',
                         success: function (data) {
+                            $('#id_title').val('')
+                            $('#id_note').val('')
                             let todoStyle = 'style="'
                             if (data.todo.is_important) {
                                 todoStyle += "background: rgb(226, 29, 29)"
@@ -373,8 +400,11 @@
                             let newTodoOutput = `
                         <div class="card">
                             <div class="card-body todoItem" id="" ${todoStyle}>
-                                <input type="checkbox" name="" class="float-left"
-                                    aria-label="Checkbox for following text input" id="">
+                                    {% if not todo.is_completed %}
+                                    <i class="far fa-circle" id="checkTodo" style="font-size: 24px;"></i>
+                                    {% else %}
+                                    <i class="fas fa-check-circle" id="checkTodo" style="font-size: 24px;"></i>
+                                    {% endif %}
                                 <div class="float-right col-lg-10 col-md-11 col-sm-10 col-10">
                                     <h5 class="card-title float-left">${ data.todo.title }--</h5><small
                                         class="form-text text-muted">${data.todo.tag.title}</small>

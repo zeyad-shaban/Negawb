@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views import generic
 from django.http import JsonResponse
 from django.forms.models import model_to_dict
@@ -21,6 +21,14 @@ def create_todo(request):
         }
         return JsonResponse({'todo': model_to_dict(todo), 'message': message})
 
+
+def update_todo(request, pk):
+    if request.GET.get('action') == 'check_todo':
+        todo = get_object_or_404(Todo, pk=pk)
+        todo.is_completed = True
+        todo.save()
+        return JsonResponse({'done': True})
+        
 
 def feedback(request):
     if request.method == 'GET':
