@@ -24,21 +24,24 @@ def home(request):
                 Q(user__in=friends), ~Q(user=request.user)).order_by('-post_date')
             followed_posts_list = Post.objects.filter(
                 Q(user__in=followed), ~Q(user=request.user)).order_by('-post_date')
+            friends_paginator = Paginator(friends_posts_list, 7)
+            followed_paginator = Paginator(followed_posts_list, 7)
+            page = request.GET.get('page')
+            try:
+                friends_posts = friends_paginator.page(page)
+                followed_posts = followed_paginator.page(page)
+            except PageNotAnInteger:
+                friends_posts = friends_paginator.page(1)
+                followed_posts = followed_paginator.page(1)
+            except EmptyPage:
+                friends_posts = friends_paginator.page(
+                    friends_paginator.num_pages)
+                followed_posts = followed_paginator.page(
+                    followed_paginator.num_pages)
         else:
-            friends_posts_list = None
-            followed_posts_list = None
-        friends_paginator = Paginator(friends_posts_list, 7)
-        followed_paginator = Paginator(followed_posts_list, 7)
-        page = request.GET.get('page')
-        try:
-            friends_posts = friends_paginator.page(page)
-            followed_posts = followed_paginator.page(page)
-        except PageNotAnInteger:
-            friends_posts = friends_paginator.page(1)
-            followed_posts = followed_paginator.page(1)
-        except EmptyPage:
-            friends_posts = friends_paginator.page(friends_paginator.num_pages)
-            followed_posts = followed_paginator.page(followed_paginator.num_pages)
+            friends_posts = None
+            followed_posts = None
+
         return render(request, 'categories/index.html', {'categories': categories, 'friends_posts': friends_posts, 'followed_posts': followed_posts, })
 
 
