@@ -20,7 +20,9 @@
                 href="{% url 'comments:view_post' post.id %}">Read
                 More</a>{% endif %}</p>
         {% endif %}
-        <img src="{{ post.image.url }}" alt="{{ post.user.username }}" height="250" width="40%">
+        <div class="text-center">
+            <img src="{{ post.image.url }}" alt="{{ post.user.username }}" class="img-fluid rounded">
+        </div>
         <p class="card-text"><small class="form-text text-muted">Published at {{ post.post_date|date:'d M Y' }}</small>
         </p>
     </div>
@@ -31,18 +33,19 @@
     <a href="{% url 'people:people' post.user.id %}">
         {% if post.user.who_see_avatar == 'everyone' %}
         <img src="{{post.user.avatar.url}}" alt="User Image" width="64" height="64">
-        {% elif post.user.who_see_avatar == 'friends' and user in friends %}
+        {% elif post.user.who_see_avatar == 'friends' and user in post.user.friends.all %}
+        <img src="{{post.user.avatar.url}}" alt="User Image" width="64" height="64">
+        {% elif post.user == user %}
         <img src="{{post.user.avatar.url}}" alt="User Image" width="64" height="64">
         {% else %}
         <img src="/media/profile_images/DefaultUserImage.WebP" alt="User Image" width="64" height="64">
         {% endif %}
+        <div class="media-body">
+            <h5 class="mt-0">{{post.user.username}}</h5>
     </a>
-    <div class="media-body">
-        <h5 class="mt-0">Media heading</h5>
-        Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio,
-        vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec
-        lacinia congue felis in faucibus.
-    </div>
+    <br>
+    {{post.description}}
+</div>
 </div>
 <!-- File post -->
 {% elif post.post_file %}
@@ -68,8 +71,6 @@
 </div>
 {% endif %}
 <span class="row justify-content-center">
-    <span><a href="{% url 'comments:view_post' post.id %}" style="text-decoration: none; color:black;"><i
-                class="far fa-comment-dots" style="font-size:36px;"></i></a></span>
     <!-- Like -->
     <form method="GET" id="likeForm{{post.id}}" class="form-inline">
         <button type="submit" name="submit" value="like" title="Like" class="btn btn-link">
