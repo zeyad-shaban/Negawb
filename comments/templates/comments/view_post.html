@@ -229,7 +229,7 @@
         <div class="tab-content">
             <div class="tab-pane active" id="comments-logout">
                 <ul class="media-list">
-{% for comment in comments %}
+                    {% for comment in comments %}
                     <li class="media">
                         <a href="{% url 'people:people' comment.user.id %}">
                             {% if comment.user.who_see_avatar == 'everyone' %}
@@ -266,34 +266,35 @@
                                         })
                                     })
                                 </script>
-                                <a class="btn btn-info btn-circle" href="#" id="addReply"><span
+                                <a class="btn btn-info btn-circle" href="#" id="addReply{{comment.id}}"><span
                                         class="glyphicon glyphicon-share-alt"></span> Reply</a>
                                 <a class="btn btn-warning btn-circle" data-toggle="collapse" href="#replyOne"
-                                    id="showReplies"><span
+                                    id="showReplies{{comment.id}}"><span
                                         class="glyphicon glyphicon-comment"></span>{{comment.reply_set.count}}
                                     Replies</a>
                                 <script>
                                     $(document).ready(function () {
-                                        $('#showReplies').click(function (event) {
+                                        $('#showReplies{{comment.id}}').click(function (event) {
                                             event.preventDefault();
                                             $('#replyList{{comment.id}}').slideToggle()
                                         })
-                                        $('#replyForm').slideToggle()
-                                        $('#addReply').click(function (event) {
+                                        $('#replyForm{{comment.id}}').slideToggle()
+                                        $('#addReply{{comment.id}}').click(function (event) {
                                             event.preventDefault();
-                                            $('#replyForm').slideToggle()
+                                            $('#replyForm{{comment.id}}').slideToggle()
                                         })
-                                        $('#cancelCommentReply').click(function (event) {
+                                        $('#cancelCommentReply{{comment.id}}').click(function (event) {
                                             event.preventDefault;
-                                            $('#replyForm').toggle();
-                                            $('#commentReplyInput').val('')
+                                            $('#replyForm{{comment.id}}').toggle();
+                                            $('#commentReplyInput{{comment.id}}').val('')
                                         })
-                                        $('#replyForm').submit(function (event) {
+                                        $('#replyForm{{comment.id}}').submit(function (event) {
                                             event.preventDefault();
                                             $.ajax({
                                                 url: "{% url 'comments:create_reply' comment.id %}",
                                                 data: {
-                                                    'description': $('#commentReplyInput')
+                                                    'description': $(
+                                                            '#commentReplyInput{{comment.id}}')
                                                         .val(),
                                                 },
                                                 dataType: 'json',
@@ -313,7 +314,7 @@
                                                     }
                                                     console.log(
                                                         'successfully got user avatar and about to prepend'
-                                                        )
+                                                    )
                                                     $('#replyList{{comment.id}}').prepend(`
                                                     <li class="media media-replied">
                                 <a href="/people/${response.reply.id}">
@@ -335,7 +336,8 @@
                                 </div>
                             </li>
                                                     `)
-                                                    $('#commentReplyInput').val('')
+                                                    $('#commentReplyInput{{comment.id}}')
+                                                        .val('')
                                                 }
                                             })
                                         })
@@ -344,13 +346,13 @@
                             </div>
                         </div>
                     </li>
-                    <form action="" method="get" id="replyForm">
+                    <form action="" method="get" id="replyForm{{comment.id}}">
                         <div class="form-group">
                             <textarea type="text" name="description" class="form-control"
-                                placeholder="Add comment for this post" id="commentReplyInput"></textarea>
+                                placeholder="Add comment for this post" id="commentReplyInput{{comment.id}}"></textarea>
                         </div>
                         <span class="float-right" id="commentCancelButtons">
-                            <button class="btn btn-secondary" id="cancelCommentReply">Cancel</button>
+                            <button class="btn btn-secondary" id="cancelCommentReply{{comment.id}}">Cancel</button>
                             <input class="btn btn-primary" type="submit" value="Comment" id="addCommentReply">
                         </span>
                     </form>
