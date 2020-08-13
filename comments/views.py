@@ -20,10 +20,10 @@ def view_post(request, pk):
     if request.method == 'GET' and not request.GET.get('action') == 'addComment':
         return render(request, 'comments/view_post.html', {'post': post, 'comments': comments,})
     elif request.GET.get('action') == 'addComment':
-        if request.GET.get('description') == '':
+        if request.GET.get('description') == '' or request.GET.get('description') == None:
             return None
         else:
-            comment = Comment(description = request.POST.get('description'), post = post)
+            comment = Comment(description = request.GET.get('description'), post = post, user=request.user)
             comment.save()
             return JsonResponse({'comment': model_to_dict(comment)})
 
