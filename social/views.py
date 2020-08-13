@@ -20,7 +20,10 @@ User = get_user_model()
 
 @login_required
 def chat_friend(request, friend_id):
-    friend = get_object_or_404(User, pk=friend_id)
+    if not request.GET.get('current_friend_username'):
+        friend = get_object_or_404(User, pk=friend_id)
+    else:
+        friend = User.objects.filter(username = request.GET.get('current_friend_username')).first()
     chat_box = ChatBox.objects.filter(
         user_1=request.user, user_2=friend).first()
     if not chat_box:
