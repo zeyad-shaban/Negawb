@@ -23,6 +23,8 @@ def create_todo(request):
 
 
 def update_todo(request, pk):
+    if request.GET.get('pk'):
+        pk = request.GET.get('pk');
     if request.GET.get('action') == 'check_todo':
         todo = get_object_or_404(Todo, pk=pk)
         todo.is_completed = True
