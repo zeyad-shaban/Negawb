@@ -185,7 +185,7 @@
 </span>
 {% if user.hide_comments == False %}
 {{comments.count}} Comment{{comments.count|pluralize}}
-<form method="POST">
+<form method="GET" id="commentForm">
     {% csrf_token %}
     <div class="form-group">
         <textarea type="text" name="description" class="form-control" placeholder="Add comment for this post"
@@ -193,44 +193,68 @@
     </div>
     <span class="float-right" id="commentCancelButtons">
         <button class="btn btn-secondary" id="cancelCommentButton">Cancel</button>
-        <input class="btn btn-primary" type="submit" value="Comment">
+        <input class="btn btn-primary" type="submit" value="Comment" id="addComment">
     </span>
 </form>
+<script>
+    $(document).ready(function () {
+        $('#commentForm').submit(function (event) {
+            event.preventDefault();
+            $.ajax({
+                url: "{% url 'comments:view_post' post.id %}",
+                method: "get",
+                dataType: 'json',
+                data: {
+                    'description': $('commentInput').val(),
+                    'action': 'addComment'
+                },
+                success: function (response) {
+                    $('#commentsList').prepend(`
+                    new comment added
+                    <br>
+                    `)
+                }
+            })
+        })
+    })
+</script>
 <br>
 <hr>
-{% for comment in comments %}
-<div class="card w-75">
-    <div class="card-body">
-        <h5 style="display: inline;" class="card-title">{{comment.user}}</h5>
-        <small style="display: inline;" class="form-text text-muted">{{ comment.comment_date }}</small>
-        <br>
-        <p class="card-text">{{comment.description}}</p>
+<div id="commentsList">
+    {% for comment in comments %}
+    <div class="card w-75">
+        <div class="card-body">
+            <h5 style="display: inline;" class="card-title">{{comment.user}}</h5>
+            <small style="display: inline;" class="form-text text-muted">{{ comment.comment_date }}</small>
+            <br>
+            <p class="card-text">{{comment.description}}</p>
+        </div>
     </div>
+    <!-- Likes and Dislikes -->
+    <span class="row justify-content-center">
+        <!-- Like -->
+        <form action="{% url 'comments:reply_like_dislike' comment.id %}" method="post" class="form-inline">
+            {% csrf_token %}
+            <button type="submit" name="submit" value="like" title="Like" class="btn btn-link">
+                <i class="fa fa-thumbs-o-up" aria-hidden="true" style="font-size:36px"></i>
+            </button>
+        </form>
+        <span class="m-3">
+            {{comment.likes.count}}
+        </span>
+        <!-- Dislike -->
+        <form action="{% url 'comments:reply_like_dislike' comment.id %}" method="post" class="form-inline">
+            {% csrf_token %}
+            <button type="submit" name="submit" value="dislike" title="Dislike" class="btn">
+                <i class="fa fa-thumbs-o-down" aria-hidden="true" style="font-size:36px"></i>
+            </button>
+        </form>
+        <span class="m-3">
+            {{comment.dislikes.count}}
+        </span>
+    </span>
+    {% endfor %}
 </div>
-<!-- Likes and Dislikes -->
-<span class="row justify-content-center">
-    <!-- Like -->
-    <form action="{% url 'comments:reply_like_dislike' comment.id %}" method="post" class="form-inline">
-        {% csrf_token %}
-        <button type="submit" name="submit" value="like" title="Like" class="btn btn-link">
-            <i class="fa fa-thumbs-o-up" aria-hidden="true" style="font-size:36px"></i>
-        </button>
-    </form>
-    <span class="m-3">
-        {{comment.likes.count}}
-    </span>
-    <!-- Dislike -->
-    <form action="{% url 'comments:reply_like_dislike' comment.id %}" method="post" class="form-inline">
-        {% csrf_token %}
-        <button type="submit" name="submit" value="dislike" title="Dislike" class="btn">
-            <i class="fa fa-thumbs-o-down" aria-hidden="true" style="font-size:36px"></i>
-        </button>
-    </form>
-    <span class="m-3">
-        {{comment.dislikes.count}}
-    </span>
-</span>
-{% endfor %}
 {% else %}
 <small class="form-text text-muted">Your Distraction Free settings doesn't allow comments to show up😍</small>
 {% endif %}

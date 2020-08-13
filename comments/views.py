@@ -3,9 +3,10 @@ from django.http import JsonResponse, Http404, HttpResponse
 from categories.models import Category
 from .models import Post, Comment
 from django.contrib.auth.decorators import login_required
-from .forms import CommentForm, PostForm
+from .forms import PostForm
 from django.db.models import Q
 from django.contrib import messages
+from django.forms.models import model_to_dict
 # DATES
 from django.utils.timezone import now
 import datetime
@@ -16,16 +17,15 @@ def view_post(request, pk):
     post = get_object_or_404(Post, pk=pk)
     comments = Comment.objects.filter(
         post=post).order_by('-comment_date')[:150]
-    if request.method == 'GET':
-        return render(request, 'comments/view_post.html', {'post': post, 'comments': comments, 'form': CommentForm})
-    else:
-        form = CommentForm(request.POST)
-        comment = form.save(commit=False)
-        comment.user = request.user
-        comment.post = post
-        comment.save()
-        return redirect('comments:view_post', pk=pk)
-
+    if request.method == 'GET' and not request.GET.get('action') == 'addComment':
+        return render(request, 'comments/view_post.html', {'post': post, 'comments': comments,})
+    elif request.GET.get('action') == 'addComment':
+        if request.POST.get('description') == '':
+            return None
+        else:
+            comment = Comment(description = request.POST.get('description'), post = post)
+            # comment.save()
+            return JsonResponse({'comment': model_to_dict(comment)})
 
 
 
