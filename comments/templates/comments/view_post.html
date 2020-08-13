@@ -253,16 +253,16 @@
                                 <span class="media-date reviews list-inline">
                                     {{comment.comment_date}}
                                 </span>
-                                <p class="media-comment" id="commentDescription">
+                                <p class="media-comment" id="commentDescription{{comment.id}}">
                                     {{comment.description|truncatechars:300}}
-                                    {% if comment.description|length >= 300 %} <a href="#" id="commentReadMore">Read
-                                        More</a>{% endif %}
+                                    {% if comment.description|length >= 300 %} <a href="#"
+                                        id="commentReadMore{{comment.id}}">Read More</a>{% endif %}
                                 </p>
                                 <script>
                                     $(document).ready(function () {
-                                        $('#commentReadMore').click(function (event) {
+                                        $('#commentReadMore{{comment.id}}').click(function (event) {
                                             event.preventDefault()
-                                            $('#commentDescription').html(
+                                            $('#commentDescription{{comment.id}}').html(
                                                 `{{comment.description}}`)
                                         })
                                     })
