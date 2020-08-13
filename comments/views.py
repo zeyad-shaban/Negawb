@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse, Http404, HttpResponse
 from categories.models import Category
-from .models import Post, Comment
+from .models import Post, Comment, Reply
 from django.contrib.auth.decorators import login_required
 from .forms import PostForm
 from django.db.models import Q
@@ -135,3 +135,10 @@ def create_post(request, pk):
         elif pk == 6:
             if request.user.followers.count() < 50000:
                 return HttpResponse('You must have +50,000K followers')
+
+
+def create_reply(request, pk):
+    comment = get_object_or_404(Comment, pk=pk)
+    reply = Reply(description = request.GET.get('description'), comment = comment, user = request.user)
+    reply.save()
+    return JsonResponse({'reply': model_to_dict(reply)})

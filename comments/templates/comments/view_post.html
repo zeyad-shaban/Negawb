@@ -187,7 +187,6 @@
 {% if user.hide_comments == False %}
 {{comments.count}} Comment{{comments.count|pluralize}}
 <form method="GET" id="commentForm">
-    {% csrf_token %}
     <div class="form-group">
         <textarea type="text" name="description" class="form-control" placeholder="Add comment for this post"
             id="commentInput"></textarea>
@@ -225,12 +224,12 @@
 </script>
 <br>
 <hr>
-{% for comment in comments %}
 <div class="row">
     <div class="comment-tabs">
         <div class="tab-content">
             <div class="tab-pane active" id="comments-logout">
                 <ul class="media-list">
+{% for comment in comments %}
                     <li class="media">
                         <a href="{% url 'people:people' comment.user.id %}">
                             {% if comment.user.who_see_avatar == 'everyone' %}
@@ -277,14 +276,85 @@
                                     $(document).ready(function () {
                                         $('#showReplies').click(function (event) {
                                             event.preventDefault();
-                                            $('#replyList').slideToggle()
+                                            $('#replyList{{comment.id}}').slideToggle()
+                                        })
+                                        $('#replyForm').slideToggle()
+                                        $('#addReply').click(function (event) {
+                                            event.preventDefault();
+                                            $('#replyForm').slideToggle()
+                                        })
+                                        $('#cancelCommentReply').click(function (event) {
+                                            event.preventDefault;
+                                            $('#replyForm').toggle();
+                                            $('#commentReplyInput').val('')
+                                        })
+                                        $('#replyForm').submit(function (event) {
+                                            event.preventDefault();
+                                            $.ajax({
+                                                url: "{% url 'comments:create_reply' comment.id %}",
+                                                data: {
+                                                    'description': $('#commentReplyInput')
+                                                        .val(),
+                                                },
+                                                dataType: 'json',
+                                                success: function (response) {
+                                                    let avatarImage
+                                                    if (response.reply.user
+                                                        .who_see_avatar == 'everyone') {
+                                                        avatarImage = response.reply.user
+                                                            .avatar.url
+                                                    } else if (response.reply.user ==
+                                                        "{{user}}") {
+                                                        avatarImage = response.reply.user
+                                                            .avatar.url
+                                                    } else {
+                                                        avatarImage =
+                                                            "/media/profile_images/DefaultUserImage.WebP"
+                                                    }
+                                                    console.log(
+                                                        'successfully got user avatar and about to prepend'
+                                                        )
+                                                    $('#replyList{{comment.id}}').prepend(`
+                                                    <li class="media media-replied">
+                                <a href="/people/${response.reply.id}">
+                                    <img src="${avatarImage}" alt="User Image" width="64"
+                                        height="64">
+                                </a>
+                                <div class="media-body">
+                                    <div class="well well-lg">
+                                        <h4 class="media-heading reviews"><span
+                                                class="glyphicon glyphicon-share-alt"></span> ${response.reply.user.username}
+                                        </h4>
+                                        <span class="media-date reviews list-inline">
+                                            ${response.reply.date}
+                                        </span>
+                                        <p class="media-comment">
+                                            ${response.reply.description}
+                                        </p>
+                                    </div>
+                                </div>
+                            </li>
+                                                    `)
+                                                    $('#commentReplyInput').val('')
+                                                }
+                                            })
                                         })
                                     })
                                 </script>
                             </div>
                         </div>
                     </li>
-                    <div class="collapse" id="replyList">
+                    <form action="" method="get" id="replyForm">
+                        <div class="form-group">
+                            <textarea type="text" name="description" class="form-control"
+                                placeholder="Add comment for this post" id="commentReplyInput"></textarea>
+                        </div>
+                        <span class="float-right" id="commentCancelButtons">
+                            <button class="btn btn-secondary" id="cancelCommentReply">Cancel</button>
+                            <input class="btn btn-primary" type="submit" value="Comment" id="addCommentReply">
+                        </span>
+                    </form>
+                    <div class="collapse" id="replyList{{comment.id}}">
                         <ul class="media-list">
                             {% for reply in comment.reply_set.all %}
                             <li class="media media-replied">
@@ -309,7 +379,7 @@
                                                 class="glyphicon glyphicon-share-alt"></span> {{reply.user.username}}
                                         </h4>
                                         <span class="media-date reviews list-inline">
-                                            {{comment.comment_date}}
+                                            {{reply.date}}
                                         </span>
                                         <p class="media-comment">
                                             {{reply.description}}
@@ -320,11 +390,11 @@
                             {% endfor %}
                         </ul>
                     </div>
+                    {% endfor %}
                 </ul>
             </div>
         </div>
     </div>
-    {% endfor %}
     {% else %}
     <small class="form-text text-muted">Your Distraction Free settings doesn't allow comments to show up😍</small>
     {% endif %}
