@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from categories import views
+from categories import views as category_views
 from django.conf.urls.static import static
 from django.conf import settings
 from users import views as users_views
@@ -24,7 +24,7 @@ from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.home, name='home'),
+    path('', category_views.home, name='home'),
     # CATEGORIES
     path('category/', include('categories.urls'), name='category'),
     path('comments/', include('comments.urls'), name='comments'),

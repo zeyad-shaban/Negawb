@@ -147,7 +147,7 @@
             <a href="{% url 'people:people' post.user.id %}">
                 <img src="{{ post.user.avatar.url }}" alt="{{ post.user.username }}" widht="64" height="64"
                     class="mr-3 float-left">
-                {{user.username}}
+                {{post.user.username}}
             </a>
         </div>
         <div class="card-body">

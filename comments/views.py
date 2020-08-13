@@ -93,15 +93,16 @@ def reply_like_dislike(request, reply_id):
 
 
 def create_post(request, pk):
+    fun_area_category = Category.objects.get(id=2)
     if request.POST.get('friendsOnlyPost') == 'Add Post':
         category = None
     else:
         category = get_object_or_404(Category, pk=pk)
-    posts_in_last_day = request.user.post_set.filter(
-        post_date__gt=now() - datetime.timedelta(days=1))
-    if posts_in_last_day.count() >= 3:
+    posts_in_last_day = request.user.post_set.filter(Q(
+        post_date__gt=now() - datetime.timedelta(days=1)),~Q(category=fun_area_category))
+    if posts_in_last_day.count() >= 3 and category !=fun_area_category:
         messages.error(
-            request, f'You can only make 3 posts a day, please wait till tommorow')
+            request, f'You can only make 3 posts a day, however, you can make as many posts as you want in <a href="/category/2/" >Fun Area</a>')
 
         if request.POST.get('friendsOnlyPost') == 'Add Post':
             return redirect('home')
