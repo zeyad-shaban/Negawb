@@ -40,6 +40,7 @@
 
 <body>
     <div id="frame">
+        <div id="message_area"></div>
         <div id="sidepanel">
             <div id="profile">
                 <div class="wrap">
@@ -246,8 +247,9 @@
                                                 senderAvatar =
                                                     '/media/profile_images/DefaultUserImage.WebP'
                                             }
-                                        } else if (action === 'group'){
-                                            senderAvatar == $('#groupImage').attr('data-img')
+                                        } else if (action === 'group') {
+                                            senderAvatar == $('#groupImage').attr(
+                                                'data-img')
                                         }
                                         $('#friendProfile').html(
                                             // ! STATIC URL todo
@@ -293,6 +295,13 @@
                                 let pk = $('#currChat').attr('data-pk')
                                 let action = $('#currChat').attr('data-action')
                                 let userInput = document.getElementById('inputMessage').value;
+                                let isImportant = $('#id_is_important').is(':checked')
+                                let is_important
+                                if (isImportant) {
+                                    is_important = "True"
+                                } else {
+                                    is_important = "False"
+                                }
                                 if (userInput) {
                                     $.ajax({
                                         url: "{% url 'social:send_message' %}",
@@ -300,9 +309,25 @@
                                             "pk": pk,
                                             "action": action,
                                             "message": userInput,
+                                            "is_important": is_important
                                         },
                                         dataType: 'json',
                                         success: function (response) {
+                                            if (response.message) {
+                                                $('#message_area').html('')
+                                                if (response.message.tags === 'error') {
+                                                    $('#message_area').append(`
+                            <div class="alert alert-danger fixed-top">${response.message.text}</div>
+                            `)
+                                                } else {
+                                                    $('#message_area').append(`
+        <div class="alert alert-${response.message.tags} fixed-top">${response.message.text}</div>
+                                `)
+                                                }
+                                                setInterval(() => {
+                                                    $('#message_area').html('')
+                                                }, 3000);
+                                            }
                                             $('#inputMessage').val('')
                                         }
                                     })
@@ -369,7 +394,8 @@
         </div>
         <div class="content">
             <div class="contact-profile" id="friendProfile">
-                <img src="{% static 'categories/favicon.WebP' %}" id="groupImage" data-img="{% static 'categories/favicon.WebP' %}" width="40" height="40" alt="" />
+                <img src="{% static 'categories/favicon.WebP' %}" id="groupImage"
+                    data-img="{% static 'categories/favicon.WebP' %}" width="40" height="40" alt="" />
                 <p id="currChat" data-pk="" data-action="">DFreeMedia</p>
             </div>
             <div class="messages" id="chatMessagesContainer">
@@ -389,10 +415,13 @@
                 <div class="wrap">
                     <form action="" method="get" id="sendMessageForm">
                         <input type="text" placeholder="Write your message..." id="inputMessage" required />
-                        <i class="fa fa-paperclip attachment" aria-hidden="true"></i>
+                        <!-- <i class="fa fa-paperclip attachment" aria-hidden="true"></i> -->
                         <button id="sendMessageButton" class="submit"><i class="fa fa-paper-plane"
                                 aria-hidden="true"></i></button>
                     </form>
+                </div>
+                <div class="input-group-text">
+                    <input type="checkbox" aria-label="Checkbox for following text input" id="id_is_important">
                 </div>
             </div>
         </div>
