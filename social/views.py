@@ -19,28 +19,32 @@ User = get_user_model()
 
 
 @login_required
-def chat_friend(request, friend_id):
-    if not request.GET.get('current_friend_username'):
-        friend = get_object_or_404(User, pk=friend_id)
-    else:
-        friend = User.objects.filter(username = request.GET.get('current_friend_username')).first()
-    chat_box = ChatBox.objects.filter(
-        user_1=request.user, user_2=friend).first()
-    if not chat_box:
+def chat_friend(request):
+    pk = request.GET.get('pk')
+    action = request.GET.get('action')
+    if action == 'friend':
+        print('It is a friend')
+        friend = get_object_or_404(User, pk=pk)
         chat_box = ChatBox.objects.filter(
-            user_1=friend, user_2=request.user).first()
-    if not chat_box:
-        chat_box = ChatBox(user_1=request.user, user_2=friend)
-        chat_box.save()
-    chat_messages = Message.objects.filter(
-        chat_box=chat_box).order_by('sent_date')
-    json_friend = {
-        'id': friend.id,
-        'username': friend.username,
-        'avatar': friend.avatar.url,
-        'who_see_avatar': friend.who_see_avatar,
-    }
-    return JsonResponse({'friend': json_friend, 'chat_messages': serialize('json', chat_messages)})
+            user_1=request.user, user_2=friend).first()
+        if not chat_box:
+            chat_box = ChatBox.objects.filter(
+                user_1=friend, user_2=request.user).first()
+        if not chat_box:
+            chat_box = ChatBox(user_1=request.user, user_2=friend)
+            chat_box.save()
+        chat_messages = Message.objects.filter(
+            chat_box=chat_box).order_by('sent_date')
+        json_friend = {
+            'id': friend.id,
+            'username': friend.username,
+            'avatar': friend.avatar.url,
+            'who_see_avatar': friend.who_see_avatar,
+        }
+        return JsonResponse({'friend': json_friend, 'chat_messages': serialize('json', chat_messages)})
+    elif action == 'group':
+        # todo
+        pass
 
 
 def send_message(request):
@@ -68,7 +72,7 @@ def send_message(request):
 @login_required
 def create_chat_group(request):
     if request.method == 'POST':
-        form = ChatGroupForm(data= request.POST, files= request.FILES)
+        form = ChatGroupForm(data=request.POST, files=request.FILES)
         new_chat_group = form.save(commit=False)
         new_chat_group.author = request.user
         new_chat_group.save()

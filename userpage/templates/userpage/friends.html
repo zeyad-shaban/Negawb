@@ -55,7 +55,7 @@
             </div>
             <div id="contacts">
                 <ul>
-                    
+
                     {% for group in groups %}
                     <li class="contact">
                         <div class="wrap" id="chatGroupButton{{group.id}}">
@@ -69,7 +69,7 @@
                         </div>
                     </li>
                     {% endfor %}
-                        
+
                     {% for friend in friends %}
                     <li class="contact">
                         <div class="wrap" id="chatFriendButton{{friend.id}}">
@@ -103,9 +103,10 @@
                             function loadMessages(e) {
                                 let friend_id = "{{friend.id}}"
                                 $.ajax({
-                                    url: "{% url 'social:chat_friend' friend.id %}",
+                                    url: "{% url 'social:chat_friend' %}",
                                     data: {
-                                        'friend_id': "{{friend.id}}"
+                                        'pk': "{{friend.id}}",
+                                        'action': 'friend',
                                     },
                                     dataType: 'json',
                                     success: function (response) {
@@ -122,7 +123,7 @@
                                             `<a href="/people/${response.friend.id}/">
                                             <img src="${friend_image}" width="40" height="40"/>
                                             </a>
-                                            <p id="currFriendName">${response.friend.username}</p>`
+                                            <p id="currChat" data-pk="${response.friend.id}" data-action="friend">${response.friend.username}</p>`
                                         )
                                         let outputMessages = ''
                                         let chat_messages = JSON.parse(response
@@ -152,12 +153,22 @@
                                 })
                             }
                             $('#chatFriendButton{{friend.id}}').click(loadMessages)
+                        })
+                    </script>
+                    {% endfor %}
+
+
+
+                    <script>
+                        $(document).ready(function () {
                             setInterval(function loadMessages(e) {
-                                let friend_id = "{{friend.id}}"
+                                let pk = $('#currChat').attr('data-pk')
+                                let action = $('#currChat').attr('data-action')
                                 $.ajax({
-                                    url: "{% url 'social:chat_friend' friend.id %}",
+                                    url: "{% url 'social:chat_friend' %}",
                                     data: {
-                                        'current_friend_username': $('#currFriendName').html()
+                                        'pk': pk,
+                                        'action': action,
                                     },
                                     dataType: 'json',
                                     success: function (response) {
@@ -174,7 +185,7 @@
                                             `<a href="/people/${response.friend.id}/">
                                             <img src="${friend_image}" width="40" height="40"/>
                                             </a>
-                                            <p id="currFriendName">${response.friend.username}</p>`
+                                            <p id="currChat" data-pk="${pk}" data-action="${action}">${response.friend.username}</p>`
                                         )
                                         let outputMessages = ''
                                         let chat_messages = JSON.parse(response
@@ -205,7 +216,7 @@
                             }, 3000);
                         })
                     </script>
-                    {% endfor %}
+                    <!-- LOAD NEW MESSAGES -->
                     <!-- SEND MESSAGE -->
                     <script>
                         $(document).ready(function () {
@@ -216,7 +227,7 @@
                                     $.ajax({
                                         url: "{% url 'social:send_message' %}",
                                         data: {
-                                            "friend_username": $('#currFriendName').html(),
+                                            "friend_username": $('#currChat').html(),
                                             "message": userInput,
                                         },
                                         dataType: 'json',
@@ -259,8 +270,8 @@
                                     </div>
                                     <div class="from-group">
                                         <label for="id_group_description" style="color:black;">description</label>
-                                        <input type="text" class="form-control" name="description" id="id_group_description"
-                                            placeholder="optional">
+                                        <input type="text" class="form-control" name="description"
+                                            id="id_group_description" placeholder="optional">
                                     </div>
                                     <div class="form-group">
                                         <label for="id_group_image" style="color:black;">Group image</label>
@@ -288,7 +299,7 @@
         <div class="content">
             <div class="contact-profile" id="friendProfile">
                 <img src="{% static 'categories/favicon.WebP' %}" width="40" height="40" alt="" />
-                <p id="currFriendName">DFreeMedia</p>
+                <p id="currChat" data-pk="" data-action="">DFreeMedia</p>
             </div>
             <div class="messages" id="chatMessagesContainer">
                 <ul id="chatMessages">
@@ -317,4 +328,5 @@
     </div>
 </body>
 <script src="{% static 'userpage/friends.js' %}"></script>
+
 </html>
