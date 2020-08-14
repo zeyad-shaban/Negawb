@@ -55,6 +55,21 @@
             </div>
             <div id="contacts">
                 <ul>
+                    
+                    {% for group in groups %}
+                    <li class="contact">
+                        <div class="wrap" id="chatGroupButton{{group.id}}">
+                            <img src="{{group.image.url}}" alt="Group Image"
+                                class="img-fluid rounded-circle d-block mx-auto" height="73" width="73">
+                            <div class="meta">
+                                <i class="float-right mr-3 fa fa-users" style="font-size: 24px;"></i>
+                                <p class="name">{{ group.title }}</p>
+                                <p class="preview"></p>
+                            </div>
+                        </div>
+                    </li>
+                    {% endfor %}
+                        
                     {% for friend in friends %}
                     <li class="contact">
                         <div class="wrap" id="chatFriendButton{{friend.id}}">

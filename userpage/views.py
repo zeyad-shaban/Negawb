@@ -13,7 +13,7 @@ from django.contrib.auth import authenticate
 from django.contrib.auth import get_user_model as user_model
 from .forms import UserForm, UserPrivacyForm, UserPasswordForm, DistractionFreeForm
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from social.models import GroupRequest
+from social.models import GroupRequest, ChatGroup
 User = user_model()
 
 
@@ -92,7 +92,8 @@ def posts(request):
 def friends(request):
     if request.method == 'GET':
         friends = User.objects.filter(friends=request.user)
-        return render(request, 'userpage/friends.html', {'friends': friends})
+        groups = ChatGroup.objects.filter(members= request.user)
+        return render(request, 'userpage/friends.html', {'friends': friends, 'groups': groups})
 
 
 @login_required
