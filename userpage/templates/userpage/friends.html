@@ -233,11 +233,7 @@
                                         if (action == 'friend') {
                                             chat = response.friend
                                             chat_url = "/people/$" + chat.id + "/"
-                                        } else if (action == 'group') {
-                                            chat = response.group
-                                            chat_url = "#"
-                                        }
-                                        if (action === 'friend') {
+                                            chat_label = chat.username
                                             if (chat.who_see_avatar ==
                                                 'everyone' ||
                                                 chat.who_see_avatar == 'friends'
@@ -247,16 +243,18 @@
                                                 senderAvatar =
                                                     '/media/profile_images/DefaultUserImage.WebP'
                                             }
-                                        } else if (action === 'group') {
-                                            senderAvatar == $('#groupImage').attr(
-                                                'data-img')
+                                        } else if (action == 'group') {
+                                            chat = response.group
+                                            chat_url = "#"
+                                            chat_label = chat.title
+                                            senderAvatar = chat['image']
                                         }
                                         $('#friendProfile').html(
                                             // ! STATIC URL todo
                                             `<a href="${chat_url}">
                                                 <img src="${senderAvatar}" id="groupImage" data-img="${senderAvatar}" width="40" height="40"/>
                                                 </a>
-                                                <p id="currChat" data-pk="${pk}" data-action="${action}">${chat.username}</p>`
+                                                <p id="currChat" data-pk="${pk}" data-action="${action}">${chat_label}</p>`
                                         )
                                         let outputMessages = ''
                                         let chat_messages = JSON.parse(response
