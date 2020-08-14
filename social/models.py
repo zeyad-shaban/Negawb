@@ -74,7 +74,7 @@ class GroupMessage(models.Model):
         User, related_name='group_message_sender', null=True, on_delete=models.CASCADE)
     sent_date = models.DateTimeField(auto_now_add=True)
     message = models.TextField()
-
+    is_important = models.BooleanField(default=False)
     def __str__(self):
         return f'message_sender: {self.message_sender}, chat_box: {self.group}'
 

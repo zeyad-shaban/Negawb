@@ -23,7 +23,6 @@ def chat_friend(request):
     pk = request.GET.get('pk')
     action = request.GET.get('action')
     if action == 'friend':
-        print('It is a friend')
         friend = get_object_or_404(User, pk=pk)
         chat_box = ChatBox.objects.filter(
             user_1=request.user, user_2=friend).first()
