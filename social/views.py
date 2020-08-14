@@ -65,7 +65,7 @@ def send_message(request):
                 user_1=friend, user_2=request.user).first()
         message = Message(
             chat_box=chat_box, message_sender=request.user, message=request.GET.get('message'))
-        if 'is_important' in request.GET:
+        if request.GET.get('is_important') == "True":
             important_messages_in_last_day = Message.objects.filter(sent_date__gt=now(
             ) - datetime.timedelta(days=1), is_important=True, chat_box=chat_box, message_sender=request.user)
             if important_messages_in_last_day.count() >= 3:
@@ -80,7 +80,7 @@ def send_message(request):
         group = ChatGroup.objects.get(id=pk)
         message = GroupMessage(
             group=group, message_sender=request.user, message=request.GET.get('message'))
-        if 'is_important' in request.GET:
+        if request.GET.get('is_important') == "True":
             important_messages_in_last_day = GroupMessage.objects.filter(sent_date__gt=now(
             ) - datetime.timedelta(days=1), is_important=True, group=group, message_sender=request.user)
             if important_messages_in_last_day.count() >= 3:
