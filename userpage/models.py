@@ -43,7 +43,7 @@ class User(AbstractUser):
         Category, related_name='blocked_categories', blank=True)
     full_focus_mode = models.BooleanField(default=False)
     chat_only_mode = models.BooleanField(default=False)
-    show_posts_in_homepage = models.BooleanField(default=False)
+    hide_posts_in_homepage = models.BooleanField(default=True)
         # Notifications
     
 

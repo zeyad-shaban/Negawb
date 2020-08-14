@@ -35,7 +35,7 @@
 </div>
 
 <div class="m-4">
-    {% if user.show_posts_in_homepage %}
+    {% if not user.hide_posts_in_homepage %}
     <p>
         <span><a href="#" class="m-3 btn btn-primary" id="toggleFriendsPosts">Friends</a></span>
         <span><a href="#" class="m-3 btn btn-primary" id="toggleFollowedPosts">Followed</a></span>

@@ -42,7 +42,7 @@ class Migration(migrations.Migration):
                 ('hide_comments', models.BooleanField(default=False)),
                 ('full_focus_mode', models.BooleanField(default=False)),
                 ('chat_only_mode', models.BooleanField(default=False)),
-                ('show_posts_in_homepage', models.BooleanField(default=False)),
+                ('hide_posts_in_homepage', models.BooleanField(default=False)),
                 ('blocked_categories', models.ManyToManyField(blank=True, related_name='blocked_categories', to='categories.Category')),
                 ('followers', models.ManyToManyField(related_name='user_followers', to=settings.AUTH_USER_MODEL)),
                 ('friends', models.ManyToManyField(blank=True, to=settings.AUTH_USER_MODEL)),
