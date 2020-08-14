@@ -43,8 +43,15 @@ def chat_friend(request):
         }
         return JsonResponse({'friend': json_friend, 'chat_messages': serialize('json', chat_messages)})
     elif action == 'group':
-        # todo
-        pass
+        group = get_object_or_404(ChatGroup, pk=pk)
+        chat_messages = GroupMessage.objects.filter(group=group)
+        json_group = {
+            'id': group.id,
+            'title': group.title,
+            'description': group.description,
+            'image': group.image.url,
+        }
+        return JsonResponse({'chat_messages': serialize('json', chat_messages), 'group': json_group, })
 
 
 def send_message(request):
