@@ -83,7 +83,7 @@
                                     success: function (response) {
                                         $('#friendProfile').html(
                                             // ! STATIC URL todo
-                                            `<a href="/people/${response.group.id}/">
+                                            `<a href="/people/${response.group.id}/" data-toggle="modal" data-target="#addMembers">
                                             <img src="${response.group.image}" id="groupImage" data-img="${response.group.image}" width="40" height="40"/>
                                             </a>
                                             <p id="currChat" data-pk="${response.group.id}" data-action="group">${response.group.title}</p>`
@@ -93,13 +93,16 @@
                                             .chat_messages)
                                         for (message of chat_messages) {
                                             let sender_avatar
-                                            // if (response.friend.who_see_avatar == 'everyone' ||
-                                            //     response.friend.who_see_avatar == 'friends') {
-                                            //     sender_avatar = response.friend.avatar
-                                            // } else {
-                                            //     sender_avatar =
-                                            //         '/media/profile_images/DefaultUserImage.WebP'
-                                            // }
+                                            if (message.message_sender.who_see_avatar ==
+                                                'everyone' ||
+                                                message.message_sender.who_see_avatar ==
+                                                'friends') {
+                                                sender_avatar = message.message_sender
+                                                    .avatar
+                                            } else {
+                                                sender_avatar =
+                                                    '/media/profile_images/DefaultUserImage.WebP'
+                                            }
                                             let messageStyle = "null"
                                             if (message.fields.is_important) {
                                                 messageStyle = 'style="background: #d10c0c"'
@@ -126,6 +129,89 @@
                         })
                     </script>
                     {% endfor %}
+                    <div class="modal fade" id="addMembers" tabindex="-1" role="dialog"
+                        aria-labelledby="addMembersLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="addMembersLabel" style="color: black;">Add Members</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <h4 style="color: black;">Add Friend</h4>
+                                    {% for friend in user.friends.all %}
+                                    <li class="list-group-item">
+                                        <div class="row w-100">
+                                            <div class="col-12 col-sm-6 col-md-3 px-0">
+                                                <a href="{% url 'people:people' friend.id %}">
+                                                    {% if friend.who_see_avatar == 'everyone' %}
+                                                    <img src="{{friend.avatar.url}}" alt="User Image" width="64"
+                                                        height="64">
+                                                    {% elif friend.who_see_avatar == 'friends' and user in friend.friends.all %}
+                                                    <img src="{{friend.avatar.url}}" alt="User Image" width="64"
+                                                        height="64">
+                                                    {% elif friend == user %}
+                                                    <img src="{{friend.avatar.url}}" alt="User Image" width="64"
+                                                        height="64">
+                                                    {% else %}
+                                                    <img src="/media/profile_images/DefaultUserImage.WebP"
+                                                        alt="User Image" width="64" height="64">
+                                                    {% endif %}
+                                                </a>
+                                            </div>
+
+                                            <div class="col-12 col-sm-6 col-md-9 text-center text-sm-left">
+                                                <a href="{% url 'people:people' friend.id %}" target="_blank">
+                                                    <label class="name lead">{{ friend.username }}</label>
+                                                </a>
+                                                <br>
+
+                                                {% if friend.phone %}
+                                                <span class="text-muted" data-toggle="tooltip" title="Phone Number"
+                                                    data-original-title="{{ friend.phone }}"></span>
+                                                <span class="text-muted small">{{ friend.phone }}</span>
+                                                <br>
+                                                {% endif %}
+                                                {% if friend.email and friend.show_email == True %}
+                                                <span class="text-muted" data-toggle="tooltip" title="Email"
+                                                    data-original-title="{{ friend.email }}"></span>
+                                                <span class="text-muted small text-truncate">{{ friend.email }}</span>
+                                                <br>
+                                                {% endif %}
+                                                <span class="text-muted" data-toggle="tooltip" title="Bio"
+                                                    data-original-title="{{ friend.bio }}"></span>
+                                                <span class="small text-truncate"
+                                                    style="color: black;">{{ friend.bio }}</span>
+                                                <form id="id_inviteForm{{friend.id}}" method="GET">
+                                                    <button type="submit" name="invite," class="btn float-right"
+                                                        id="id_inviteButton{{friend.id}}"><i class="fa fa-user-plus"
+                                                            style="font-size: 36px;"></i></button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <script>
+                                        $(document).ready(function () {
+                                            $('#id_inviteForm{{friend.id}}').submit(function (e) {
+                                                e.preventDefault();
+                                                alert("{{friend.id}}")
+                                            });
+                                        })
+                                    </script>
+                                    {% endfor %}
+                                    <hr>
+                                    <h4 style="color: black;">Or search users</h4>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-primary">Save changes</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                     {% for friend in friends %}
                     <li class="contact">
@@ -245,7 +331,8 @@
                                             }
                                         } else if (action == 'group') {
                                             chat = response.group
-                                            chat_url = "#"
+                                            chat_url =
+                                                `" data-toggle="modal" data-target="#addMembers`
                                             chat_label = chat.title
                                             senderAvatar = chat['image']
                                         }
