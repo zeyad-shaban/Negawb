@@ -139,7 +139,7 @@ def groupinvite(request, pk):
         return render(request, 'social/groupinvite.html', {'group': group, 'users': users, 'friends': friends})
 
 
-def create_invite(request, user_pk, group_pk):
+def create_invite(request,):
     user_pk = request.GET.get('user_pk')
     group_pk = request.GET.get('group_pk')
     request_sender = request.user

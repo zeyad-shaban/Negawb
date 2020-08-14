@@ -129,6 +129,7 @@
                         })
                     </script>
                     {% endfor %}
+
                     <div class="modal fade" id="addMembers" tabindex="-1" role="dialog"
                         aria-labelledby="addMembersLabel" aria-hidden="true">
                         <div class="modal-dialog modal-lg modal-dialog-scrollable">
@@ -196,7 +197,20 @@
                                         $(document).ready(function () {
                                             $('#id_inviteForm{{friend.id}}').submit(function (e) {
                                                 e.preventDefault();
-                                                alert("{{friend.id}}")
+                                                $.ajax({
+                                                    url: "{% url 'social:create_invite' %}",
+                                                    data: {
+                                                        'user_pk': "{{friend.id}}",
+                                                        'group_pk': $('#currChat').attr(
+                                                            'data-pk'),
+                                                    },
+                                                    dataType: 'json',
+                                                    success: function (response) {
+                                                        console.log('success')
+                                                        $('#id_inviteButton{{friend.id}}')
+                                                            .fadeOut();
+                                                    }
+                                                })
                                             });
                                         })
                                     </script>
