@@ -290,12 +290,15 @@
                         $(document).ready(function () {
                             $('#sendMessageForm').submit(function (event) {
                                 event.preventDefault()
+                                let pk = $('#currChat').attr('data-pk')
+                                let action = $('#currChat').attr('data-action')
                                 let userInput = document.getElementById('inputMessage').value;
                                 if (userInput) {
                                     $.ajax({
                                         url: "{% url 'social:send_message' %}",
                                         data: {
-                                            "friend_username": $('#currChat').html(),
+                                            "pk": pk,
+                                            "action": action,
                                             "message": userInput,
                                         },
                                         dataType: 'json',

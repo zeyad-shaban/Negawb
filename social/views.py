@@ -54,23 +54,36 @@ def chat_friend(request):
 
 
 def send_message(request):
-    friend_username = request.GET.get('friend_username')
-    friend = User.objects.get(username=friend_username)
-    chat_box = ChatBox.objects.filter(
-        user_1=request.user, user_2=friend).first()
-    if not chat_box:
+    pk = request.GET.get('pk')
+    action = request.GET.get('action')
+    if action == 'friend':
+        friend = User.objects.get(id=pk)
         chat_box = ChatBox.objects.filter(
-            user_1=friend, user_2=request.user).first()
-    message = Message(
-        chat_box=chat_box, message_sender=request.user, message=request.GET.get('message'))
-    # if 'is_important' in request.GET:
-    #     important_messages_in_last_day = Message.objects.filter(sent_date__gt=now(
-    #     ) - datetime.timedelta(days=1), is_important=True, chat_box=chat_box, message_sender=request.user)
-    #     if important_messages_in_last_day.count() >= 3:
-    #         messages.error(
-    #             request, 'You can only send 3 important messages each day for each chat')
-    #     else:
-    #         message.is_important = request.GET.get('is_important', False)
+            user_1=request.user, user_2=friend).first()
+        if not chat_box:
+            chat_box = ChatBox.objects.filter(
+                user_1=friend, user_2=request.user).first()
+        message = Message(
+            chat_box=chat_box, message_sender=request.user, message=request.GET.get('message'))
+        # if 'is_important' in request.GET:
+        #     important_messages_in_last_day = Message.objects.filter(sent_date__gt=now(
+        #     ) - datetime.timedelta(days=1), is_important=True, chat_box=chat_box, message_sender=request.user)
+        #     if important_messages_in_last_day.count() >= 3:
+        #         messages.error(
+        #             request, 'You can only send 3 important messages each day for each chat')
+        #     else:
+        #         message.is_important = request.GET.get('is_important', False)
+    elif action == 'group':
+        group = ChatGroup.objects.get(id=pk)
+        message = GroupMessage(group= group, message_sender = request.user, message = request.GET.get('message'))
+        # if 'is_important' in request.GET:
+        #     important_messages_in_last_day = Message.objects.filter(sent_date__gt=now(
+        #     ) - datetime.timedelta(days=1), is_important=True, chat_box=chat_box, message_sender=request.user)
+        #     if important_messages_in_last_day.count() >= 3:
+        #         messages.error(
+        #             request, 'You can only send 3 important messages each day for each chat')
+        #     else:
+        #         message.is_important = request.GET.get('is_important', False)
     message.save()
     return JsonResponse({})
 
