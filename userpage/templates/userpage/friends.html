@@ -3,6 +3,14 @@
 <html>
 
 <head>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous">
+    </script>
+
     <link rel='shortcut icon' href="{% static 'categories/favicon.WebP' %}" type="image/WebP">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
         integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous" />
@@ -56,10 +64,16 @@
                             <span class="contact-status offline"></span>
                             {% endif %}
                             {% if friend.who_see_avatar == 'everyone' %}
-                            <img src="{{ friend.avatar.url }}" alt="{{ friend.username }}"
+                            <img src="{{friend.avatar.url}}" alt="User Image"
+                                class="img-fluid rounded-circle d-block mx-auto" height="73" width="73">
+                            {% elif friend.who_see_avatar == 'friends' and user in friend.friends.all %}
+                            <img src="{{friend.avatar.url}}" alt="User Image"
+                                class="img-fluid rounded-circle d-block mx-auto" height="73" width="73">
+                            {% elif friend == user %}
+                            <img src="{{friend.avatar.url}}" alt="User Image"
                                 class="img-fluid rounded-circle d-block mx-auto" height="73" width="73">
                             {% else %}
-                            <img src="/media/profile_images/DefaultUserImage.WebP" alt="{{ friend.username }}"
+                            <img src="/media/profile_images/DefaultUserImage.WebP" alt="User Image"
                                 class="img-fluid rounded-circle d-block mx-auto" height="73" width="73">
                             {% endif %}
                             <div class="meta">
@@ -207,6 +221,53 @@
                 <a href="{% url 'home' %}">
                     <button id="settings"><i class="fa fa-home fa-fw" aria-hidden="true"></i> <span>Home</span></button>
                 </a>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createNewGroup">
+                    New Group
+                </button>
+                <div class="modal fade" id="createNewGroup" tabindex="-1" role="dialog"
+                    aria-labelledby="createNewGroupLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-scrollable">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="createNewGroupLabel">New Group</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="{% url 'social:create_chat_group' %}" method="POST" id="newGroupForm">
+                                    {% csrf_token %}
+                                    <div class="from-group">
+                                        <label for="id_group_title" style="color:black;">Title</label>
+                                        <input type="text" class="form-control" name="title" id="id_group_title"
+                                            required max_length="75">
+                                    </div>
+                                    <div class="from-group">
+                                        <label for="id_group_description" style="color:black;">description</label>
+                                        <input type="text" class="form-control" name="description" id="id_group_description"
+                                            placeholder="optional">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="id_group_image" style="color:black;">Group image</label>
+                                        <small class="form-text text-muted">We will use the default image if nothing was
+                                            provided</small>
+                                        <input type="file" name="image" accept="image/*" id="id_group_image">
+                                    </div>
+                                    <div class="form-group">
+                                        <label style="color: black;" for="id_is_public">Do you want it public?</label>
+                                        <input type="checkbox" id="id_is_public" name="is_public" class="form-control"
+                                            maxlength="200">
+                                    </div>
+                                    <!-- todo choose members -->
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary" id="addGroupButton">Add</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="content">
@@ -240,5 +301,5 @@
         </div>
     </div>
 </body>
-
+<script src="{% static 'userpage/friends.js' %}"></script>
 </html>

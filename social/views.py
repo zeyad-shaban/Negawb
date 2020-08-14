@@ -68,14 +68,12 @@ def send_message(request):
 @login_required
 def create_chat_group(request):
     if request.method == 'POST':
-        form = ChatGroupForm(request.POST)
+        form = ChatGroupForm(data= request.POST, files= request.FILES)
         new_chat_group = form.save(commit=False)
         new_chat_group.author = request.user
         new_chat_group.save()
         new_chat_group.members.add(request.user)
-        messages.success(
-            request, 'Successfully created group, you can now add members')
-        return redirect('social:view_group', new_chat_group.id)
+        return redirect('userpage:friends')
 
 
 @login_required
