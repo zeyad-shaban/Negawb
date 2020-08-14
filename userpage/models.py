@@ -32,9 +32,10 @@ class User(AbstractUser):
         max_length=30,
         choices=who_add_group_choices,
         default='friends')
-    followers = models.ManyToManyField('User', related_name='user_followers', blank=True)
+    followers = models.ManyToManyField(
+        'User', related_name='user_followers', blank=True)
     is_confirmed = models.BooleanField(default=False)
-    is_trusted = models.BooleanField(default=False) # For news
+    is_trusted = models.BooleanField(default=False)  # For news
     allow_friend_request = models.BooleanField(default=True)
 
     # DISTRACTION FREE!!!!!!!!!!!!!!!
@@ -44,8 +45,8 @@ class User(AbstractUser):
     full_focus_mode = models.BooleanField(default=False)
     chat_only_mode = models.BooleanField(default=False)
     hide_posts_in_homepage = models.BooleanField(default=True)
-        # Notifications
-    
+    fixed_navbar = models.BooleanField(default=True)
+    # Notifications
 
     # IMAGE RESIZING
 

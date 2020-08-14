@@ -23,17 +23,12 @@ class UserPrivacyForm(ModelForm):
                   'who_see_avatar': 'Who can see profile image'}
 
 
-class UserPasswordForm(ModelForm):
-
-    class Meta:
-        model = User
-        fields = ('password',)
-
 
 class DistractionFreeForm(ModelForm):
     class Meta:
         model = User
-        fields = ('hide_comments', 'hide_posts_in_homepage', 'blocked_categories',
-                  'full_focus_mode', 'chat_only_mode',)
-        labels = {'full_focus_mode': 'Full focus mode <small class="form-text text-muted">Turns DFreeMedia into Todo only app</small>',
+        fields = ('hide_comments', 'hide_posts_in_homepage', 'fixed_navbar', 'blocked_categories',
+                  'chat_only_mode', 'full_focus_mode')
+        labels = {'hide_posts_in_homepage': 'Hide posts in Homepage <hr>',
+            'full_focus_mode': '<strong>Full Focus Mode</strong> <small class="form-text text-muted">Turns DFreeMedia into Todo only app</small>',
                   'chat_only_mode': 'Chat only mode <small class="form-text text-muted">Turns DFreeMedia into Chatting and todo app only</small>'}

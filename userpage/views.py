@@ -11,7 +11,7 @@ from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.contrib.auth import authenticate
 from django.contrib.auth import get_user_model as user_model
-from .forms import UserForm, UserPrivacyForm, UserPasswordForm, DistractionFreeForm
+from .forms import UserForm, UserPrivacyForm, DistractionFreeForm
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from social.models import GroupRequest, ChatGroup
 User = user_model()
@@ -46,26 +46,6 @@ def home(request):
             data=request.POST, files=request.FILES, instance=request.user)
         form.save()
         messages.success(request, 'Successfully updated privacy settings')
-        return redirect('userpage:home')
-    elif request.POST['submit'] == 'Update Password':
-        user = authenticate(
-            request, username=request.user.username, password=request.POST['password'])
-        if user:
-            if request.POST['password1'] == request.POST['password2']:
-                try:
-                    user = UserPasswordForm(
-                        request.POST, instance=request.user)
-                    user.save()
-                    user.set_password(request.POST['password1'])
-                    messages.success(request, 'Successfully changed password')
-                except:
-                    messages.error(
-                        request, 'Unknown error occured, please try again and report a feedback so we can fix this error')
-            else:
-                messages.error(request, 'Passwords didn\'t match')
-        else:
-            messages.error(request, 'Username and Old password didn\'t match')
-
         return redirect('userpage:home')
     elif request.POST['submit'] == 'DFree':
         form = DistractionFreeForm(request.POST, instance=request.user)
