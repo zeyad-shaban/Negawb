@@ -202,7 +202,6 @@
             event.preventDefault()
         })
         $('#addComment').click(function (event) {
-            console.log($('#commentInput').val())
             event.preventDefault();
             $.ajax({
                 url: "{% url 'comments:view_post' post.id %}",
@@ -213,10 +212,30 @@
                     'action': 'addComment'
                 },
                 success: function (response) {
+                    console.log('success')
+                    let userImage
+                    if (response.comment.user.whoo_see_avatar == "everyone"){
+                        userImage = "{response.comment.user.avatar.url}"
+                    }else{
+                        userImage = "/media/profile_images/DefaultUserImage.WebP"
+                    }
                     $('#commentsList').prepend(`
-                    new comment added
-                    <br>
+                    <li class="media">
+                        <a href="/people/${response.comment.user.id}/">
+                            <img src="${userImage}" alt="User Image" width="64"
+                                height="64" class="media-object img-circle">
+                        </a>
+                        <div class="media-body">
+                            <div class="well well-lg">
+                                <h4 class="media-heading reviews">${response.comment.user.username} </h4>
+                                <span class="media-date reviews list-inline">
+                                    ${response.comment.comment_date}
+                                </span>
+                                <p class="media-comment" id="commentDescription${response.comment.id}">
+                                    ${response.comment.description}
+                                </p>
                     `)
+                    $('#commentInput').val('')
                 }
             })
         })
@@ -228,7 +247,7 @@
     <div class="comment-tabs">
         <div class="tab-content">
             <div class="tab-pane active" id="comments-logout">
-                <ul class="media-list">
+                <ul class="media-list" id="commentsList">
                     {% for comment in comments %}
                     <li class="media">
                         <a href="{% url 'people:people' comment.user.id %}">

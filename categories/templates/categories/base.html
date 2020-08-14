@@ -46,19 +46,17 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto ml-">
                 <li class="nav-item">
-                    <a href="{% url 'people:all_people' %}">
-                        <i class="fas fa-users" style="font-size: 24px; color: white;"></i><span
-                            style="color:white;">Find Friends</span>
+                    <a href="{% url 'people:all_people' %}"><span style="color:white;">Find Friends</span>
                     </a>
                 </li>
                 {% if user.is_authenticated %}
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-plus" style="font-size:24"></i><span style="color:white;">Create</span>
+                        <i class="fas fa-plus" style="font-size:24"></i><span style="color:white;"> Create</span>
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createPost">
+                        <button type="button" class="btn" data-toggle="modal" data-target="#createPost">
                             Post
                         </button>
                         <button type="button" class="btn btn-primary dropdown-item" data-toggle="modal"
@@ -68,24 +66,14 @@
                         <a class="dropdown-item" href="{% url 'production:feedback' %}">FeedBack</a>
                     </div>
                 </li>
-                {% endif %}
-                {% if user.is_authenticated %}
-                <li class="nav-item">
-                    <form action="{% url 'logoutuser' %}" method="POST">
-                        {% csrf_token %}
-                        <input class="btn btn-danger" type="submit" value="Logout">
-                    </form>
-                </li>
                 {% else %}
-                <li class="nav-item"><a href="{% url 'signupuser' %}">SignUp</a>
+                <li class="nav-item"><a href="{% url 'signupuser' %}">Sign Up</a>
                 </li>
                 <li class="nav-item">
                     <a href="{% url 'loginuser' %}">Login</a>
                 </li>
                 {% endif %}
-
                 {% if user.is_authenticated %}
-
                 <li class="nav-item">
                     <a href="{% url 'userpage:friends' %}" title="Chat">
                         <i class="fa fa-comments" style="font-size:36px;"></i>
@@ -98,6 +86,38 @@
                     {% endif %}
                 </li>
                 {% endif %}
+                <span class="mr-5"></span>
+                {% if user.is_authenticated %}
+                <div class="btn-group">
+                    <div title="Inbox" class="master-menu-right-item" id="app-menu" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false"><i class="fas fa-inbox" style="font-size: 36px; color: white;"></i></div>
+                    <div class="dropdown-menu master-menu-dropdown" aria-labelledby="app-menu">
+                        <label>Welcome</label>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">App 1</a>
+                    </div>
+                </div>
+                <span class="mr-5"></span>
+                {% endif %}
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                        aria-expanded="false"><i class="fas fa-sort-down"
+                            style="color: white; font-size: 36px;"></i><span class="caret"></span></a>
+                    <ul class="dropdown-menu float-right mr-100">
+                        {% if user.is_authenticated %}
+                        <!-- todo announcments -->
+                        <li>
+                            <span><a href="#"></a>Announcements </span><i class="fas fa-bullhorn"></i>
+                        </li>
+                        <li role="separator" class="divider"></li>
+                        <br>
+                        <form action="{% url 'logoutuser' %}" method="POST">
+                            {% csrf_token %}
+                            <input class="btn" type="submit" value="Logout">
+                        </form>
+                        {% endif %}
+                    </ul>
+                </li>
             </ul>
             {% block searchbar %} {% endblock searchbar %}
         </div>

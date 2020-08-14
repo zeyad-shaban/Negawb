@@ -44,7 +44,8 @@ class User(AbstractUser):
     full_focus_mode = models.BooleanField(default=False)
     chat_only_mode = models.BooleanField(default=False)
     show_posts_in_homepage = models.BooleanField(default=False)
-    # todo add notifications
+        # Notifications
+    
 
     # IMAGE RESIZING
 
