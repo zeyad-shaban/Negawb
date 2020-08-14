@@ -70,7 +70,7 @@ def send_message(request):
             ) - datetime.timedelta(days=1), is_important=True, chat_box=chat_box, message_sender=request.user)
             if important_messages_in_last_day.count() >= 3:
                 message = {
-                    'text':'You can only send 3 important messages each day for each chat',
+                    'text': 'You can only send 3 important messages each day for each chat',
                     'tags': 'error'
                 }
                 return JsonResponse({'message': message})
@@ -78,15 +78,19 @@ def send_message(request):
                 message.is_important = request.GET.get('is_important', False)
     elif action == 'group':
         group = ChatGroup.objects.get(id=pk)
-        message = GroupMessage(group= group, message_sender = request.user, message = request.GET.get('message'))
-        # if 'is_important' in request.GET:
-        #     important_messages_in_last_day = Message.objects.filter(sent_date__gt=now(
-        #     ) - datetime.timedelta(days=1), is_important=True, chat_box=chat_box, message_sender=request.user)
-        #     if important_messages_in_last_day.count() >= 3:
-        #         messages.error(
-        #             request, 'You can only send 3 important messages each day for each chat')
-        #     else:
-        #         message.is_important = request.GET.get('is_important', False)
+        message = GroupMessage(
+            group=group, message_sender=request.user, message=request.GET.get('message'))
+        if 'is_important' in request.GET:
+            important_messages_in_last_day = GroupMessage.objects.filter(sent_date__gt=now(
+            ) - datetime.timedelta(days=1), is_important=True, group=group, message_sender=request.user)
+            if important_messages_in_last_day.count() >= 3:
+                message = {
+                    'text': 'You can only send 3 important messages each day for each chat',
+                    'tags': 'error'
+                }
+                return JsonResponse({'message': message})
+            else:
+                message.is_important = request.GET.get('is_important', False)
     message.save()
     return JsonResponse({})
 

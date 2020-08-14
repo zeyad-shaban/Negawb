@@ -329,6 +329,7 @@
                                                 }, 3000);
                                             }
                                             $('#inputMessage').val('')
+                                            $("#id_is_important").prop("checked", false);
                                         }
                                     })
                                 }
@@ -351,7 +352,7 @@
                     <div class="modal-dialog modal-dialog-scrollable">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="createNewGroupLabel">New Group</h5>
+                                <h5 class="modal-title" id="createNewGroupLabel" style="color: black;">New Group</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
