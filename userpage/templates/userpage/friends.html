@@ -93,11 +93,11 @@
                                             .chat_messages)
                                         for (message of chat_messages) {
                                             let sender_avatar
-                                            if (message.message_sender.who_see_avatar ==
+                                            if (message.fields.message_sender.who_see_avatar ==
                                                 'everyone' ||
-                                                message.message_sender.who_see_avatar ==
+                                                message.fields.message_sender.who_see_avatar ==
                                                 'friends') {
-                                                sender_avatar = message.message_sender
+                                                sender_avatar = message.fields.message_sender
                                                     .avatar
                                             } else {
                                                 sender_avatar =
@@ -105,13 +105,13 @@
                                             }
                                             let messageStyle = "null"
                                             if (message.fields.is_important) {
-                                                messageStyle = 'style="background: #d10c0c"'
+                                                messageStyle = 'style="background: #d10c0c; color: white;"'
                                             }
                                             if (message.fields.message_sender !=
                                                 "{{user.id}}") {
                                                 outputMessages += `<li class="replies">
                                     <img src="${sender_avatar}" alt="" width="22" height="22"/>
-                                    <p>${message.fields.message}</p>
+                                    <p ${messageStyle}>${message.fields.message}</p>
                                 </li>`
                                             } else {
                                                 outputMessages += `
@@ -288,13 +288,13 @@
                                         for (message of chat_messages) {
                                             let messageStyle = "null"
                                             if (message.fields.is_important) {
-                                                messageStyle = 'style="background: #d10c0c"'
+                                                messageStyle = 'style="background: #d10c0c; color: white"'
                                             }
                                             if (message.fields.message_sender == response
                                                 .friend.id) {
                                                 outputMessages += `<li class="replies">
                                     <img src="${friend_image}" alt="" width="22" height="22"/>
-                                    <p>${message.fields.message}</p>
+                                    <p ${messageStyle}>${message.fields.message}</p>
                                 </li>`
                                             } else {
                                                 outputMessages += `
@@ -363,13 +363,13 @@
                                         for (message of chat_messages) {
                                             let messageStyle = "null"
                                             if (message.fields.is_important) {
-                                                messageStyle = 'style="background: #d10c0c"'
+                                                messageStyle = 'style="background: #d10c0c; color: white;"'
                                             }
                                             if (message.fields.message_sender !=
                                                 "{{user.id}}") {
                                                 outputMessages += `<li class="replies">
                                     <img src="${senderAvatar}" alt="" width="22" height="22"/>
-                                    <p>${message.fields.message}</p>
+                                    <p ${messageStyle}>${message.fields.message}</p>
                                 </li>`
                                             } else {
                                                 outputMessages += `
