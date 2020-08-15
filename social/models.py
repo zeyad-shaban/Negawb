@@ -78,3 +78,29 @@ class GroupMessage(models.Model):
     def __str__(self):
         return f'message_sender: {self.message_sender}, chat_box: {self.group}'
 
+
+class Notification(models.Model):
+    notification_type_choices = [
+        # Messages
+        # * important
+        ('important_friend_message', 'important_friend_message'),
+        ('important_group_message','important_group_message'),
+        # * noraml
+        ('normal_friend_message','normal_friend_message'),
+        ('normal_group_message','normal_group_message'),
+        # Society
+        ('comment_message', 'comment_message'),
+        ('reply_message', 'reply_message'),
+        # Invites
+        # * others
+        ('friend_invite', 'friend_invite'),
+        ('group_invite', 'group_invite'),
+        # * you
+        ('accept_invite', 'accept_invite'),
+        ('denied_invite', 'denied_invite'),
+    ]
+    notification_type = models.CharField(max_length=50, choices=notification_type_choices)
+    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name="notification_receiver")
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notification_sender')
+    content = models.CharField(max_length=200, null=True, blank=True)
+    url = models.URLField(null=True, blank=True)
