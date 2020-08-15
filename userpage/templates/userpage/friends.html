@@ -93,11 +93,14 @@
                                             .chat_messages)
                                         for (message of chat_messages) {
                                             let sender_avatar
-                                            if (message.fields.message_sender.who_see_avatar ==
+                                            if (message.fields.message_sender
+                                                .who_see_avatar ==
                                                 'everyone' ||
-                                                message.fields.message_sender.who_see_avatar ==
+                                                message.fields.message_sender
+                                                .who_see_avatar ==
                                                 'friends') {
-                                                sender_avatar = message.fields.message_sender
+                                                sender_avatar = message.fields
+                                                    .message_sender
                                                     .avatar
                                             } else {
                                                 sender_avatar =
@@ -105,7 +108,8 @@
                                             }
                                             let messageStyle = "null"
                                             if (message.fields.is_important) {
-                                                messageStyle = 'style="background: #d10c0c; color: white;"'
+                                                messageStyle =
+                                                    'style="background: #d10c0c; color: white;"'
                                             }
                                             if (message.fields.message_sender !=
                                                 "{{user.id}}") {
@@ -288,7 +292,8 @@
                                         for (message of chat_messages) {
                                             let messageStyle = "null"
                                             if (message.fields.is_important) {
-                                                messageStyle = 'style="background: #d10c0c; color: white"'
+                                                messageStyle =
+                                                    'style="background: #d10c0c; color: white"'
                                             }
                                             if (message.fields.message_sender == response
                                                 .friend.id) {
@@ -363,7 +368,8 @@
                                         for (message of chat_messages) {
                                             let messageStyle = "null"
                                             if (message.fields.is_important) {
-                                                messageStyle = 'style="background: #d10c0c; color: white;"'
+                                                messageStyle =
+                                                    'style="background: #d10c0c; color: white;"'
                                             }
                                             if (message.fields.message_sender !=
                                                 "{{user.id}}") {
@@ -429,6 +435,15 @@
                                             }
                                             $('#inputMessage').val('')
                                             $("#id_is_important").prop("checked", false);
+                                            $('<li class="sent"><img src="{{ user }}" alt="" /><p>' +
+                                                userInput + '</p></li>').appendTo($(
+                                                '.messages ul'));
+                                            $('.message-input input').val(null);
+                                            $('.contact.active .preview').html(
+                                                '<span>You: </span>' + userInput);
+                                            $(".messages").animate({
+                                                scrollTop: $(document).height()
+                                            }, "fast");
                                         }
                                     })
                                 }
