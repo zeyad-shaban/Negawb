@@ -103,3 +103,4 @@ class Notification(models.Model):
     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notification_sender')
     content = models.CharField(max_length=200, null=True, blank=True)
     url = models.URLField(null=True, blank=True)
+    date = models.DateTimeField(auto_now_add=True)

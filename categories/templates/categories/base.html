@@ -90,12 +90,16 @@
                 {% if user.is_authenticated %}
                 <div class="btn-group">
                     <div title="Notifications" class="master-menu-right-item" id="app-menu" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false"><i class="fas fa-bell"
-                            style="font-size: 36px; color: white;"></i></div>
+                        aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-bell" style="font-size: 36px; color: rgb(209, 202, 202); cursor: pointer"></i>
+                        {% if notifications.count > 0 %}
+                        <span class="badge">{{ notifications.count }}</span>
+                        {% endif %}
+                    </div>
                     <div class="dropdown-menu master-menu-dropdown" aria-labelledby="app-menu">
-                        <label>Welcome</label>
+                        {% for notification in notifications %}
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">App 1</a>
+                        {% endfor %}
                     </div>
                 </div>
                 <span class="mr-5"></span>
@@ -376,7 +380,7 @@
                     </div>
                 </div>
             </div>
-            
+
             {% endif %}
         </div>
 

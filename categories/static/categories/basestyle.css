@@ -35,3 +35,24 @@ nav li a:hover {
 #doneLabel:hover {
     background-color: grey;
 }
+
+.notification {
+    background-color: #555 !important;
+    color: white !important;
+    text-decoration: none !important;
+    padding: 15px 26px !important;
+    position: relative !important;
+    display: inline-block !important;
+    border-radius: 2px !important;
+}
+
+
+.notification .badge {
+    position: absolute !important;
+    top: -10px !important;
+    right: -10px !important;
+    padding: 5px 10px !important;
+    border-radius: 50% !important;
+    background-color: red !important;
+    color: white !important;
+}
