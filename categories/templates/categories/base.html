@@ -94,6 +94,8 @@
                         <i class="fas fa-bell" style="font-size: 36px; color: rgb(209, 202, 202); cursor: pointer"></i>
                         {% if notifications.count > 0 %}
                         <span class="badge" style="color: white;" id="currNotificationsCount">{{ notifications.count }}</span>
+                        {% else %}
+                        <span class="badge" style="color: white;" id="currNotificationsCount"></span>
                         {% endif %}
                     </div>
                     <div class="dropdown-menu master-menu-dropdown" aria-labelledby="app-menu">

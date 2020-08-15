@@ -2,7 +2,7 @@ from django.core.serializers import serialize
 from django.utils.timezone import now
 import datetime
 from django.forms.models import model_to_dict
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, resolve
 from django.http import JsonResponse, Http404
 from django.views import generic
 from django.http import HttpResponse as hs
@@ -15,8 +15,6 @@ from django.db.models import Q
 from .forms import ChatGroupForm
 from .models import ChatBox, Message, ChatGroup, GroupRequest, GroupMessage, Notification
 User = get_user_model()
-# DATE
-
 
 @login_required
 def chat_friend(request):
@@ -75,6 +73,8 @@ def send_message(request):
                 }
                 return JsonResponse({'message': message})
             else:
+                notification = Notification.objects.create(notification_type= 'important_friend_message', sender= request.user, receiver=friend , url= resolve(request.path_info).url_name, content=message.message[:101])
+                notification.save()
                 message.is_important = request.GET.get('is_important', False)
     elif action == 'group':
         group = ChatGroup.objects.get(id=pk)
