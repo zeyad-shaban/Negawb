@@ -13,7 +13,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from .forms import ChatGroupForm
-from .models import ChatBox, Message, ChatGroup, GroupRequest, GroupMessage
+from .models import ChatBox, Message, ChatGroup, GroupRequest, GroupMessage, Notification
 User = get_user_model()
 # DATE
 
@@ -199,4 +199,5 @@ def deny_group(request, pk):
     return JsonResponse({'message': message, })
 
 def load_notifications(request):
-    return JsonResponse({'test': 'Merna Magdy'})
+    notifications = Notification.objects.filter(receiver = request.user).order_by('-date')
+    return JsonResponse({'notifications': serialize('json', notifications)})

@@ -8,14 +8,28 @@ $(document).ready(function () {
 
     // * Load notifications
     setInterval(() => {
+        let currNotificationsCount
+        if ($('#currNotificationsCount').html()) {
+            currNotificationsCount = $('#currNotificationsCount').html()
+        } else {
+            currNotificationsCount = 0
+        }
         $.ajax({
             url: $('#notificationsList').attr('data-url'),
-            data: {
-
-            },
+            data: {},
             dataType: 'json',
             success: function (response) {
-
+                let notifications = JSON.parse(response.notifications)
+                let newNotificationsCount = notifications.length
+                let output = ''
+                for (notification of notifications) {
+                    output += notification.fields.content
+                    output += '<br>'
+                }
+                $('#notificationsList').html(output)
+                if (currNotificationsCount != newNotificationsCount) {
+                    $('#currNotificationsCount').html(newNotificationsCount)
+                }
             }
         })
     }, 6000);
