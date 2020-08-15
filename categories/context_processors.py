@@ -9,7 +9,7 @@ def add_variable_to_context(request):
             todos = Todo.objects.filter(user=request.user, is_completed=False)
             done_todos = Todo.objects.filter(user=request.user, is_completed=True)
             #Notifications
-            notifications = Notification.objects.all()
+            notifications = Notification.objects.filter(receiver=request.user)
         else:
             todos = []
             done_todos = []

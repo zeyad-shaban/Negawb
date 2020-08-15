@@ -14,4 +14,5 @@ urlpatterns = [
          views.join_group, name='join_group'),
     path('denygroup/<int:pk>/', views.deny_group, name='deny_group'),
     path('send_message/', views.send_message, name='send_message'),
+    path('loadnotifications/', views.load_notifications, name='load_notifications'),
 ]

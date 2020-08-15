@@ -197,3 +197,6 @@ def deny_group(request, pk):
         'tags': 'success'
     }
     return JsonResponse({'message': message, })
+
+def load_notifications(request):
+    return JsonResponse({'test': 'Merna Magdy'})

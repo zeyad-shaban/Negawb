@@ -93,16 +93,20 @@
                         aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-bell" style="font-size: 36px; color: rgb(209, 202, 202); cursor: pointer"></i>
                         {% if notifications.count > 0 %}
-                        <span class="badge">{{ notifications.count }}</span>
+                        <span class="badge" style="color: white;">{{ notifications.count }}</span>
                         {% endif %}
                     </div>
                     <div class="dropdown-menu master-menu-dropdown" aria-labelledby="app-menu">
-                        {% for notification in notifications %}
-                        <div class="dropdown-divider"></div>
-                        {% endfor %}
+                        <div id="notificationsList" data-url="{% url 'social:load_notifications' %}">
+                            {% if notifications.count > 0 %}
+                            {% for notification in notifications %}
+                            {{ notification.content }}
+                            <div class="dropdown-divider"></div>
+                            {% endfor %}
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
-                <span class="mr-5"></span>
                 {% endif %}
                 {% if user.is_authenticated %}
                 <li class="dropdown">
