@@ -100,12 +100,12 @@
                 </div>
                 <span class="mr-5"></span>
                 {% endif %}
+                {% if user.is_authenticated %}
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                         aria-expanded="false"><i class="fas fa-sort-down"
                             style="color: white; font-size: 36px;"></i><span class="caret"></span></a>
                     <ul class="dropdown-menu float-right mr-100">
-                        {% if user.is_authenticated %}
                         <!-- todo announcments -->
                         <li>
                             <span><a href="#"></a>Announcements </span><i class="fas fa-bullhorn"></i>
@@ -116,9 +116,9 @@
                             {% csrf_token %}
                             <input class="btn" type="submit" value="Logout">
                         </form>
-                        {% endif %}
                     </ul>
                 </li>
+                {% endif %}
             </ul>
             {% block searchbar %} {% endblock searchbar %}
         </div>
@@ -181,7 +181,7 @@
         </div>
         {% block content %} {% endblock content %}
 
-
+        {% if user.is_authenticated %}
         <!-- * create todo -->
         <div class="modal fade" id="createtodo" tabindex="-1" role="dialog" aria-labelledby="createtodoLabel"
             aria-hidden="true">
@@ -376,9 +376,8 @@
                     </div>
                 </div>
             </div>
-
+            {% endif %}
         </div>
-
 
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
             integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">

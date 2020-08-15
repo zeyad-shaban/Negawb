@@ -25,7 +25,7 @@ SECRET_KEY = os.environ.get('DFREEMEDIA_SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['zeyadshapan.pythonanywhere.com', 'dfreemedia.herokuapp.com', 'www.dfreemedia.com', 'dfreemedia.com']
+ALLOWED_HOSTS = ['zeyadshaban.pythonanywhere.com', 'dfreemedia.herokuapp.com', 'www.dfreemedia.com', 'dfreemedia.com']
 
 
 # Application definition
