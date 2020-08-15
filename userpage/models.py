@@ -42,14 +42,21 @@ class User(AbstractUser):
     hide_comments = models.BooleanField(default=False)
     blocked_categories = models.ManyToManyField(
         Category, related_name='blocked_categories', blank=True)
-    full_focus_mode = models.BooleanField(default=False)
     chat_only_mode = models.BooleanField(default=False)
     hide_posts_in_homepage = models.BooleanField(default=True)
     fixed_navbar = models.BooleanField(default=True)
-    # Notifications
+    # * notifications
+    allow_important_friend_messages = models.BooleanField(default=True)
+    allow_important_group_message = models.BooleanField(default=True)
+    allow_normal_friend_message = models.BooleanField(default=True)
+    allow_normal_group_message = models.BooleanField(default=True)
+    allow_comment_message = models.BooleanField(default=True)
+    allow_reply_message = models.BooleanField(default=True)
+    allow_friend_invite = models.BooleanField(default=True)
+    allow_group_invite = models.BooleanField(default=True)
+    your_invites = models.BooleanField(default=True)
 
     # IMAGE RESIZING
-
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         if self.avatar:

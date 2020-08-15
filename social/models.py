@@ -96,8 +96,7 @@ class Notification(models.Model):
         ('friend_invite', 'friend_invite'),
         ('group_invite', 'group_invite'),
         # * you
-        ('accept_invite', 'accept_invite'),
-        ('denied_invite', 'denied_invite'),
+        ('your_invites', 'your_invites'),
     ]
     notification_type = models.CharField(max_length=50, choices=notification_type_choices)
     receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name="notification_receiver")
