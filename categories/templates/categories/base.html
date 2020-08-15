@@ -93,12 +93,20 @@
                         aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-bell" style="font-size: 36px; color: rgb(209, 202, 202); cursor: pointer"></i>
                         {% if notifications.count > 0 %}
-                        <span class="badge" style="color: white;" id="currNotificationsCount">{{ notifications.count }}</span>
+                        <span class="badge" style="color: white;"
+                            id="currNotificationsCount">{{ notifications.count }}</span>
                         {% else %}
                         <span class="badge" style="color: white;" id="currNotificationsCount"></span>
                         {% endif %}
                     </div>
                     <div class="dropdown-menu master-menu-dropdown" aria-labelledby="app-menu">
+                        <audio id="notificationSound">
+                            <source src="{% static 'social/notificationsound.wav' %}" type="audio/wav">
+                            <source src="{% static 'social/notificationsound.wav' %}" type="audio/mp3">
+                            <source src="{% static 'social/notificationsound.wav' %}" type="audio/ogg">
+                            <source src="{% static 'social/notificationsound.wav' %}" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
                         <div id="notificationsList" data-url="{% url 'social:load_notifications' %}">
                             {% if notifications.count > 0 %}
                             {% for notification in notifications %}

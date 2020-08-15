@@ -29,8 +29,11 @@ $(document).ready(function () {
                     }
                     $('#notificationsList').html(output)
                     $('#currNotificationsCount').html(newNotificationsCount)
+                    let notificationAudio = document.getElementById('notificationSound');
+                    notificationAudio.play()
                 }
             }
         })
     }, 6000);
+
 });
