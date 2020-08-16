@@ -120,7 +120,7 @@
                                                 outputMessages += `
                                             <li class="sent">
                         <img src="{{user.avatar.url}}" alt="" width="22" height="22"/>
-                        <p ${messageStyle}>${message.fields.message}</p>
+                        <p id="messageContent" data-currMessagesCount="${chat_messages.length}" ${messageStyle}>${message.fields.message}</p>
                     </li>
                                             `
                                             }
@@ -304,7 +304,7 @@
                                                 outputMessages += `
                                             <li class="sent">
                         <img src="{{user.avatar.url}}" alt="" width="22" height="22"/>
-                        <p ${messageStyle}>${message.fields.message}</p>
+                        <p id="messageContent" data-currMessagesCount="${chat_messages.length}" ${messageStyle}>${message.fields.message}</p>
                     </li>
                                             `
                                             }
@@ -323,6 +323,8 @@
                             setInterval(function loadMessages(e) {
                                 let pk = $('#currChat').attr('data-pk')
                                 let action = $('#currChat').attr('data-action')
+                                let currMessagesCount = $('#messageContent').attr(
+                                    'data-currMessagesCount')
                                 $.ajax({
                                     url: "{% url 'social:chat_friend' %}",
                                     data: {
@@ -331,61 +333,63 @@
                                     },
                                     dataType: 'json',
                                     success: function (response) {
-                                        let senderAvatar
-                                        let chat
-                                        let chat_url
-                                        if (action == 'friend') {
-                                            chat = response.friend
-                                            chat_url = "/people/$" + chat.id + "/"
-                                            chat_label = chat.username
-                                            if (chat.who_see_avatar ==
-                                                'everyone' ||
-                                                chat.who_see_avatar == 'friends'
-                                            ) {
-                                                senderAvatar = chat.avatar
-                                            } else {
-                                                senderAvatar =
-                                                    '/media/profile_images/DefaultUserImage.WebP'
+                                        let chat_messages = JSON.parse(response
+                                            .chat_messages)
+                                        if (chat_messages.length > currMessagesCount) {
+                                            let senderAvatar
+                                            let chat
+                                            let chat_url
+                                            if (action == 'friend') {
+                                                chat = response.friend
+                                                chat_url = "/people/$" + chat.id + "/"
+                                                chat_label = chat.username
+                                                if (chat.who_see_avatar ==
+                                                    'everyone' ||
+                                                    chat.who_see_avatar == 'friends'
+                                                ) {
+                                                    senderAvatar = chat.avatar
+                                                } else {
+                                                    senderAvatar =
+                                                        '/media/profile_images/DefaultUserImage.WebP'
+                                                }
+                                            } else if (action == 'group') {
+                                                chat = response.group
+                                                chat_url =
+                                                    `" data-toggle="modal" data-target="#addMembers`
+                                                chat_label = chat.title
+                                                senderAvatar = chat['image']
                                             }
-                                        } else if (action == 'group') {
-                                            chat = response.group
-                                            chat_url =
-                                                `" data-toggle="modal" data-target="#addMembers`
-                                            chat_label = chat.title
-                                            senderAvatar = chat['image']
-                                        }
-                                        $('#friendProfile').html(
-                                            // ! STATIC URL todo
-                                            `<a href="${chat_url}">
+                                            $('#friendProfile').html(
+                                                // ! STATIC URL todo
+                                                `<a href="${chat_url}">
                                                 <img src="${senderAvatar}" id="groupImage" data-img="${senderAvatar}" width="40" height="40"/>
                                                 </a>
                                                 <p id="currChat" data-pk="${pk}" data-action="${action}">${chat_label}</p>`
-                                        )
-                                        let outputMessages = ''
-                                        let chat_messages = JSON.parse(response
-                                            .chat_messages)
-                                        for (message of chat_messages) {
-                                            let messageStyle = "null"
-                                            if (message.fields.is_important) {
-                                                messageStyle =
-                                                    'style="background: #d10c0c; color: white;"'
-                                            }
-                                            if (message.fields.message_sender !=
-                                                "{{user.id}}") {
-                                                outputMessages += `<li class="replies">
+                                            )
+                                            let outputMessages = ''
+                                            for (message of chat_messages) {
+                                                let messageStyle = "null"
+                                                if (message.fields.is_important) {
+                                                    messageStyle =
+                                                        'style="background: #d10c0c; color: white;"'
+                                                }
+                                                if (message.fields.message_sender !=
+                                                    "{{user.id}}") {
+                                                    outputMessages += `<li class="replies">
                                     <img src="${senderAvatar}" alt="" width="22" height="22"/>
                                     <p ${messageStyle}>${message.fields.message}</p>
                                 </li>`
-                                            } else {
-                                                outputMessages += `
+                                                } else {
+                                                    outputMessages += `
                                             <li class="sent">
                         <img src="{{user.avatar.url}}" alt="" width="22" height="22"/>
-                        <p ${messageStyle}>${message.fields.message}</p>
+                        <p id="messageContent" data-currMessagesCount="${chat_messages.length}" ${messageStyle}>${message.fields.message}</p>
                     </li>
                                             `
+                                                }
                                             }
+                                            $('#chatMessages').html(outputMessages)
                                         }
-                                        $('#chatMessages').html(outputMessages)
                                     }
                                 })
                             }, 3000);
