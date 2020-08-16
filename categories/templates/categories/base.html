@@ -304,8 +304,9 @@
                             <a><a href="#"></a>Announcements </a><i class="fas fa-bullhorn"></i>
                         </li>
                         <li>
-                            <a class="dropdown-item" href="{% url 'production:feedback' %}">FeedBack</a>
+                            <a class="btn" href="{% url 'production:feedback' %}">FeedBack</a>
                         </li>
+                        <li><a class="btn" href="{% url 'userpage:requestssent' %}">Requests Sent</a></li>
                         <li role="separator" class="divider"></li>
                         <br>
                         <form action="{% url 'logoutuser' %}" method="POST">

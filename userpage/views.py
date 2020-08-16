@@ -1,4 +1,5 @@
 from django.dispatch import receiver
+from django.core.serializers import serialize
 from django.contrib.auth.signals import user_logged_in, user_logged_out
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
@@ -81,7 +82,7 @@ def friendsresult(request):
     query = request.GET.get('q')
     results = User.objects.filter(
         Q(username__icontains=query), friends=request.user)
-    return render(request, 'userpage/friendsresult.html', {'results': results})
+    return JsonResponse({'results': serialize('json', results)})
 
 
 @login_required

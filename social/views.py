@@ -129,39 +129,6 @@ def create_chat_group(request):
         return redirect('userpage:friends')
 
 
-@login_required
-def my_groups(request):
-    if request.method == 'GET':
-        groups = ChatGroup.objects.filter(members=request.user)
-        return render(request, 'social/my_groups.html', {'groups': groups})
-
-
-@login_required
-def view_group(request, chatgroup_pk):
-    chat_group = get_object_or_404(ChatGroup, pk=chatgroup_pk)
-    if not request.user in chat_group.members.all():
-        raise Http404
-    else:
-        if request.method == 'GET':
-            chat_messages = GroupMessage.objects.filter(group=chat_group)
-            return render(request, 'social/viewgroup.html', {'chat_group': chat_group, 'chat_messages': chat_messages})
-        else:
-            chat_group = get_object_or_404(ChatGroup, pk=chatgroup_pk)
-            message = GroupMessage(
-                group=chat_group, message_sender=request.user, message=request.POST.get('message'))
-            message.save()
-            return redirect('social:view_group', chatgroup_pk)
-
-
-@login_required
-def groupinvite(request, pk):
-    group = get_object_or_404(ChatGroup, pk=pk)
-    if request.method == 'GET':
-        users = User.objects.filter(~Q(friends=request.user))
-        friends = User.objects.filter(friends=request.user)
-        return render(request, 'social/groupinvite.html', {'group': group, 'users': users, 'friends': friends})
-
-
 def create_invite(request,):
     user_pk = request.GET.get('user_pk')
     group_pk = request.GET.get('group_pk')
