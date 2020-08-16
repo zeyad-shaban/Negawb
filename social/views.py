@@ -16,6 +16,7 @@ from .forms import ChatGroupForm
 from .models import ChatBox, Message, ChatGroup, GroupRequest, GroupMessage, Notification
 User = get_user_model()
 
+
 @login_required
 def chat_friend(request):
     pk = request.GET.get('pk')
@@ -73,8 +74,11 @@ def send_message(request):
                 }
                 return JsonResponse({'message': message})
             else:
-                notification = Notification.objects.create(notification_type= 'important_friend_message', sender= request.user, receiver=friend , url= resolve(request.path_info).url_name, content=message.message[:101])
-                notification.save()
+                if friend.allow_important_friend_messages:
+                    notification = Notification.objects.create(notification_type='important_friend_message', sender=request.user, url=resolve(
+                        request.path_info).url_name, content=message.message[:100], image=request.user.avatar)
+                    notification.save()
+                    notification.receiver.add(friend)
                 message.is_important = request.GET.get('is_important', False)
     elif action == 'group':
         group = ChatGroup.objects.get(id=pk)
@@ -90,6 +94,13 @@ def send_message(request):
                 }
                 return JsonResponse({'message': message})
             else:
+                receivers = [member for member in group.members.filter(
+                    allow_important_group_message=True)]
+                notification = Notification(notification_type='important_group_message', sender=request.user, url=resolve(
+                    request.path_info).url_name, content=message.message[:100], image=request.user.avatar)
+                notification.save()
+                for receiver in receivers:
+                    notification.receiver.add(receiver)
                 message.is_important = request.GET.get('is_important', False)
     message.save()
     return JsonResponse({})
@@ -198,6 +209,8 @@ def deny_group(request, pk):
     }
     return JsonResponse({'message': message, })
 
+
 def load_notifications(request):
-    notifications = Notification.objects.filter(receiver = request.user).order_by('-date')
+    notifications = Notification.objects.filter(
+        receiver=request.user).order_by('-date')
     return JsonResponse({'notifications': serialize('json', notifications)})

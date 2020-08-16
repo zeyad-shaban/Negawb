@@ -28,8 +28,6 @@ class Message(models.Model):
         return f'message_sender: {self.message_sender}, chat_box: {self.chat_box}'
 
 
-
-
 class ChatGroup(models.Model):
     title = models.CharField(max_length=75)
     description = models.CharField(max_length=200, null=True, blank=True)
@@ -67,6 +65,7 @@ class GroupRequest(models.Model):
     def __str__(self):
         return f'{self.request_sender} To {self.reciever}'
 
+
 class GroupMessage(models.Model):
     group = models.ForeignKey(
         ChatGroup, related_name='chat_group', null=True, on_delete=models.CASCADE)
@@ -75,6 +74,7 @@ class GroupMessage(models.Model):
     sent_date = models.DateTimeField(auto_now_add=True)
     message = models.TextField()
     is_important = models.BooleanField(default=False)
+
     def __str__(self):
         return f'message_sender: {self.message_sender}, chat_box: {self.group}'
 
@@ -84,10 +84,10 @@ class Notification(models.Model):
         # Messages
         # * important
         ('important_friend_message', 'important_friend_message'),
-        ('important_group_message','important_group_message'),
+        ('important_group_message', 'important_group_message'),
         # * noraml
-        ('normal_friend_message','normal_friend_message'),
-        ('normal_group_message','normal_group_message'),
+        ('normal_friend_message', 'normal_friend_message'),
+        ('normal_group_message', 'normal_group_message'),
         # Society
         ('comment_message', 'comment_message'),
         ('reply_message', 'reply_message'),
@@ -98,12 +98,17 @@ class Notification(models.Model):
         # * you
         ('your_invites', 'your_invites'),
     ]
-    notification_type = models.CharField(max_length=50, choices=notification_type_choices)
-    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name="notification_receiver")
-    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notification_sender')
-    content = models.CharField(max_length=200, null=True, blank=True)
+    notification_type = models.CharField(
+        max_length=50, choices=notification_type_choices)
+    receiver = models.ManyToManyField(
+        User, related_name="notification_receiver", default=None)
+    sender = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='notification_sender')
+    content = models.CharField(max_length=100, null=True, blank=True)
     url = models.URLField(null=True, blank=True)
     date = models.DateTimeField(auto_now_add=True)
+    image = models.ImageField(
+        upload_to='social/notifications', null=True, blank=True)
 
     def __str__(self):
         return self.content
