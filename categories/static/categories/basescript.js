@@ -38,4 +38,9 @@ $(document).ready(function () {
     $('#notificationDropMenu').click(function (event) {
         event.stopPropagation();
     });
+    $('.notificationType').click(function (e) { 
+        e.preventDefault();
+        $('.notificationType').removeClass('active');
+        $(this).addClass('active')
+    });
 });

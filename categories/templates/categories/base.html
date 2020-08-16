@@ -21,14 +21,6 @@
 </head>
 
 <body>
-    <!-- todo REMOVE THIS! -->
-    <style>
-        #notificationDropMenu {
-            overflow: scroll;
-            width: 430px;
-            max-height: 568px;
-        }
-    </style>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark {% if user.fixed_navbar %}sticky-top{% endif %}">
         <a class="navbar-brand" href="{% url 'home' %}">
             <img src="{% static 'categories/favicon.WebP' %}" width="35" height="30" alt="Website Logo" loading="lazy">
@@ -120,30 +112,51 @@
                             <h4>Notifications</h4>
                             <div class="dropdown-divider"></div>
                             {% if notifications.count > 0 %}
-                            {% for notification in notifications %}
-                            <a href="{{ notification.url }}" style="text-decoration: none; color: black">
-                                <div class="media" style="background: #F7F7F7;">
-                                    {% if notification.sender.who_see_avatar == 'everyone' %}
-                                    <img src="{{notification.sender.avatar.url}}" alt="User Image" width="50"
-                                        height="50">
-                                    {% elif notification.sender.who_see_avatar == 'friends' and user in notification.sender.friends.all %}
-                                    <img src="{{notification.sender.avatar.url}}" alt="User Image" width="50"
-                                        height="50">
-                                    {% elif notification.sender == user %}
-                                    <img src="{{notification.sender.avatar.url}}" alt="User Image" width="50"
-                                        height="50">
-                                    {% else %}
-                                    <img src="/media/profile_images/DefaultUserImage.WebP" alt="User Image" width="50"
-                                        height="64">
-                                    {% endif %}
-                                    <div class="media-body">
-                                        <h5 class="mt-0">{{ notification.sender.username }}</h5>
-                                        <p>{{ notification.content }}</p>
+                            <ul class="list-group list-group-horizontal">
+                                <li class="list-group-item active notificationType">All</li>
+                                {% if user.allow_important_friend_messages or user.allow_important_group_message or user.allow_normal_friend_message or user.allow_normal_group_message %}
+                                <li class="list-group-item notificationType">Messages</li>
+                                {% endif %}
+                                
+                                {% if user.allow_comment_message or user.allow_reply_message %}
+                                <li class="list-group-item notificationType">Comments/Replies</li>
+                                {% endif %}
+                            </ul>
+                            <ul class="list-group list-group-horizontal">
+                                {% if user.allow_invites %}
+                                <li class="list-group-item notificationType">Invites</li>
+                                {% endif %}
+                                
+                                {% if user.your_invites %}
+                                <li class="list-group-item notificationType">Your invites</li>
+                                {% endif %}
+                            </ul>
+                            <div id="notificationsContainer">
+                                {% for notification in notifications %}
+                                <a href="{{ notification.url }}" style="text-decoration: none; color: black">
+                                    <div class="media" style="background: #F7F7F7;">
+                                        {% if notification.sender.who_see_avatar == 'everyone' %}
+                                        <img src="{{notification.sender.avatar.url}}" alt="User Image" width="50"
+                                            height="50">
+                                        {% elif notification.sender.who_see_avatar == 'friends' and user in notification.sender.friends.all %}
+                                        <img src="{{notification.sender.avatar.url}}" alt="User Image" width="50"
+                                            height="50">
+                                        {% elif notification.sender == user %}
+                                        <img src="{{notification.sender.avatar.url}}" alt="User Image" width="50"
+                                            height="50">
+                                        {% else %}
+                                        <img src="/media/profile_images/DefaultUserImage.WebP" alt="User Image"
+                                            width="50" height="64">
+                                        {% endif %}
+                                        <div class="media-body">
+                                            <h5 class="mt-0">{{ notification.sender.username }}</h5>
+                                            <p>{{ notification.content }}</p>
+                                        </div>
                                     </div>
-                                </div>
-                            </a>
-                            <hr>
-                            {% endfor %}
+                                </a>
+                                <hr>
+                                {% endfor %}
+                            </div>
                             <div class="dropdown-divider"></div>
                             {% endif %}
                         </div>
