@@ -205,6 +205,11 @@ def join_group(request, pk):
     group = group_request.group
     group.members.add(request.user)
     group_request.delete()
+    if group_request.request_sender.your_invites:
+        notification = Notification(notification_type='your_invites', sender=request.user,
+                                    url=f'/people/{request.user.id}/', content=f'{request.user} Accepted your invite to join {group.title}')
+        notification.save()
+        notification.receiver.add(group_request.request_sender)
     message = {
         'text': f'Welome to {group.title}',
         'tags': 'success',
@@ -215,6 +220,11 @@ def join_group(request, pk):
 def deny_group(request, pk):
     group_request = get_object_or_404(GroupRequest, pk=pk)
     group_request.delete()
+    if group_request.request_sender.your_invites:
+        notification = Notification(notification_type='your_invites', sender=request.user,
+                                    url=f'/people/{request.user.id}/', content=f'{request.user} Denied your inite to join {group_request.group.title}')
+        notification.save()
+        notification.receiver.add(group_request.request_sender)
     message = {
         'text': f'You didn\'t join {group_request.group.title}',
         'tags': 'success'

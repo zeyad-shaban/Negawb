@@ -13,7 +13,7 @@ from django.contrib.auth import authenticate
 from django.contrib.auth import get_user_model as user_model
 from .forms import UserForm, UserPrivacyForm, DistractionFreeForm
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from social.models import GroupRequest, ChatGroup
+from social.models import GroupRequest, ChatGroup, Notification
 User = user_model()
 
 
@@ -72,7 +72,7 @@ def posts(request):
 def friends(request):
     if request.method == 'GET':
         friends = User.objects.filter(friends=request.user)
-        groups = ChatGroup.objects.filter(members= request.user)
+        groups = ChatGroup.objects.filter(members=request.user)
         return render(request, 'userpage/friends.html', {'friends': friends, 'groups': groups})
 
 
@@ -103,6 +103,11 @@ def requestssent(request):
 def denyrequest(request, request_id):
     denied_request = get_object_or_404(FriendRequest, pk=request_id)
     denied_request.delete()
+    if denied_request.from_user.your_invites:
+        notification = Notification(notification_type='your_invites', sender=request.user,
+                                    url=f'/people/{request.user.id}/', content=f'{request.user} Denied your friend request')
+        notification.save()
+        notification.receiver.add(denied_request.from_user)
     message = {
         'text': f'Friend Request denied',
         'tags': 'success'
@@ -115,11 +120,14 @@ def acceptrequest(request, request_id):
     friend_request = get_object_or_404(FriendRequest, pk=request_id)
     from_user = request.user
     to_user = friend_request.from_user
-
     from_user.friends.add(to_user)
     to_user.friends.add(from_user)
     friend_request.delete()
-    messages.success(request, f'{to_user} is now a friend')
+    if friend_request.from_user.your_invites:
+        notification = Notification(notification_type='your_invites', sender=request.user,
+                                    url=f'/people/{request.user.id}/', content=f'{request.user} Accepted your friend request')
+        notification.save()
+        notification.receiver.add(friend_request.from_user)
     message = {
         'text': f'{to_user} is now a friend 😄',
         'tags': 'success'
