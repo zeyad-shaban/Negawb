@@ -214,7 +214,7 @@
                 success: function (response) {
                     console.log('success')
                     let userImage
-                    if (response.comment.user.whoo_see_avatar == "everyone"){
+                    if (response.comment.user.who_see_avatar == "everyone"){
                         userImage = "{response.comment.user.avatar.url}"
                     }else{
                         userImage = "/media/profile_images/DefaultUserImage.WebP"
