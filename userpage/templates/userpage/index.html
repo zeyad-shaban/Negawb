@@ -146,22 +146,22 @@
                     <hr>
                     {% for field in distraction_free_form %}
                     {% if field.label == 'Hide posts in homepage' %}
-                    {{field.label}}
+                    {{field.label|safe}}
                     {{field}}
                     <hr>
                     <br>
-                    {% elif field.html_name == 'allow_important_friend_messages' or field.html_name == 'allow_important_group_message' or field.html_name == 'allow_normal_friend_message' or field.html_name == 'allow_normal_group_message' or field.html_name == 'allow_comment_message' or field.html_name == 'allow_reply_message' or field.html_name == 'allow_friend_invite' or field.html_name == 'allow_group_invite' or field.html_name == 'your_invites' %}
+                    {% elif field.html_name == 'allow_important_friend_messages' or field.html_name == 'allow_important_group_message' or field.html_name == 'allow_normal_friend_message' or field.html_name == 'allow_normal_group_message' or field.html_name == 'allow_comment_message' or field.html_name == 'allow_reply_message' or field.html_name == 'allow_invites' or field.html_name == 'your_invites' %}
                     <script>
                         $(document).ready(function () {
                             $('#notificationFields').append(`
-                            {{field.label}}
+                            {{field.label|safe}}
                             {{field}}
                             <br>
                             `)
                         })
                     </script>
                     {% elif field.html_name == 'chat_only_mode' %}
-                    {{field.label}}
+                    {{field.label|safe}}
                     {{ field }}
                     <small class="form-text text-muted">Turns DFreeMedia into Chatting and todo app only</small>
                     <br>

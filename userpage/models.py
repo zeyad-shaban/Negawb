@@ -52,8 +52,7 @@ class User(AbstractUser):
     allow_normal_group_message = models.BooleanField(default=True)
     allow_comment_message = models.BooleanField(default=True)
     allow_reply_message = models.BooleanField(default=True)
-    allow_friend_invite = models.BooleanField(default=True)
-    allow_group_invite = models.BooleanField(default=True)
+    allow_invites = models.BooleanField(default=True)
     your_invites = models.BooleanField(default=True)
 
     # IMAGE RESIZING

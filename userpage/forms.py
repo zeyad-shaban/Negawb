@@ -27,7 +27,7 @@ class DistractionFreeForm(ModelForm):
     class Meta:
         model = User
         fields = ('hide_comments', 'hide_posts_in_homepage', 'allow_important_friend_messages', 'allow_important_group_message', 'allow_normal_friend_message', 'allow_normal_group_message',
-                'allow_comment_message', 'allow_reply_message', 'allow_friend_invite', 'allow_group_invite', 'your_invites', 'fixed_navbar', 'blocked_categories', 'chat_only_mode',)
+                'allow_comment_message', 'allow_reply_message', 'allow_invites', 'your_invites', 'fixed_navbar', 'blocked_categories', 'chat_only_mode',)
         labels = {
             'allow_important_friend_messages': 'Friend\'s important message',
             'allow_important_group_message': 'Group important message',
@@ -36,8 +36,6 @@ class DistractionFreeForm(ModelForm):
             'allow_normal_group_message': 'Group normal message',
             'allow_comment_message': 'Post Comments',
             'allow_reply_message': 'Comment replies',
-            'allow_friend_invite': 'Friend Requests',
-            'allow_friend_invite': 'Friend Requests',
-            'allow_group_invite': 'Group invitations',
+            'allow_invites': 'friend and group <b>Invites</b>',
             'your_invites':'Your own invites',
         }

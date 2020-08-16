@@ -93,8 +93,7 @@ class Notification(models.Model):
         ('reply_message', 'reply_message'),
         # Invites
         # * others
-        ('friend_invite', 'friend_invite'),
-        ('group_invite', 'group_invite'),
+        ('invites', 'invites'),
         # * you
         ('your_invites', 'your_invites'),
     ]
