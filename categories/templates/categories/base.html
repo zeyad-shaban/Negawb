@@ -21,10 +21,12 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark {% if user.fixed_navbar %}sticky-top{% endif %}">
+    <nav
+        class="navbar navbar-expand-xl navbar-expand-lg navbar-expand-md navbar-expand-sm navbar-dark bg-dark {% if user.fixed_navbar %}sticky-top{% endif %}">
         <a class="navbar-brand" href="{% url 'home' %}">
             <img src="{% static 'categories/favicon.WebP' %}" width="35" height="30" alt="Website Logo" loading="lazy">
-        </a> <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -49,24 +51,7 @@
                     <a href="{% url 'people:all_people' %}"><span style="color:white;">Find Friends</span>
                     </a>
                 </li>
-                {% if user.is_authenticated %}
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-plus" style="font-size:24"></i><span style="color:white;"> Create</span>
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <button type="button" class="btn" data-toggle="modal" data-target="#createPost">
-                            Post
-                        </button>
-                        <button type="button" class="btn btn-primary dropdown-item" data-toggle="modal"
-                            data-target="#createChatGroup" data-whatever="createChatGroup">Chat Group</button>
-                        <div class="dropdown-divider"></div>
-                        <!-- Todo add feedback form -->
-                        <a class="dropdown-item" href="{% url 'production:feedback' %}">FeedBack</a>
-                    </div>
-                </li>
-                {% else %}
+                {% if not user.is_authenticated %}
                 <li class="nav-item"><a href="{% url 'signupuser' %}">Sign Up</a>
                 </li>
                 <li class="nav-item">
@@ -78,7 +63,6 @@
                     <a href="{% url 'userpage:friends' %}" title="Chat">
                         <i class="fa fa-comments" style="font-size:36px;"></i>
                     </a>
-                    <!-- todo use image instead of  -->
                     {% if user.is_authenticated %}
                     <button type="button" class="btn btn-link" data-toggle="modal" data-target="#todos" title="Tasks">
                         <i class="fas fa-clipboard-check" style="font-size:36px; color:white"></i>
@@ -86,7 +70,6 @@
                     {% endif %}
                 </li>
                 {% endif %}
-                <span class="mr-5"></span>
                 {% if user.is_authenticated %}
                 <div class="btn-group">
                     <div title="Notifications" class="master-menu-right-item" id="app-menu" data-toggle="dropdown"
@@ -197,7 +180,7 @@
                                 <hr>
                                 {% endfor %}
             `)
-                            } else if (wantedType == 'Messages'){
+                            } else if (wantedType == 'Messages') {
                                 $('#notificationsContainer').html(`
             {% for notification in messages_notifications %}
                                 <a href="{{ notification.url }}" style="text-decoration: none; color: black">
@@ -224,7 +207,7 @@
                                 <hr>
                                 {% endfor %}
             `)
-                            } else if (wantedType == 'Comments/Replies'){
+                            } else if (wantedType == 'Comments/Replies') {
                                 $('#notificationsContainer').html(`
             {% for notification in society_notifications %}
                                 <a href="{{ notification.url }}" style="text-decoration: none; color: black">
@@ -251,7 +234,7 @@
                                 <hr>
                                 {% endfor %}
             `)
-                            } else if (wantedType == 'Invites'){
+                            } else if (wantedType == 'Invites') {
                                 $('#notificationsContainer').html(`
             {% for notification in invites_notifications %}
                                 <a href="{{ notification.url }}" style="text-decoration: none; color: black">
@@ -278,7 +261,7 @@
                                 <hr>
                                 {% endfor %}
             `)
-                            }else if (wantedType == 'Your invites'){
+                            } else if (wantedType == 'Your invites') {
                                 $('#notificationsContainer').html(`
             {% for notification in your_invites_notifications %}
                                 <a href="{{ notification.url }}" style="text-decoration: none; color: black">
@@ -318,7 +301,10 @@
                     <ul class="dropdown-menu float-right mr-100">
                         <!-- todo announcments -->
                         <li>
-                            <span><a href="#"></a>Announcements </span><i class="fas fa-bullhorn"></i>
+                            <a><a href="#"></a>Announcements </a><i class="fas fa-bullhorn"></i>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{% url 'production:feedback' %}">FeedBack</a>
                         </li>
                         <li role="separator" class="divider"></li>
                         <br>
@@ -345,142 +331,98 @@
         {% endif %}
     </span>
 
-    <!-- *Create Group -->
-    <div class="container">
-        <div class="modal fade " id="createChatGroup" tabindex="-1" role="dialog" aria-labelledby="createChatGroupLabel"
-            aria-hidden="true">
-            <div class="modal-dialog modal-dialog-scrollable">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Create Chat Group</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form action="{% url 'social:create_chat_group' %}" name="createChatGroup" method="post">
-                            {% csrf_token %}
-                            <div class="form-group">
-                                <label for="id_group_title">Name of the group</label>
-                                <input type="text" id="id_group_title" value="" name="title" class="form-control"
-                                    maxlength="75" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="id_description">Description</label>
-                                <small class="form-text text-muted">optional</small>
-                                <input type="text" id="id_description" value="" name="description" class="form-control"
-                                    maxlength="200">
-                            </div>
-                            <div class="form-group">
-                                <label for="id_image">Group image</label>
-                                <small class="form-text text-muted">We will use the default image if nothing was
-                                    provided</small>
-                                <input type="file" name="image" accept="image/*" id="id_image"></p>
-                            </div>
-                            <div class="form-group">
-                                <label for="id_is_public">Do you want it public?</label>
-                                <input type="checkbox" id="id_is_public" name="is_public" class="form-control"
-                                    maxlength="200">
-                            </div>
+    {% block content %} {% endblock content %}
 
-                            <input type="submit" name="submit" value="Create" class="btn btn-success">
-                        </form>
-                    </div>
+    {% if user.is_authenticated %}
+    <!-- * create todo -->
+    <div class="modal fade" id="createtodo" tabindex="-1" role="dialog" aria-labelledby="createtodoLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createtodoLabel">Create Todo</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-            </div>
-        </div>
-        {% block content %} {% endblock content %}
+                <div class="modal-body">
+                    <form method="GET" id="todoForm">
+                        {{todo_form|crispy}}
+                    </form>
+                    <hr>
+                    <hr>
+                    <hr>
+                    <hr>
+                    <form id="TodoTagForm" action="" method="get" class="form-inline">
+                        <div class="from-group">
+                            <small class="form-text text-muted">Only if you want to add a new tag</small>
+                            <label for="id_tag_title">Add Tag</label>
+                            <input type="text" name="title" id="id_tag_title" class="from-control" maxlength="18">
+                        </div>
+                        <input type="submit" value="Add" name="submit" class="btn btn-success">
+                    </form>
+                    <script>
+                        $(document).ready(function () {
 
-        {% if user.is_authenticated %}
-        <!-- * create todo -->
-        <div class="modal fade" id="createtodo" tabindex="-1" role="dialog" aria-labelledby="createtodoLabel"
-            aria-hidden="true">
-            <div class="modal-dialog modal-dialog-scrollable">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="createtodoLabel">Create Todo</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form method="GET" id="todoForm">
-                            {{todo_form|crispy}}
-                        </form>
-                        <hr>
-                        <hr>
-                        <hr>
-                        <hr>
-                        <form id="TodoTagForm" action="" method="get" class="form-inline">
-                            <div class="from-group">
-                                <small class="form-text text-muted">Only if you want to add a new tag</small>
-                                <label for="id_tag_title">Add Tag</label>
-                                <input type="text" name="title" id="id_tag_title" class="from-control" maxlength="18">
-                            </div>
-                            <input type="submit" value="Add" name="submit" class="btn btn-success">
-                        </form>
-                        <script>
-                            $(document).ready(function () {
-
-                                $('#TodoTagForm').submit(function (event) {
-                                    event.preventDefault();
-                                    $.ajax({
-                                        url: "{% url 'production:add_tag' %}",
-                                        data: {
-                                            'title': $('#id_tag_title').val()
-                                        },
-                                        dataType: 'json',
-                                        success: function (data) {
-                                            $('#message_area').html('')
-                                            if (data.message.tags === 'error') {
-                                                $('#message_area').append(`
+                            $('#TodoTagForm').submit(function (event) {
+                                event.preventDefault();
+                                $.ajax({
+                                    url: "{% url 'production:add_tag' %}",
+                                    data: {
+                                        'title': $('#id_tag_title').val()
+                                    },
+                                    dataType: 'json',
+                                    success: function (data) {
+                                        $('#message_area').html('')
+                                        if (data.message.tags === 'error') {
+                                            $('#message_area').append(`
                             <div class="alert alert-danger fixed-top">${data.message.text}</div>
                             `)
-                                            } else {
-                                                $('#message_area').append(`
+                                        } else {
+                                            $('#message_area').append(`
         <div class="alert alert-${data.message.tags} fixed-top">${data.message.text}</div>
                                 `)
-                                            }
                                         }
-                                    })
-                                    setTimeout(() => {
-                                        $('#message_area').html('')
-                                    }, 4500);
+                                    }
                                 })
-
+                                setTimeout(() => {
+                                    $('#message_area').html('')
+                                }, 4500);
                             })
-                        </script>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#todos">
-                            Todos</button>
-                        <input type="submit" value="Add" class="btn btn-success" id="addTodoButton">
-                    </div>
+
+                        })
+                    </script>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#todos">
+                        Todos</button>
+                    <input type="submit" value="Add" class="btn btn-success" id="addTodoButton">
                 </div>
             </div>
         </div>
+    </div>
 
 
-        <!-- * todos list -->
-        <div class="modal fade" id="todos" tabindex="-1" role="dialog" aria-labelledby="todosLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-scrollable">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button class="btn modal-title col-md-6 col-lg-6 col-sm-6 col-6 " id="showTodosButton">
-                            <h5 class="text-center" id="todosLabel">
-                                {{todos.count}} Todo{{ todos.count|pluralize }}</h5>
-                        </button>
-                        <button class="btn modal-title col-md-6 col-lg-6 col-sm-6 col-6" id="doneTodosButton">
-                            <h5 class="text-center" id="doneLabel">Done</h5>
-                        </button>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                        <script>
-                            $(document).ready(function () {
-                                $('#doneTodosButton').click(function (event) {
-                                    event.preventDefault();
-                                    $('#todosList').html(`
+    <!-- * todos list -->
+    <div class="modal fade" id="todos" tabindex="-1" role="dialog" aria-labelledby="todosLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button class="btn modal-title col-md-6 col-lg-6 col-sm-6 col-6 " id="showTodosButton">
+                        <h5 class="text-center" id="todosLabel">
+                            {{todos.count}} Todo{{ todos.count|pluralize }}</h5>
+                    </button>
+                    <button class="btn modal-title col-md-6 col-lg-6 col-sm-6 col-6" id="doneTodosButton">
+                        <h5 class="text-center" id="doneLabel">Done</h5>
+                    </button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <script>
+                        $(document).ready(function () {
+                            $('#doneTodosButton').click(function (event) {
+                                event.preventDefault();
+                                $('#todosList').html(`
                                     {% for todo in done_todos %}
                         <div class="card">
                             {% if todo.is_important %}
@@ -504,10 +446,10 @@
                         </div>
                         {% endfor %}
                                     `)
-                                })
-                                $('#showTodosButton').click(function (event) {
-                                    event.preventDefault();
-                                    $('#todosList').html(`
+                            })
+                            $('#showTodosButton').click(function (event) {
+                                event.preventDefault();
+                                $('#todosList').html(`
                                     {% for todo in todos %}
                         <div class="card">
                             {% if todo.is_important %}
@@ -531,104 +473,103 @@
                         </div>
                         {% endfor %}
                                     `)
-                                })
                             })
-                        </script>
-                    </div>
-                    <div class="modal-body" id="todosList">
-                        {% for todo in todos %}
-                        <div class="card" id="todoItem{{todo.id}}">
-                            {% if todo.is_important %}
-                            <div class="card-body" id="" style="background: rgb(226, 29, 29);">
-                                {% else %}
-                                <div class="card-body">
-                                    {% endif %}
-                                    {% if not todo.is_completed %}
-                                    <i class="far fa-circle" id="checkTodo{{todo.id}}" style="font-size: 24px;"></i>
-                                    <script>
-                                        $(document).ready(function () {
-                                            $('#checkTodo{{todo.id}}').click(function (event) {
-                                                event.preventDefault();
-                                                $.ajax({
-                                                    url: "{% url 'production:update_todo' todo.id %}",
-                                                    data: {
-                                                        'action': 'check_todo',
-                                                    },
-                                                    dataType: 'json',
-                                                    success: function (response) {
-                                                        $('#todoItem{{todo.id}}').toggle()
-                                                    }
-                                                })
+                        })
+                    </script>
+                </div>
+                <div class="modal-body" id="todosList">
+                    {% for todo in todos %}
+                    <div class="card" id="todoItem{{todo.id}}">
+                        {% if todo.is_important %}
+                        <div class="card-body" id="" style="background: rgb(226, 29, 29);">
+                            {% else %}
+                            <div class="card-body">
+                                {% endif %}
+                                {% if not todo.is_completed %}
+                                <i class="far fa-circle" id="checkTodo{{todo.id}}" style="font-size: 24px;"></i>
+                                <script>
+                                    $(document).ready(function () {
+                                        $('#checkTodo{{todo.id}}').click(function (event) {
+                                            event.preventDefault();
+                                            $.ajax({
+                                                url: "{% url 'production:update_todo' todo.id %}",
+                                                data: {
+                                                    'action': 'check_todo',
+                                                },
+                                                dataType: 'json',
+                                                success: function (response) {
+                                                    $('#todoItem{{todo.id}}').toggle()
+                                                }
                                             })
                                         })
-                                    </script>
-                                    {% else %}
-                                    <i class="fas fa-check-circle" id="uncheckTodo{{todo.id}}"
-                                        style="font-size: 24px;"></i>
-                                    {% endif %}
-                                    <div class="float-right col-lg-10 col-md-11 col-sm-10 col-10 todoItem">
-                                        <h5 class="card-title float-left">{{ todo.title }}--</h5><small
-                                            class="form-text text-muted">{{todo.tag}}</small>
-                                        <br>
-                                        <p class="card-text todoNote text-left" id="">{{ todo.note }}</p>
-                                    </div>
+                                    })
+                                </script>
+                                {% else %}
+                                <i class="fas fa-check-circle" id="uncheckTodo{{todo.id}}" style="font-size: 24px;"></i>
+                                {% endif %}
+                                <div class="float-right col-lg-10 col-md-11 col-sm-10 col-10 todoItem">
+                                    <h5 class="card-title float-left">{{ todo.title }}--</h5><small
+                                        class="form-text text-muted">{{todo.tag}}</small>
+                                    <br>
+                                    <p class="card-text todoNote text-left" id="">{{ todo.note }}</p>
                                 </div>
                             </div>
-                            {% endfor %}
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-info" id="createtodo" data-toggle="modal"
-                                data-target="#createtodo">
-                                <i class="fas fa-plus"></i>Add</span>
-                            </button>
-                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-info" id="createtodo" data-toggle="modal"
+                            data-target="#createtodo">
+                            <i class="fas fa-plus"></i>Add</span>
+                        </button>
                     </div>
                 </div>
             </div>
-
-            {% endif %}
         </div>
 
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-            integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
-        </script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
-            integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous">
-        </script>
-        <script src="{% static 'categories/basescript.js' %}"></script>
-        <script>
-            $(document).ready(function () {
+        {% endif %}
+    </div>
 
-                $('#todoForm').submit(function (event) {
-                    event.preventDefault()
-                })
-                $('#addTodoButton').click(function (event) {
-                    let check_box
-                    let isImportant = $('#id_is_important').is(":checked")
-                    if (isImportant) {
-                        check_box = 'True'
-                    } else {
-                        check_box = 'False'
-                    }
-                    $.ajax({
-                        url: "{% url 'production:create_todo' %}",
-                        data: {
-                            'title': $('#id_title').val(),
-                            'note': $('#id_note').val(),
-                            'is_important': check_box,
-                            'tag': $('#id_tag').val()
-                        },
-                        dataType: 'json',
-                        success: function (data) {
-                            $('#id_title').val('')
-                            $('#id_note').val('')
-                            let todoStyle = 'style="'
-                            if (data.todo.is_important) {
-                                todoStyle += "background: rgb(226, 29, 29)"
-                            }
-                            todoStyle += '"'
-                            let newTodoOutput = `
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous">
+    </script>
+    <script src="{% static 'categories/basescript.js' %}"></script>
+    <script>
+        $(document).ready(function () {
+
+            $('#todoForm').submit(function (event) {
+                event.preventDefault()
+            })
+            $('#addTodoButton').click(function (event) {
+                let check_box
+                let isImportant = $('#id_is_important').is(":checked")
+                if (isImportant) {
+                    check_box = 'True'
+                } else {
+                    check_box = 'False'
+                }
+                $.ajax({
+                    url: "{% url 'production:create_todo' %}",
+                    data: {
+                        'title': $('#id_title').val(),
+                        'note': $('#id_note').val(),
+                        'is_important': check_box,
+                        'tag': $('#id_tag').val()
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        $('#id_title').val('')
+                        $('#id_note').val('')
+                        let todoStyle = 'style="'
+                        if (data.todo.is_important) {
+                            todoStyle += "background: rgb(226, 29, 29)"
+                        }
+                        todoStyle += '"'
+                        let newTodoOutput = `
                         <div class="card">
                             <div class="card-body todoItem" id="" ${todoStyle}>
                                     {% if not todo.is_completed %}
@@ -645,85 +586,25 @@
                             </div>
                         </div>
                         `
-                            $('#todosList').append(newTodoOutput)
-                            $('#message_area').html('')
-                            if (data.message.tags === 'error') {
-                                $('#message_area').append(`
+                        $('#todosList').append(newTodoOutput)
+                        $('#message_area').html('')
+                        if (data.message.tags === 'error') {
+                            $('#message_area').append(`
                             <div class="alert alert-danger fixed-top">${data.message.text}</div>
                             `)
-                            } else {
-                                $('#message_area').append(`
+                        } else {
+                            $('#message_area').append(`
         <div class="alert alert-${data.message.tags} fixed-top">${data.message.text}</div>
                                 `)
-                            }
                         }
-                    })
-                    setTimeout(() => {
-                        $('#message_area').html('')
-                    }, 2000);
+                    }
                 })
+                setTimeout(() => {
+                    $('#message_area').html('')
+                }, 2000);
             })
-        </script>
-
-        <!-- todo fix how stupid this is -->
-        <!-- CREATE POST MODAL -->
-        <!-- <div class="modal fade" id="createPost" tabindex="-1" role="dialog" aria-labelledby="createPostLabel"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="createPostLabel">Create Post</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                {% if user.is_authenticated %}
-                <form method="POST" class="mb-4" enctype="multipart/form-data"
-                    action="{% url 'comments:create_post' 2%}" id="createPostForm">
-                    {% csrf_token %}
-                    <div class="form-group">
-                        <label for="id_post_description">Description</label>
-                        <textarea type="text" name="description" id="id_post_description"
-                            class="form-control"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <p><label for="id_post_image">Optional Image</label>
-                            <input type="file" name="image" accept="image/*" id="id_image"></p>
-                    </div>
-                    <div class="form-group">
-                        <p><label for="id_post_image">Or Video</label>
-                            <input type="file" name="post_file" accept="video/*" id="id_post_file"></p>
-                    </div>
-                    <small class="form-text text-muted">You don't have to specify image or video, but if you do then
-                        only one of
-                        them</small>
-                </form>
-                {% else %}
-                <div class="alert alert-danger">You must be logged in to add posts</div>
-                {% endif %}
-                <div class="alert alert-warning">This will be visible for friends and followers only. If you want to
-                    make it public then consider adding it from a category.
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="addPostButton" name="friendsOnlyPost">Add
-                    Post</button>
-            </div>
-            <script>
-                $(document).ready(function () {
-                    $('#addPostButton').click(function (e) {
-                        e.preventDefault();
-                        $('#createPostForm').submit()
-                    });
-                })
-            </script>
-        </div>
-    </div>
-</div> -->
-
-
+        })
+    </script>
 </body>
 
 </html>
