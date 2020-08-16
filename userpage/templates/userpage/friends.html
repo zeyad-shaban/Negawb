@@ -212,14 +212,35 @@
                                                     data-original-title="{{ friend.bio }}"></span>
                                                 <span class="small text-truncate"
                                                     style="color: black;">{{ friend.bio }}</span>
-                                                <form class="id_inviteForm" method="GET" data-url="{% url 'social:create_invite' %}" data-user_pk="{{friend.id}}">
+                                                <form id="id_inviteForm{{friend.id}}" method="GET">
                                                     <button type="submit" name="invite," class="btn float-right"
-                                                        id="id_inviteButton"><i class="fa fa-user-plus"
+                                                        id="id_inviteButton{{friend.id}}"><i class="fa fa-user-plus"
                                                             style="font-size: 36px;"></i></button>
                                                 </form>
                                             </div>
                                         </div>
                                     </li>
+                                    <script>
+                                        $(document).ready(function () {
+                                            $('#id_inviteForm{{friend.id}}').submit(function (e) {
+                                                e.preventDefault();
+                                                $.ajax({
+                                                    url: "{% url 'social:create_invite' %}",
+                                                    data: {
+                                                        'user_pk': "{{friend.id}}",
+                                                        'group_pk': $('#currChat').attr(
+                                                            'data-pk'),
+                                                    },
+                                                    dataType: 'json',
+                                                    success: function (response) {
+                                                        console.log('success')
+                                                        $('#id_inviteButton{{friend.id}}')
+                                                            .fadeOut();
+                                                    }
+                                                })
+                                            });
+                                        })
+                                    </script>
                                     {% endfor %}
                                     <hr>
                                     <h4 class="float-left" style="color: black;">Or search users</h4>
@@ -275,13 +296,11 @@
                             {% endif %}
                         </a>
                     </div>
-
                     <div class="col-12 col-sm-6 col-md-9 text-center text-sm-left">
                         <a href="/people/${result.pk}/">
                             <label class="name lead">${ result.fields.username }</label>
                         </a>
                         <br>
-
                         {% if result.fields.phone %}
                         <span class="fa fa-fw fa-phone fa-fw text-muted" data-toggle="tooltip" title="Phone Number"
                             data-original-title="${ result.fields.phone }" style="color: black;"></span>
@@ -297,9 +316,9 @@
                         <span class="fa fa-fw fa-envelope fa-fw text-muted" data-toggle="tooltip" title="Bio"
                             data-original-title="${ result.fields.bio }" style="color: black;"></span>
                         <span class="small text-truncate" style="color: black;">${ result.fields.bio }</span>
-                        <form class="id_inviteForm" method="GET" data-url="{% url 'social:create_invite' %}">
+                        <form id="id_inviteForm{{friend.id}}" method="GET">
                             <button type="submit" name="invite," class="btn float-right"
-                                id="id_inviteButton"><i class="fa fa-user-plus"
+                                id="id_inviteButton{{friend.id}}"><i class="fa fa-user-plus"
                                     style="font-size: 36px;"></i></button>
                         </form>
                     </div>
