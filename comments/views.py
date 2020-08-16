@@ -30,7 +30,7 @@ def view_post(request, pk):
             comment.save()
             if post.user.allow_comment_message:
                 notification = Notification(notification_type='comment_message', sender=request.user, url=resolve(
-                    request.path_info).url_name, content=comment.description[:100], image=request.user.avatar)
+                    request.path_info).url_name, content=comment.description[:100])
                 notification.save()
                 notification.receiver.add(post.user)
             return JsonResponse({'comment': model_to_dict(comment)})
@@ -152,7 +152,7 @@ def create_reply(request, pk):
     reply.save()
     if comment.user.allow_reply_message:
         notification = Notification(notification_type='reply_message', sender=request.user, url=resolve(
-            request.path_info).url_name, content=reply.description[:100], image=request.user.avatar)
+            request.path_info).url_name, content=reply.description[:100])
         notification.save()
         notification.receiver.add(comment.user)
     return JsonResponse({'reply': model_to_dict(reply)})

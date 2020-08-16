@@ -76,14 +76,14 @@ def send_message(request):
             else:
                 if friend.allow_important_friend_messages:
                     notification = Notification.objects.create(notification_type='important_friend_message', sender=request.user, url=resolve(
-                        request.path_info).url_name, content=message.message[:100], image=request.user.avatar)
+                        request.path_info).url_name, content=message.message[:100])
                     notification.save()
                     notification.receiver.add(friend)
                 message.is_important = request.GET.get('is_important', False)
         else:
             if friend.allow_normal_friend_message:
                 notification = Notification.objects.create(notification_type='normal_friend_message', sender=request.user, url=resolve(
-                    request.path_info).url_name, content=message.message[:100], image=request.user.avatar)
+                    request.path_info).url_name, content=message.message[:100])
                 notification.save()
                 notification.receiver.add(friend)
     elif action == 'group':
@@ -102,7 +102,7 @@ def send_message(request):
             else:
                 receivers = [member for member in group.members.filter(Q(allow_important_group_message=True),~Q(id = request.user.id))]
                 notification = Notification(notification_type='important_group_message', sender=request.user, url=resolve(
-                    request.path_info).url_name, content=message.message[:100], image=request.user.avatar)
+                    request.path_info).url_name, content=message.message[:100])
                 if receivers:
                     notification.save()
                     for receiver in receivers:
@@ -111,7 +111,7 @@ def send_message(request):
         else:
             receivers = [member for member in group.members.filter(Q(allow_normal_group_message=True), ~Q(id=request.user.id))]
             notification = Notification(notification_type='normal_group_message', sender=request.user, url=resolve(
-                request.path_info).url_name, content=message.message[:100], image=request.user.avatar)
+                request.path_info).url_name, content=message.message[:100])
             if receivers:
                 notification.save()
                 for receiver in receivers:
