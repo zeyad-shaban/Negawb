@@ -144,12 +144,30 @@
                         <div class="modal-dialog modal-lg modal-dialog-scrollable">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="addMembersLabel" style="color: black;">Add Members</h5>
+                                    <ul class="list-group list-group-horizontal">
+                                        <li class="list-group-item active groupSettings" style="color: black;">Add</li>
+                                        <li class="list-group-item groupSettings" style="color: black;">Members</li>
+                                    </ul>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
-                                <div class="modal-body">
+                                <!-- Group Settings -->
+                                <script>
+                                    $(document).ready(function () {
+                                        $('.groupSettings').click(function (event) {
+                                            event.preventDefault();
+                                            $('.groupSettings').removeClass('active');
+                                            $(this).addClass('active');
+                                            if ($(this).html() == 'Add') {
+                                                $('#groupMenu').html(`
+                                                hi
+                                                `)
+                                            }
+                                        })
+                                    })
+                                </script>
+                                <div class="modal-body" id="groupMenu">
                                     <h4 style="color: black;">Add Friend</h4>
                                     {% for friend in user.friends.all %}
                                     <li class="list-group-item">
@@ -225,8 +243,101 @@
                                     </script>
                                     {% endfor %}
                                     <hr>
-                                    <h4 style="color: black;">Or search users</h4>
+                                    <h4 class="float-left" style="color: black;">Or search users</h4>
+                                    <form action="" method="get" class="form-inline" id="findUserForm"
+                                        data-url="{% url 'people:all_peopleresults' %}">
+                                        <input type="text" name="user_username" id="searchUser" class="form-control"
+                                            maxlength="150">
+                                    </form>
+                                    <div id="userResults"></div>
+                                    <!-- Get user results -->
+                                    <script>
+                                        $(document).ready(function () {
+                                            $('#searchUser').keyup(function (event) {
+                                                event.preventDefault();
+                                                $('#userResults').html(`<div class="spinner-border text-success" role="status">
+        <span class="sr-only">Loading...</span>
+        </div>`)
+                                                setTimeout(() => {
+                                                    $.ajax({
+                                                        url: $('#findUserForm').attr(
+                                                            'data-url'),
+                                                        data: {
+                                                            'q': $('#searchUser').val(),
+                                                        },
+                                                        dataType: 'json',
+                                                        success: function (data) {
+                                                            let results = JSON
+                                                                .parse(data.results)
+                                                            let output = ''
 
+                                                            if (results.length ===
+                                                                0) {
+                                                                $('#userResults')
+                                                                    .html(
+                                                                        '<h4>User not found</h4>'
+                                                                    )
+                                                            } else {
+
+                                                                for (result of
+                                                                    results) {
+                                                                    // !DOESN'T USE [DJANGO URL
+                                                                    output += `
+                        <li class="list-group-item">
+                <div class="row w-100">
+                    <div class="col-12 col-sm-6 col-md-3 px-0">
+                        <a href="/people/${result.pk }">
+                            {% if result.fields.who_see_avatar == 'everyone' %}
+                            <img src="${ result.fields.avatar.url }" alt="${ result.fields.username }"
+                                class="img-fluid rounded-circle d-block mx-auto" height="73" width="73">
+                                {% else %}
+                                <img src="/media/profile_images/DefaultUserImage.WebP" alt="${ result.fields.username }"
+                                    class="img-fluid rounded-circle d-block mx-auto" height="73" width="73">
+                            {% endif %}
+                        </a>
+                    </div>
+
+                    <div class="col-12 col-sm-6 col-md-9 text-center text-sm-left">
+                        <a href="/people/${result.pk}/">
+                            <label class="name lead">${ result.fields.username }</label>
+                        </a>
+                        <br>
+
+                        {% if result.fields.phone %}
+                        <span class="fa fa-fw fa-phone fa-fw text-muted" data-toggle="tooltip" title="Phone Number"
+                            data-original-title="${ result.fields.phone }" style="color: black;"></span>
+                        <span class="text-muted small" style="color: black;">${ result.fields.phone }</span>
+                        <br>
+                        {% endif %}
+                        {% if result.fields.email and result.fields.show_email == True %}
+                        <span class="fa fa-fw fa-envelope fa-fw text-muted" data-toggle="tooltip" title="Email"
+                            data-original-title="${ result.fields.email }" style="color: black;"></span>
+                        <span class="text-muted small text-truncate" style="color: black;">${ result.fields.email }</span>
+                        <br>
+                        {% endif %}
+                        <span class="fa fa-fw fa-envelope fa-fw text-muted" data-toggle="tooltip" title="Bio"
+                            data-original-title="${ result.fields.bio }" style="color: black;"></span>
+                        <span class="small text-truncate" style="color: black;">${ result.fields.bio }</span>
+                        <form id="id_inviteForm{{friend.id}}" method="GET">
+                            <button type="submit" name="invite," class="btn float-right"
+                                id="id_inviteButton{{friend.id}}"><i class="fa fa-user-plus"
+                                    style="font-size: 36px;"></i></button>
+                        </form>
+                    </div>
+                </div>
+            </li>
+            `
+                                                                }
+
+                                                            }
+                                                            $('#userResults').html(
+                                                                output)
+                                                        }
+                                                    })
+                                                }, 2000);
+                                            })
+                                        })
+                                    </script>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

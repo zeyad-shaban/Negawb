@@ -3,4 +3,7 @@ $(document).ready(function () {
         e.preventDefault();
         $('#newGroupForm').submit()
     });
+    $('#findUserForm').submit(function (e) {
+        e.preventDefault();
+    })
 });
