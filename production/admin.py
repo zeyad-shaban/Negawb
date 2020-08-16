@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Todo, Feedback, Tag
+from .models import Todo, Feedback, Tag, Announcement
 
 @admin.register(Todo)
 class TodoAdmin(admin.ModelAdmin):
@@ -10,3 +10,8 @@ class FeedbackAdmin(admin.ModelAdmin):
     readonly_fields = ('created_date',)
 
 admin.site.register(Tag)
+
+@admin.register(Announcement)
+class AnnouncementAdmin(admin.ModelAdmin):
+    '''Admin View for Announcement'''
+    readonly_fields = ('date',)

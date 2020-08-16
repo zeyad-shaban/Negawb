@@ -4,7 +4,7 @@ from django.http import JsonResponse
 from django.forms.models import model_to_dict
 from django.contrib import messages
 from .forms import TodoForm, FeedbackForm
-from .models import Feedback, Todo, Tag
+from .models import Feedback, Todo, Tag, Announcement
 import datetime
 from django.utils.timezone import now
 
@@ -73,3 +73,12 @@ def add_tag(request):
             'tags': 'success'
         }
         return JsonResponse({'message': message})
+
+
+def announcements(request):
+    announcements = Announcement.objects.all().order_by('-date')
+    return render(request, 'production/announcements.html', {'announcements':announcements })
+
+class ViewAnnounce(generic.DetailView):
+    model = Announcement
+    template_name = 'production/announce.html'

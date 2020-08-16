@@ -1,0 +1,23 @@
+{% extends 'categories/base.html' %}
+
+{% block title %}Announcements{% endblock title %}
+
+{% block content %}
+{% load static %}
+
+{% for announce in announcements %}
+<div class="media">
+    <img src="{% static 'categories/favicon.WebP' %}" class="align-self-center mr-3" alt="DFreeMedia" width="100" height="100">
+    <div class="media-body">
+        <h5 class="mt-0">{{ announce.title }}</h5>
+        <p>{{ announce.content|truncatechars:300|safe }}
+            {% if announce.content|length > 300 %} <a href="{% url 'production:ViewAnnounce' announce.id %}">Read
+                More</a>
+            {% endif %}
+        </p>
+    </div>
+</div>
+<hr>
+{% endfor %}
+
+{% endblock content %}
