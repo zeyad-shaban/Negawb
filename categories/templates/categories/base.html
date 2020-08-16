@@ -117,7 +117,7 @@
                                 {% if user.allow_important_friend_messages or user.allow_important_group_message or user.allow_normal_friend_message or user.allow_normal_group_message %}
                                 <li class="list-group-item notificationType">Messages</li>
                                 {% endif %}
-                                
+
                                 {% if user.allow_comment_message or user.allow_reply_message %}
                                 <li class="list-group-item notificationType">Comments/Replies</li>
                                 {% endif %}
@@ -126,7 +126,7 @@
                                 {% if user.allow_invites %}
                                 <li class="list-group-item notificationType">Invites</li>
                                 {% endif %}
-                                
+
                                 {% if user.your_invites %}
                                 <li class="list-group-item notificationType">Your invites</li>
                                 {% endif %}
@@ -162,6 +162,153 @@
                         </div>
                     </div>
                 </div>
+                <script>
+                    // LOAD BY TYPE
+                    $(document).ready(function () {
+                        $('.notificationType').click(function (e) {
+                            e.preventDefault();
+                            $('.notificationType').removeClass('active');
+                            $(this).addClass('active')
+                            let wantedType = $(this).html()
+                            if (wantedType == 'All') {
+                                $('#notificationsContainer').html(`
+            {% for notification in notifications %}
+                                <a href="{{ notification.url }}" style="text-decoration: none; color: black">
+                                    <div class="media" style="background: #F7F7F7;">
+                                        {% if notification.sender.who_see_avatar == 'everyone' %}
+                                        <img src="{{notification.sender.avatar.url}}" alt="User Image" width="50"
+                                            height="50">
+                                        {% elif notification.sender.who_see_avatar == 'friends' and user in notification.sender.friends.all %}
+                                        <img src="{{notification.sender.avatar.url}}" alt="User Image" width="50"
+                                            height="50">
+                                        {% elif notification.sender == user %}
+                                        <img src="{{notification.sender.avatar.url}}" alt="User Image" width="50"
+                                            height="50">
+                                        {% else %}
+                                        <img src="/media/profile_images/DefaultUserImage.WebP" alt="User Image"
+                                            width="50" height="64">
+                                        {% endif %}
+                                        <div class="media-body">
+                                            <h5 class="mt-0">{{ notification.sender.username }}</h5>
+                                            <p>{{ notification.content }}</p>
+                                        </div>
+                                    </div>
+                                </a>
+                                <hr>
+                                {% endfor %}
+            `)
+                            } else if (wantedType == 'Messages'){
+                                $('#notificationsContainer').html(`
+            {% for notification in messages_notifications %}
+                                <a href="{{ notification.url }}" style="text-decoration: none; color: black">
+                                    <div class="media" style="background: #F7F7F7;">
+                                        {% if notification.sender.who_see_avatar == 'everyone' %}
+                                        <img src="{{notification.sender.avatar.url}}" alt="User Image" width="50"
+                                            height="50">
+                                        {% elif notification.sender.who_see_avatar == 'friends' and user in notification.sender.friends.all %}
+                                        <img src="{{notification.sender.avatar.url}}" alt="User Image" width="50"
+                                            height="50">
+                                        {% elif notification.sender == user %}
+                                        <img src="{{notification.sender.avatar.url}}" alt="User Image" width="50"
+                                            height="50">
+                                        {% else %}
+                                        <img src="/media/profile_images/DefaultUserImage.WebP" alt="User Image"
+                                            width="50" height="64">
+                                        {% endif %}
+                                        <div class="media-body">
+                                            <h5 class="mt-0">{{ notification.sender.username }}</h5>
+                                            <p>{{ notification.content }}</p>
+                                        </div>
+                                    </div>
+                                </a>
+                                <hr>
+                                {% endfor %}
+            `)
+                            } else if (wantedType == 'Comments/Replies'){
+                                $('#notificationsContainer').html(`
+            {% for notification in society_notifications %}
+                                <a href="{{ notification.url }}" style="text-decoration: none; color: black">
+                                    <div class="media" style="background: #F7F7F7;">
+                                        {% if notification.sender.who_see_avatar == 'everyone' %}
+                                        <img src="{{notification.sender.avatar.url}}" alt="User Image" width="50"
+                                            height="50">
+                                        {% elif notification.sender.who_see_avatar == 'friends' and user in notification.sender.friends.all %}
+                                        <img src="{{notification.sender.avatar.url}}" alt="User Image" width="50"
+                                            height="50">
+                                        {% elif notification.sender == user %}
+                                        <img src="{{notification.sender.avatar.url}}" alt="User Image" width="50"
+                                            height="50">
+                                        {% else %}
+                                        <img src="/media/profile_images/DefaultUserImage.WebP" alt="User Image"
+                                            width="50" height="64">
+                                        {% endif %}
+                                        <div class="media-body">
+                                            <h5 class="mt-0">{{ notification.sender.username }}</h5>
+                                            <p>{{ notification.content }}</p>
+                                        </div>
+                                    </div>
+                                </a>
+                                <hr>
+                                {% endfor %}
+            `)
+                            } else if (wantedType == 'Invites'){
+                                $('#notificationsContainer').html(`
+            {% for notification in invites_notifications %}
+                                <a href="{{ notification.url }}" style="text-decoration: none; color: black">
+                                    <div class="media" style="background: #F7F7F7;">
+                                        {% if notification.sender.who_see_avatar == 'everyone' %}
+                                        <img src="{{notification.sender.avatar.url}}" alt="User Image" width="50"
+                                            height="50">
+                                        {% elif notification.sender.who_see_avatar == 'friends' and user in notification.sender.friends.all %}
+                                        <img src="{{notification.sender.avatar.url}}" alt="User Image" width="50"
+                                            height="50">
+                                        {% elif notification.sender == user %}
+                                        <img src="{{notification.sender.avatar.url}}" alt="User Image" width="50"
+                                            height="50">
+                                        {% else %}
+                                        <img src="/media/profile_images/DefaultUserImage.WebP" alt="User Image"
+                                            width="50" height="64">
+                                        {% endif %}
+                                        <div class="media-body">
+                                            <h5 class="mt-0">{{ notification.sender.username }}</h5>
+                                            <p>{{ notification.content }}</p>
+                                        </div>
+                                    </div>
+                                </a>
+                                <hr>
+                                {% endfor %}
+            `)
+                            }else if (wantedType == 'Your invites'){
+                                $('#notificationsContainer').html(`
+            {% for notification in your_invites_notifications %}
+                                <a href="{{ notification.url }}" style="text-decoration: none; color: black">
+                                    <div class="media" style="background: #F7F7F7;">
+                                        {% if notification.sender.who_see_avatar == 'everyone' %}
+                                        <img src="{{notification.sender.avatar.url}}" alt="User Image" width="50"
+                                            height="50">
+                                        {% elif notification.sender.who_see_avatar == 'friends' and user in notification.sender.friends.all %}
+                                        <img src="{{notification.sender.avatar.url}}" alt="User Image" width="50"
+                                            height="50">
+                                        {% elif notification.sender == user %}
+                                        <img src="{{notification.sender.avatar.url}}" alt="User Image" width="50"
+                                            height="50">
+                                        {% else %}
+                                        <img src="/media/profile_images/DefaultUserImage.WebP" alt="User Image"
+                                            width="50" height="64">
+                                        {% endif %}
+                                        <div class="media-body">
+                                            <h5 class="mt-0">{{ notification.sender.username }}</h5>
+                                            <p>{{ notification.content }}</p>
+                                        </div>
+                                    </div>
+                                </a>
+                                <hr>
+                                {% endfor %}
+            `)
+                            }
+                        });
+                    })
+                </script>
                 {% endif %}
                 {% if user.is_authenticated %}
                 <li class="dropdown">
