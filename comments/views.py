@@ -150,4 +150,9 @@ def create_reply(request, pk):
     reply = Reply(description=request.GET.get('description'),
                   comment=comment, user=request.user)
     reply.save()
+    if comment.user.allow_reply_message:
+        notification = Notification(notification_type='reply_message', sender=request.user, url=resolve(
+            request.path_info).url_name, content=reply.description[:100], image=request.user.avatar)
+        notification.save()
+        notification.receiver.add(comment.user)
     return JsonResponse({'reply': model_to_dict(reply)})
