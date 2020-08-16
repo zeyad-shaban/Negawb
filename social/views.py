@@ -2,7 +2,6 @@ from django.core.serializers import serialize
 from django.utils.timezone import now
 import datetime
 from django.forms.models import model_to_dict
-from django.urls import reverse_lazy, resolve
 from django.http import JsonResponse, Http404
 from django.views import generic
 from django.http import HttpResponse as hs
@@ -75,15 +74,14 @@ def send_message(request):
                 return JsonResponse({'message': message})
             else:
                 if friend.allow_important_friend_messages:
-                    notification = Notification.objects.create(notification_type='important_friend_message', sender=request.user, url=resolve(
-                        request.path_info).url_name, content=message.message[:100])
+                    notification = Notification.objects.create(notification_type='important_friend_message', sender=request.user, url='/userpage/friends/', content=message.message[:100])
                     notification.save()
                     notification.receiver.add(friend)
                 message.is_important = request.GET.get('is_important', False)
         else:
             if friend.allow_normal_friend_message:
-                notification = Notification.objects.create(notification_type='normal_friend_message', sender=request.user, url=resolve(
-                    request.path_info).url_name, content=message.message[:100])
+                # !ABSOLUTE PATH
+                notification = Notification.objects.create(notification_type='normal_friend_message', sender=request.user, url='/userpage/friends/', content=message.message[:100])
                 notification.save()
                 notification.receiver.add(friend)
     elif action == 'group':
@@ -101,8 +99,8 @@ def send_message(request):
                 return JsonResponse({'message': message})
             else:
                 receivers = [member for member in group.members.filter(Q(allow_important_group_message=True),~Q(id = request.user.id))]
-                notification = Notification(notification_type='important_group_message', sender=request.user, url=resolve(
-                    request.path_info).url_name, content=message.message[:100])
+                # !ABSOLUTE PATH
+                notification = Notification(notification_type='important_group_message', sender=request.user, url='/userpage/friends/', content=message.message[:100])
                 if receivers:
                     notification.save()
                     for receiver in receivers:
@@ -110,8 +108,8 @@ def send_message(request):
                 message.is_important = request.GET.get('is_important', False)
         else:
             receivers = [member for member in group.members.filter(Q(allow_normal_group_message=True), ~Q(id=request.user.id))]
-            notification = Notification(notification_type='normal_group_message', sender=request.user, url=resolve(
-                request.path_info).url_name, content=message.message[:100])
+            # !ABSOLUTE PATH
+            notification = Notification(notification_type='normal_group_message', sender=request.user, url='/userpage/friends/', content=message.message[:100])
             if receivers:
                 notification.save()
                 for receiver in receivers:

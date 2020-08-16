@@ -29,10 +29,11 @@ def view_post(request, pk):
                 'description'), post=post, user=request.user)
             comment.save()
             if post.user.allow_comment_message:
-                notification = Notification(notification_type='comment_message', sender=request.user, url=resolve(
-                    request.path_info).url_name, content=comment.description[:100])
-                notification.save()
-                notification.receiver.add(post.user)
+                if post.user != request.user:
+                    # !ABSOLUTE PATH
+                    notification = Notification(notification_type='comment_message', sender=request.user, url=f'/comments/{post.id}/', content=comment.description[:100])
+                    notification.save()
+                    notification.receiver.add(post.user)
             return JsonResponse({'comment': model_to_dict(comment)})
 
 
@@ -151,8 +152,8 @@ def create_reply(request, pk):
                   comment=comment, user=request.user)
     reply.save()
     if comment.user.allow_reply_message:
-        notification = Notification(notification_type='reply_message', sender=request.user, url=resolve(
-            request.path_info).url_name, content=reply.description[:100])
+        # TODO FIX THE URL
+        notification = Notification(notification_type='reply_message', sender=request.user, url=f'404', content=reply.description[:100])
         notification.save()
         notification.receiver.add(comment.user)
     return JsonResponse({'reply': model_to_dict(reply)})

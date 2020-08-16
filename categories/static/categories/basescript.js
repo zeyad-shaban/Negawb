@@ -22,7 +22,7 @@ $(document).ready(function () {
                 let notifications = JSON.parse(response.notifications)
                 let newNotificationsCount = notifications.length
                 let output = ''
-                if (newNotificationsCount != currNotificationsCount) {
+                if (newNotificationsCount > currNotificationsCount) {
                     for (notification of notifications) {
                         output += notification.fields.content
                         output += '<br>'
