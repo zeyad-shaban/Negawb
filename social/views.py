@@ -181,7 +181,7 @@ def create_invite(request,):
         request_sender=request_sender, reciever=reciever)
     if group_request_check:
         message = {
-            'text': f'You already send a friend request to {reciever}',
+            'text': f'You already send a group request to {reciever}',
             'tags': 'warning',
         }
         return JsonResponse({'message': message})

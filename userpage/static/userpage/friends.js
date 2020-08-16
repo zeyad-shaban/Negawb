@@ -18,6 +18,7 @@ $(document).ready(function () {
             dataType: 'json',
             success: function (response) {
                 console.log('success')
+                
                 $('.id_inviteForm', this).fadeOut();
             }
         })

@@ -212,7 +212,6 @@
                     'action': 'addComment'
                 },
                 success: function (response) {
-                    console.log('success')
                     let userImage
                     if (response.comment.user.who_see_avatar == "everyone"){
                         userImage = "{response.comment.user.avatar.url}"
@@ -331,9 +330,6 @@
                                                         avatarImage =
                                                             "/media/profile_images/DefaultUserImage.WebP"
                                                     }
-                                                    console.log(
-                                                        'successfully got user avatar and about to prepend'
-                                                    )
                                                     $('#replyList{{comment.id}}').prepend(`
                                                     <li class="media media-replied">
                                 <a href="/people/${response.reply.id}">

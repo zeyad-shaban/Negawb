@@ -7,6 +7,7 @@ from django.db.models import Q
 from django.contrib import messages
 from django.http import JsonResponse
 from django.core.serializers import serialize
+from social.models import Notification
 from django.contrib.auth import get_user_model as user_model
 User = user_model()
 
@@ -52,7 +53,7 @@ def addfriend(request, user_id):
     friend_request_check_2 = FriendRequest.objects.filter(
         from_user=to_user, to_user=from_user)
     if user_id == request.user.id:
-        users = User.objects.all()
+        # users = User.objects.all()
         message = {
             'text': 'Adding yourself 😭😿',
             'tags': 'error'
@@ -76,13 +77,17 @@ def addfriend(request, user_id):
             friend_request = FriendRequest(
                 from_user=from_user, to_user=to_user)
             friend_request.save()
+            if friend_request.to_user.allow_invites:
+                notification = Notification(notification_type='invites', sender=request.user, url="/userpage/friendrequest/", content=f'{friend_request.from_user} wants to be your friend')
+                notification.save()
+                notification.receiver.add(friend_request.to_user)
             message = {
                 'text': f'Successfully sent Friend request to {to_user}',
                 'tags': 'success',
             }
             return JsonResponse({'message': message})
         except:
-            users = User.objects.all()
+            # users = User.objects.all()
             message = {
                 'text': 'Unknown error, please try again and make sure to report a feedback so we can fix this error',
                 'tags': 'success',
