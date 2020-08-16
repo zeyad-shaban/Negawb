@@ -21,6 +21,14 @@
 </head>
 
 <body>
+    <!-- todo REMOVE THIS! -->
+    <style>
+        #notificationDropMenu {
+            overflow: scroll;
+            width: 430px;
+            max-height: 568px;
+        }
+    </style>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark {% if user.fixed_navbar %}sticky-top{% endif %}">
         <a class="navbar-brand" href="{% url 'home' %}">
             <img src="{% static 'categories/favicon.WebP' %}" width="35" height="30" alt="Website Logo" loading="lazy">
@@ -99,7 +107,8 @@
                         <span class="badge" style="color: white;" id="currNotificationsCount"></span>
                         {% endif %}
                     </div>
-                    <div class="dropdown-menu master-menu-dropdown" aria-labelledby="app-menu">
+                    <div class="dropdown-menu master-menu-dropdown" aria-labelledby="app-menu"
+                        id="notificationDropMenu">
                         <audio id="notificationSound">
                             <source src="{% static 'social/notificationsound.wav' %}" type="audio/wav">
                             <source src="{% static 'social/notificationsound.wav' %}" type="audio/mp3">
@@ -108,10 +117,34 @@
                             Your browser does not support the audio element.
                         </audio>
                         <div id="notificationsList" data-url="{% url 'social:load_notifications' %}">
+                            <h4>Notifications</h4>
+                            <div class="dropdown-divider"></div>
                             {% if notifications.count > 0 %}
                             {% for notification in notifications %}
-                            {{ notification.content }}
-                            <br>
+                            <div class="media" style="background: #F7F7F7;">
+                                <a href="{% url 'people:people' notification.sender.id %}">
+                                    {% if notification.sender.who_see_avatar == 'everyone' %}
+                                    <img src="{{notification.sender.avatar.url}}" alt="User Image" width="50"
+                                        height="50">
+                                    {% elif notification.sender.who_see_avatar == 'friends' and user in notification.sender.friends.all %}
+                                    <img src="{{notification.sender.avatar.url}}" alt="User Image" width="50"
+                                        height="50">
+                                    {% elif notification.sender == user %}
+                                    <img src="{{notification.sender.avatar.url}}" alt="User Image" width="50"
+                                        height="50">
+                                    {% else %}
+                                    <img src="/media/profile_images/DefaultUserImage.WebP" alt="User Image" width="50"
+                                        height="64">
+                                    {% endif %}
+                                </a>
+                                <div class="media-body">
+                                    <a href="{% url 'people:people' notification.sender.id %}">
+                                        <h5 class="mt-0">{{ notification.sender.username }}</h5>
+                                    </a>
+                                    <p>{{ notification.content }}</p>
+                                </div>
+                            </div>
+                            <hr>
                             {% endfor %}
                             <div class="dropdown-divider"></div>
                             {% endif %}

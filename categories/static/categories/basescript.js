@@ -35,5 +35,7 @@ $(document).ready(function () {
             }
         })
     }, 6000);
-
+    $('#notificationDropMenu').click(function (event) {
+        event.stopPropagation();
+    });
 });

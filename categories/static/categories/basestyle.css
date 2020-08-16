@@ -56,3 +56,16 @@ nav li a:hover {
     background-color: red !important;
     color: white !important;
 }
+
+#notificationDropMenu {
+    overflow: scroll;
+    width: 430px;
+    max-height: 568px;
+}
+
+/* Width */
+/* @media only screen and (max-width: 600px) {
+    #notificationDropMenu {
+        
+    } 
+}*/
