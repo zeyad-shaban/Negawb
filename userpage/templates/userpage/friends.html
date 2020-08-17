@@ -9,7 +9,6 @@
 {% block chat_frame %}
 <div id="frame">
     {% endblock chat_frame %}
-
     <div id="message_area"></div>
     <div id="sidepanel">
         <div id="profile">
@@ -300,7 +299,8 @@
                                     <hr>
                                     <h3 style="color: black;">Danger Area</h3>
                                     <br>
-                                    <button class="btn btn-danger" id="deleteGroup" data-url="{% url 'social:delete_group' %}">DELETE GROUP</button>
+                                    <button class="btn btn-danger" id="deleteGroup"
+                                        data-url="{% url 'social:delete_group' %}">DELETE GROUP</button>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -546,11 +546,9 @@
         <div id="bottom-bar">
             <a href="{% url 'people:all_people' %}"><button id="addcontact"><i class="fa fa-user-plus fa-fw"
                         aria-hidden="true"></i> <span>Find Friends</span></button></a>
-            <a href="{% url 'home' %}">
-                <button id="settings"><i class="fa fa-home fa-fw" aria-hidden="true"></i> <span>Home</span></button>
-            </a>
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createNewGroup">
-                New Group
+            <button type="button" id="settings" class="btn btn-primary" data-toggle="modal"
+                data-target="#createNewGroup">
+                <i class="fas fa-users" aria-hidden="true"></i> <span>Add Group</span>
             </button>
             <div class="modal fade" id="createNewGroup" tabindex="-1" role="dialog"
                 aria-labelledby="createNewGroupLabel" aria-hidden="true">

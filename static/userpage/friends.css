@@ -798,3 +798,9 @@ body {
 .fa {
     font-size: 1.5em !important;
 }
+
+@media only screen and (max-width: 399px) {
+    #contacts{
+        max-width: 63px;
+    }
+}
