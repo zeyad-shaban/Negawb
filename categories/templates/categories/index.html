@@ -15,6 +15,7 @@
 <div class="row row-cols-1 row-cols-md-3">
     {% for category in categories %}
     {% if not category.id == 1 %}
+    {% if not category.id == 7 %}
     {% if not category in user.blocked_categories.all %}
     <div class="col mb-4">
         <div class="card">
@@ -29,6 +30,7 @@
             </div>
         </div>
     </div>
+    {% endif %}
     {% endif %}
     {% endif %}
     {% endfor %}
