@@ -57,3 +57,7 @@ def view_category(request, pk):
     except EmptyPage:
         posts = paginator.page(paginator.num_pages)
     return render(request, f'categories/{category.title}.html', {'category': category, 'posts': posts})
+
+
+def onesignal(request):
+    return render(request, 'categories/OneSignalSDKWorker.js')
