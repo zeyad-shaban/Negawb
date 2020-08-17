@@ -166,6 +166,12 @@ def create_invite(request,):
         return JsonResponse({'message': message})
     else:
         group_request.save()
+        # !ABSOLUTE PATH
+        notification = Notification.objects.create(
+                        notification_type='invites', sender=request.user, url='/userpage/friendrequest/', content=f'{reciever.username} wants you to join {group.title}')
+        if reciever.allow_invites:
+            notification.save()
+            notification.receiver.add(reciever)
         message = {
             'text': f'Successfully invited {reciever}',
             'tags': 'success',
