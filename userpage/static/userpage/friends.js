@@ -23,7 +23,7 @@ $(document).ready(function () {
     $('#deleteGroup').click(function(evet){
         event.preventDefault();
         let currChat = $('#currChat').attr('data-pk')
-        confirmation = confirm('Are you sure you want to delte the group?')
+        let confirmation = confirm('Are you sure you want to delete the group?')
         if (confirmation){
             $.ajax({
                 url: $('#deleteGroup').attr('data-url'),
