@@ -74,14 +74,16 @@ def send_message(request):
                 return JsonResponse({'message': message})
             else:
                 if friend.allow_important_friend_messages:
-                    notification = Notification.objects.create(notification_type='important_friend_message', sender=request.user, url='/userpage/friends/', content=message.message[:100])
+                    notification = Notification.objects.create(
+                        notification_type='important_friend_message', sender=request.user, url='/userpage/friends/', content=message.message[:100])
                     notification.save()
                     notification.receiver.add(friend)
                 message.is_important = request.GET.get('is_important', False)
         else:
             if friend.allow_normal_friend_message:
                 # !ABSOLUTE PATH
-                notification = Notification.objects.create(notification_type='normal_friend_message', sender=request.user, url='/userpage/friends/', content=message.message[:100])
+                notification = Notification.objects.create(
+                    notification_type='normal_friend_message', sender=request.user, url='/userpage/friends/', content=message.message[:100])
                 notification.save()
                 notification.receiver.add(friend)
     elif action == 'group':
@@ -98,18 +100,22 @@ def send_message(request):
                 }
                 return JsonResponse({'message': message})
             else:
-                receivers = [member for member in group.members.filter(Q(allow_important_group_message=True),~Q(id = request.user.id))]
+                receivers = [member for member in group.members.filter(
+                    Q(allow_important_group_message=True), ~Q(id=request.user.id))]
                 # !ABSOLUTE PATH
-                notification = Notification(notification_type='important_group_message', sender=request.user, url='/userpage/friends/', content=message.message[:100])
+                notification = Notification(notification_type='important_group_message',
+                                            sender=request.user, url='/userpage/friends/', content=message.message[:100])
                 if receivers:
                     notification.save()
                     for receiver in receivers:
                         notification.receiver.add(receiver)
                 message.is_important = request.GET.get('is_important', False)
         else:
-            receivers = [member for member in group.members.filter(Q(allow_normal_group_message=True), ~Q(id=request.user.id))]
+            receivers = [member for member in group.members.filter(
+                Q(allow_normal_group_message=True), ~Q(id=request.user.id))]
             # !ABSOLUTE PATH
-            notification = Notification(notification_type='normal_group_message', sender=request.user, url='/userpage/friends/', content=message.message[:100])
+            notification = Notification(notification_type='normal_group_message',
+                                        sender=request.user, url='/userpage/friends/', content=message.message[:100])
             if receivers:
                 notification.save()
                 for receiver in receivers:
@@ -200,9 +206,24 @@ def deny_group(request, pk):
 
 
 def load_notifications(request):
-    notifications = Notification.objects.filter(
-        receiver=request.user).order_by('-date')
+    notification_type = request.GET.get('notification_type')
+    if notification_type == 'messages':
+        notifications = Notification.objects.filter(Q(receiver=request.user), Q(notification_type='important_friend_message') | Q(
+            notification_type='important_group_message') | Q(notification_type='normal_friend_message') | Q(notification_type='normal_group_message')).order_by('-date')
+    elif notification_type == 'society':
+        notifications = Notification.objects.filter(Q(receiver=request.user), Q(notification_type='comment_message') | Q(
+            notification_type='reply_message')).order_by('-date')
+    elif notification_type == 'invites':
+        notifications = Notification.objects.filter(Q(receiver=request.user), Q(
+            notification_type='invites')).order_by('-date')
+    elif notification_type == 'your_invites':
+        notifications = Notification.objects.filter(Q(receiver=request.user), Q(
+            notification_type='your_invites')).order_by('-date')
+    elif not notification_type or notification_type == 'all':
+        notifications = Notification.objects.filter(
+            receiver=request.user).order_by('-date')
     return JsonResponse({'notifications': serialize('json', notifications)})
+
 
 @login_required
 def delete_group(request):

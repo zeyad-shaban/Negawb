@@ -158,3 +158,17 @@ def got_online(sender, user, request, **kwargs):
 def got_offline(sender, user, request, **kwargs):
     user.is_online = False
     user.save()
+
+def get_user_by_id(request):
+    pk = request.GET.get('pk')
+    user = get_object_or_404(User, pk=pk)
+    json_user = {
+        'id': user.id,
+        'username':user.username,
+        'who_see_avatar': user.who_see_avatar,
+        'avatar': user.avatar.url,
+        'friends': serialize('json', user.friends.all()),
+    }
+    if not user:
+        user = request.user
+    return JsonResponse({'user': json_user})

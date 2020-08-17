@@ -92,27 +92,27 @@
                             <source src="{% static 'social/notificationsound.wav' %}" type="audio/mpeg">
                             Your browser does not support the audio element.
                         </audio>
-                        <div id="notificationsList" data-url="{% url 'social:load_notifications' %}">
+                        <div id="notificationsList" data-url="{% url 'social:load_notifications' %}" data-getUserUrl="{% url 'userpage:get_user_by_id' %}" data-currUser="{{ user }}">
                             <h4>Notifications</h4>
                             <div class="dropdown-divider"></div>
                             {% if notifications.count > 0 %}
                             <ul class="list-group list-group-horizontal">
-                                <li class="list-group-item active notificationType">All</li>
+                                <li class="list-group-item active notificationType" date-wantedType="all">All</li>
                                 {% if user.allow_important_friend_messages or user.allow_important_group_message or user.allow_normal_friend_message or user.allow_normal_group_message %}
-                                <li class="list-group-item notificationType">Messages</li>
+                                <li class="list-group-item notificationType" date-wantedType="messages">Messages</li>
                                 {% endif %}
 
                                 {% if user.allow_comment_message or user.allow_reply_message %}
-                                <li class="list-group-item notificationType">Comments/Replies</li>
+                                <li class="list-group-item notificationType" date-wantedType="society">Comments/Replies</li>
                                 {% endif %}
                             </ul>
                             <ul class="list-group list-group-horizontal">
                                 {% if user.allow_invites %}
-                                <li class="list-group-item notificationType">Invites</li>
+                                <li class="list-group-item notificationType" date-wantedType="invites">Invites</li>
                                 {% endif %}
 
                                 {% if user.your_invites %}
-                                <li class="list-group-item notificationType">Your invites</li>
+                                <li class="list-group-item notificationType" date-wantedType="your_invites">Your invites</li>
                                 {% endif %}
                             </ul>
                             <div id="notificationsContainer">
@@ -146,153 +146,6 @@
                         </div>
                     </div>
                 </div>
-                <script>
-                    // LOAD BY TYPE
-                    $(document).ready(function () {
-                        $('.notificationType').click(function (e) {
-                            e.preventDefault();
-                            $('.notificationType').removeClass('active');
-                            $(this).addClass('active')
-                            let wantedType = $(this).html()
-                            if (wantedType == 'All') {
-                                $('#notificationsContainer').html(`
-            {% for notification in notifications %}
-                                <a href="{{ notification.url }}" style="text-decoration: none; color: black">
-                                    <div class="media" style="background: #F7F7F7;">
-                                        {% if notification.sender.who_see_avatar == 'everyone' %}
-                                        <img src="{{notification.sender.avatar.url}}" alt="User Image" width="50"
-                                            height="50">
-                                        {% elif notification.sender.who_see_avatar == 'friends' and user in notification.sender.friends.all %}
-                                        <img src="{{notification.sender.avatar.url}}" alt="User Image" width="50"
-                                            height="50">
-                                        {% elif notification.sender == user %}
-                                        <img src="{{notification.sender.avatar.url}}" alt="User Image" width="50"
-                                            height="50">
-                                        {% else %}
-                                        <img src="/media/profile_images/DefaultUserImage.WebP" alt="User Image"
-                                            width="50" height="64">
-                                        {% endif %}
-                                        <div class="media-body">
-                                            <h5 class="mt-0">{{ notification.sender.username }}</h5>
-                                            <p>{{ notification.content }}</p>
-                                        </div>
-                                    </div>
-                                </a>
-                                <hr>
-                                {% endfor %}
-            `)
-                            } else if (wantedType == 'Messages') {
-                                $('#notificationsContainer').html(`
-            {% for notification in messages_notifications %}
-                                <a href="{{ notification.url }}" style="text-decoration: none; color: black">
-                                    <div class="media" style="background: #F7F7F7;">
-                                        {% if notification.sender.who_see_avatar == 'everyone' %}
-                                        <img src="{{notification.sender.avatar.url}}" alt="User Image" width="50"
-                                            height="50">
-                                        {% elif notification.sender.who_see_avatar == 'friends' and user in notification.sender.friends.all %}
-                                        <img src="{{notification.sender.avatar.url}}" alt="User Image" width="50"
-                                            height="50">
-                                        {% elif notification.sender == user %}
-                                        <img src="{{notification.sender.avatar.url}}" alt="User Image" width="50"
-                                            height="50">
-                                        {% else %}
-                                        <img src="/media/profile_images/DefaultUserImage.WebP" alt="User Image"
-                                            width="50" height="64">
-                                        {% endif %}
-                                        <div class="media-body">
-                                            <h5 class="mt-0">{{ notification.sender.username }}</h5>
-                                            <p>{{ notification.content }}</p>
-                                        </div>
-                                    </div>
-                                </a>
-                                <hr>
-                                {% endfor %}
-            `)
-                            } else if (wantedType == 'Comments/Replies') {
-                                $('#notificationsContainer').html(`
-            {% for notification in society_notifications %}
-                                <a href="{{ notification.url }}" style="text-decoration: none; color: black">
-                                    <div class="media" style="background: #F7F7F7;">
-                                        {% if notification.sender.who_see_avatar == 'everyone' %}
-                                        <img src="{{notification.sender.avatar.url}}" alt="User Image" width="50"
-                                            height="50">
-                                        {% elif notification.sender.who_see_avatar == 'friends' and user in notification.sender.friends.all %}
-                                        <img src="{{notification.sender.avatar.url}}" alt="User Image" width="50"
-                                            height="50">
-                                        {% elif notification.sender == user %}
-                                        <img src="{{notification.sender.avatar.url}}" alt="User Image" width="50"
-                                            height="50">
-                                        {% else %}
-                                        <img src="/media/profile_images/DefaultUserImage.WebP" alt="User Image"
-                                            width="50" height="64">
-                                        {% endif %}
-                                        <div class="media-body">
-                                            <h5 class="mt-0">{{ notification.sender.username }}</h5>
-                                            <p>{{ notification.content }}</p>
-                                        </div>
-                                    </div>
-                                </a>
-                                <hr>
-                                {% endfor %}
-            `)
-                            } else if (wantedType == 'Invites') {
-                                $('#notificationsContainer').html(`
-            {% for notification in invites_notifications %}
-                                <a href="{{ notification.url }}" style="text-decoration: none; color: black">
-                                    <div class="media" style="background: #F7F7F7;">
-                                        {% if notification.sender.who_see_avatar == 'everyone' %}
-                                        <img src="{{notification.sender.avatar.url}}" alt="User Image" width="50"
-                                            height="50">
-                                        {% elif notification.sender.who_see_avatar == 'friends' and user in notification.sender.friends.all %}
-                                        <img src="{{notification.sender.avatar.url}}" alt="User Image" width="50"
-                                            height="50">
-                                        {% elif notification.sender == user %}
-                                        <img src="{{notification.sender.avatar.url}}" alt="User Image" width="50"
-                                            height="50">
-                                        {% else %}
-                                        <img src="/media/profile_images/DefaultUserImage.WebP" alt="User Image"
-                                            width="50" height="64">
-                                        {% endif %}
-                                        <div class="media-body">
-                                            <h5 class="mt-0">{{ notification.sender.username }}</h5>
-                                            <p>{{ notification.content }}</p>
-                                        </div>
-                                    </div>
-                                </a>
-                                <hr>
-                                {% endfor %}
-            `)
-                            } else if (wantedType == 'Your invites') {
-                                $('#notificationsContainer').html(`
-            {% for notification in your_invites_notifications %}
-                                <a href="{{ notification.url }}" style="text-decoration: none; color: black">
-                                    <div class="media" style="background: #F7F7F7;">
-                                        {% if notification.sender.who_see_avatar == 'everyone' %}
-                                        <img src="{{notification.sender.avatar.url}}" alt="User Image" width="50"
-                                            height="50">
-                                        {% elif notification.sender.who_see_avatar == 'friends' and user in notification.sender.friends.all %}
-                                        <img src="{{notification.sender.avatar.url}}" alt="User Image" width="50"
-                                            height="50">
-                                        {% elif notification.sender == user %}
-                                        <img src="{{notification.sender.avatar.url}}" alt="User Image" width="50"
-                                            height="50">
-                                        {% else %}
-                                        <img src="/media/profile_images/DefaultUserImage.WebP" alt="User Image"
-                                            width="50" height="64">
-                                        {% endif %}
-                                        <div class="media-body">
-                                            <h5 class="mt-0">{{ notification.sender.username }}</h5>
-                                            <p>{{ notification.content }}</p>
-                                        </div>
-                                    </div>
-                                </a>
-                                <hr>
-                                {% endfor %}
-            `)
-                            }
-                        });
-                    })
-                </script>
                 {% endif %}
                 {% if user.is_authenticated %}
                 <li class="dropdown">
