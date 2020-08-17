@@ -28,7 +28,6 @@ $(document).ready(function () {
                 success: function (response){
                     members = JSON.parse(response.members)
                     for (let i=0; members.length > i; i++){
-                        console.log(members[i])
                         $('#groupMembers').prepend(`
                         <li class="list-group-item">
                                 <div class="row w-100">

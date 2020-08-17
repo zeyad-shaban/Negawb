@@ -24,9 +24,6 @@ $(document).ready(function () {
                 let notifications = JSON.parse(response.notifications)
                 let newNotificationsCount = notifications.length
                 let output = ''
-                console.log(newNotificationsCount)
-                console.log(currNotificationsCount)
-                console.log(notifications)
                 if (newNotificationsCount > currNotificationsCount) {
                     for (notification of notifications) {
                         let senderAvatar
