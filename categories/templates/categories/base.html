@@ -92,10 +92,10 @@
                             <source src="{% static 'social/notificationsound.wav' %}" type="audio/mpeg">
                             Your browser does not support the audio element.
                         </audio>
-                        <div id="notificationsList" data-url="{% url 'social:load_notifications' %}" data-getUserUrl="{% url 'userpage:get_user_by_id' %}" data-currUser="{{ user }}">
+                        <div id="notificationsList" data-url="{% url 'social:load_notifications' %}"
+                            data-getUserUrl="{% url 'userpage:get_user_by_id' %}" data-currUser="{{ user }}">
                             <h4>Notifications</h4>
                             <div class="dropdown-divider"></div>
-                            {% if notifications.count > 0 %}
                             <ul class="list-group list-group-horizontal">
                                 <li class="list-group-item active notificationType" date-wantedType="all">All</li>
                                 {% if user.allow_important_friend_messages or user.allow_important_group_message or user.allow_normal_friend_message or user.allow_normal_group_message %}
@@ -103,7 +103,8 @@
                                 {% endif %}
 
                                 {% if user.allow_comment_message or user.allow_reply_message %}
-                                <li class="list-group-item notificationType" date-wantedType="society">Comments/Replies</li>
+                                <li class="list-group-item notificationType" date-wantedType="society">Comments/Replies
+                                </li>
                                 {% endif %}
                             </ul>
                             <ul class="list-group list-group-horizontal">
@@ -112,10 +113,12 @@
                                 {% endif %}
 
                                 {% if user.your_invites %}
-                                <li class="list-group-item notificationType" date-wantedType="your_invites">Your invites</li>
+                                <li class="list-group-item notificationType" date-wantedType="your_invites">Your invites
+                                </li>
                                 {% endif %}
                             </ul>
                             <div id="notificationsContainer">
+                                {% if notifications.count > 0 %}
                                 {% for notification in notifications %}
                                 <a href="{{ notification.url }}" style="text-decoration: none; color: black">
                                     <div class="media" style="background: #F7F7F7;">
@@ -140,9 +143,9 @@
                                 </a>
                                 <hr>
                                 {% endfor %}
+                                {% endif %}
                             </div>
                             <div class="dropdown-divider"></div>
-                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -154,7 +157,8 @@
                             style="color: white; font-size: 36px;"></i><span class="caret"></span></a>
                     <ul class="dropdown-menu float-right mr-100">
                         <li>
-                            <a style="color: black; text-decoration: none;" href="{% url 'production:announcements' %}">Announcements </a>
+                            <a style="color: black; text-decoration: none;"
+                                href="{% url 'production:announcements' %}">Announcements </a>
                             <i class="fas fa-bullhorn"></i>
                         </li>
                         <li>
