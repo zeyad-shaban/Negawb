@@ -203,3 +203,10 @@ def load_notifications(request):
     notifications = Notification.objects.filter(
         receiver=request.user).order_by('-date')
     return JsonResponse({'notifications': serialize('json', notifications)})
+
+@login_required
+def delete_group(request):
+    pk = request.GET.get('pk')
+    group = get_object_or_404(ChatGroup, pk=pk)
+    group.delete()
+    return JsonResponse({})
