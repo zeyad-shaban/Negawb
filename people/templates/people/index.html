@@ -3,51 +3,59 @@
 {% block title %} {{view_user.username}} {% endblock title %}
 
 {% block content %}
-<link rel="stylesheet" href="{% static 'people/indexstyle.css' %}">
-<div class="container">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="fb-profile-block">
-                <!-- *The Image -->
-                <div class="fb-profile-block-thumb cover-container">
-                    {% if user in view_user.followers.all %}
-                    <input id="followUser" type="submit" name='submit' value="{{view_user.followers.count}} Unfollow"
-                        class="btn btn-primary" title="UnFollow">
-                    {% else %}
-                    <input id="followUser" type="submit" name='submit' value="{{view_user.followers.count}} Follow"
-                        class="btn btn-primary" title="Follow">
-                    {% endif %}
-                    {% if user.allow_friend_request %}
-                    <input id="addFriendRequest" type="submit" name='submit' value="Add Friend" class="btn btn-primary">
-                    {% endif %}
-                </div>
-                <div class="profile-img">
-                    <a href="#">
-                        {% if view_user.who_see_avatar == 'everyone' %}
-                        <img src="{{view_user.avatar.url}}" alt="User Image">
-                        {% elif view_user.who_see_avatar == 'friends' and user in friends %}
-                        <img src="{{view_user.avatar.url}}" alt="User Image">
-                        {% else %}
-                        <img src="/media/profile_images/DefaultUserImage.WebP" alt="User Image">
-                        {% endif %}
-                    </a>
-                </div>
-                <div class="profile-name">
-                    <h2>{{view_user.username}}</h2>
-                </div>
+<style>
+    body {
+        background: #E9EBEE;
+    }
+</style>
 
-                <div class="fb-profile-block-menu">
-                    <div class="block-menu">
-                        <ul>
-                            <button class="btn btn-link" id="viewPosts">{{posts.count}}
-                                Post{{ posts.count|pluralize }}</button>
+<a href="{% url 'people:people' view_user.id %}">
+    {% if view_user.who_see_avatar == 'everyone' %}
+    <img src="{{view_user.avatar.url}}" alt="User Image" class="img-fluid float-left mr-4" width="170" height="170">
+    {% elif view_user.who_see_avatar == 'friends' and user in view_user.friends.all %}
+    <img src="{{view_user.avatar.url}}" alt="User Image" class="img-fluid float-left mr-4" width="170" height="170">
+    {% elif view_user == user %}
+    <img src="{{view_user.avatar.url}}" alt="User Image" class="img-fluid float-left mr-4" width="170" height="170">
+    {% else %}
+    <img src="/media/profile_images/DefaultUserImage.WebP" alt="User Image" class="img-fluid float-left mr-4"
+        width="170" height="170">
+    {% endif %}
+</a>
+<div class="">
+    <h3>{{view_user.username}}</h3>
+    <p><b>Bio</b>: {{view_user.bio}}</p>
+    {% if user.show_email %}
+    <p><b>Email</b>: {{view_user.email}}</p>
+    {% endif %}
+    <p><b>Friends</b>: {{ view_user.friends.count }}</p>
+    <p><b>Followers</b>: {{view_user.followers.count}}</p>
+    <p id="viewPosts" class="btn btn-primary"><b>Posts</b>: {{view_user.post_set.count}}</p>
+</div>
 
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+<div class="fb-profile-block-thumb cover-container">
+    {% if user in view_user.followers.all %}
+    <input id="followUser" type="submit" name='submit' value="{{view_user.followers.count}} Unfollow"
+        class="btn btn-primary" title="UnFollow">
+    {% else %}
+    <input id="followUser" type="submit" name='submit' value="{{view_user.followers.count}} Follow"
+        class="btn btn-primary" title="Follow">
+    {% endif %}
+    {% if user.allow_friend_request %}
+    {% if user in view_user.friends.all %}
+    <form action="{% url 'userpage:unfriend' view_user.id %}" method="post" class="form-inline d-inline ml-3">
+        {% csrf_token %}
+        <input type="submit" name='submit' value="Unfriend" class="btn btn-danger">
+    </form>
+    {% else %}
+    <input id="addFriendRequest" type="submit" name='submit' value="Add Friend" class="btn btn-primary">
+    {% endif %}
+    {% endif %}
+</div>
+<div class="profile-img">
+</div>
+</div>
+</div>
+</div>
 </div>
 <!-- Adding Friend and Follow -->
 <script>
@@ -72,6 +80,7 @@
         <div class="alert alert-${data.message.tags} fixed-top">${data.message.text}</div>
                                 `)
                     }
+                    $('#addFriendRequest').fadeOut()
                 }
             })
             setTimeout(() => {
@@ -335,5 +344,4 @@
             {% endif %}
         </ul>
     </nav>
-</div>
-{% endblock content %}
+    {% endblock content %}

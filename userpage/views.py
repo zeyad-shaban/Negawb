@@ -3,7 +3,7 @@ from django.core.serializers import serialize
 from django.contrib.auth.signals import user_logged_in, user_logged_out
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseRedirect
 from comments.models import Post, Comment
 from people.models import FriendRequest
 from django.contrib import messages
@@ -144,7 +144,11 @@ def unfriend(request, pk):
         user.friends.remove(friend)
         friend.friends.remove(user)
         messages.success(request, f'{friend.username} is no longer a friend')
-        return redirect('userpage:friends')
+        if request.user.your_invites:
+            notification = Notification(notification_type = 'your_invite', sender = request.user, url=f"/people/{request.user.id}", content=f'{request.user} Unfriended You' )
+            notification.save()
+            notification.receiver.add(friend)
+        return redirect("people:people", pk= friend.id)
 
 
 # Is online?

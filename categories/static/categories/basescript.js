@@ -66,7 +66,7 @@ $(document).ready(function () {
                 }
             }
         })
-    }, 2000);
+    }, 6000);
     $('#notificationDropMenu').click(function (event) {
         event.stopPropagation();
     });
