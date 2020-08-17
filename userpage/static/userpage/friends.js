@@ -6,4 +6,5 @@ $(document).ready(function () {
     $('#findUserForm').submit(function (e) {
         e.preventDefault();
     })
+    $('nav').removeClass('sticky-top')
 });

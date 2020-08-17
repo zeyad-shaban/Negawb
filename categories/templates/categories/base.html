@@ -21,6 +21,7 @@
 </head>
 
 <body>
+    {% block chat_frame %} {% endblock chat_frame %}
     <nav
         class="navbar navbar-expand-xl navbar-expand-lg navbar-expand-md navbar-expand-sm navbar-dark bg-dark {% if user.fixed_navbar %}sticky-top{% endif %}">
         <a class="navbar-brand" href="{% url 'home' %}">

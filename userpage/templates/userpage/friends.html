@@ -1,283 +1,259 @@
+{% extends 'categories/base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html>
 
-<head>
-    <link rel="stylesheet" href="{% static 'userpage/friends.css' %}">
-    <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css'>
-    <script src='https://kit.fontawesome.com/a076d05399.js'></script>
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="{% static 'categories/basestyle.css' %}">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
-        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-    <link rel='shortcut icon' href="{% static 'categories/favicon.WebP' %}" type="image/WebP">
-    <meta name="description" content="Want help in any field? Let our professional workers help you in it, 100% free">
-    <meta name="keywords" content="dfreemedia, ask, Question, answer, QandA, help, all, fields, free">
-    <meta name="author" content="Zeyad Shaban">
-    <meta charset=" UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat</title>
-    <script>
-        try {
-            Typekit.load({
-                async: true
-            });
-        } catch (e) {}
-    </script>
-    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,300' rel='stylesheet'
-        type='text/css'>
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+{% block title %}Chat{% endblock title %}
 
+{% block content %}
+<link rel="stylesheet" href="{% static 'userpage/friends.css' %}">
+<link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css'>
+{% block chat_frame %}
+<div id="frame">
+    {% endblock chat_frame %}
 
-</head>
-
-<body>
-    <div id="frame">
-        <div id="message_area"></div>
-        <div id="sidepanel">
-            <div id="profile">
-                <div class="wrap">
-                    <a href="{% url 'userpage:home' %}">
-                        <img src="{{ user.avatar.url }}" class="online" alt="" />
-                    </a>
-                    <p>{{ user.username }}</p>
-                </div>
+    <div id="message_area"></div>
+    <div id="sidepanel">
+        <div id="profile">
+            <div class="wrap">
+                <a href="{% url 'userpage:home' %}">
+                    <img src="{{ user.avatar.url }}" class="online" alt="" />
+                </a>
+                <p>{{ user.username }}</p>
             </div>
-            <div id="search">
-                <label for=""><i class="fa fa-search" aria-hidden="true"></i></label>
-                <input type="text" placeholder="Search contacts..." />
-            </div>
-            <div id="contacts">
-                <ul>
-                    <audio id="notificationSound">
-                        <source src="{% static 'social/notificationsound.wav' %}" type="audio/wav">
-                        <source src="{% static 'social/notificationsound.wav' %}" type="audio/mp3">
-                        <source src="{% static 'social/notificationsound.wav' %}" type="audio/ogg">
-                        <source src="{% static 'social/notificationsound.wav' %}" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                    </audio>
-                    {% for group in groups %}
-                    <li class="contact" id="chatGroupButton{{group.id}}">
-                        <div class="wrap">
-                            <img src="{{group.image.url}}" alt="Group Image"
-                                class="img-fluid rounded-circle d-block mx-auto" height="73" width="73">
-                            <div class="meta">
-                                <i class="float-right mr-3 fa fa-users" style="font-size: 24px;"></i>
-                                <p class="name">{{ group.title }}</p>
-                                <p class="preview"></p>
-                            </div>
+        </div>
+        <div id="search">
+            <label for=""><i class="fa fa-search" aria-hidden="true"></i></label>
+            <input type="text" placeholder="Search contacts..." />
+        </div>
+        <div id="contacts">
+            <ul>
+                <audio id="notificationSound">
+                    <source src="{% static 'social/notificationsound.wav' %}" type="audio/wav">
+                    <source src="{% static 'social/notificationsound.wav' %}" type="audio/mp3">
+                    <source src="{% static 'social/notificationsound.wav' %}" type="audio/ogg">
+                    <source src="{% static 'social/notificationsound.wav' %}" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
+                {% for group in groups %}
+                <li class="contact" id="chatGroupButton{{group.id}}">
+                    <div class="wrap">
+                        <img src="{{group.image.url}}" alt="Group Image"
+                            class="img-fluid rounded-circle d-block mx-auto" height="73" width="73">
+                        <div class="meta">
+                            <i class="float-right mr-3 fa fa-users" style="font-size: 24px;"></i>
+                            <p class="name">{{ group.title }}</p>
+                            <p class="preview"></p>
                         </div>
-                    </li>
-                    <!-- LOAD GROUP MESSAGES -->
-                    <script>
-                        $(document).ready(function () {
-                            $('#chatGroupButton{{group.id}}').click(function loadMessages(e) {
-                                $.ajax({
-                                    url: "{% url 'social:chat_friend' %}",
-                                    data: {
-                                        'pk': "{{group.id}}",
-                                        'action': 'group',
-                                    },
-                                    dataType: 'json',
-                                    success: function (response) {
-                                        $('#friendProfile').html(
-                                            // ! STATIC URL todo
-                                            `<a href="/people/${response.group.id}/" data-toggle="modal" data-target="#addMembers">
+                    </div>
+                </li>
+                <!-- LOAD GROUP MESSAGES -->
+                <script>
+                    $(document).ready(function () {
+                        $('#chatGroupButton{{group.id}}').click(function loadMessages(e) {
+                            $.ajax({
+                                url: "{% url 'social:chat_friend' %}",
+                                data: {
+                                    'pk': "{{group.id}}",
+                                    'action': 'group',
+                                },
+                                dataType: 'json',
+                                success: function (response) {
+                                    $('#friendProfile').html(
+                                        // ! STATIC URL todo
+                                        `<a href="/people/${response.group.id}/" data-toggle="modal" data-target="#addMembers">
                                             <img src="${response.group.image}" id="groupImage" data-img="${response.group.image}" width="40" height="40"/>
                                             </a>
                                             <p id="currChat" data-pk="${response.group.id}" data-action="group">${response.group.title}</p>`
-                                        )
-                                        let outputMessages = ''
-                                        let chat_messages = JSON.parse(response
-                                            .chat_messages)
-                                        for (message of chat_messages) {
-                                            let sender_avatar
-                                            if (message.fields.message_sender
-                                                .who_see_avatar ==
-                                                'everyone' ||
-                                                message.fields.message_sender
-                                                .who_see_avatar ==
-                                                'friends') {
-                                                sender_avatar = message.fields
-                                                    .message_sender
-                                                    .avatar
-                                            } else {
-                                                sender_avatar =
-                                                    '/media/profile_images/DefaultUserImage.WebP'
-                                            }
-                                            let messageStyle = "null"
-                                            if (message.fields.is_important) {
-                                                messageStyle =
-                                                    'style="background: #d10c0c; color: white;"'
-                                            }
-                                            if (message.fields.message_sender !=
-                                                "{{user.id}}") {
-                                                outputMessages += `<li class="replies">
+                                    )
+                                    let outputMessages = ''
+                                    let chat_messages = JSON.parse(response
+                                        .chat_messages)
+                                    for (message of chat_messages) {
+                                        let sender_avatar
+                                        if (message.fields.message_sender
+                                            .who_see_avatar ==
+                                            'everyone' ||
+                                            message.fields.message_sender
+                                            .who_see_avatar ==
+                                            'friends') {
+                                            sender_avatar = message.fields
+                                                .message_sender
+                                                .avatar
+                                        } else {
+                                            sender_avatar =
+                                                '/media/profile_images/DefaultUserImage.WebP'
+                                        }
+                                        let messageStyle = "null"
+                                        if (message.fields.is_important) {
+                                            messageStyle =
+                                                'style="background: #d10c0c; color: white;"'
+                                        }
+                                        if (message.fields.message_sender !=
+                                            "{{user.id}}") {
+                                            outputMessages += `<li class="replies">
                                     <img src="${sender_avatar}" alt="" width="22" height="22"/>
                                     <p ${messageStyle}>${message.fields.message}</p>
                                 </li>`
-                                            } else {
-                                                outputMessages += `
+                                        } else {
+                                            outputMessages += `
                                             <li class="sent">
                         <img src="{{user.avatar.url}}" alt="" width="22" height="22"/>
                         <p id="messageContent" data-currMessagesCount="${chat_messages.length}" ${messageStyle}>${message.fields.message}</p>
                     </li>
                                             `
-                                            }
                                         }
-                                        $('#chatMessages').html(outputMessages)
                                     }
-                                })
+                                    $('#chatMessages').html(outputMessages)
+                                }
                             })
                         })
-                    </script>
-                    {% endfor %}
+                    })
+                </script>
+                {% endfor %}
 
-                    <div class="modal fade" id="addMembers" tabindex="-1" role="dialog"
-                        aria-labelledby="addMembersLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-lg modal-dialog-scrollable">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <ul class="list-group list-group-horizontal">
-                                        <li class="list-group-item active groupSettings" style="color: black;">Add</li>
-                                        <li class="list-group-item groupSettings" style="color: black;">Members</li>
-                                    </ul>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <!-- Group Settings -->
-                                <script>
-                                    $(document).ready(function () {
-                                        $('.groupSettings').click(function (event) {
-                                            event.preventDefault();
-                                            $('.groupSettings').removeClass('active');
-                                            $(this).addClass('active');
-                                            if ($(this).html() == 'Add') {
-                                                $('#groupMenu').html(`
+                <div class="modal fade" id="addMembers" tabindex="-1" role="dialog" aria-labelledby="addMembersLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <ul class="list-group list-group-horizontal">
+                                    <li class="list-group-item active groupSettings" style="color: black;">Add</li>
+                                    <li class="list-group-item groupSettings" style="color: black;">Members</li>
+                                </ul>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <!-- Group Settings -->
+                            <script>
+                                $(document).ready(function () {
+                                    $('.groupSettings').click(function (event) {
+                                        event.preventDefault();
+                                        $('.groupSettings').removeClass('active');
+                                        $(this).addClass('active');
+                                        if ($(this).html() == 'Add') {
+                                            $('#groupMenu').html(`
                                                 hi
                                                 `)
-                                            }
-                                        })
+                                        }
+                                    })
+                                })
+                            </script>
+                            <div class="modal-body" id="groupMenu">
+                                <h4 style="color: black;">Add Friend</h4>
+                                {% for friend in user.friends.all %}
+                                <li class="list-group-item">
+                                    <div class="row w-100">
+                                        <div class="col-12 col-sm-6 col-md-3 px-0">
+                                            <a href="{% url 'people:people' friend.id %}">
+                                                {% if friend.who_see_avatar == 'everyone' %}
+                                                <img src="{{friend.avatar.url}}" alt="User Image" width="64"
+                                                    height="64">
+                                                {% elif friend.who_see_avatar == 'friends' and user in friend.friends.all %}
+                                                <img src="{{friend.avatar.url}}" alt="User Image" width="64"
+                                                    height="64">
+                                                {% elif friend == user %}
+                                                <img src="{{friend.avatar.url}}" alt="User Image" width="64"
+                                                    height="64">
+                                                {% else %}
+                                                <img src="/media/profile_images/DefaultUserImage.WebP" alt="User Image"
+                                                    width="64" height="64">
+                                                {% endif %}
+                                            </a>
+                                        </div>
+
+                                        <div class="col-12 col-sm-6 col-md-9 text-center text-sm-left">
+                                            <a href="{% url 'people:people' friend.id %}" target="_blank">
+                                                <label class="name lead">{{ friend.username }}</label>
+                                            </a>
+                                            <br>
+
+                                            {% if friend.phone %}
+                                            <span class="text-muted" data-toggle="tooltip" title="Phone Number"
+                                                data-original-title="{{ friend.phone }}"></span>
+                                            <span class="text-muted small">{{ friend.phone }}</span>
+                                            <br>
+                                            {% endif %}
+                                            {% if friend.email and friend.show_email == True %}
+                                            <span class="text-muted" data-toggle="tooltip" title="Email"
+                                                data-original-title="{{ friend.email }}"></span>
+                                            <span class="text-muted small text-truncate">{{ friend.email }}</span>
+                                            <br>
+                                            {% endif %}
+                                            <span class="text-muted" data-toggle="tooltip" title="Bio"
+                                                data-original-title="{{ friend.bio }}"></span>
+                                            <span class="small text-truncate"
+                                                style="color: black;">{{ friend.bio }}</span>
+                                            <form id="id_inviteForm{{friend.id}}" method="GET">
+                                                <button type="submit" name="invite," class="btn float-right"
+                                                    id="id_inviteButton{{friend.id}}"><i class="fa fa-user-plus"
+                                                        style="font-size: 36px;"></i></button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </li>
+                                <script>
+                                    $(document).ready(function () {
+                                        $('#id_inviteForm{{friend.id}}').submit(function (e) {
+                                            e.preventDefault();
+                                            $.ajax({
+                                                url: "{% url 'social:create_invite' %}",
+                                                data: {
+                                                    'user_pk': "{{friend.id}}",
+                                                    'group_pk': $('#currChat').attr(
+                                                        'data-pk'),
+                                                },
+                                                dataType: 'json',
+                                                success: function (response) {
+                                                    console.log('success')
+                                                    $('#id_inviteButton{{friend.id}}')
+                                                        .fadeOut();
+                                                }
+                                            })
+                                        });
                                     })
                                 </script>
-                                <div class="modal-body" id="groupMenu">
-                                    <h4 style="color: black;">Add Friend</h4>
-                                    {% for friend in user.friends.all %}
-                                    <li class="list-group-item">
-                                        <div class="row w-100">
-                                            <div class="col-12 col-sm-6 col-md-3 px-0">
-                                                <a href="{% url 'people:people' friend.id %}">
-                                                    {% if friend.who_see_avatar == 'everyone' %}
-                                                    <img src="{{friend.avatar.url}}" alt="User Image" width="64"
-                                                        height="64">
-                                                    {% elif friend.who_see_avatar == 'friends' and user in friend.friends.all %}
-                                                    <img src="{{friend.avatar.url}}" alt="User Image" width="64"
-                                                        height="64">
-                                                    {% elif friend == user %}
-                                                    <img src="{{friend.avatar.url}}" alt="User Image" width="64"
-                                                        height="64">
-                                                    {% else %}
-                                                    <img src="/media/profile_images/DefaultUserImage.WebP"
-                                                        alt="User Image" width="64" height="64">
-                                                    {% endif %}
-                                                </a>
-                                            </div>
-
-                                            <div class="col-12 col-sm-6 col-md-9 text-center text-sm-left">
-                                                <a href="{% url 'people:people' friend.id %}" target="_blank">
-                                                    <label class="name lead">{{ friend.username }}</label>
-                                                </a>
-                                                <br>
-
-                                                {% if friend.phone %}
-                                                <span class="text-muted" data-toggle="tooltip" title="Phone Number"
-                                                    data-original-title="{{ friend.phone }}"></span>
-                                                <span class="text-muted small">{{ friend.phone }}</span>
-                                                <br>
-                                                {% endif %}
-                                                {% if friend.email and friend.show_email == True %}
-                                                <span class="text-muted" data-toggle="tooltip" title="Email"
-                                                    data-original-title="{{ friend.email }}"></span>
-                                                <span class="text-muted small text-truncate">{{ friend.email }}</span>
-                                                <br>
-                                                {% endif %}
-                                                <span class="text-muted" data-toggle="tooltip" title="Bio"
-                                                    data-original-title="{{ friend.bio }}"></span>
-                                                <span class="small text-truncate"
-                                                    style="color: black;">{{ friend.bio }}</span>
-                                                <form id="id_inviteForm{{friend.id}}" method="GET">
-                                                    <button type="submit" name="invite," class="btn float-right"
-                                                        id="id_inviteButton{{friend.id}}"><i class="fa fa-user-plus"
-                                                            style="font-size: 36px;"></i></button>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <script>
-                                        $(document).ready(function () {
-                                            $('#id_inviteForm{{friend.id}}').submit(function (e) {
-                                                e.preventDefault();
-                                                $.ajax({
-                                                    url: "{% url 'social:create_invite' %}",
-                                                    data: {
-                                                        'user_pk': "{{friend.id}}",
-                                                        'group_pk': $('#currChat').attr(
-                                                            'data-pk'),
-                                                    },
-                                                    dataType: 'json',
-                                                    success: function (response) {
-                                                        console.log('success')
-                                                        $('#id_inviteButton{{friend.id}}')
-                                                            .fadeOut();
-                                                    }
-                                                })
-                                            });
-                                        })
-                                    </script>
-                                    {% endfor %}
-                                    <hr>
-                                    <h4 class="float-left" style="color: black;">Or search users</h4>
-                                    <form action="" method="get" class="form-inline" id="findUserForm"
-                                        data-url="{% url 'people:all_peopleresults' %}">
-                                        <input type="text" name="user_username" id="searchUser" class="form-control"
-                                            maxlength="150">
-                                    </form>
-                                    <div id="userResults"></div>
-                                    <!-- Get user results -->
-                                    <script>
-                                        $(document).ready(function () {
-                                            $('#searchUser').keyup(function (event) {
-                                                event.preventDefault();
-                                                $('#userResults').html(`<div class="spinner-border text-success" role="status">
+                                {% endfor %}
+                                <hr>
+                                <h4 class="float-left" style="color: black;">Or search users</h4>
+                                <form action="" method="get" class="form-inline" id="findUserForm"
+                                    data-url="{% url 'people:all_peopleresults' %}">
+                                    <input type="text" name="user_username" id="searchUser" class="form-control"
+                                        maxlength="150">
+                                </form>
+                                <div id="userResults"></div>
+                                <!-- Get user results -->
+                                <script>
+                                    $(document).ready(function () {
+                                        $('#searchUser').keyup(function (event) {
+                                            event.preventDefault();
+                                            $('#userResults').html(`<div class="spinner-border text-success" role="status">
         <span class="sr-only">Loading...</span>
         </div>`)
-                                                setTimeout(() => {
-                                                    $.ajax({
-                                                        url: $('#findUserForm').attr(
-                                                            'data-url'),
-                                                        data: {
-                                                            'q': $('#searchUser').val(),
-                                                        },
-                                                        dataType: 'json',
-                                                        success: function (data) {
-                                                            let results = JSON
-                                                                .parse(data.results)
-                                                            let output = ''
+                                            setTimeout(() => {
+                                                $.ajax({
+                                                    url: $('#findUserForm').attr(
+                                                        'data-url'),
+                                                    data: {
+                                                        'q': $('#searchUser').val(),
+                                                    },
+                                                    dataType: 'json',
+                                                    success: function (data) {
+                                                        let results = JSON
+                                                            .parse(data.results)
+                                                        let output = ''
 
-                                                            if (results.length ===
-                                                                0) {
-                                                                $('#userResults')
-                                                                    .html(
-                                                                        '<h4>User not found</h4>'
-                                                                    )
-                                                            } else {
+                                                        if (results.length ===
+                                                            0) {
+                                                            $('#userResults')
+                                                                .html(
+                                                                    '<h4>User not found</h4>'
+                                                                )
+                                                        } else {
 
-                                                                for (result of
-                                                                    results) {
-                                                                    // !DOESN'T USE [DJANGO URL
-                                                                    output += `
+                                                            for (result of
+                                                                results) {
+                                                                // !DOESN'T USE [DJANGO URL
+                                                                output += `
                         <li class="list-group-item">
                 <div class="row w-100">
                     <div class="col-12 col-sm-6 col-md-3 px-0">
@@ -320,94 +296,173 @@
                 </div>
             </li>
             `
-                                                                }
-
                                                             }
-                                                            $('#userResults').html(
-                                                                output)
+
                                                         }
-                                                    })
-                                                }, 2000);
-                                            })
+                                                        $('#userResults').html(
+                                                            output)
+                                                    }
+                                                })
+                                            }, 2000);
                                         })
-                                    </script>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                    <button type="button" class="btn btn-primary">Save changes</button>
-                                </div>
+                                    })
+                                </script>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary">Save changes</button>
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    {% for friend in friends %}
-                    <li class="contact">
-                        <div class="wrap" id="chatFriendButton{{friend.id}}">
-                            {% if friend.is_online %}
-                            <span class="contact-status online"></span>
-                            {% else %}
-                            <span class="contact-status offline"></span>
-                            {% endif %}
-                            {% if friend.who_see_avatar == 'everyone' %}
-                            <img src="{{friend.avatar.url}}" alt="User Image"
-                                class="img-fluid rounded-circle d-block mx-auto" height="73" width="73">
-                            {% elif friend.who_see_avatar == 'friends' and user in friend.friends.all %}
-                            <img src="{{friend.avatar.url}}" alt="User Image"
-                                class="img-fluid rounded-circle d-block mx-auto" height="73" width="73">
-                            {% elif friend == user %}
-                            <img src="{{friend.avatar.url}}" alt="User Image"
-                                class="img-fluid rounded-circle d-block mx-auto" height="73" width="73">
-                            {% else %}
-                            <img src="/media/profile_images/DefaultUserImage.WebP" alt="User Image"
-                                class="img-fluid rounded-circle d-block mx-auto" height="73" width="73">
-                            {% endif %}
-                            <div class="meta">
-                                <p class="name">{{ friend.username }}</p>
-                                <p class="preview"></p>
-                            </div>
+                {% for friend in friends %}
+                <li class="contact">
+                    <div class="wrap" id="chatFriendButton{{friend.id}}">
+                        {% if friend.is_online %}
+                        <span class="contact-status online"></span>
+                        {% else %}
+                        <span class="contact-status offline"></span>
+                        {% endif %}
+                        {% if friend.who_see_avatar == 'everyone' %}
+                        <img src="{{friend.avatar.url}}" alt="User Image"
+                            class="img-fluid rounded-circle d-block mx-auto" height="73" width="73">
+                        {% elif friend.who_see_avatar == 'friends' and user in friend.friends.all %}
+                        <img src="{{friend.avatar.url}}" alt="User Image"
+                            class="img-fluid rounded-circle d-block mx-auto" height="73" width="73">
+                        {% elif friend == user %}
+                        <img src="{{friend.avatar.url}}" alt="User Image"
+                            class="img-fluid rounded-circle d-block mx-auto" height="73" width="73">
+                        {% else %}
+                        <img src="/media/profile_images/DefaultUserImage.WebP" alt="User Image"
+                            class="img-fluid rounded-circle d-block mx-auto" height="73" width="73">
+                        {% endif %}
+                        <div class="meta">
+                            <p class="name">{{ friend.username }}</p>
+                            <p class="preview"></p>
                         </div>
-                    </li>
-                    <!-- LOAD FRIEND CHAT -->
-                    <script>
-                        $(document).ready(function () {
-                            function loadMessages(e) {
-                                let friend_id = "{{friend.id}}"
-                                $.ajax({
-                                    url: "{% url 'social:chat_friend' %}",
-                                    data: {
-                                        'pk': "{{friend.id}}",
-                                        'action': 'friend',
-                                    },
-                                    dataType: 'json',
-                                    success: function (response) {
-                                        let friend_image
-                                        if (response.friend.who_see_avatar == 'everyone' ||
-                                            response.friend.who_see_avatar == 'friends') {
-                                            friend_image = response.friend.avatar
-                                        } else {
-                                            friend_image =
-                                                '/media/profile_images/DefaultUserImage.WebP'
-                                        }
-                                        $('#friendProfile').html(
-                                            // ! STATIC URL todo
-                                            `<a href="/people/${response.friend.id}/">
+                    </div>
+                </li>
+                <!-- LOAD FRIEND CHAT -->
+                <script>
+                    $(document).ready(function () {
+                        function loadMessages(e) {
+                            let friend_id = "{{friend.id}}"
+                            $.ajax({
+                                url: "{% url 'social:chat_friend' %}",
+                                data: {
+                                    'pk': "{{friend.id}}",
+                                    'action': 'friend',
+                                },
+                                dataType: 'json',
+                                success: function (response) {
+                                    let friend_image
+                                    if (response.friend.who_see_avatar == 'everyone' ||
+                                        response.friend.who_see_avatar == 'friends') {
+                                        friend_image = response.friend.avatar
+                                    } else {
+                                        friend_image =
+                                            '/media/profile_images/DefaultUserImage.WebP'
+                                    }
+                                    $('#friendProfile').html(
+                                        // ! STATIC URL todo
+                                        `<a href="/people/${response.friend.id}/">
                                             <img src="${friend_image}" width="40" height="40"/>
                                             </a>
                                             <p id="currChat" data-pk="${response.friend.id}" data-action="friend">${response.friend.username}</p>`
+                                    )
+                                    let outputMessages = ''
+                                    let chat_messages = JSON.parse(response
+                                        .chat_messages)
+                                    for (message of chat_messages) {
+                                        let messageStyle = "null"
+                                        if (message.fields.is_important) {
+                                            messageStyle =
+                                                'style="background: #d10c0c; color: white"'
+                                        }
+                                        if (message.fields.message_sender == response
+                                            .friend.id) {
+                                            outputMessages += `<li class="replies">
+                                    <img src="${friend_image}" alt="" width="22" height="22"/>
+                                    <p ${messageStyle}>${message.fields.message}</p>
+                                </li>`
+                                        } else {
+                                            outputMessages += `
+                                            <li class="sent">
+                        <img src="{{user.avatar.url}}" alt="" width="22" height="22"/>
+                        <p id="messageContent" data-currMessagesCount="${chat_messages.length}" ${messageStyle}>${message.fields.message}</p>
+                    </li>
+                                            `
+                                        }
+                                    }
+                                    $('#chatMessages').html(outputMessages)
+                                }
+                            })
+                        }
+                        $('#chatFriendButton{{friend.id}}').click(loadMessages)
+                    })
+                </script>
+                {% endfor %}
+                <!-- LOAD NEW MESSAGES -->
+                <script>
+                    $(document).ready(function () {
+                        setInterval(function loadMessages(e) {
+                            let pk = $('#currChat').attr('data-pk')
+                            let action = $('#currChat').attr('data-action')
+                            let currMessagesCount = $('#messageContent').attr(
+                                'data-currMessagesCount')
+                            $.ajax({
+                                url: "{% url 'social:chat_friend' %}",
+                                data: {
+                                    'pk': pk,
+                                    'action': action,
+                                },
+                                dataType: 'json',
+                                success: function (response) {
+                                    let chat_messages = JSON.parse(response
+                                        .chat_messages)
+                                    if (chat_messages.length > currMessagesCount) {
+                                        let senderAvatar
+                                        let chat
+                                        let chat_url
+                                        if (action == 'friend') {
+                                            chat = response.friend
+                                            chat_url = "/people/$" + chat.id + "/"
+                                            chat_label = chat.username
+                                            if (chat.who_see_avatar ==
+                                                'everyone' ||
+                                                chat.who_see_avatar == 'friends'
+                                            ) {
+                                                senderAvatar = chat.avatar
+                                            } else {
+                                                senderAvatar =
+                                                    '/media/profile_images/DefaultUserImage.WebP'
+                                            }
+                                        } else if (action == 'group') {
+                                            chat = response.group
+                                            chat_url =
+                                                `" data-toggle="modal" data-target="#addMembers`
+                                            chat_label = chat.title
+                                            senderAvatar = chat['image']
+                                        }
+                                        $('#friendProfile').html(
+                                            // ! STATIC URL todo
+                                            `<a href="${chat_url}">
+                                                <img src="${senderAvatar}" id="groupImage" data-img="${senderAvatar}" width="40" height="40"/>
+                                                </a>
+                                                <p id="currChat" data-pk="${pk}" data-action="${action}">${chat_label}</p>`
                                         )
                                         let outputMessages = ''
-                                        let chat_messages = JSON.parse(response
-                                            .chat_messages)
                                         for (message of chat_messages) {
                                             let messageStyle = "null"
                                             if (message.fields.is_important) {
                                                 messageStyle =
-                                                    'style="background: #d10c0c; color: white"'
+                                                    'style="background: #d10c0c; color: white;"'
                                             }
-                                            if (message.fields.message_sender == response
-                                                .friend.id) {
+                                            if (message.fields.message_sender !=
+                                                "{{user.id}}") {
                                                 outputMessages += `<li class="replies">
-                                    <img src="${friend_image}" alt="" width="22" height="22"/>
+                                    <img src="${senderAvatar}" alt="" width="22" height="22"/>
                                     <p ${messageStyle}>${message.fields.message}</p>
                                 </li>`
                                             } else {
@@ -421,239 +476,158 @@
                                         }
                                         $('#chatMessages').html(outputMessages)
                                     }
-                                })
+                                }
+                            })
+                        }, 3000);
+                    })
+                </script>
+                <!-- SEND MESSAGE -->
+                <script>
+                    $(document).ready(function () {
+                        $('#sendMessageForm').submit(function (event) {
+                            event.preventDefault()
+                            let pk = $('#currChat').attr('data-pk')
+                            let action = $('#currChat').attr('data-action')
+                            let userInput = document.getElementById('inputMessage').value;
+                            let isImportant = $('#id_is_important').is(':checked')
+                            let is_important
+                            if (isImportant) {
+                                is_important = "True"
+                            } else {
+                                is_important = "False"
                             }
-                            $('#chatFriendButton{{friend.id}}').click(loadMessages)
-                        })
-                    </script>
-                    {% endfor %}
-                    <!-- LOAD NEW MESSAGES -->
-                    <script>
-                        $(document).ready(function () {
-                            setInterval(function loadMessages(e) {
-                                let pk = $('#currChat').attr('data-pk')
-                                let action = $('#currChat').attr('data-action')
-                                let currMessagesCount = $('#messageContent').attr(
-                                    'data-currMessagesCount')
+                            if (userInput) {
                                 $.ajax({
-                                    url: "{% url 'social:chat_friend' %}",
+                                    url: "{% url 'social:send_message' %}",
                                     data: {
-                                        'pk': pk,
-                                        'action': action,
+                                        "pk": pk,
+                                        "action": action,
+                                        "message": userInput,
+                                        "is_important": is_important
                                     },
                                     dataType: 'json',
                                     success: function (response) {
-                                        let chat_messages = JSON.parse(response
-                                            .chat_messages)
-                                        if (chat_messages.length > currMessagesCount) {
-                                            let senderAvatar
-                                            let chat
-                                            let chat_url
-                                            if (action == 'friend') {
-                                                chat = response.friend
-                                                chat_url = "/people/$" + chat.id + "/"
-                                                chat_label = chat.username
-                                                if (chat.who_see_avatar ==
-                                                    'everyone' ||
-                                                    chat.who_see_avatar == 'friends'
-                                                ) {
-                                                    senderAvatar = chat.avatar
-                                                } else {
-                                                    senderAvatar =
-                                                        '/media/profile_images/DefaultUserImage.WebP'
-                                                }
-                                            } else if (action == 'group') {
-                                                chat = response.group
-                                                chat_url =
-                                                    `" data-toggle="modal" data-target="#addMembers`
-                                                chat_label = chat.title
-                                                senderAvatar = chat['image']
-                                            }
-                                            $('#friendProfile').html(
-                                                // ! STATIC URL todo
-                                                `<a href="${chat_url}">
-                                                <img src="${senderAvatar}" id="groupImage" data-img="${senderAvatar}" width="40" height="40"/>
-                                                </a>
-                                                <p id="currChat" data-pk="${pk}" data-action="${action}">${chat_label}</p>`
-                                            )
-                                            let outputMessages = ''
-                                            for (message of chat_messages) {
-                                                let messageStyle = "null"
-                                                if (message.fields.is_important) {
-                                                    messageStyle =
-                                                        'style="background: #d10c0c; color: white;"'
-                                                }
-                                                if (message.fields.message_sender !=
-                                                    "{{user.id}}") {
-                                                    outputMessages += `<li class="replies">
-                                    <img src="${senderAvatar}" alt="" width="22" height="22"/>
-                                    <p ${messageStyle}>${message.fields.message}</p>
-                                </li>`
-                                                } else {
-                                                    outputMessages += `
-                                            <li class="sent">
-                        <img src="{{user.avatar.url}}" alt="" width="22" height="22"/>
-                        <p id="messageContent" data-currMessagesCount="${chat_messages.length}" ${messageStyle}>${message.fields.message}</p>
-                    </li>
-                                            `
-                                                }
-                                            }
-                                            $('#chatMessages').html(outputMessages)
-                                        }
-                                    }
-                                })
-                            }, 3000);
-                        })
-                    </script>
-                    <!-- SEND MESSAGE -->
-                    <script>
-                        $(document).ready(function () {
-                            $('#sendMessageForm').submit(function (event) {
-                                event.preventDefault()
-                                let pk = $('#currChat').attr('data-pk')
-                                let action = $('#currChat').attr('data-action')
-                                let userInput = document.getElementById('inputMessage').value;
-                                let isImportant = $('#id_is_important').is(':checked')
-                                let is_important
-                                if (isImportant) {
-                                    is_important = "True"
-                                } else {
-                                    is_important = "False"
-                                }
-                                if (userInput) {
-                                    $.ajax({
-                                        url: "{% url 'social:send_message' %}",
-                                        data: {
-                                            "pk": pk,
-                                            "action": action,
-                                            "message": userInput,
-                                            "is_important": is_important
-                                        },
-                                        dataType: 'json',
-                                        success: function (response) {
 
-                                            if (response.message) {
-                                                $('#message_area').html('')
-                                                if (response.message.tags === 'error') {
-                                                    $('#message_area').append(`
+                                        if (response.message) {
+                                            $('#message_area').html('')
+                                            if (response.message.tags === 'error') {
+                                                $('#message_area').append(`
                             <div class="alert alert-danger fixed-top">${response.message.text}</div>
                             `)
-                                                } else {
-                                                    $('#message_area').append(`
+                                            } else {
+                                                $('#message_area').append(`
         <div class="alert alert-${response.message.tags} fixed-top">${response.message.text}</div>
                                 `)
-                                                }
-                                                setInterval(() => {
-                                                    $('#message_area').html('')
-                                                }, 3000);
                                             }
-                                            $('#inputMessage').val('')
-                                            $("#id_is_important").prop("checked", false);
-                                            $('<li class="sent"><img src="{{ user }}" alt="" /><p>' +
-                                                userInput + '</p></li>').appendTo($(
-                                                '.messages ul'));
-                                            $('.message-input input').val(null);
-                                            $('.contact.active .preview').html(
-                                                '<span>You: </span>' + userInput);
-                                            $(".messages").animate({
-                                                scrollTop: $(document).height()
-                                            }, "fast");
-                                            document.getElementById('notificationSound')
-                                                .play()
-                                            var element = document.getElementById(
-                                                'chatMessages');
-                                            element.scrollTop = element.scrollHeight -
-                                                element.clientHeight;
+                                            setInterval(() => {
+                                                $('#message_area').html('')
+                                            }, 3000);
                                         }
-                                    })
-                                }
-                            })
+                                        $('#inputMessage').val('')
+                                        $("#id_is_important").prop("checked", false);
+                                        $('<li class="sent"><img src="{{ user }}" alt="" /><p>' +
+                                            userInput + '</p></li>').appendTo($(
+                                            '.messages ul'));
+                                        $('.message-input input').val(null);
+                                        $('.contact.active .preview').html(
+                                            '<span>You: </span>' + userInput);
+                                        $(".messages").animate({
+                                            scrollTop: $(document).height()
+                                        }, "fast");
+                                        document.getElementById('notificationSound')
+                                            .play()
+                                        var element = document.getElementById(
+                                            'chatMessages');
+                                        element.scrollTop = element.scrollHeight -
+                                            element.clientHeight;
+                                    }
+                                })
+                            }
                         })
-                    </script>
-                </ul>
-            </div>
-            <div id="bottom-bar">
-                <a href="{% url 'people:all_people' %}"><button id="addcontact"><i class="fa fa-user-plus fa-fw"
-                            aria-hidden="true"></i> <span>Find Friends</span></button></a>
-                <a href="{% url 'home' %}">
-                    <button id="settings"><i class="fa fa-home fa-fw" aria-hidden="true"></i> <span>Home</span></button>
-                </a>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createNewGroup">
-                    New Group
-                </button>
-                <div class="modal fade" id="createNewGroup" tabindex="-1" role="dialog"
-                    aria-labelledby="createNewGroupLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-scrollable">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="createNewGroupLabel" style="color: black;">New Group</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <form action="{% url 'social:create_chat_group' %}" method="POST" id="newGroupForm">
-                                    {% csrf_token %}
-                                    <div class="from-group">
-                                        <label for="id_group_title" style="color:black;">Title</label>
-                                        <input type="text" class="form-control" name="title" id="id_group_title"
-                                            required max_length="75">
-                                    </div>
-                                    <div class="from-group">
-                                        <label for="id_group_description" style="color:black;">description</label>
-                                        <input type="text" class="form-control" name="description"
-                                            id="id_group_description" placeholder="optional">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="id_group_image" style="color:black;">Group image</label>
-                                        <small class="form-text text-muted">We will use the default image if nothing was
-                                            provided</small>
-                                        <input type="file" name="image" accept="image/*" id="id_group_image">
-                                    </div>
-                                    <div class="form-group">
-                                        <label style="color: black;" for="id_is_public">Do you want it public?</label>
-                                        <input type="checkbox" id="id_is_public" name="is_public" class="form-control"
-                                            maxlength="200">
-                                    </div>
-                                    <!-- todo choose members -->
-                                </form>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary" id="addGroupButton">Add</button>
-                            </div>
+                    })
+                </script>
+            </ul>
+        </div>
+        <div id="bottom-bar">
+            <a href="{% url 'people:all_people' %}"><button id="addcontact"><i class="fa fa-user-plus fa-fw"
+                        aria-hidden="true"></i> <span>Find Friends</span></button></a>
+            <a href="{% url 'home' %}">
+                <button id="settings"><i class="fa fa-home fa-fw" aria-hidden="true"></i> <span>Home</span></button>
+            </a>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createNewGroup">
+                New Group
+            </button>
+            <div class="modal fade" id="createNewGroup" tabindex="-1" role="dialog"
+                aria-labelledby="createNewGroupLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-scrollable">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="createNewGroupLabel" style="color: black;">New Group</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="{% url 'social:create_chat_group' %}" method="POST" id="newGroupForm">
+                                {% csrf_token %}
+                                <div class="from-group">
+                                    <label for="id_group_title" style="color:black;">Title</label>
+                                    <input type="text" class="form-control" name="title" id="id_group_title" required
+                                        max_length="75">
+                                </div>
+                                <div class="from-group">
+                                    <label for="id_group_description" style="color:black;">description</label>
+                                    <input type="text" class="form-control" name="description" id="id_group_description"
+                                        placeholder="optional">
+                                </div>
+                                <div class="form-group">
+                                    <label for="id_group_image" style="color:black;">Group image</label>
+                                    <small class="form-text text-muted">We will use the default image if nothing was
+                                        provided</small>
+                                    <input type="file" name="image" accept="image/*" id="id_group_image">
+                                </div>
+                                <div class="form-group">
+                                    <label style="color: black;" for="id_is_public">Do you want it public?</label>
+                                    <input type="checkbox" id="id_is_public" name="is_public" class="form-control"
+                                        maxlength="200">
+                                </div>
+                                <!-- todo choose members -->
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" id="addGroupButton">Add</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="content">
-            <div class="contact-profile" id="friendProfile">
-                <img src="{% static 'categories/favicon.WebP' %}" id="groupImage"
-                    data-img="{% static 'categories/favicon.WebP' %}" width="40" height="40" alt="" />
-                <p id="currChat" data-pk="" data-action="">DFreeMedia</p>
+    </div>
+    <div class="content">
+        <div class="contact-profile" id="friendProfile">
+            <img src="{% static 'categories/favicon.WebP' %}" id="groupImage"
+                data-img="{% static 'categories/favicon.WebP' %}" width="40" height="40" alt="" />
+            <p id="currChat" data-pk="" data-action="">DFreeMedia</p>
+        </div>
+        <div class="messages" id="chatMessagesContainer">
+            <ul id="chatMessages">
+                <img src="{% static 'categories/favicon.WebP' %}" width="40%" class="img-fluid" alt="">
+            </ul>
+        </div>
+        <div class="message-input">
+            <div class="wrap">
+                <form action="" method="get" id="sendMessageForm">
+                    <input type="text" placeholder="Write your message..." id="inputMessage" required />
+                    <!-- <i class="fa fa-paperclip attachment" aria-hidden="true"></i> -->
+                    <button id="sendMessageButton" class="submit"><i class="fa fa-paper-plane"
+                            aria-hidden="true"></i></button>
+                </form>
             </div>
-            <div class="messages" id="chatMessagesContainer">
-                <ul id="chatMessages">
-                    <img src="{% static 'categories/favicon.WebP' %}" width="40%" class="img-fluid" alt="">
-                </ul>
-            </div>
-            <div class="message-input">
-                <div class="wrap">
-                    <form action="" method="get" id="sendMessageForm">
-                        <input type="text" placeholder="Write your message..." id="inputMessage" required />
-                        <!-- <i class="fa fa-paperclip attachment" aria-hidden="true"></i> -->
-                        <button id="sendMessageButton" class="submit"><i class="fa fa-paper-plane"
-                                aria-hidden="true"></i></button>
-                    </form>
-                </div>
-                <div class="input-group-text">
-                    <input type="checkbox" aria-label="Checkbox for following text input" id="id_is_important">
-                </div>
+            <div class="input-group-text">
+                <input type="checkbox" aria-label="Checkbox for following text input" id="id_is_important">
             </div>
         </div>
     </div>
-</body>
+</div>
 <script src="{% static 'userpage/friends.js' %}"></script>
-
-</html>
+{% endblock content %}
