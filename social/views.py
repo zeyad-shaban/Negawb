@@ -132,6 +132,7 @@ def create_chat_group(request):
         new_chat_group.author = request.user
         new_chat_group.save()
         new_chat_group.members.add(request.user)
+        new_chat_group.group_admins.add(request.user)
         return redirect('userpage:friends')
 
 
@@ -167,11 +168,14 @@ def create_invite(request,):
     else:
         group_request.save()
         # !ABSOLUTE PATH
-        notification = Notification.objects.create(
-                        notification_type='invites', sender=request.user, url='/userpage/friendrequest/', content=f'{reciever.username} wants you to join {group.title}')
         if reciever.allow_invites:
+            print('about to create notification')
+            notification = Notification(notification_type='invites', sender=request.user, url='/userpage/friendrequest/', content=f'{request.user.username} wants you to join {group.title}')
+            print('created')
             notification.save()
+            print('saved')
             notification.receiver.add(reciever)
+            print('added receivers')
         message = {
             'text': f'Successfully invited {reciever}',
             'tags': 'success',
@@ -237,3 +241,9 @@ def delete_group(request):
     group = get_object_or_404(ChatGroup, pk=pk)
     group.delete()
     return JsonResponse({})
+
+def group_members(request):
+    group_id = request.GET.get('group_id')
+    group = get_object_or_404(ChatGroup, pk=group_id)
+    members = group.members.all().order_by('followers')
+    return JsonResponse({'members': serialize('json', members)})

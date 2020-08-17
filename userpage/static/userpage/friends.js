@@ -18,6 +18,52 @@ $(document).ready(function () {
         } else if ($(this).html() == 'Members'){
             $('#addMemberSettings').hide()
             $('#groupMembersSettings').show();
+            $('#groupMembers').html('')
+            $.ajax({
+                url:$('#groupMembersSettings').attr('data-url'),
+                data: {
+                    'group_id': $('#currChat').attr('data-pk')
+                },
+                dataType: 'json',
+                success: function (response){
+                    members = JSON.parse(response.members)
+                    for (let i=0; members.length > i; i++){
+                        console.log(members[i])
+                        $('#groupMembers').prepend(`
+                        <li class="list-group-item">
+                                <div class="row w-100">
+                                    <div class="col-12 col-sm-6 col-md-3 px-0">
+                                        <a href="/people/${members[i].pk }">
+                                            <img src="/media/profile_images/DefaultUserImage.WebP" alt="${ members[i].fields.username }"
+                                            class="img-fluid rounded-circle d-block mx-auto" height="73" width="73">
+                                    </a>
+                                    </div>
+                                    <div class="col-12 col-sm-6 col-md-9 text-center text-sm-left">
+                                        <a href="/people/${members[i].pk}/">
+                                    <label class="name lead">${ members[i].fields.username }</label>
+                                    </a>
+                                    <br>
+                                    <span class="text-muted" data-toggle="tooltip" title="Bio"
+                                    data-original-title="${ members[i].fields.bio }" style="color: black;"></span>
+                                    <span class="small text-truncate" style="color: black;">${ members[i].fields.bio }</span>
+                                    <form id="id_removeMemberForm${members[i].pk}" method="GET">
+                                        <button type="submit" name="invite," class="btn float-right"
+                                        id="id_removeMember${members[i].pk}"><i class="fas fa-minus-circle"
+                                        style="font-size: 36px;"></i></button>
+                                        </form>
+                                        </div>
+                                        </div>
+                                        </li>
+                        `)
+                    }
+                }
+            })
+            // List them
+            // add kick button beside them ONLY IF ADMIN
+            // check if the user going to be kicked is either an admin or author
+            // if yes make checker author > admin > member
+            // kick or keep (NO RELOAD!!)
+            // make group admin
         }
     })
     $('#deleteGroup').click(function(evet){
