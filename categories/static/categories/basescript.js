@@ -33,6 +33,7 @@ $(document).ready(function () {
                                 'pk': notifications[i].fields.sender,
                             },
                             dataType: 'json',
+                            async:false,
                             success: function (response) {
                                 output = ''
                                 let sender = response.user
@@ -58,7 +59,8 @@ $(document).ready(function () {
                                 </a>
                                 <hr>
                                 `
-                                $('#notificationsContainer').prepend(output)
+                                console.log(i)
+                                $('#notificationsContainer').append(output)
                             }
                         })
                     }
@@ -71,9 +73,9 @@ $(document).ready(function () {
         event.stopPropagation();
     });
     $('.notificationType').click(function (e) {
-        $('#notificationsContainer').html('')
         e.preventDefault();
         if (!$(this).hasClass('active')) {
+            $('#notificationsContainer').html('')
             $('.notificationType').removeClass('active');
             $(this).addClass('active')
             let wantedType = $(this).attr('date-wantedType')
@@ -93,6 +95,7 @@ $(document).ready(function () {
                                 'pk': notifications[i].fields.sender,
                             },
                             dataType: 'json',
+                            async: false,
                             success: function (response) {
                                 output = ''
                                 let sender = response.user
@@ -118,7 +121,7 @@ $(document).ready(function () {
                                 </a>
                                 <hr>
                                 `
-                                $('#notificationsContainer').prepend(output)
+                                $('#notificationsContainer').append(output)
                             }
                         })
                     }
