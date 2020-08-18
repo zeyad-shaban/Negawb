@@ -28,8 +28,8 @@ def home(request):
         return render(request, 'userpage/index.html', {'user': user, 'form': form, 'privacy_form': privacy_form, 'distraction_free_form': distraction_free_form})
     elif request.POST['submit'] == 'Update':
         try:
-            if request.POST['email']:
-                validate_email(request.POST['email'])
+            # if request.POST['email']:
+            #     validate_email(request.POST['email'])
             form = UserForm(data=request.POST,
                             files=request.FILES, instance=request.user)
             form.save()

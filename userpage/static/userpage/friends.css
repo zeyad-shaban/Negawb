@@ -30,9 +30,9 @@ body {
 
 #frame #sidepanel {
     float: left;
-    min-width: 280px;
+    min-width: 250px;
     max-width: 340px;
-    width: 40%;
+    width: 30%;
     height: 100%;
     background: #2c3e50;
     color: #f5f5f5;
@@ -139,7 +139,7 @@ body {
 
 @media screen and (max-width: 735px) {
     #frame #sidepanel #profile .wrap p {
-        display: none;
+        display: inline;
     }
 }
 
@@ -153,7 +153,7 @@ body {
 
 @media screen and (max-width: 735px) {
     #frame #sidepanel #profile .wrap i.expand-button {
-        display: none;
+        display: inline;
     }
 }
 
@@ -269,7 +269,7 @@ body {
 
 @media screen and (max-width: 735px) {
     #frame #sidepanel #profile .wrap #status-options ul li p {
-        display: none;
+        display: inline;
     }
 }
 
@@ -341,7 +341,7 @@ body {
 
 @media screen and (max-width: 735px) {
     #frame #sidepanel #search {
-        display: none;
+        display: inline;
     }
 }
 
@@ -394,7 +394,7 @@ body {
     }
 
     #frame #sidepanel #contacts::-webkit-scrollbar {
-        display: none;
+        display: inline;
     }
 }
 
@@ -491,7 +491,7 @@ body {
 
 @media screen and (max-width: 735px) {
     #frame #sidepanel #contacts ul li.contact .wrap .meta {
-        display: none;
+        display: inline;
     }
 }
 
@@ -800,7 +800,35 @@ body {
 }
 
 @media only screen and (max-width: 399px) {
-    #contacts{
+    #contacts {
         max-width: 63px;
+    }
+}
+
+#id_is_important {
+    /* Double-sized Checkboxes */
+    -ms-transform: scale(5);
+    /* IE */
+    -moz-transform: scale(5);
+    /* FF */
+    -webkit-transform: scale(5);
+    /* Safari and Chrome */
+    -o-transform: scale(5);
+    /* Opera */
+    transform: scale(5);
+    padding: 10px;
+}
+
+/* Might want to wrap a span around your checkbox text */
+.checkboxtext {
+    /* Checkbox text */
+    font-size: 110%;
+    display: inline;
+}
+
+@media screen and (max-width: 360px) {
+    #sidepanel {
+        width: 70px;
+        height: 100vh;
     }
 }

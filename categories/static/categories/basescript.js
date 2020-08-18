@@ -126,4 +126,7 @@ $(document).ready(function () {
             })
         }
     });
+    setInterval(() => {
+        $('#message_area').html('')
+    }, 4000);
 });

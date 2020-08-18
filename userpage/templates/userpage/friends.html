@@ -4,28 +4,6 @@
 {% block title %}Chat{% endblock title %}
 
 {% block content %}
-<style>
-    input[type=checkbox] {
-        /* Double-sized Checkboxes */
-        -ms-transform: scale(5);
-        /* IE */
-        -moz-transform: scale(5);
-        /* FF */
-        -webkit-transform: scale(5);
-        /* Safari and Chrome */
-        -o-transform: scale(5);
-        /* Opera */
-        transform: scale(5);
-        padding: 10px;
-    }
-
-    /* Might want to wrap a span around your checkbox text */
-    .checkboxtext {
-        /* Checkbox text */
-        font-size: 110%;
-        display: inline;
-    }
-</style>
 <link rel="stylesheet" href="{% static 'social/emojionearea.min.css' %}">
 <link rel="stylesheet" href="{% static 'userpage/friends.css' %}">
 <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css'>
@@ -603,7 +581,7 @@
                                     <label for="id_group_image" style="color:black;">Group image</label>
                                     <small class="form-text text-muted">We will use the default image if nothing was
                                         provided</small>
-                                    <input type="file" name="image" accept="image/*" id="id_group_image">
+                                    <input type="file" name="image" accept="image/*" id="id_image">
                                 </div>
                                 <div class="form-group">
                                     <label style="color: black;" for="id_is_public">Do you want it public?</label>

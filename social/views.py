@@ -2,9 +2,8 @@ from django.core.serializers import serialize
 from django.utils.timezone import now
 import datetime
 from django.forms.models import model_to_dict
-from django.http import JsonResponse, Http404
+from django.http import JsonResponse, Http404, HttpResponseRedirect
 from django.views import generic
-from django.http import HttpResponse as hs
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Q
 from django.contrib import messages
@@ -128,6 +127,8 @@ def send_message(request):
 def create_chat_group(request):
     if request.method == 'POST':
         form = ChatGroupForm(data=request.POST, files=request.FILES)
+        print(request.POST)
+        print(request.FILES)
         new_chat_group = form.save(commit=False)
         new_chat_group.author = request.user
         new_chat_group.save()
@@ -169,13 +170,10 @@ def create_invite(request,):
         group_request.save()
         # !ABSOLUTE PATH
         if reciever.allow_invites:
-            print('about to create notification')
-            notification = Notification(notification_type='invites', sender=request.user, url='/userpage/friendrequest/', content=f'{request.user.username} wants you to join {group.title}')
-            print('created')
+            notification = Notification(notification_type='invites', sender=request.user,
+                                        url='/userpage/friendrequest/', content=f'{request.user.username} wants you to join {group.title}')
             notification.save()
-            print('saved')
             notification.receiver.add(reciever)
-            print('added receivers')
         message = {
             'text': f'Successfully invited {reciever}',
             'tags': 'success',
@@ -239,11 +237,33 @@ def load_notifications(request):
 def delete_group(request):
     pk = request.GET.get('pk')
     group = get_object_or_404(ChatGroup, pk=pk)
-    group.delete()
-    return JsonResponse({})
+    if request.user == group.author:
+        group.delete()
+        return JsonResponse({})
+    else:
+        messages.error(request, 'Only the group owner can delete the group')
+        return JsonResponse({})
+
 
 def group_members(request):
     group_id = request.GET.get('group_id')
     group = get_object_or_404(ChatGroup, pk=group_id)
-    members = group.members.all().order_by('followers')
-    return JsonResponse({'members': serialize('json', members)})
+    member_id = request.GET.get('member_id')
+    if member_id:
+        member = get_object_or_404(User, pk=member_id)
+    if request.GET.get('action') == 'showMembers':
+        members = group.members.all().order_by('followers')
+        return JsonResponse({'members': serialize('json', members)})
+    elif request.GET.get('action') == 'removeMember':
+        if (request.user in group.group_admins.all() and member not in group.group_admins.all() and not member == group.author) or (request.user == group.author):
+            group.members.remove(member)
+            if member.allow_invites:
+                notification = Notification(notification_type='invites', sender=request.user,
+                                            url=f'/people/{request.user.id}/', content=f'{request.user} removed you from {group.title}')
+                notification.save()
+                notification.receiver.add(member)
+            return JsonResponse({})
+    elif request.GET.get('action') == 'makeAdmin':
+        group.group_admins.add(member)
+    elif request.GET.get('action') == 'removeAdmin':
+        group.group_admins.remove(member)
