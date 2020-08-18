@@ -15,19 +15,20 @@ $(document).ready(function () {
         if ($(this).html() == 'Add') {
             $('#groupMembersSettings').hide()
             $('#addMemberSettings').show()
-        } else if ($(this).html() == 'Members'){
+        } else if ($(this).html() == 'Members') {
             $('#addMemberSettings').hide()
             $('#groupMembersSettings').show();
             $('#groupMembers').html('')
             $.ajax({
-                url:$('#groupMembersSettings').attr('data-url'),
+                url: $('#groupMembersSettings').attr('data-url'),
                 data: {
-                    'group_id': $('#currChat').attr('data-pk')
+                    'group_id': $('#currChat').attr('data-pk'),
+                    'action': 'showMembers'
                 },
                 dataType: 'json',
-                success: function (response){
+                success: function (response) {
                     members = JSON.parse(response.members)
-                    for (let i=0; members.length > i; i++){
+                    for (let i = 0; members.length > i; i++) {
                         $('#groupMembers').prepend(`
                         <li class="list-group-item">
                                 <div class="row w-100">
@@ -46,7 +47,7 @@ $(document).ready(function () {
                                     data-original-title="${ members[i].fields.bio }" style="color: black;"></span>
                                     <span class="small text-truncate" style="color: black;">${ members[i].fields.bio }</span>
                                     <form id="id_removeMemberForm${members[i].pk}" method="GET">
-                                        <button type="submit" name="invite," class="btn float-right"
+                                        <button type="submit" name="invite," data-pk="${members[i].pk}" class="id_removeMember btn float-right"
                                         id="id_removeMember${members[i].pk}"><i class="fas fa-minus-circle"
                                         style="font-size: 36px;"></i></button>
                                         </form>
@@ -55,31 +56,78 @@ $(document).ready(function () {
                                         </li>
                         `)
                     }
+                    var g = document.createElement('script');
+                    var s = document.getElementsByTagName('script')[0];
+
+                    function removeMember() {
+                        $(`.id_removeMember`).click(function (e) {
+                            e.preventDefault();
+                            let member_id = $(this).attr('data-pk')
+                            let confirmation = confirm(`Are you sure you want to remove ${members[member_id-1].fields.username}`)
+                            if (confirmation) {
+                                $.ajax({
+                                    url: $('#groupMembersSettings').attr('data-url'),
+                                    data: {
+                                        'group_id': $('#currChat').attr('data-pk'),
+                                        'member_id': member_id,
+                                        'action': 'removeMember'
+                                    },
+                                    method: 'get',
+                                    dataType: 'json',
+                                    success: function (response) {
+                                        $(this).fadeOut()
+                                    }
+                                })
+                            }
+                        })
+                    }
+                    g.text = removeMember()
+                    s.parentNode.insertBefore(g, s);
                 }
             })
-            // List them
-            // add kick button beside them ONLY IF ADMIN
-            // check if the user going to be kicked is either an admin or author
-            // if yes make checker author > admin > member
-            // kick or keep (NO RELOAD!!)
             // make group admin
         }
     })
-    $('#deleteGroup').click(function(evet){
+    $('#deleteGroup').click(function (evet) {
         event.preventDefault();
         let currChat = $('#currChat').attr('data-pk')
         let confirmation = confirm('Are you sure you want to delete the group?')
-        if (confirmation){
+        if (confirmation) {
             $.ajax({
                 url: $('#deleteGroup').attr('data-url'),
                 data: {
                     'pk': $('#currChat').attr('data-pk'),
                 },
-                dataType:'json',
-                success: function(response){
+                dataType: 'json',
+                success: function (response) {
                     location.reload();
                 }
             })
         }
+    })
+    $('#sidepanelCollapser').hide();
+
+    $('#sidepanelCollapser').click(function (e) {
+        e.preventDefault();
+        $('#sidepanel').slideToggle();
+    });
+
+    function windowResizing() {
+        if ($(window).width() <= 704) {
+            $('#sidepanelCollapser').show();
+            $('.contact').click(function (e) {
+                e.preventDefault();
+                $('#sidepanel').toggle();
+            });
+        }
+        if ($(window).width() >= 704) {
+            $('#sidepanel').show();
+            $('#sidepanelCollapser').hide();
+            $('.content').show();
+        }
+    }
+    windowResizing()
+    $(window).resize(function (event) {
+        windowResizing()
     })
 });
