@@ -10,7 +10,9 @@
 {% block chat_frame %}
 <div id="frame">
     {% endblock chat_frame %}
-    <div id="message_area"></div>
+    <a class="btn float-left" data-toggle="collapse" href="#sidepanel" role="button" aria-expanded="false" aria-controls="sidepanel" id="sidepanelCollapser">
+        <i class="fas fa-address-book" style="font-size: 60px"></i>
+      </a>
     <div id="sidepanel">
         <div id="profile">
             <div class="wrap">
@@ -37,7 +39,8 @@
                 <li class="contact" id="chatGroupButton{{group.id}}">
                     <div class="wrap">
                         <img src="{{group.image.url}}" alt="Group Image"
-                            class="img-fluid rounded-circle d-block mx-auto" height="50" width="50" style="max-height: 50;">
+                            class="img-fluid rounded-circle d-block mx-auto" height="50" width="50"
+                            style="max-height: 50;">
                         <div class="meta">
                             <i class="float-right mr-3 fa fa-users" style="font-size: 24px;"></i>
                             <p class="name">{{ group.title }}</p>
@@ -324,16 +327,20 @@
                         {% endif %}
                         {% if friend.who_see_avatar == 'everyone' %}
                         <img src="{{friend.avatar.url}}" alt="User Image"
-                            class="img-fluid rounded-circle d-block mx-auto" height="50" width="50" style="max-height: 50px;">
+                            class="img-fluid rounded-circle d-block mx-auto" height="50" width="50"
+                            style="max-height: 50px;">
                         {% elif friend.who_see_avatar == 'friends' and user in friend.friends.all %}
                         <img src="{{friend.avatar.url}}" alt="User Image"
-                            class="img-fluid rounded-circle d-block mx-auto" height="50" width="50" style="max-height: 50px;">
+                            class="img-fluid rounded-circle d-block mx-auto" height="50" width="50"
+                            style="max-height: 50px;">
                         {% elif friend == user %}
                         <img src="{{friend.avatar.url}}" alt="User Image"
-                            class="img-fluid rounded-circle d-block mx-auto" height="50" width="50" style="max-height: 50px;">
+                            class="img-fluid rounded-circle d-block mx-auto" height="50" width="50"
+                            style="max-height: 50px;">
                         {% else %}
                         <img src="/media/profile_images/DefaultUserImage.WebP" alt="User Image"
-                            class="img-fluid rounded-circle d-block mx-auto" height="50" width="50" style="max-height: 50px;">
+                            class="img-fluid rounded-circle d-block mx-auto" height="50" width="50"
+                            style="max-height: 50px;">
                         {% endif %}
                         <div class="meta">
                             <p class="name">{{ friend.username }}</p>
@@ -613,8 +620,8 @@
         </div>
         <div class="message-input">
             <div class="wrap">
-                <form action="" method="get" id="sendMessageForm" class="form-inline">
-                    <span class="col-lg-9 col-md-8 col-sm-8 col-6 float-left">
+                <form action="" method="get" id="sendMessageForm" class="form-inline" style="width: 100%">
+                    <span class="float-left" id="sendMessageContainer">
                         <input type="text" placeholder="Write your message..." id="inputMessage" style="display:none"
                             required />
                         <script>
@@ -623,13 +630,15 @@
                             })
                         </script>
                     </span>
+                    <div class="input-group-append" id="messageExtraInputs">
                     <!-- <i class="fa fa-paperclip attachment" aria-hidden="true"></i> -->
-                    <span class="input-group-text d-inline">
-                        <label for="id_is_important">Important</label>
-                        <input type="checkbox" aria-label="Is Important" id="id_is_important">
-                    </span>
-                    <button id="sendMessageButton" class="submit" style="height:28px"><i class="fa fa-paper-plane"
-                            aria-hidden="true"></i></button>
+                        <span class="input-group-text d-inline">
+                            <label for="id_is_important">Important</label>
+                            <input type="checkbox" aria-label="Is Important" id="id_is_important">
+                        </span>
+                        <button id="sendMessageButton" class="submit" style="height:28px"><i class="fa fa-paper-plane"
+                                aria-hidden="true"></i></button>
+                    </div>
                 </form>
             </div>
         </div>

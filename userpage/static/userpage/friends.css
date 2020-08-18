@@ -3,7 +3,7 @@ body {
     align-items: center;
     justify-content: center;
     min-height: 100vh;
-    background: #27ae60;
+    background: #E6EAEA;
     font-family: "proxima-nova", "Source Sans Pro", sans-serif;
     font-size: 1em;
     letter-spacing: 0.1px;
@@ -40,19 +40,19 @@ body {
     position: relative;
 }
 
-@media screen and (max-width: 735px) {
+/* @media screen and (max-width: 704px) {
     #frame #sidepanel {
         width: 100px;
         min-width: 100px;
     }
-}
+} */
 
 #frame #sidepanel #profile {
     width: 80%;
     margin: 25px auto;
 }
 
-@media screen and (max-width: 735px) {
+@media screen and (max-width: 704px) {
     #frame #sidepanel #profile {
         width: 100%;
         margin: 0 auto;
@@ -89,7 +89,7 @@ body {
     transition: 0.3s height ease;
 }
 
-@media screen and (max-width: 735px) {
+@media screen and (max-width: 704px) {
     #frame #sidepanel #profile .wrap {
         height: 65px;
     }
@@ -109,7 +109,7 @@ body {
     transition: 0.3s border ease;
 }
 
-@media screen and (max-width: 735px) {
+@media screen and (max-width: 704px) {
     #frame #sidepanel #profile .wrap img {
         width: 60px;
         margin-left: 4px;
@@ -137,11 +137,6 @@ body {
     margin-left: 15px;
 }
 
-@media screen and (max-width: 735px) {
-    #frame #sidepanel #profile .wrap p {
-        display: inline;
-    }
-}
 
 #frame #sidepanel #profile .wrap i.expand-button {
     float: right;
@@ -151,7 +146,7 @@ body {
     color: #435f7a;
 }
 
-@media screen and (max-width: 735px) {
+@media screen and (max-width: 704px) {
     #frame #sidepanel #profile .wrap i.expand-button {
         display: inline;
     }
@@ -173,7 +168,7 @@ body {
     transition: 0.3s all ease;
 }
 
-@media screen and (max-width: 735px) {
+@media screen and (max-width: 704px) {
     #frame #sidepanel #profile .wrap #status-options {
         width: 58px;
         margin-top: 57px;
@@ -186,7 +181,7 @@ body {
     margin: 75px 0 0 0;
 }
 
-@media screen and (max-width: 735px) {
+@media screen and (max-width: 704px) {
     #frame #sidepanel #profile .wrap #status-options.active {
         margin-top: 62px;
     }
@@ -203,7 +198,7 @@ body {
     margin: -8px 0 0 24px;
 }
 
-@media screen and (max-width: 735px) {
+@media screen and (max-width: 704px) {
     #frame #sidepanel #profile .wrap #status-options:before {
         margin-left: 23px;
     }
@@ -220,7 +215,7 @@ body {
     cursor: pointer;
 }
 
-@media screen and (max-width: 735px) {
+@media screen and (max-width: 704px) {
     #frame #sidepanel #profile .wrap #status-options ul li {
         padding: 15px 0 35px 22px;
     }
@@ -238,7 +233,7 @@ body {
     margin: 5px 0 0 0;
 }
 
-@media screen and (max-width: 735px) {
+@media screen and (max-width: 704px) {
     #frame #sidepanel #profile .wrap #status-options ul li span.status-circle {
         width: 14px;
         height: 14px;
@@ -256,7 +251,7 @@ body {
     z-index: 0;
 }
 
-@media screen and (max-width: 735px) {
+@media screen and (max-width: 704px) {
     #frame #sidepanel #profile .wrap #status-options ul li span.status-circle:before {
         height: 18px;
         width: 18px;
@@ -267,11 +262,6 @@ body {
     padding-left: 12px;
 }
 
-@media screen and (max-width: 735px) {
-    #frame #sidepanel #profile .wrap #status-options ul li p {
-        display: inline;
-    }
-}
 
 #frame #sidepanel #profile .wrap #status-options ul li#status-online span.status-circle {
     background: #2ecc71;
@@ -339,11 +329,6 @@ body {
     font-weight: 300;
 }
 
-@media screen and (max-width: 735px) {
-    #frame #sidepanel #search {
-        display: inline;
-    }
-}
 
 #frame #sidepanel #search label {
     position: absolute;
@@ -386,7 +371,7 @@ body {
     overflow-x: hidden;
 }
 
-@media screen and (max-width: 735px) {
+@media screen and (max-width: 704px) {
     #frame #sidepanel #contacts {
         height: calc(100% - 149px);
         overflow-y: scroll;
@@ -418,7 +403,7 @@ body {
     cursor: pointer;
 }
 
-@media screen and (max-width: 735px) {
+@media screen and (max-width: 704px) {
     #frame #sidepanel #contacts ul li.contact {
         padding: 6px 0 66px 8px;
     }
@@ -443,7 +428,7 @@ body {
     position: relative;
 }
 
-@media screen and (max-width: 735px) {
+@media screen and (max-width: 704px) {
     #frame #sidepanel #contacts ul li.contact .wrap {
         width: 100%;
     }
@@ -479,7 +464,7 @@ body {
     margin-right: 10px;
 }
 
-@media screen and (max-width: 735px) {
+@media screen and (max-width: 704px) {
     #frame #sidepanel #contacts ul li.contact .wrap img {
         margin-right: 0px;
     }
@@ -489,11 +474,6 @@ body {
     padding: 5px 0 0 0;
 }
 
-@media screen and (max-width: 735px) {
-    #frame #sidepanel #contacts ul li.contact .wrap .meta {
-        display: inline;
-    }
-}
 
 #frame #sidepanel #contacts ul li.contact .wrap .meta .name {
     font-weight: 600;
@@ -540,7 +520,7 @@ body {
     font-family: "proxima-nova", "Source Sans Pro", sans-serif;
 }
 
-@media screen and (max-width: 735px) {
+@media screen and (max-width: 704px) {
     #frame #sidepanel #bottom-bar button {
         float: none;
         width: 100%;
@@ -556,7 +536,7 @@ body {
     border-right: 1px solid #2c3e50;
 }
 
-@media screen and (max-width: 735px) {
+@media screen and (max-width: 704px) {
     #frame #sidepanel #bottom-bar button:nth-child(1) {
         border-right: none;
         border-bottom: 1px solid #2c3e50;
@@ -572,17 +552,12 @@ body {
     font-size: 1em;
 }
 
-@media screen and (max-width: 735px) {
+@media screen and (max-width: 704px) {
     #frame #sidepanel #bottom-bar button i {
         font-size: 1.3em;
     }
 }
 
-@media screen and (max-width: 735px) {
-    #frame #sidepanel #bottom-bar button span {
-        display: none;
-    }
-}
 
 #frame .content {
     float: right;
@@ -592,7 +567,7 @@ body {
     position: relative;
 }
 
-@media screen and (max-width: 735px) {
+@media screen and (max-width: 704px) {
     #frame .content {
         width: calc(100% - 100px);
         min-width: 300px !important;
@@ -650,7 +625,7 @@ body {
     width: 100%;
 }
 
-@media screen and (max-width: 735px) {
+@media screen and (max-width: 704px) {
     #frame .content .messages {
         max-height: calc(100% - 105px);
     }
@@ -712,7 +687,7 @@ body {
     font-size: 18px;
 }
 
-@media screen and (min-width: 735px) {
+@media screen and (min-width: 704px) {
     #frame .content .messages ul li p {
         max-width: 300px;
     }
@@ -739,7 +714,7 @@ body {
     color: #32465a;
 }
 
-@media screen and (max-width: 735px) {
+@media screen and (max-width: 704px) {
     #frame .content .message-input .wrap input {
         padding: 15px 32px 16px 8px;
     }
@@ -760,7 +735,7 @@ body {
     cursor: pointer;
 }
 
-@media screen and (max-width: 735px) {
+@media screen and (max-width: 704px) {
     #frame .content .message-input .wrap .attachment {
         margin-top: 19px;
         right: 65px;
@@ -781,7 +756,7 @@ body {
     color: #f5f5f5;
 }
 
-@media screen and (max-width: 735px) {
+@media screen and (max-width: 704px) {
     #frame .content .message-input .wrap button {
         padding: 21px 0;
     }
@@ -826,9 +801,86 @@ body {
     display: inline;
 }
 
-@media screen and (max-width: 360px) {
+
+#sendMessageContainer{
+    width:80%;
+}
+#messageExtraInputs{
+    width:20%;
+}
+
+@media screen and (max-width:1000px){
+
+    #sendMessageContainer{
+        width:75%;
+    }
+    #messageExtraInputs{
+        width:25%;
+    }
+
+}
+@media screen and (max-width:908px){
+
+    #sendMessageContainer{
+        width:70%;
+    }
+    #messageExtraInputs{
+        width:30%;
+    }
+
+}
+@media screen and (max-width:584px){
+
+    #sendMessageContainer{
+        width:55%;
+    }
+    #messageExtraInputs{
+        width:45%;
+    }
+
+}
+@media screen and (max-width:379px){
+
+    #sendMessageContainer{
+        width:100%;
+    }
+    #messageExtraInputs{
+        width:100%;
+    }
+}
+@media screen and (max-width:335px){
+
+    #sendMessageContainer{
+        width:70%;
+    }
+    #messageExtraInputs{
+        width:100%;
+    }
+}
+
+/* @media screen and (max-width:584px){
+
+    #sendMessageContainer{
+        width:60%;
+    }
+    #messageExtraInputs{
+        width:40%;
+    }
+
+} */
+
+
+@media screen and (max-width:704px) {
     #sidepanel {
-        width: 70px;
-        height: 100vh;
+        display: none;
+    }
+
+    #sidepanelCollapser {
+        display: block;
+    }
+
+    #frame .content {
+        width: calc(100% - 100px);
+        min-width: 300px !important;
     }
 }

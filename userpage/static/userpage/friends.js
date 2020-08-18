@@ -103,7 +103,31 @@ $(document).ready(function () {
                     location.reload();
                 }
             })
-            // location.reload();
         }
+    })
+    $('#sidepanelCollapser').hide();
+
+    $('#sidepanelCollapser').click(function (e) {
+        e.preventDefault();
+        $('#sidepanel').slideToggle();
+    });
+
+    function windowResizing() {
+        if ($(window).width() <= 704) {
+            $('#sidepanelCollapser').show();
+            $('.contact').click(function (e) {
+                e.preventDefault();
+                $('#sidepanel').toggle();
+            });
+        }
+        if ($(window).width() >= 704) {
+            $('#sidepanel').show();
+            $('#sidepanelCollapser').hide();
+            $('.content').show();
+        }
+    }
+    windowResizing()
+    $(window).resize(function (event) {
+        windowResizing()
     })
 });
