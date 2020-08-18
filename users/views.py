@@ -1,4 +1,4 @@
-from .utils import account_activation_token
+# from .utils import account_activation_token
 from django.urls import reverse
 from django.core.mail import EmailMessage
 from django.views import generic
