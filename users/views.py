@@ -1,11 +1,10 @@
 from .utils import account_activation_token
 from django.urls import reverse
-from django.utils.encoding import force_bytes, force_text, DjangoUnicodeDecodeError
 from django.core.mail import EmailMessage
 from django.views import generic
 from django.template.loader import render_to_string
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.utils.encoding import force_bytes, force_text
+# from django.utils.encoding import force_bytes, force_text, DjangoUnicodeDecodeError
+# from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.sites.shortcuts import get_current_site
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
@@ -29,23 +28,24 @@ def signupuser(request):
             try:
                 user = User.objects.create_user(
                     request.POST['username'], password=request.POST['password1'])
-                if request.POST['email']:
-                    user.is_active = False
-                    uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
-                    domain = get_current_site(request).domain
-                    link = reverse('activate', kwargs={
-                        'uidb64': uidb64, 'token': account_activation_token.make_token(user)})
-                    #! CHANGE TO HTTPS WHEN DEVELOPMENT
-                    # TODO TO HTTPS WHEN DEVELOPMENT
-                    activate_url = f'http://{domain}{link}'
-                    email_body = f'{user.username} You are one step away from activating your account, just click this link to vertify your account \n {activate_url} \n Thanks for joining DFreeMedia Community'
-                    email = EmailMessage(
-                        subject='Activate Your DFreeMedia Account',
-                        body=email_body,
-                        from_email='dfreemedia@gmail.com',
-                        to=(request.POST.get('email'),),
-                    )
-                    email.send(fail_silently=False)
+                if False:
+                    pass
+                    # user.is_active = False
+                    # uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
+                    # domain = get_current_site(request).domain
+                    # link = reverse('activate', kwargs={
+                    #     'uidb64': uidb64, 'token': account_activation_token.make_token(user)})
+                    # #! CHANGE TO HTTPS WHEN DEVELOPMENT
+                    # # TODO TO HTTPS WHEN DEVELOPMENT
+                    # activate_url = f'http://{domain}{link}'
+                    # email_body = f'{user.username} You are one step away from activating your account, just click this link to vertify your account \n {activate_url} \n Thanks for joining DFreeMedia Community'
+                    # email = EmailMessage(
+                    #     subject='Activate Your DFreeMedia Account',
+                    #     body=email_body,
+                    #     from_email='dfreemedia@gmail.com',
+                    #     to=(request.POST.get('email'),),
+                    # )
+                    # email.send(fail_silently=False)
                 else:
                     user.save()
                     login(request, user)
