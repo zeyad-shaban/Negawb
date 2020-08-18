@@ -59,7 +59,6 @@ $(document).ready(function () {
                                 </a>
                                 <hr>
                                 `
-                                console.log(i)
                                 $('#notificationsContainer').append(output)
                             }
                         })

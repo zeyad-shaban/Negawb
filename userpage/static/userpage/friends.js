@@ -85,11 +85,6 @@ $(document).ready(function () {
                     s.parentNode.insertBefore(g, s);
                 }
             })
-            // List them
-            // add kick button beside them ONLY IF ADMIN
-            // check if the user going to be kicked is either an admin or author
-            // if yes make checker author > admin > member
-            // kick or keep (NO RELOAD!!)
             // make group admin
         }
     })
