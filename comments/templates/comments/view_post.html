@@ -7,6 +7,7 @@
 {% block content %}
 <!-- <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css"> -->
 <link rel="stylesheet" href="{% static 'comments/view_post.css' %}">
+<link rel="stylesheet" href="{% static 'social/emojionearea.min.css' %}">
 <script src="{% static 'comments/view_post.js' %}"></script>
 
 {% if post.image %}
@@ -194,6 +195,13 @@
     <span class="float-right" id="commentCancelButtons">
         <button class="btn btn-secondary" id="cancelCommentButton">Cancel</button>
         <input class="btn btn-primary" type="submit" value="Comment" id="addComment">
+        <script>
+            $(document).ready(function () {
+                $("textarea").emojioneArea({
+                    pickerPosition: "bottom"
+                });
+            })
+        </script>
     </span>
 </form>
 <script>
@@ -213,9 +221,9 @@
                 },
                 success: function (response) {
                     let userImage
-                    if (response.comment.user.who_see_avatar == "everyone"){
+                    if (response.comment.user.who_see_avatar == "everyone") {
                         userImage = "{response.comment.user.avatar.url}"
-                    }else{
+                    } else {
                         userImage = "/media/profile_images/DefaultUserImage.WebP"
                     }
                     $('#commentsList').prepend(`
@@ -415,4 +423,5 @@
     {% else %}
     <small class="form-text text-muted">Your Distraction Free settings doesn't allow comments to show up😍</small>
     {% endif %}
+<script src="{% static 'social/emojionearea.min.js' %}"></script>
     {% endblock content %}

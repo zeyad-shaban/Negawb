@@ -4,6 +4,29 @@
 {% block title %}Chat{% endblock title %}
 
 {% block content %}
+<style>
+    input[type=checkbox] {
+        /* Double-sized Checkboxes */
+        -ms-transform: scale(5);
+        /* IE */
+        -moz-transform: scale(5);
+        /* FF */
+        -webkit-transform: scale(5);
+        /* Safari and Chrome */
+        -o-transform: scale(5);
+        /* Opera */
+        transform: scale(5);
+        padding: 10px;
+    }
+
+    /* Might want to wrap a span around your checkbox text */
+    .checkboxtext {
+        /* Checkbox text */
+        font-size: 110%;
+        display: inline;
+    }
+</style>
+<link rel="stylesheet" href="{% static 'social/emojionearea.min.css' %}">
 <link rel="stylesheet" href="{% static 'userpage/friends.css' %}">
 <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css'>
 {% block chat_frame %}
@@ -296,7 +319,7 @@
                                 </div>
                                 <div id="groupMembersSettings" data-url="{% url 'social:group_members' %}">
                                     <div id="groupMembers">
-                                        
+
                                     </div>
                                     <hr>
                                     <h3 style="color: black;">Danger Area</h3>
@@ -521,6 +544,7 @@
                                             }, 3000);
                                         }
                                         $('#inputMessage').val('')
+                                        $('.emojionearea-editor').html('')
                                         $("#id_is_important").prop("checked", false);
                                         $('<li class="sent"><img src="{{ user }}" alt="" /><p>' +
                                             userInput + '</p></li>').appendTo($(
@@ -611,18 +635,28 @@
         </div>
         <div class="message-input">
             <div class="wrap">
-                <form action="" method="get" id="sendMessageForm">
-                    <input type="text" placeholder="Write your message..." id="inputMessage" required />
+                <form action="" method="get" id="sendMessageForm" class="form-inline">
+                    <span class="col-lg-9 col-md-8 col-sm-8 col-6 float-left">
+                        <input type="text" placeholder="Write your message..." id="inputMessage" style="display:none"
+                            required />
+                        <script>
+                            $(document).ready(function () {
+                                $('#inputMessage').emojioneArea()
+                            })
+                        </script>
+                    </span>
                     <!-- <i class="fa fa-paperclip attachment" aria-hidden="true"></i> -->
-                    <button id="sendMessageButton" class="submit"><i class="fa fa-paper-plane"
+                    <span class="input-group-text d-inline">
+                        <label for="id_is_important">Important</label>
+                        <input type="checkbox" aria-label="Is Important" id="id_is_important">
+                    </span>
+                    <button id="sendMessageButton" class="submit" style="height:28px"><i class="fa fa-paper-plane"
                             aria-hidden="true"></i></button>
                 </form>
-            </div>
-            <div class="input-group-text">
-                <input type="checkbox" aria-label="Checkbox for following text input" id="id_is_important">
             </div>
         </div>
     </div>
 </div>
 <script src="{% static 'userpage/friends.js' %}"></script>
+<script src="{% static 'social/emojionearea.min.js' %}"></script>
 {% endblock content %}

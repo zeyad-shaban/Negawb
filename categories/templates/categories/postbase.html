@@ -4,6 +4,7 @@
 {{category.title}}
 {% endblock title %}
 {% block content %}
+<link rel="stylesheet" href="{% static 'social/emojionearea.min.css' %}">
 <style>
     .card.bg-dark.text-white {
         width: 397px;
@@ -21,6 +22,13 @@
     <div class="form-group">
         <label for="id_post_description">Description</label>
         <textarea type="text" name="description" id="id_post_description" class="form-control"></textarea>
+        <script>
+            $(document).ready(function () {
+                $('textarea').emojioneArea({
+                    pickerPosition: "bottom",
+                })
+            })
+        </script>
     </div>
     <div class="form-group">
         <p><label for="id_post_image">Optional Image</label>
@@ -242,6 +250,6 @@
         {% endif %}
     </ul>
 </nav>
-
+<script src="{% static 'social/emojionearea.min.js' %}"></script>
 
 {% endblock content %}
