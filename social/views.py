@@ -81,7 +81,7 @@ def send_message(request):
                     for receiver in notification.receiver.all():
                         if notification.sender.who_see_avatar == 'everyone':
                             sender_avatar = notification.sender.avatar.url
-                        elif notification.sender.who_see_avatar == 'friends' and receiver in receiver.friends.all:
+                        elif notification.sender.who_see_avatar == 'friends' and receiver in receiver.friends.all():
                             sender_avatar = notification.sender.avatar.url
                         else:
                             sender_avatar = '/media/profile_images/DefaultUserImage.WebP'
@@ -102,7 +102,7 @@ def send_message(request):
                 for receiver in notification.receiver.all():
                     if notification.sender.who_see_avatar == 'everyone':
                         sender_avatar = notification.sender.avatar.url
-                    elif notification.sender.who_see_avatar == 'friends' and receiver in receiver.friends.all:
+                    elif notification.sender.who_see_avatar == 'friends' and receiver in receiver.friends.all():
                         sender_avatar = notification.sender.avatar.url
                     else:
                         sender_avatar = '/media/profile_images/DefaultUserImage.WebP'
@@ -139,7 +139,7 @@ def send_message(request):
                         payload = {"head": f"Important message from {group.title} Group, {notification.sender}",
                         "body": notification.content,
                         "url": notification.url,
-                        "icon": group.image,
+                        "icon": group.image.url,
                         }
                         send_user_notification(user = receiver, payload = payload,ttl = 1000)
                 message.is_important = request.GET.get('is_important', False)
@@ -157,10 +157,9 @@ def send_message(request):
                         payload = {"head": f"{notification.sender} send a message in {group.title} group",
                         "body": notification.content,
                         "url": notification.url,
-                        "icon": group.image,
+                        "icon": group.image.url,
                         }
-                        send_user_notification(user = receiver, payload = payload,ttl = 1000)
-                
+                        send_user_notification(user = receiver, payload = payload,ttl= 1000)
     message.save()
     return JsonResponse({})
 
@@ -219,7 +218,7 @@ def create_invite(request,):
             for receiver in notification.receiver.all():
                 if notification.sender.who_see_avatar == 'everyone':
                     sender_avatar = notification.sender.avatar.url
-                elif notification.sender.who_see_avatar == 'friends' and receiver in receiver.friends.all:
+                elif notification.sender.who_see_avatar == 'friends' and receiver in receiver.friends.all():
                     sender_avatar = notification.sender.avatar.url
                 else:
                     sender_avatar = '/media/profile_images/DefaultUserImage.WebP'
@@ -246,19 +245,6 @@ def join_group(request, pk):
                                     url=f'/people/{request.user.id}/', content=f'{request.user} joined {group.title}')
         notification.save()
         notification.receiver.add(group_request.request_sender)
-        for receiver in notification.receiver.all():
-            if notification.sender.who_see_avatar == 'everyone':
-                sender_avatar = notification.sender.avatar.url
-            elif notification.sender.who_see_avatar == 'friends' and receiver in receiver.friends.all:
-                sender_avatar = notification.sender.avatar.url
-            else:
-                sender_avatar = '/media/profile_images/DefaultUserImage.WebP'
-            payload = {"head": f"{request.user} joined  {group.title}",
-            "body": notification.content,
-            "url": notification.url,
-            "icon": sender_avatar,
-            }
-            send_user_notification(user = receiver, payload = payload,ttl = 1000)
     message = {
         'text': f'Welome to {group.title}',
         'tags': 'success',
@@ -271,21 +257,8 @@ def deny_group(request, pk):
     group_request.delete()
     if group_request.request_sender.your_invites:
         notification = Notification(notification_type='your_invites', sender=request.user,
-                                    url=f'/people/{request.user.id}/', content=f'{request.user} Denied your inite to join {group_request.group.title}')
+                                    url=f'/people/{request.user.id}/', content=f'{request.user} Denied your invite to join {group_request.group.title}')
         notification.save()
-        for receiver in notification.receiver.all():
-            if notification.sender.who_see_avatar == 'everyone':
-                sender_avatar = notification.sender.avatar.url
-            elif notification.sender.who_see_avatar == 'friends' and receiver in receiver.friends.all:
-                sender_avatar = notification.sender.avatar.url
-            else:
-                sender_avatar = '/media/profile_images/DefaultUserImage.WebP'
-            payload = {"head": f"{request.user} Denied your inite to join {group_request.group.title}",
-            "body": notification.content,
-            "url": notification.url,
-            "icon": sender_avatar,
-            }
-            send_user_notification(user = receiver, payload = payload,ttl = 1000)
         notification.receiver.add(group_request.request_sender)
     message = {
         'text': f'You didn\'t join {group_request.group.title}',

@@ -98,7 +98,7 @@ def addfriend(request):
                 for receiver in notification.receiver.all():
                     if notification.sender.who_see_avatar == 'everyone':
                         sender_avatar = notification.sender.avatar.url
-                    elif notification.sender.who_see_avatar == 'friends' and receiver in receiver.friends.all:
+                    elif notification.sender.who_see_avatar == 'friends' and receiver in receiver.friends.all():
                         sender_avatar = notification.sender.avatar.url
                     else:
                         sender_avatar = '/media/profile_images/DefaultUserImage.WebP'
