@@ -158,7 +158,8 @@
                                 likes + '</b></p>')
                         } else if (data.action == 'unlike') {
                             likes -= 1
-                            $('#id_likes{{post.id}}').html('<p style="color:#black;"' + likes +
+                            $('#id_likes{{post.id}}').html('<p style="color:#black;"' +
+                                likes +
                                 '</p>')
                         } else {
                             likes++
@@ -206,7 +207,8 @@
                         if (data.action == 'unlike_and_dislike') {
                             dislikes++
                             likes -= 1
-                            $('#id_dislikes{{post.id}}').html('<p style="color:#065FD4;"><b>' +
+                            $('#id_dislikes{{post.id}}').html(
+                                '<p style="color:#065FD4;"><b>' +
                                 dislikes + '</b></p>')
                             $('#id_likes{{post.id}}').html('<p style="color:black;">' +
                                 likes + '</p>')
@@ -217,7 +219,8 @@
                                 '</p>')
                         } else {
                             dislikes++
-                            $('#id_dislikes{{post.id}}').html('<p style="color:#065FD4;"><b>' +
+                            $('#id_dislikes{{post.id}}').html(
+                                '<p style="color:#065FD4;"><b>' +
                                 dislikes + '</b></p>')
                         }
                     }
