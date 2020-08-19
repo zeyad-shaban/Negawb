@@ -31,9 +31,21 @@ def people(request, pk):
 
 @login_required
 def all_people(request):
-    users = User.objects.all().order_by('-id')
+    users_list = User.objects.all().order_by('-id')
+    paginator = Paginator(users_list, 4)
+    page= request.GET.get('page')
+    try:
+        users = paginator.page(page)
+    except PageNotAnInteger:
+        users = paginator.page(1)
+    except EmptyPage:
+        users = []
     user_friends = User.objects.filter(friends=request.user)
-    return render(request, 'people/all_people.html', {'users': users, 'user_friends': user_friends, })
+    if request.GET.get('page'):
+        
+        return JsonResponse({'users': serialize('json', users)})
+    else:
+        return render(request, 'people/all_people.html', {'users': users, 'user_friends': user_friends, })
 
 
 def all_peopleresults(request):
