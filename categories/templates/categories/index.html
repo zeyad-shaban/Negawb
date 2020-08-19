@@ -2,13 +2,6 @@
 {% load static %}
 {% block title %} Home Page {% endblock title %}
 
-{% block searchbar %}
-<!-- todo -->
-<!-- <form class="form-inline" method="GET">
-    <input class="form-control mr-sm-2" type="search" name="q" placeholder="Search" aria-label="Search">
-    <input class="btn btn-outline-success my-2 my-sm-0" type="submit" value="Search">
-</form> -->
-{% endblock searchbar %}
 {% block content %}
 
 <ul class="list-group list-group-horizontal">
@@ -28,7 +21,7 @@
 {% if not user.homepage_posts %}
 <small class="form-text text-muted">Your Distraction Free settings doesn't allow posts to show in homepage</small>
 {% endif %}
-<div class="row row-cols-1 row-cols-md-3 homepageItem" id="categoryContainer">
+<div class="row row-cols-1 row-cols-md-3 homepageItem" id="categoryContainer" data-url="{% url 'userpage:get_user_by_id' %}" data-currUser="{{user}}">
     {% for category in categories %}
     {% if not category.id == 1 %}
     {% if not category.id == 7 %}
@@ -99,7 +92,7 @@
     <div class="alert alert-danger">You must be logged in to add posts</div>
     {% endif %}
 
-    {% for post in user.homepage_posts.post_set.all %}
+    {% for post in homepage_posts %}
     {% if post.image %}
     <a href="{% url 'people:people' post.user.id %}">
         <img src="{{ post.user.avatar.url }}" alt="{{ post.user.username }}" widht="64" height="64"
