@@ -23,7 +23,7 @@
 <body>
     {% block chat_frame %} {% endblock chat_frame %}
     <nav
-        class="navbar navbar-expand-xl navbar-expand-lg navbar-expand-md navbar-expand-sm navbar-dark bg-dark {% if user.fixed_navbar %}sticky-top{% endif %}">
+        class="navbar navbar-expand-xl navbar-expand-lg navbar-expand-md navbar-expand-sm navbar-dark bg-dark {% if user.fixed_navbar or not user.is_authenticated %}sticky-top{% endif %}">
         <a class="navbar-brand" href="{% url 'home' %}">
             <img src="{% static 'categories/favicon.WebP' %}" width="35" height="30" alt="Website Logo" loading="lazy">
         </a>

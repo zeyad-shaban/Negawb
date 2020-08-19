@@ -37,6 +37,8 @@ class User(AbstractUser):
     is_confirmed = models.BooleanField(default=False)
     is_trusted = models.BooleanField(default=False)  # For news
     allow_friend_request = models.BooleanField(default=True)
+    homepage_posts = models.ForeignKey(Category, on_delete= models.CASCADE ,null=True, blank=True)
+
 
     # DISTRACTION FREE!!!!!!!!!!!!!!!
     hide_comments = models.BooleanField(default=False)

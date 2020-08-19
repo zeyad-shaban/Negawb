@@ -115,9 +115,10 @@
                         <div class="dropdown-menu" id="notificationFields" style="width: 250px; max-height:200px; overflow:scroll; ">
                         </div>
                     </div>
-                    <hr>
+                    <br>
+                    <br>
                     {% for field in distraction_free_form %}
-                    {% if field.label == 'Hide posts in homepage' %}
+                    {% if field.html_name == 'hide_posts_in_homepage' %}
                     {{field.label|safe}}
                     {{field}}
                     <hr>
@@ -132,14 +133,10 @@
                             `)
                         })
                     </script>
-                    {% elif field.html_name == 'chat_only_mode' %}
-                    {{field.label|safe}}
-                    {{ field }}
-                    <small class="form-text text-muted">Turns DFreeMedia into Chatting and todo app only</small>
-                    <br>
                     {% else %}
-                    {{field.label}}
+                    {{field.label|safe}}
                     {{field}}
+                    <br>
                     <br>
                     {% endif %}
                     {% endfor %}

@@ -11,8 +11,24 @@
 {% endblock searchbar %}
 {% block content %}
 
-
-<div class="row row-cols-1 row-cols-md-3">
+<ul class="list-group list-group-horizontal">
+    {% if user.homepage_posts %}
+    <li class="list-group-item active homepageView">Posts</li>
+    <li class="list-group-item homepageView">Categories</li>
+    {% else %}
+    <li class="list-group-item homepageView">Posts</li>
+    <li class="list-group-item active homepageView">Categories</li>
+    {% endif %}
+    {% if not user.hide_posts_in_homepage %}
+    <li class="list-group-item homepageView" id="toggleFriendsPosts">Friends Posts</li>
+    <li class="list-group-item homepageView">Followed Posts</li>
+    {% endif %}
+</ul>
+<!-- categories -->
+{% if not user.homepage_posts %}
+<small class="form-text text-muted">Your Distraction Free settings doesn't allow posts to show in homepage</small>
+{% endif %}
+<div class="row row-cols-1 row-cols-md-3 homepageItem" id="categoryContainer">
     {% for category in categories %}
     {% if not category.id == 1 %}
     {% if not category.id == 7 %}
@@ -36,18 +52,277 @@
     {% endfor %}
 </div>
 
+<!-- Homepage posts -->
+{% if user.homepage_posts %}
+<div class="homepageItem" id="postsContainer">
+    <link rel="stylesheet" href="{% static 'social/emojionearea.min.css' %}">
+    <style>
+        .card.bg-dark.text-white {
+            width: 397px;
+            height: 262;
+        }
+
+        .card-img-overlay {
+            display: none;
+        }
+    </style>
+
+    {% if user.is_authenticated %}
+    <form method="POST" class="mb-4" enctype="multipart/form-data"
+        action="{% url 'comments:create_post' user.homepage_posts.id %}">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="id_post_description">Description</label>
+            <textarea type="text" name="description" id="id_post_description" class="form-control"></textarea>
+            <script>
+                $(document).ready(function () {
+                    $('textarea').emojioneArea({
+                        pickerPosition: "bottom",
+                    })
+                })
+            </script>
+        </div>
+        <div class="form-group">
+            <p><label for="id_post_image">Optional Image</label>
+                <input type="file" name="image" accept="image/*" id="id_image"></p>
+        </div>
+        <div class="form-group">
+            <p><label for="id_post_image">Or Video</label>
+                <input type="file" name="post_file" accept="video/*" id="id_post_file"></p>
+        </div>
+        <small class="form-text text-muted">You don't have to specify image or video, but if you do then only one of
+            them</small>
+
+        <input type="submit" value="Add Post" class="btn btn-primary" id="addPostButton">
+    </form>
+    {% else %}
+    <div class="alert alert-danger">You must be logged in to add posts</div>
+    {% endif %}
+
+    {% for post in user.homepage_posts.post_set.all %}
+    {% if post.image %}
+    <a href="{% url 'people:people' post.user.id %}">
+        <img src="{{ post.user.avatar.url }}" alt="{{ post.user.username }}" widht="64" height="64"
+            class="mr-3 float-left">
+        <span>{{post.user.username}}</span>
+    </a>
+    <div class="mb-3">
+        <div class="card-body">
+            {% if post.description %}
+            <p class="card-text">{{post.description|truncatechars:200}}{% if post.description|length > 200%}<a
+                    href="{% url 'comments:view_post' post.id %}">Read
+                    More</a>{% endif %}</p>
+            {% endif %}
+            <img src="{{ post.image.url }}" alt="{{ post.user.username }}" height="250" width="40%">
+            <p class="card-text"><small class="form-text text-muted">Published at
+                    {{ post.post_date|date:'d M Y' }}</small>
+            </p>
+        </div>
+    </div>
+    <!-- Descriptin only post -->
+    {% elif post.description and not post.image and not post.post_file %}
+    <div class="card">
+        <div class="card-header">
+            <a href="{% url 'people:people' post.user.id %}">
+                <img src="{{ post.user.avatar.url }}" alt="{{ post.user.username }}" widht="64" height="64"
+                    class="mr-3 float-left">
+                {{post.user.username}}
+            </a>
+        </div>
+        <div class="card-body">
+            <blockquote class="blockquote mb-0">
+                <p class="text-break">{{post.description|truncatechars:450}} {% if post.description|length > 450%}<a
+                        href="{% url 'comments:view_post' post.id %}">Read
+                        More</a>{% endif %}</p>
+                <small class="form-text text-muted">Published at {{ post.post_date|date:'d M Y' }}</small>
+            </blockquote>
+        </div>
+    </div>
+    <!-- File post -->
+    {% elif post.post_file %}
+    <a href="{% url 'people:people' post.user.id %}">
+        <img src="{{ post.user.avatar.url }}" alt="{{ post.user.username }}" widht="64" height="64"
+            class="mr-3 float-left">
+        <span>{{post.user.username}}</span>
+    </a>
+    <div class="mb-3">
+        <div class="card-body">
+            {% if post.description %}
+            <p class="card-text">{{post.description|truncatechars:200}}{% if post.description|length > 200%}<a
+                    href="{% url 'comments:view_post' post.id %}">Read
+                    More</a>{% endif %}</p>
+            {% endif %}
+            <video width="400" height="320" controls>
+                <source src="{{ post.post_file.url }}" type="video/mp4">
+                <source src="{{ post.post_file.url }}" type="video/ogg">
+                Your browser does not support the video tag.
+            </video>
+            <p class="card-text"><small class="form-text text-muted">Published at
+                    {{ post.post_date|date:'d M Y' }}</small>
+            </p>
+        </div>
+    </div>
+    {% endif %}
+    <span class="row justify-content-center">
+        <span><a href="{% url 'comments:view_post' post.id %}" style="text-decoration: none; color:black;"><i
+                    class="far fa-comment-dots" style="font-size:36px;"></i></a></span>
+        <!-- Like -->
+        <form method="GET" id="likeForm{{post.id}}" class="form-inline">
+            <button type="submit" name="submit" value="like" title="Like" class="btn btn-link">
+                <i class="fa fa-thumbs-o-up" aria-hidden="true" style="font-size:36px" id="likeButton{{post.id}}"></i>
+            </button>
+        </form>
+        <span class="m-3" id="id_likes{{post.id}}">
+            {% if user in post.likes.all %}
+            <p style="color:#065FD4;"><b>{{post.likes.count}}</b></p>
+            {% else %}
+            <p style="color:black;">{{post.likes.count}}</p>
+            {% endif %}
+        </span>
+        <!-- add like script -->
+        <script>
+            $(document).ready(function () {
+
+                $('#likeForm{{post.id}}').click((event) => {
+                    event.preventDefault()
+                })
+                $('#likeButton{{post.id}}').click(function (event) {
+                    $.ajax({
+                        url: "{% url 'comments:post_like_dislike' post.id %}",
+                        data: {
+                            'submit': 'like',
+                        },
+                        method: 'get',
+                        dataType: 'json',
+                        success: function (data) {
+                            let likes = "{{post.likes.count}}";
+                            let dislikes = "{{ post.dislikes.count }}"
+                            if (data.action == 'undislike_and_like') {
+                                dislikes -= 1
+                                likes++
+                                $('#id_dislikes{{post.id}}').html(
+                                    '<p style="color:black;">' +
+                                    dislikes + '</p>')
+                                $('#id_likes{{post.id}}').html(
+                                    '<p style="color:#065FD4;"><b>' +
+                                    likes + '</b></p>')
+                            } else if (data.action == 'unlike') {
+                                likes -= 1
+                                $('#id_likes{{post.id}}').html('<p style="color:#black;"' +
+                                    likes +
+                                    '</p>')
+                            } else {
+                                likes++
+                                $('#id_likes{{post.id}}').html(
+                                    '<p style="color:#065FD4;"><b>' +
+                                    likes + '</b></p>')
+                            }
+                        }
+                    })
+                })
+
+            })
+        </script>
+        <!-- Dislike -->
+        <form action="{% url 'comments:post_like_dislike' post.id %}" method="post" class="form-inline"
+            id="dislikeForm{{post.id}}">
+            {% csrf_token %}
+            <button type="submit" id="dislikeButton{{post.id}}" name="submit" value="dislike" title="Dislike"
+                class="btn">
+                <i class="fa fa-thumbs-o-down" aria-hidden="true" style="font-size:36px"></i>
+            </button>
+        </form>
+        <span class="m-3" id="id_dislikes{{post.id}}">
+            {% if user in post.dislikes.all %}
+            <p style="color:#065FD4;"><b>{{post.dislikes.count}}</b></p>
+            {% else %}
+            <p style="color:black;">{{post.dislikes.count}}</p>
+            {% endif %}
+        </span>
+        <!-- add like script -->
+        <script>
+            $(document).ready(function () {
+
+                $('#dislikeForm{{post.id}}').click((event) => {
+                    event.preventDefault()
+                })
+                $('#dislikeButton{{post.id}}').click(function (event) {
+                    $.ajax({
+                        url: "{% url 'comments:post_like_dislike' post.id %}",
+                        data: {
+                            'submit': 'dislike',
+                        },
+                        dataType: 'json',
+                        success: function (data) {
+                            let likes = "{{post.likes.count}}";
+                            let dislikes = "{{ post.dislikes.count }}"
+                            if (data.action == 'unlike_and_dislike') {
+                                dislikes++
+                                likes -= 1
+                                $('#id_dislikes{{post.id}}').html(
+                                    '<p style="color:#065FD4;"><b>' +
+                                    dislikes + '</b></p>')
+                                $('#id_likes{{post.id}}').html('<p style="color:black;">' +
+                                    likes + '</p>')
+                            } else if (data.action == 'undislike') {
+                                dislikes -= 1
+                                $('#id_dislikes{{post.id}}').html(
+                                    '<p style="color:#black;"' +
+                                    dislikes +
+                                    '</p>')
+                            } else {
+                                dislikes++
+                                $('#id_dislikes{{post.id}}').html(
+                                    '<p style="color:#065FD4;"><b>' +
+                                    dislikes + '</b></p>')
+                            }
+                        }
+                    })
+                })
+
+            })
+        </script>
+    </span>
+    {% endfor %}
+
+
+    <!-- PAGINATOR -->
+    <nav aria-label="...">
+        <ul class="pagination">
+            {% if posts.has_previous %}
+            <li class="page-item">
+                <a href="?page={{ posts.previous_page_number }}" class="page-link">&laquo</a>
+            </li>
+            {% endif %}
+
+
+            {% for page in posts.paginator.page_range %}
+            {% if posts.number == page %}
+            <li class="page-item active">
+                <a href="?page={{ page }}" class="page-link">{{ page }}</a>
+            </li>
+            {% else %}
+            <li class="page-item">
+                <a href="?page={{ page }}" class="page-link">{{ page }}</a>
+            </li>
+            {% endif %}
+            {% endfor %}
+            {% if posts.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ posts.next_page_number }}">&raquo</a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+    <script src="{% static 'social/emojionearea.min.js' %}"></script>
+</div>
+{% endif %}
+
 <div class="m-4">
     {% if not user.hide_posts_in_homepage %}
-    <p>
-        <span><a href="#" class="m-3 btn btn-primary" id="toggleFriendsPosts">Friends</a></span>
-        <span><a href="#" class="m-3 btn btn-primary" id="toggleFollowedPosts">Followed</a></span>
-    </p>
 
     <!-- FRIENDS POSTS -->
-    <div id="friendsPosts">
-        <p> {{ friends_posts.count }} Friend{{ friends_posts.count|pluralize }} Post{{ friends_posts.count|pluralize }}
-        </p>
-        <hr>
+    <div id="friendsPosts" class="homepageItem">
         {% for post in friends_posts %}
         {% if not post.category in user.blocked_categories.all %}
         <div class="card">
@@ -136,9 +411,7 @@
 
 
     <!-- FOLLOWED POSTS -->
-    <div id="followedPosts">
-        <p>{{ followed_posts.count }} Followed Post{{ followed_posts.count|pluralize }}</p>
-        <hr>
+    <div id="followedPosts" class="homepageItem">
         {% for post in followed_posts %}
         {% if not post.category in user.blocked_categories.all %}
         <div class="card">
@@ -223,26 +496,9 @@
         </nav>
     </div>
 
-    <script>
-        $(document).ready(function () {
-            $('#followedPosts').fadeOut()
-            $('#friendsPosts').fadeOut()
-            $('#toggleFollowedPosts').click(function (e) {
-                e.preventDefault();
-                $('#friendsPosts').fadeOut()
-                $('#followedPosts').fadeToggle()
-            });
-            $('#toggleFriendsPosts').click(function (e) {
-                e.preventDefault();
-                $('#followedPosts').fadeOut()
-                $('#friendsPosts').fadeToggle()
-            });
-        })
-    </script>
-
     {% else %}
     <small class="from-text text-muted">Your Distraction Free settings doesn't allow posts to show in home page</small>
     {% endif %}
 </div>
-
+<script src="{% static 'categories/index.js' %}"></script>
 {% endblock content %}
