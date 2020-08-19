@@ -37,7 +37,6 @@ class User(AbstractUser):
     is_confirmed = models.BooleanField(default=False)
     is_trusted = models.BooleanField(default=False)  # For news
     allow_friend_request = models.BooleanField(default=True)
-    homepage_posts = models.ForeignKey(Category, on_delete= models.CASCADE ,null=True, blank=True)
 
 
     # DISTRACTION FREE!!!!!!!!!!!!!!!
@@ -45,8 +44,9 @@ class User(AbstractUser):
     blocked_categories = models.ManyToManyField(
         Category, related_name='blocked_categories', blank=True)
     chat_only_mode = models.BooleanField(default=False)
-    hide_posts_in_homepage = models.BooleanField(default=True)
+    hide_posts_in_homepage = models.BooleanField(default=False)
     fixed_navbar = models.BooleanField(default=True)
+    homepage_posts = models.ForeignKey(Category, on_delete= models.CASCADE ,null=True, blank=True)
     # * notifications
     allow_important_friend_messages = models.BooleanField(default=True)
     allow_important_group_message = models.BooleanField(default=True)
