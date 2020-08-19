@@ -57,7 +57,7 @@ def home(request):
 
     return render(request, 'categories/index.html', {'categories': categories, 'friends_posts': friends_posts, 'followed_posts': followed_posts, 'homepage_posts': homepage_posts })
 
-
+@login_required
 def view_category(request, pk):
     category = get_object_or_404(Category, pk=pk)
     post_list = Post.objects.filter(category=category).order_by('-post_date')

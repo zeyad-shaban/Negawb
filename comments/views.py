@@ -9,7 +9,7 @@ from django.contrib import messages
 from django.forms.models import model_to_dict
 from social.models import Notification
 from django.urls import resolve
-# DATES
+from webpush import send_user_notification
 from django.utils.timezone import now
 import datetime
 
@@ -31,9 +31,17 @@ def view_post(request, pk):
             if post.user.allow_comment_message:
                 if post.user != request.user:
                     # !ABSOLUTE PATH
-                    notification = Notification(notification_type='comment_message', sender=request.user, url=f'/comments/{post.id}/', content=comment.description[:100])
+                    notification = Notification(notification_type='comment_message', sender=request.user,
+                                                url=f'/comments/{post.id}/', content=comment.description[:100])
                     notification.save()
                     notification.receiver.add(post.user)
+                    for receiver in notification.receiver.all():
+                        payload = {"head": f"new comment on your post{post.description}",
+                        "body": notification.content,
+                        "url": notification.url,
+                        "icon": notification.sender.avatar.url,
+                        }
+                        send_user_notification(user = receiver, payload = payload,ttl = 1000)
             return JsonResponse({'comment': model_to_dict(comment)})
 
 
@@ -153,7 +161,8 @@ def create_reply(request, pk):
     reply.save()
     if comment.user.allow_reply_message:
         # TODO FIX THE URL
-        notification = Notification(notification_type='reply_message', sender=request.user, url=f'404', content=reply.description[:100])
+        notification = Notification(notification_type='reply_message',
+                                    sender=request.user, url=f'404', content=reply.description[:100])
         notification.save()
         notification.receiver.add(comment.user)
     return JsonResponse({'reply': model_to_dict(reply)})

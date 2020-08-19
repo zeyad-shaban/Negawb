@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'crispy_forms',
     'six',
+    'webpush',
     'categories',
     'users',
     'userpage',
@@ -108,6 +109,12 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+WEBPUSH_SETTINGS = {
+    "VAPID_PUBLIC_KEY": "BORA8XeeE6Z5PJcobvvmRxdyjB6wxo0OS7Z4F1W-zZCV7964cLAqIVuYBprLfojqbqa4qCF-hx7IXBjiwNOmtFQ",
+    "VAPID_PRIVATE_KEY":"v6hZnC0IbnxC2UhpNZ4u51RUE_NuIBFlQKrHbnRR9Uc",
+    "VAPID_ADMIN_EMAIL": "zeyadshapan2004@gmail.com"
+}
 
 
 # Internationalization
