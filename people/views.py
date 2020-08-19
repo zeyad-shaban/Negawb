@@ -57,14 +57,15 @@ def all_peopleresults(request):
 
 
 @login_required
-def addfriend(request, user_id):
+def addfriend(request):
+    pk = request.GET.get('pk')
     from_user = request.user
-    to_user = get_object_or_404(User, pk=user_id)
+    to_user = get_object_or_404(User, pk=pk)
     friend_request_check_1 = FriendRequest.objects.filter(
         from_user=from_user, to_user=to_user)
     friend_request_check_2 = FriendRequest.objects.filter(
         from_user=to_user, to_user=from_user)
-    if user_id == request.user.id:
+    if pk == request.user.id:
         # users = User.objects.all()
         message = {
             'text': 'Adding yourself 😭😿',

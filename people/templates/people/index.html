@@ -64,9 +64,9 @@
         // Add Friend
         $('#addFriendRequest').click(function () {
             $.ajax({
-                url: "{% url 'people:addfriend' view_user.id %}",
+                url: "{% url 'people:addfriend' %}",
                 data: {
-                    'user_id': "{{ view_user.id }}"
+                    'pk': "{{ view_user.id }}"
                 },
                 dataType: 'json',
                 success: function (data) {

@@ -55,7 +55,7 @@
                         <span class="small text-truncate">{{ view_user.bio }}</span>
                         {% if view_user == user or view_user in user_friends %}
                         {%  else %}
-                        <form action="{% url 'people:addfriend' view_user.id%}" method="GET" id="idAddFriendForm">
+                        <form action="{% url 'people:addfriend' %}" method="GET" id="idAddFriendForm">
                             <input type="button" value="Add Friend" name="addfriend,"
                                 class="btn btn-primary float-right" id='idAddFriendButton{{ view_user.id }}'>
                         </form>
@@ -72,9 +72,9 @@
                     })
                     $('#idAddFriendButton{{ view_user.id }}').click(function () {
                         $.ajax({
-                            url: "{% url 'people:addfriend' view_user.id %}",
+                            url: "{% url 'people:addfriend' %}",
                             data: {
-                                'user_id': "{{ view_user.id }}"
+                                'pk': "{{ view_user.id }}"
                             },
                             dataType: 'json',
                             success: function (data) {
@@ -245,10 +245,33 @@
                             $('#contact-list').append(output)
                         }
                         var g = document.createElement('script')
+
                         function addFriend() {
                             $('.id_addFriend').click(function (e) {
-                                e.preventDefault
-                                
+                                e.preventDefault();
+                                let user_id = $(this).attr('data-pk')
+                                $.ajax({
+                                    url: `addfriend/`,
+                                    data: {
+                                        'pk': user_id                                    },
+                                    dataType: 'json',
+                                    success: function (data) {
+                                        $('#message_area').html('')
+                                        $(this).toggle();
+                                        if (data.message.tags === 'error') {
+                                            $('#message_area').append(`
+                            <div class="alert alert-danger fixed-top">${data.message.text}</div>
+                            `)
+                                        } else {
+                                            $('#message_area').append(`
+        <div class="alert alert-${data.message.tags} fixed-top">${data.message.text}</div>
+                                `)
+                                        }
+                                    }
+                                })
+                                setTimeout(() => {
+                                    $('#message_area').fadeOut()
+                                }, 3200);
                             })
                         }
                         var s = document.getElementsByName('script')[0]
