@@ -36,10 +36,16 @@ def view_post(request, pk):
                     notification.save()
                     notification.receiver.add(post.user)
                     for receiver in notification.receiver.all():
+                        if notification.sender.who_see_avatar == 'everyone':
+                            sender_avatar = notification.sender.avatar.url
+                        elif notification.sender.who_see_avatar == 'friends' and receiver in receiver.friends.all:
+                            sender_avatar = notification.sender.avatar.url
+                        else:
+                            sender_avatar = '/media/profile_images/DefaultUserImage.WebP'
                         payload = {"head": f"new comment on your post{post.description}",
                         "body": notification.content,
                         "url": notification.url,
-                        "icon": notification.sender.avatar.url,
+                        "icon": sender_avatar,
                         }
                         send_user_notification(user = receiver, payload = payload,ttl = 1000)
             return JsonResponse({'comment': model_to_dict(comment)})
@@ -165,4 +171,17 @@ def create_reply(request, pk):
                                     sender=request.user, url=f'404', content=reply.description[:100])
         notification.save()
         notification.receiver.add(comment.user)
+        for receiver in notification.receiver.all():
+            if notification.sender.who_see_avatar == 'everyone':
+                sender_avatar = notification.sender.avatar.url
+            elif notification.sender.who_see_avatar == 'friends' and receiver in receiver.friends.all:
+                sender_avatar = notification.sender.avatar.url
+            else:
+                sender_avatar = '/media/profile_images/DefaultUserImage.WebP'
+            payload = {"head": f"{notification.sender.username} Replied to your comment",
+            "body": notification.content,
+            "url": notification.url,
+            "icon": sender_avatar,
+            }
+            send_user_notification(user = receiver, payload = payload,ttl = 1000)
     return JsonResponse({'reply': model_to_dict(reply)})

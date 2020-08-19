@@ -6,6 +6,7 @@ from .models import FriendRequest
 from django.db.models import Q
 from django.contrib import messages
 from django.http import JsonResponse
+from webpush import send_user_notification
 from django.core.serializers import serialize
 from social.models import Notification
 from django.contrib.auth import get_user_model as user_model
@@ -94,6 +95,19 @@ def addfriend(request):
                 notification = Notification(notification_type='invites', sender=request.user, url="/userpage/friendrequest/", content=f'{friend_request.from_user} wants to be your friend')
                 notification.save()
                 notification.receiver.add(friend_request.to_user)
+                for receiver in notification.receiver.all():
+                    if notification.sender.who_see_avatar == 'everyone':
+                        sender_avatar = notification.sender.avatar.url
+                    elif notification.sender.who_see_avatar == 'friends' and receiver in receiver.friends.all:
+                        sender_avatar = notification.sender.avatar.url
+                    else:
+                        sender_avatar = '/media/profile_images/DefaultUserImage.WebP'
+                    payload = {"head": f"You got a friend request from {notification.sender.username}",
+                    "body": notification.content,
+                    "url": notification.url,
+                    "icon": sender_avatar,
+                    }
+                    send_user_notification(user = receiver, payload = payload,ttl = 1000)
             message = {
                 'text': f'Successfully sent Friend request to {to_user}',
                 'tags': 'success',
