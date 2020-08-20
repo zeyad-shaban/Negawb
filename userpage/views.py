@@ -24,8 +24,10 @@ def home(request):
     form = UserForm(instance=request.user)
     privacy_form = UserPrivacyForm(instance=request.user)
     distraction_free_form = DistractionFreeForm(instance=request.user)
+    requests = FriendRequest.objects.filter(to_user=request.user)
+    group_requests = GroupRequest.objects.filter(reciever=request.user)
     if request.method == 'GET':
-        return render(request, 'userpage/index.html', {'user': user, 'form': form, 'privacy_form': privacy_form, 'distraction_free_form': distraction_free_form})
+        return render(request, 'userpage/index.html', {'user': user, 'form': form, 'privacy_form': privacy_form, 'distraction_free_form': distraction_free_form, 'requests': requests, 'group_requests':group_requests})
     elif request.POST['submit'] == 'Update':
         try:
             # if request.POST['email']:
@@ -69,12 +71,12 @@ def posts(request):
     return render(request, 'userpage/posts.html', {'posts': posts})
 
 
-@login_required
-def friends(request):
-    if request.method == 'GET':
-        friends = User.objects.filter(friends=request.user)
-        groups = ChatGroup.objects.filter(members=request.user)
-        return render(request, 'userpage/friends.html', {'friends': friends, 'groups': groups})
+# @login_required
+# def friends(request):
+#     if request.method == 'GET':
+#         friends = User.objects.filter(friends=request.user)
+#         groups = ChatGroup.objects.filter(members=request.user)
+#         return render(request, 'userpage/friends.html', {'friends': friends, 'groups': groups})
 
 
 @login_required
@@ -137,18 +139,17 @@ def acceptrequest(request, request_id):
 
 
 @login_required
-def unfriend(request, pk):
+def unfriend(request):
+    pk = request.GET.get('pk')
     friend = get_object_or_404(User, pk=pk)
-    if request.method == 'POST':
-        user = request.user
-        user.friends.remove(friend)
-        friend.friends.remove(user)
-        messages.success(request, f'{friend.username} is no longer a friend')
-        if request.user.your_invites:
-            notification = Notification(notification_type = 'your_invite', sender = request.user, url=f"/people/{request.user.id}", content=f'{request.user} Unfriended You' )
-            notification.save()
-            notification.receiver.add(friend)
-        return redirect("people:people", pk= friend.id)
+    user = request.user
+    user.friends.remove(friend)
+    friend.friends.remove(user)
+    if request.user.your_invites:
+        notification = Notification(notification_type = 'your_invite', sender = request.user, url=f"/people/{request.user.id}", content=f'{request.user} Unfriended You' )
+        notification.save()
+        notification.receiver.add(friend)
+    return JsonResponse({})
 
 
 # Is online?

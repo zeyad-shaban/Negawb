@@ -14,9 +14,7 @@ urlpatterns = [
     path('requestssent/', views.requestssent, name='requestssent'),
     path('acceptrequest/<int:request_id>/',
          views.acceptrequest, name='acceptrequest'),
-    path('friends/', views.friends, name='friends'),
-    path('friends/result', views.friendsresult, name='friendsresult'),
-    path('unfriend/<int:pk>', views.unfriend, name='unfriend'),
+    path('unfriend/', views.unfriend, name='unfriend'),
     path('get_user_by_id/', views.get_user_by_id, name='get_user_by_id'),
 ]
 
