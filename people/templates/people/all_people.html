@@ -79,7 +79,7 @@
                             },
                             dataType: 'json',
                             success: function (data) {
-                                thisElement.parent().parent().parent().parent().fadeOut()
+                                thisElement.parent().fadeOut()
                                 $('#message_area').html('')
                                 if (data.message.tags === 'error') {
                                     $('#message_area').append(`

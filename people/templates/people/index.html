@@ -42,10 +42,35 @@
     {% endif %}
     {% if user.allow_friend_request %}
     {% if user in view_user.friends.all %}
-    <form action="{% url 'userpage:unfriend' view_user.id %}" method="post" class="form-inline d-inline ml-3">
-        {% csrf_token %}
+    <form method="GET" class="form-inline d-inline ml-3 unfriend">
         <input type="submit" name='submit' value="Unfriend" class="btn btn-danger">
     </form>
+    <script>
+        $(document).ready(function () {
+            $('.unfriend').submit(function (e) {
+                e.preventDefault();
+                let confirmation = confirm('Are you sure you want to unfriend {{ view_user.username }}')
+                if (confirmation) {
+                    let friendUsername = "{{view_user.username}}"
+                    let thisButton = $(this)
+                    $.ajax({
+                        url: "{% url 'userpage:unfriend' %}",
+                        data: {
+                            'pk': "{{view_user.id}}"
+                        },
+                        method: 'get',
+                        dataType: 'json',
+                        success: function (response) {
+                            thisButton.fadeOut()
+                            $('#message_area').html(
+                                `<div class="alert alert-success"> You unfriended {{ view_user.username }} `
+                            )
+                        }
+                    })
+                }
+            })
+        })
+    </script>
     {% else %}
     <input id="addFriendRequest" type="submit" name='submit' value="Add Friend" class="btn btn-primary">
     {% endif %}
@@ -83,9 +108,6 @@
                     $('#addFriendRequest').fadeOut()
                 }
             })
-            setTimeout(() => {
-                $('#message_area').fadeOut()
-            }, 3200);
         })
     })
     // Follow User
@@ -114,9 +136,6 @@
                 }
             }
         })
-        setTimeout(() => {
-            $('#message_area').fadeOut()
-        }, 800);
     })
 </script>
 <hr>

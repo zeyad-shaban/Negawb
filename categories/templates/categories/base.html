@@ -152,20 +152,26 @@
                     </div>
                 </div>
                 {% endif %}
-                {% if user.is_authenticated %}
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                        aria-expanded="false"><i class="fas fa-sort-down"
-                            style="color: white; font-size: 36px;"></i><span class="caret"></span></a>
+                    aria-expanded="false"><i class="fas fa-sort-down"
+                    style="color: white; font-size: 36px;"></i><span class="caret"></span></a>
                     <ul class="dropdown-menu float-right mr-100">
                         <li>
                             <a style="color: black; text-decoration: none;"
-                                href="{% url 'production:announcements' %}">Announcements </a>
+                            href="{% url 'production:announcements' %}">Announcements </a>
                             <i class="fas fa-bullhorn"></i>
                         </li>
                         <li>
                             <a class="btn" href="{% url 'production:feedback' %}">FeedBack</a>
                         </li>
+                        <li>
+                            <a class="btn" href="#">About</a>
+                        </li>
+                        <li>
+                            <a class="btn" href="#">Q and A</a>
+                        </li>
+                        {% if user.is_authenticated %}
                         <li><a class="btn" href="{% url 'userpage:requestssent' %}">Requests Sent</a></li>
                         <li role="separator" class="divider"></li>
                         <br>
@@ -173,9 +179,9 @@
                             {% csrf_token %}
                             <input class="btn" type="submit" value="Logout">
                         </form>
+                        {% endif %}
                     </ul>
                 </li>
-                {% endif %}
             </ul>
             {% block searchbar %} {% endblock searchbar %}
         </div>

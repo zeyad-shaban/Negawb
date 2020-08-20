@@ -39,5 +39,5 @@ class DistractionFreeForm(ModelForm):
             'allow_invites': 'friend and group <b>Invites</b>',
             'your_invites':'Your own invites',
             'homepage_posts': 'Posts to show in homepage <small class="form-text text-muted">choose none if you don\'t want to show posts in homepage</small>',
-            'hide_posts_in_homepage':'Hide Friends posts in homepage'
+            'hide_posts_in_homepage':'Hide Followers/Friends posts in homepage'
         }

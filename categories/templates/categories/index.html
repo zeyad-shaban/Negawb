@@ -21,7 +21,9 @@
 {% if not user.homepage_posts %}
 <small class="form-text text-muted">Your Distraction Free settings doesn't allow posts to show in homepage</small>
 {% endif %}
-<div class="row row-cols-1 row-cols-md-3 homepageItem" id="categoryContainer" data-url="{% url 'userpage:get_user_by_id' %}" data-currUser="{{user}}" data-likeUrl="{% url 'comments:post_like_dislike' 1%}">
+<div class="row row-cols-1 row-cols-md-3 homepageItem" id="categoryContainer"
+    data-url="{% url 'userpage:get_user_by_id' %}" data-currUser="{{user}}"
+    data-likeUrl="{% url 'comments:post_like_dislike' 1%}">
     {% for category in categories %}
     {% if not category.id == 1 %}
     {% if not category.id == 7 %}
@@ -337,14 +339,13 @@
             </div>
             <span class="row justify-content-center">
                 <!-- Like -->
-                <form method="GET" id="likeForm" class="form-inline">
+                <form method="GET" id="likeFriendForm{{post.id}}" class="form-inline">
                     <button type="submit" name="submit" value="like" title="Like" class="btn btn-link">
-                        <i class="fa fa-thumbs-o-up" aria-hidden="true" style="font-size:36px"></i>
+                        <i class="fa fa-thumbs-o-up" aria-hidden="true" style="font-size:36px"
+                            id="likeFriendButton{{post.id}}"></i>
                     </button>
                 </form>
-
-
-                <span class="m-3" id="id_likes">
+                <span class="m-3" id="id_friendLikes{{post.id}}">
                     {% if user in post.likes.all %}
                     <p style="color:#065FD4;"><b>{{post.likes.count}}</b></p>
                     {% else %}
@@ -352,15 +353,61 @@
                     {% endif %}
                 </span>
 
+                <script>
+                    $(document).ready(function () {
+
+                        $('#likeFriendForm{{post.id}}').click((event) => {
+                            event.preventDefault()
+                        })
+                        $('#likeFriendButton{{post.id}}').click(function (event) {
+                            $.ajax({
+                                url: "{% url 'comments:post_like_dislike' post.id %}",
+                                data: {
+                                    'submit': 'like',
+                                },
+                                method: 'get',
+                                dataType: 'json',
+                                success: function (data) {
+                                    let likes = "{{post.likes.count}}";
+                                    let dislikes = "{{ post.dislikes.count }}"
+                                    if (data.action == 'undislike_and_like') {
+                                        dislikes -= 1
+                                        likes++
+                                        $('#id_friendDislikes{{post.id}}').html(
+                                            '<p style="color:black;">' +
+                                            dislikes + '</p>')
+                                        $('#id_friendLikes{{post.id}}').html(
+                                            '<p style="color:#065FD4;"><b>' +
+                                            likes + '</b></p>')
+                                    } else if (data.action == 'unlike') {
+                                        likes -= 1
+                                        $('#id_friendLikes{{post.id}}').html(
+                                            '<p style="color:#black;"' +
+                                            likes +
+                                            '</p>')
+                                    } else {
+                                        likes++
+                                        $('#id_friendLikes{{post.id}}').html(
+                                            '<p style="color:#065FD4;"><b>' +
+                                            likes + '</b></p>')
+                                    }
+                                }
+                            })
+                        })
+
+                    })
+                </script>
+
                 <!-- Dislike -->
                 <form action="{% url 'comments:post_like_dislike' post.id %}" method="post" class="form-inline"
-                    id="dislikeForm">
+                    id="friendDislikeForm{{post.id}}">
                     {% csrf_token %}
-                    <button type="submit" id="dislikeButton" name="submit" value="dislike" title="Dislike" class="btn">
+                    <button type="submit" id="friendDislikeButton{{post.id}}" name="submit" value="dislike" title="Dislike"
+                        class="btn">
                         <i class="fa fa-thumbs-o-down" aria-hidden="true" style="font-size:36px"></i>
                     </button>
                 </form>
-                <span class="m-3" id="id_dislikes">
+                <span class="m-3" id="id_friendDislikes{{post.id}}">
                     {% if user in post.dislikes.all %}
                     <p style="color:#065FD4;"><b>{{post.dislikes.count}}</b></p>
                     {% else %}
@@ -368,6 +415,49 @@
                     {% endif %}
                 </span>
 
+                <script>
+                    $(document).ready(function () {
+        
+                        $('#friendDislikeForm{{post.id}}').click((event) => {
+                            event.preventDefault()
+                        })
+                        $('#friendDislikeButton{{post.id}}').click(function (event) {
+                            $.ajax({
+                                url: "{% url 'comments:post_like_dislike' post.id %}",
+                                data: {
+                                    'submit': 'dislike',
+                                },
+                                dataType: 'json',
+                                success: function (data) {
+                                    let likes = "{{post.likes.count}}";
+                                    let dislikes = "{{ post.dislikes.count }}"
+                                    if (data.action == 'unlike_and_dislike') {
+                                        dislikes++
+                                        likes -= 1
+                                        $('#id_friendDislikes{{post.id}}').html(
+                                            '<p style="color:#065FD4;"><b>' +
+                                            dislikes + '</b></p>')
+                                        $('#id_friendLikes{{post.id}}').html('<p style="color:black;">' +
+                                            likes + '</p>')
+                                    } else if (data.action == 'undislike') {
+                                        dislikes -= 1
+                                        $('#id_friendDislikes{{post.id}}').html(
+                                            '<p style="color:#black;"' +
+                                            dislikes +
+                                            '</p>')
+                                    } else {
+                                        dislikes++
+                                        $('#id_friendDislikes{{post.id}}').html(
+                                            '<p style="color:#065FD4;"><b>' +
+                                            dislikes + '</b></p>')
+                                    }
+                                }
+                            })
+                        })
+        
+                    })
+                </script>
+                
             </span>
         </div>
         {% endif %}

@@ -19,8 +19,7 @@ def home(request):
             Q(followers=request.user), ~Q(friends=request.user))
         friends_posts_list = Post.objects.filter(
             Q(user__in=friends), ~Q(user=request.user)).order_by('-post_date')
-        followed_posts_list = Post.objects.filter(
-            Q(user__in=followed), ~Q(user=request.user)).order_by('-post_date')
+        followed_posts_list = Post.objects.filter(user__in=followed).order_by('-post_date')
         friends_paginator = Paginator(friends_posts_list, 7)
         followed_paginator = Paginator(followed_posts_list, 7)
         page = request.GET.get('page')
