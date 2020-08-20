@@ -317,8 +317,7 @@
                 {{request.date|date:"j b o"}}</small></small></h5>
 
     </div>
-    <a class="btn btn-danger float-left" href="{% url 'social:deny_group' 1 %}"
-        id="denyGroup{{request.id}}">Deny</a>
+    <a class="btn btn-danger float-left denyGroup" href="{% url 'social:deny_group' %}" data-pk="{{ request.id }}">Deny</a>
     <form method="GET" class="AcceptGroup" data-pk = '{{request.id}}'>
         <input type="submit" value="Join" name="joingroup," class="btn btn-success ml-2" id="joinGroup{{request.id}}">
     </form>
@@ -409,16 +408,18 @@
             })
         })
         // DENY INVITE
-        $('#denyGroup{{request.id}}').click(function (event) {
+        $('.denyGroup').click(function (event) {
+            let thisElement = $(this)
             event.preventDefault();
             $.ajax({
                 type: "get",
-                url: "{% url 'social:deny_group' request.id%}",
+                url: "{% url 'social:deny_group' %}",
                 data: {
-                    'pk': '{{ request.id }}'
+                    'pk': $(this).attr('data-pk')
                 },
                 dataType: "json",
                 success: function (data) {
+                    thisElement.parent().fadeOut()
                     $('#message_area').html('')
                     if (data.message.tags === 'error') {
                         $('#message_area').append(`

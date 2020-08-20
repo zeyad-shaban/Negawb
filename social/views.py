@@ -261,7 +261,8 @@ def join_group(request):
     return JsonResponse({'message': message})
 
 
-def deny_group(request, pk):
+def deny_group(request):
+    pk = request.GET.get('pk')
     group_request = get_object_or_404(GroupRequest, pk=pk)
     group_request.delete()
     if group_request.request_sender.your_invites:
