@@ -56,7 +56,7 @@
                         {% if view_user == user or view_user in user_friends %}
                         {%  else %}
                         <form action="{% url 'people:addfriend' %}" method="GET" id="idAddFriendForm">
-                            <input type="button" value="Add Friend" name="addfriend,"
+                            <input type="button" value="Add Friend" onclick="$(this).fadeOut()" name="addfriend,"
                                 class="btn btn-primary float-right" id='idAddFriendButton{{ view_user.id }}'>
                         </form>
                         {% endif %}
