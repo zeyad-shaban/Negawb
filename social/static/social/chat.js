@@ -125,6 +125,24 @@ $(document).ready(function () {
             })
         }
     })
+    // Leave Group
+    $('#leaveGroup').click(function(e){
+        e.preventDefault();
+        let currChat = $('#currChat').attr('data-pk')
+        let confirmation = confirm('You are about to leave this group')
+        if (confirmation) {
+            $.ajax({
+                url: $('#leaveGroup').attr('data-url'),
+                data: {
+                    'pk': $('#currChat').attr('data-pk'),
+                },
+                dataType: 'json',
+                success: function (response) {
+                    location.reload();
+                }
+            })
+        }
+    })
     $('#sidepanelCollapser').hide();
 
     $('#sidepanelCollapser').click(function (e) {

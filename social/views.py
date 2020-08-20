@@ -342,3 +342,13 @@ def group_members(request):
         group.group_admins.add(member)
     elif request.GET.get('action') == 'removeAdmin':
         group.group_admins.remove(member)
+
+
+def leave_group(request):
+    pk = request.GET.get('pk')
+    group = get_object_or_404(ChatGroup, pk=pk)
+    group.members.remove(request.user)
+    message = GroupMessage(
+            group=group, message_sender=request.user, message=f'{request.user} left the group')
+    message.save()
+    return JsonResponse({})

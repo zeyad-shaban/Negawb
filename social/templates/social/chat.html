@@ -204,7 +204,7 @@
                                     </script>
                                     {% endfor %}
                                     <hr>
-                                    <h4 class="float-left" style="color: black;">Or search users</h4>
+                                    <h4 class="float-left" style="color: black;">Or search users <i><b>*Beta*</b></i></h4>
                                     <form action="" method="get" class="form-inline" id="findUserForm"
                                         data-url="{% url 'people:all_peopleresults' %}">
                                         <input type="text" name="user_username" id="searchUser" class="form-control"
@@ -304,8 +304,9 @@
                                     <hr>
                                     <h3 style="color: black;">Danger Area</h3>
                                     <br>
-                                    <button class="btn btn-danger" id="deleteGroup"
-                                        data-url="{% url 'social:delete_group' %}">DELETE GROUP</button>
+                                    <button class="btn btn-outline-danger" id="deleteGroup"
+                                        data-url="{% url 'social:delete_group' %}">DELETE GROUP <i class="far fa-trash-alt"></i></button>
+                                    <button class="btn btn-outline-danger ml-3" data-url="{% url 'social:leave_group' %}" id="leaveGroup">Leave <i class="fas fa-sign-out-alt"></i></button>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
