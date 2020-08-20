@@ -326,14 +326,18 @@ def group_members(request):
         }
         return JsonResponse({'members': serialize('json', members), 'group': json_group})
     elif request.GET.get('action') == 'removeMember':
-        if (request.user in group.group_admins.all() and member not in group.group_admins.all() and not member == group.author) or (request.user == group.author):
+        if request.user == member:
+            return JsonResponse({'message': 'You cannot remove yourself'})
+        elif (request.user in group.group_admins.all() and member not in group.group_admins.all() and not member == group.author) or (request.user == group.author):
             group.members.remove(member)
             if member.allow_invites:
                 notification = Notification(notification_type='invites', sender=request.user,
                                             url=f'/people/{request.user.id}/', content=f'{request.user} removed you from {group.title}')
                 notification.save()
                 notification.receiver.add(member)
-            return JsonResponse({})
+            return JsonResponse({'message': 'removed'})
+        else:
+            return JsonResponse({'message': 'You cannot remove this member'})
     elif request.GET.get('action') == 'makeAdmin':
         group.group_admins.add(member)
     elif request.GET.get('action') == 'removeAdmin':
