@@ -115,6 +115,8 @@ def reply_like_dislike(request, reply_id):
 
 
 def create_post(request, pk):
+    if request.GET.get('pk'):
+        pk = request.GET.get('pk')
     fun_area_category = Category.objects.get(id=2)
     if request.POST.get('friendsOnlyPost') == 'Add Post':
         category = None

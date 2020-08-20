@@ -124,31 +124,67 @@ $(document).ready(function () {
     <span><a href="/comments/${post.pk}" style="text-decoration: none; color:black;"><i
                 class="far fa-comment-dots" style="font-size:36px;"></i></a></span>
     <!-- Like -->
-    <form method="GET" id="likeForm${post.pk}" class="form-inline" data-pk="${post.pk}">
+    <form method="GET" class="likeForm" class="form-inline" data-pk="${post.pk}">
         <button type="submit" name="submit" value="like" title="Like" class="btn btn-link">
             <i class="fa fa-thumbs-o-up" aria-hidden="true" style="font-size:36px" id="likeButton${post.pk}"></i>
         </button>
     </form>
     <span class="m-3" id="id_likes${post.pk}">
-        <p style="color:#065FD4;"><b>${post.fields.likes.length}</b></p>
         <p style="color:black;">${post.fields.likes.length}</p>
         </span>
         <!-- Dislike -->
-    <form action="{% url 'comments:post_like_dislike" method="post" class="form-inline"
-        id="dislikeForm{{post.id}}">
-        {% csrf_token %}
-        <button type="submit" id="dislikeButton{{post.id}}" name="submit" value="dislike" title="Dislike" class="btn">
+        <form action="/comments/${post.pk}" method="post" class="form-inline"
+        id="dislikeForm${post.pk}">
+        <button type="submit" id="dislikeButton${post.pk}" name="submit" value="dislike" title="Dislike" class="btn">
             <i class="fa fa-thumbs-o-down" aria-hidden="true" style="font-size:36px"></i>
         </button>
     </form>
-    <span class="m-3" id="id_dislikes{{post.id}}">
-        {% if user in post.dislikes.all %}
-        <p style="color:#065FD4;"><b>{{post.dislikes.count}}</b></p>
-        {% else %}
-        <p style="color:black;">{{post.dislikes.count}}</p>
-        {% endif %}
-    </span>
+    <span class="m-3" id="id_dislikes${post.pk}">
+        <p style="color:#065FD4;"><b>${post.fields.dislikes.length}</b></p>
+        </span>
                                 `
+                                function like(){
+                                    $(`.likeForm`).click((event) => {
+                                        event.preventDefault()
+                                        consolog()
+                                    })
+                                    $(`#likeButton${post.pk}`).click(function (event) {
+                                        $.ajax({
+                                            url: $('#categoryContainer').attr('data-url'),
+                                            data: {
+                                                'submit': 'like',
+                                                'pk': post.pk
+                                            },
+                                            method: 'get',
+                                            dataType: 'json',
+                                            success: function (data) {
+                                                let likes = post.fields.likes.length;
+                                                let dislikes = post.fields.dislikes.length
+                                                if (data.action == 'undislike_and_like') {
+                                                    dislikes -= 1
+                                                    likes++
+                                                    $(`#id_dislikes${post.pk}`).html('<p style="color:black;">' +
+                                                        dislikes + '</p>')
+                                                    $(`#id_likes${post.pk}`).html('<p style="color:#065FD4;"><b>' +
+                                                        likes + '</b></p>')
+                                                } else if (data.action == 'unlike') {
+                                                    likes -= 1
+                                                    $(`#id_likes${post.pk}`).html('<p style="color:#black;"' +
+                                                        likes +
+                                                        '</p>')
+                                                } else {
+                                                    likes++
+                                                    $(`#id_likes${post.pk}`).html('<p style="color:#065FD4;"><b>' +
+                                                        likes + '</b></p>')
+                                                }
+                                            }
+                                        })
+                                    })
+                                }
+                                var g = document.createElement('script')
+                                var s = document.getElementsByTagName('script')[0]
+                                g.text = like();
+                                s.parentNode.insertBefore(g, s)
                                 $('#postsContainer').append(output)
                             }
                         })
