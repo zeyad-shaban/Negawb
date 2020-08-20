@@ -243,7 +243,8 @@ def create_invite(request,):
         return JsonResponse({'message': message})
 
 
-def join_group(request, pk):
+def join_group(request):
+    pk = request.GET.get('pk')
     group_request = get_object_or_404(GroupRequest, pk=pk)
     group = group_request.group
     group.members.add(request.user)

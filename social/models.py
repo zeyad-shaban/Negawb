@@ -29,7 +29,7 @@ class Message(models.Model):
 
 
 class ChatGroup(models.Model):
-    title = models.CharField(max_length=75)
+    title = models.CharField(max_length=25)
     description = models.CharField(max_length=200, null=True, blank=True)
     image = models.ImageField(upload_to='group_images',
                               default='profile_images/DefaultUserImage.WebP')

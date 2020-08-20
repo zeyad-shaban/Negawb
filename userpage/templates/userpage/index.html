@@ -317,17 +317,16 @@
                 {{request.date|date:"j b o"}}</small></small></h5>
 
     </div>
-    <a class="btn btn-danger float-left" href="{% url 'social:deny_group' request.id%}"
+    <a class="btn btn-danger float-left" href="{% url 'social:deny_group' 1 %}"
         id="denyGroup{{request.id}}">Deny</a>
-    <form method="GET" id="AcceptGroup{{request.id}}">
-        {% csrf_token %}
+    <form method="GET" class="AcceptGroup" data-pk = '{{request.id}}'>
         <input type="submit" value="Join" name="joingroup," class="btn btn-success ml-2" id="joinGroup{{request.id}}">
     </form>
 </div>
 {% endfor %}
                 `)
 
-                function friendRequestHandler() {
+                function RequestHandler() {
                     // ACCEPT 
                     $('.acceptFriendForm').submit(function (event) {
                         let thisElement = $(this)
@@ -374,12 +373,76 @@
                                 }
                             }
                         });
-
+                        
                     })
+
+                    // ACCEPT INVITE
+        $('.AcceptGroup').submit(function (event) {
+            let thisElement = $(this)
+            event.preventDefault()
+            $.ajax({
+                url: "{% url 'social:join_group' %}",
+                data: {
+                    'pk': $(this).attr('data-pk'),
+                },
+                dataType: 'json',
+                success: function (data) {
+                    thisElement.parent().fadeOut()
+                    $('#message_area').html('')
+                    if (data.message.tags === 'error') {
+                        $('#message_area').append(`
+                            <div class="alert alert-danger fixed-top">${data.message.text}</div>
+                            `)
+                    } else {
+                        $('#message_area').append(`
+        <div class="alert alert-${data.message.tags} fixed-top">${data.message.text}</div>
+                                `)
+                    }
+                    setTimeout(() => {
+                        $('#{{request.id}}Group').fadeOut()
+                    }, 900);
+                    setTimeout(() => {
+                        $('#message_area').fadeOut()
+                    }, 3200);
+                }
+
+            })
+        })
+        // DENY INVITE
+        $('#denyGroup{{request.id}}').click(function (event) {
+            event.preventDefault();
+            $.ajax({
+                type: "get",
+                url: "{% url 'social:deny_group' request.id%}",
+                data: {
+                    'pk': '{{ request.id }}'
+                },
+                dataType: "json",
+                success: function (data) {
+                    $('#message_area').html('')
+                    if (data.message.tags === 'error') {
+                        $('#message_area').append(`
+                            <div class="alert alert-danger fixed-top">${data.message.text}</div>
+                            `)
+                    } else {
+                        $('#message_area').append(`
+        <div class="alert alert-${data.message.tags} fixed-top">${data.message.text}</div>
+                                `)
+                    }
+                    setTimeout(() => {
+                        $('#{{request.id}}Group').fadeOut()
+                    }, 900);
+                    setTimeout(() => {
+                        $('#message_area').fadeOut()
+                    }, 3200);
+                },
+            });
+        });
+                    
                 }
                 var g = document.createElement('script')
                 var s = document.getElementsByTagName('script')[0]
-                g.text(friendRequestHandler())
+                g.text(RequestHandler())
                 s.parentNode.insertBefore(g, s)
             } else if ($(this).html().includes('My Requests')) {
                 $('#mainContainer').html("Myyyy Requests")
