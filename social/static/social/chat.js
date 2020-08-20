@@ -32,10 +32,14 @@ $(document).ready(function () {
                     admins = JSON.parse(group.admins)
                     for (let i = 0; members.length > i; i++) {
                         let badge = ''
-                        if (members[i].fields.username == group.author_username){
+                        if (members[i].fields.username == group.author_username) {
                             badge = '<i class="fas fa-crown"></i>'
-                        } else if (admins[i].fields.id === members[i].fields.id){
-                            badge = '<i class="fas fa-user-cog"></i>'
+                        } else {
+                            for (admin of admins) {
+                                if (admin.fields.username === members[i].fields.username) {
+                                    badge = '<i class="fas fa-user-cog"></i>'
+                                }
+                            }
                         }
                         // Get group admins
                         $('#groupMembers').prepend(`
