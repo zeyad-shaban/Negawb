@@ -12,7 +12,7 @@ urlpatterns = [
     path('denyrequest/<int:request_id>/',
          views.denyrequest, name='denyrequest'),
     path('requestssent/', views.requestssent, name='requestssent'),
-    path('acceptrequest/<int:request_id>/',
+    path('acceptrequest/',
          views.acceptrequest, name='acceptrequest'),
     path('unfriend/', views.unfriend, name='unfriend'),
     path('get_user_by_id/', views.get_user_by_id, name='get_user_by_id'),

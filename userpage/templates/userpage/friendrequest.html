@@ -44,10 +44,11 @@
             event.preventDefault();
             $.ajax({
                 type: "get",
-                url: "{% url 'userpage:acceptrequest' request.id %}",
+                url: "{% url 'userpage:acceptrequest' %}",
                 data: {
-                    'request_id': "{{ request.id }}"
+                    'pk': "{{ request.id }}"
                 },
+                method: 'get',
                 dataType: "json",
                 success: function (data) {
                     $('#message_area').html('')

@@ -22,8 +22,8 @@
 <ul class="list-group list-group-horizontal row justify-content-center mb-5 mt-5">
     <li class="list-group-item userMenuItem active">Home</li>
     <li class="list-group-item userMenuItem">Friends {{user.friends.count}}</li>
-    <li class="list-group-item userMenuItem">Followers {{user.followers.count}}</li>
     <li class="list-group-item userMenuItem">Requests</li>
+    <li class="list-group-item userMenuItem">My Requests</li>
 </ul>
 <div id="mainContainer">
     <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#privacy" data-whatever="privacy"><i
@@ -238,7 +238,6 @@
             `)
 
                 $('.unfriend').click(function (e) {
-                    console.log('clicked')
                     e.preventDefault();
                     let confirmation = confirm('Are you sure you want to unfriend ' + $(
                             this)
@@ -265,7 +264,96 @@
             } else if ($(this).html().includes('Followers')) {
                 $('#mainContainer').html("Followers")
             } else if ($(this).html().includes('Requests')) {
-                $('#mainContainer').html("Requests")
+                $('#mainContainer').html(`
+                <small class="from-text text-muted float-right mr-3"><a href="{% url 'people:all_people' %}">Find Friend</a></small>
+<h1>Friends Requests</h1>
+<p>{{requests.count}} Friend Request{{requests.count|pluralize}}</p>
+<br>
+
+{% for request in requests %}
+<div class="media" id="{{request.id}}Friend">
+
+    {% if request.from_user.who_see_avatar == 'everyone' %}
+    <img src="{{ request.from_user.avatar.url }}" class="mr-3" alt="{{ request.from_user.username }}" widht="64"
+        height="64">
+    {% else %}
+    <img src="/media/profile_images/DefaultUserImage.WebP" class="mr-3" alt="{{ request.from_user.username }}" widht="64"
+        height="64">
+    {% endif %}
+
+    <div class="media-body">
+        <h5 class="mt-0"><a href="{% url 'people:people' request.from_user.id %}">{{ request.from_user }}</a> sent you a
+            friend request <small class="form-text text-muted">
+                {{request.date|date:"j b o"}}</small></small></h5>
+
+    </div>
+    <form method="GET" class="float-left ml-4 acceptFriendForm">
+        {% csrf_token %}
+        <input type="submit" value="Accept" name="acceptrequest," class="btn btn-success ml-2 acceptFriend" data-pk="{{request.id}}" data-username="{{ request.from_user.username }}">
+    </form>
+    <a class="btn btn-danger" id="denyRequest{{request.id}}" style="color: white;">Deny</a>
+</div>
+{% endfor %}
+<hr>
+<h1>Group Requests</h1>
+<p>{{group_requests.count}} Group Request{{group_requests.count|pluralize}}</p>
+<br>
+{% for request in group_requests %}
+<div class="media" id="{{request.id}}Group">
+    {% if request.request_sender.who_see_avatar == 'everyone' %}
+    <img src="{{ request.request_sender.avatar.url }}" class="mr-3" alt="{{ request.request_sender.username }}"
+        widht="64" height="64">
+    {% elif request.request_sender.who_see_avatar == 'friends' and request.request_sender in user_friends %}
+    <img src="{{ request.request_sender.avatar.url }}" class="mr-3" alt="{{ request.request_sender.username }}"
+        widht="64" height="64">
+    {% else %}
+    <img src="/media/profile_images/DefaultUserImage.WebP" class="mr-3" alt="{{ request.request_sender.username }}"
+        widht="64" height="64">
+    {% endif %}
+
+    <div class="media-body">
+        <h5 class="mt-0">{{ request.request_sender }} wants you to join {{request.group.title}} <small
+                class="form-text text-muted">
+                {{request.date|date:"j b o"}}</small></small></h5>
+
+    </div>
+    <a class="btn btn-danger float-left" href="{% url 'social:deny_group' request.id%}"
+        id="denyGroup{{request.id}}">Deny</a>
+    <form method="GET" id="AcceptGroup{{request.id}}">
+        {% csrf_token %}
+        <input type="submit" value="Join" name="joingroup," class="btn btn-success ml-2" id="joinGroup{{request.id}}">
+    </form>
+</div>
+{% endfor %}
+                `)
+                function friendRequestHandler() {
+                    // ACCEPT 
+        $('.acceptFriendForm').submit(function (event) {
+            event.preventDefault()
+        })
+        $('.acceptFriend').click(function (event) {
+            event.preventDefault();
+            let thisElement = $(this)
+            $.ajax({
+                type: "get",
+                url: "{% url 'userpage:acceptrequest' %}",
+                data: {
+                    'pk': $('.acceptFriend').attr('data-pk')
+                },
+                dataType: "json",
+                success: function (data) {
+                    $('#message_area').html('')
+                    $('#message_area').html(`<div class="alert alert-success">${thisElement.attr('data-username')} is now a friend</div>`)
+                }
+            });
+        });
+                }
+                var g = document.createElement('script')
+                var s = document.getElementsByTagName('script')[0]
+                g.text(friendRequestHandler())
+                s.parentNode.insertBefore(g, s)
+            } else if ($(this).html().includes('My Requests')) {
+                $('#mainContainer').html("Myyyy Requests")
             }
         });
     });

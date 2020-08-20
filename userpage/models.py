@@ -15,7 +15,7 @@ class User(AbstractUser):
     show_email = models.BooleanField(default=False)
     who_see_avatar_choices = [
         ('none', 'No One'),
-        ('friends', 'Friends Only'),
+        ('friends', 'Friends only *Beta*'),
         ('everyone', 'Every One'),
     ]
     who_see_avatar = models.CharField(

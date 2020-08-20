@@ -119,8 +119,9 @@ def denyrequest(request, request_id):
 
 
 @login_required
-def acceptrequest(request, request_id):
-    friend_request = get_object_or_404(FriendRequest, pk=request_id)
+def acceptrequest(request):
+    pk = request.GET.get('pk')
+    friend_request = get_object_or_404(FriendRequest, pk=pk)
     from_user = request.user
     to_user = friend_request.from_user
     from_user.friends.add(to_user)
