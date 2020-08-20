@@ -51,6 +51,14 @@ def chat_friend(request):
         return JsonResponse({'chat_messages': serialize('json', chat_messages), 'group': json_group, })
 
 
+@login_required
+def chat(request):
+    if request.method == 'GET':
+        friends = User.objects.filter(friends=request.user)
+        groups = ChatGroup.objects.filter(members=request.user)
+        return render(request, 'social/chat.html', {'friends': friends, 'groups': groups})
+
+
 def send_message(request):
     pk = request.GET.get('pk')
     action = request.GET.get('action')
@@ -75,7 +83,7 @@ def send_message(request):
             else:
                 if friend.allow_important_friend_messages:
                     notification = Notification.objects.create(
-                        notification_type='important_friend_message', sender=request.user, url='/userpage/friends/', content=message.message[:100])
+                        notification_type='important_friend_message', sender=request.user, url='/chat/', content=message.message[:100])
                     notification.save()
                     notification.receiver.add(friend)
                     for receiver in notification.receiver.all():
@@ -96,7 +104,7 @@ def send_message(request):
             if friend.allow_normal_friend_message:
                 # !ABSOLUTE PATH
                 notification = Notification.objects.create(
-                    notification_type='normal_friend_message', sender=request.user, url='/userpage/friends/', content=message.message[:100])
+                    notification_type='normal_friend_message', sender=request.user, url='/chat/', content=message.message[:100])
                 notification.save()
                 notification.receiver.add(friend)
                 for receiver in notification.receiver.all():
@@ -130,7 +138,7 @@ def send_message(request):
                     Q(allow_important_group_message=True), ~Q(id=request.user.id))]
                 # !ABSOLUTE PATH
                 notification = Notification(notification_type='important_group_message',
-                                            sender=request.user, url='/userpage/friends/', content=message.message[:100])
+                                            sender=request.user, url='/chat/', content=message.message[:100])
                 if receivers:
                     notification.save()
                     for receiver in receivers:
@@ -148,7 +156,7 @@ def send_message(request):
                 Q(allow_normal_group_message=True), ~Q(id=request.user.id))]
             # !ABSOLUTE PATH
             notification = Notification(notification_type='normal_group_message',
-                                        sender=request.user, url='/userpage/friends/', content=message.message[:100])
+                                        sender=request.user, url='/chat/', content=message.message[:100])
             if receivers:
                 notification.save()
                 for receiver in receivers:
@@ -175,7 +183,7 @@ def create_chat_group(request):
         new_chat_group.save()
         new_chat_group.members.add(request.user)
         new_chat_group.group_admins.add(request.user)
-        return redirect('userpage:friends')
+        return redirect('chat')
 
 
 def create_invite(request,):

@@ -63,7 +63,7 @@
                 {% endif %}
                 {% if user.is_authenticated %}
                 <li class="nav-item">
-                    <a href="{% url 'userpage:friends' %}" title="Chat">
+                    <a href="{% url 'chat' %}" title="Chat">
                         <i class="fa fa-comments" style="font-size:36px;"></i>
                     </a>
                     {% if user.is_authenticated %}

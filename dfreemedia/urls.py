@@ -19,12 +19,15 @@ from categories import views as category_views
 from django.conf.urls.static import static
 from django.conf import settings
 from users import views as users_views
+from social import views as social_views
 from django.contrib.auth import views as auth_views
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', category_views.home, name='home'),
+    # Chat
+    path('chat/', social_views.chat,name='chat'),
     # CATEGORIES
     path('category/', include('categories.urls'), name='category'),
     path('comments/', include('comments.urls'), name='comments'),
