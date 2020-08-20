@@ -20,15 +20,28 @@ $(document).ready(function () {
             $('#groupMembersSettings').show();
             $('#groupMembers').html('')
             $.ajax({
-                url: $('#groupMembersSettings').attr('data-url'),
+                url: $('#groupMembersSettings').attr('data-url'), // social:group_members
                 data: {
                     'group_id': $('#currChat').attr('data-pk'),
                     'action': 'showMembers'
                 },
                 dataType: 'json',
                 success: function (response) {
+                    group = response.group
                     members = JSON.parse(response.members)
+                    admins = JSON.parse(group.admins)
                     for (let i = 0; members.length > i; i++) {
+                        let badge = ''
+                        if (members[i].fields.username == group.author_username) {
+                            badge = '<i class="fas fa-crown"></i>'
+                        } else {
+                            for (admin of admins) {
+                                if (admin.fields.username === members[i].fields.username) {
+                                    badge = '<i class="fas fa-user-cog"></i>'
+                                }
+                            }
+                        }
+                        // Get group admins
                         $('#groupMembers').prepend(`
                         <li class="list-group-item">
                                 <div class="row w-100">
@@ -40,7 +53,8 @@ $(document).ready(function () {
                                     </div>
                                     <div class="col-12 col-sm-6 col-md-9 text-center text-sm-left">
                                         <a href="/people/${members[i].pk}/">
-                                    <label class="name lead">${ members[i].fields.username }</label>
+                                    <label class="name lead">${ members[i].fields.username } <span class="badge badge-secondary">${badge}</span>
+                                    </label> 
                                     </a>
                                     <br>
                                     <span class="text-muted" data-toggle="tooltip" title="Bio"
@@ -49,7 +63,7 @@ $(document).ready(function () {
                                     <form id="id_removeMemberForm${members[i].pk}" method="GET">
                                         <button type="submit" name="invite," data-pk="${members[i].pk}" class="id_removeMember btn float-right"
                                         id="id_removeMember${members[i].pk}"><i class="fas fa-minus-circle"
-                                        style="font-size: 36px;"></i></button>
+                                        style="font-size: 24px;"></i></button>
                                         </form>
                                         </div>
                                         </div>

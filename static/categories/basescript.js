@@ -33,7 +33,7 @@ $(document).ready(function () {
                                 'pk': notifications[i].fields.sender,
                             },
                             dataType: 'json',
-                            async:false,
+                            async: false,
                             success: function (response) {
                                 output = ''
                                 let sender = response.user
@@ -129,6 +129,10 @@ $(document).ready(function () {
         }
     });
     setInterval(() => {
-        $('#message_area').html('')
+        if ($('#message_area').html()) {
+            setTimeout(() => {
+                $('#message_area').html('')
+            }, 4000);
+        }
     }, 4000);
 });
