@@ -71,6 +71,7 @@
                         event.preventDefault()
                     })
                     $('#idAddFriendButton{{ view_user.id }}').click(function () {
+                        let thisElement = $(this)
                         $.ajax({
                             url: "{% url 'people:addfriend' %}",
                             data: {
@@ -78,6 +79,7 @@
                             },
                             dataType: 'json',
                             success: function (data) {
+                                thisElement.parent().parent().parent().parent().fadeOut()
                                 $('#message_area').html('')
                                 if (data.message.tags === 'error') {
                                     $('#message_area').append(`

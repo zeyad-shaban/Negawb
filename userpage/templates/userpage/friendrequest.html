@@ -75,9 +75,9 @@
             event.preventDefault();
             $.ajax({
                 type: "get",
-                url: "{% url 'userpage:denyrequest' request.id%}",
+                url: "{% url 'userpage:denyrequest' %}",
                 data: {
-                    'request_id': "{{ request.id }}"
+                    'pk': "{{ request.id }}"
                 },
                 dataType: "json",
                 success: function (data) {

@@ -22,7 +22,7 @@
 <ul class="list-group list-group-horizontal row justify-content-center mb-5 mt-5">
     <li class="list-group-item userMenuItem active">Home</li>
     <li class="list-group-item userMenuItem">Friends {{user.friends.count}}</li>
-    <li class="list-group-item userMenuItem">Requests</li>
+    <li class="list-group-item userMenuItem">Requests {{total_requests}}</li>
     <li class="list-group-item userMenuItem">My Requests</li>
 </ul>
 <div id="mainContainer">
@@ -253,7 +253,7 @@
                             method: 'get',
                             dataType: 'json',
                             success: function (response) {
-                                thisButton.toggle()
+                                thisButton.parent().parent().fadeOut()
                                 $('#message_area').html(
                                     `<div class="alert alert-success"> You unfriended ${friendUsername}`
                                 )
@@ -291,8 +291,8 @@
         {% csrf_token %}
         <input type="submit" value="Accept" name="acceptrequest," class="btn btn-success ml-2 acceptFriend" data-pk="{{request.id}}" data-username="{{ request.from_user.username }}">
     </form>
-    <a class="btn btn-danger" id="denyRequest{{request.id}}" style="color: white;">Deny</a>
-</div>
+    <a class="btn btn-danger denyRequest" style="color: white;" data-pk="{{request.id}}">Deny</a>
+    </div>
 {% endfor %}
 <hr>
 <h1>Group Requests</h1>
@@ -326,27 +326,56 @@
 </div>
 {% endfor %}
                 `)
+
                 function friendRequestHandler() {
                     // ACCEPT 
-        $('.acceptFriendForm').submit(function (event) {
-            event.preventDefault()
-        })
-        $('.acceptFriend').click(function (event) {
-            event.preventDefault();
-            let thisElement = $(this)
-            $.ajax({
-                type: "get",
-                url: "{% url 'userpage:acceptrequest' %}",
-                data: {
-                    'pk': $('.acceptFriend').attr('data-pk')
-                },
-                dataType: "json",
-                success: function (data) {
-                    $('#message_area').html('')
-                    $('#message_area').html(`<div class="alert alert-success">${thisElement.attr('data-username')} is now a friend</div>`)
-                }
-            });
-        });
+                    $('.acceptFriendForm').submit(function (event) {
+                        let thisElement = $(this)
+                        event.preventDefault()
+                        event.preventDefault();
+                        $.ajax({
+                            type: "get",
+                            url: "{% url 'userpage:acceptrequest' %}",
+                            data: {
+                                'pk': $('.acceptFriend').attr('data-pk')
+                            },
+                            dataType: "json",
+                            success: function (data) {
+                                thisElement.parent().fadeOut()
+                                $('#message_area').html('')
+                                $('#message_area').html(
+                                    `<div class="alert alert-success">${thisElement.attr('data-username')} is now a friend</div>`
+                                )
+                            }
+                        });
+                    });
+                    // DENNY
+                    $('.denyRequest').click(function (event) {
+                        event.preventDefault();
+                        let thisElement = $(this);
+                        $.ajax({
+                            method: "get",
+                            url: "{% url 'userpage:denyrequest' %}",
+                            data: {
+                                'pk': $(this).attr('data-pk')
+                            },
+                            dataType: "json",
+                            success: function (data) {
+                                $('#message_area').html('')
+                                thisElement.parent().fadeOut();
+                                if (data.message.tags === 'error') {
+                                    $('#message_area').append(`
+                            <div class="alert alert-danger fixed-top">${data.message.text}</div>
+                            `)
+                                } else {
+                                    $('#message_area').append(`
+        <div class="alert alert-${data.message.tags} fixed-top">${data.message.text}</div>
+                                `)
+                                }
+                            }
+                        });
+
+                    })
                 }
                 var g = document.createElement('script')
                 var s = document.getElementsByTagName('script')[0]

@@ -26,8 +26,9 @@ def home(request):
     distraction_free_form = DistractionFreeForm(instance=request.user)
     requests = FriendRequest.objects.filter(to_user=request.user)
     group_requests = GroupRequest.objects.filter(reciever=request.user)
+    total_requests_count = len(requests) + len(group_requests)
     if request.method == 'GET':
-        return render(request, 'userpage/index.html', {'user': user, 'form': form, 'privacy_form': privacy_form, 'distraction_free_form': distraction_free_form, 'requests': requests, 'group_requests':group_requests})
+        return render(request, 'userpage/index.html', {'user': user, 'form': form, 'privacy_form': privacy_form, 'distraction_free_form': distraction_free_form, 'requests': requests, 'group_requests':group_requests, 'total_requests': total_requests_count})
     elif request.POST['submit'] == 'Update':
         try:
             # if request.POST['email']:
@@ -103,8 +104,9 @@ def requestssent(request):
 
 
 @login_required
-def denyrequest(request, request_id):
-    denied_request = get_object_or_404(FriendRequest, pk=request_id)
+def denyrequest(request):
+    pk = request.GET.get('pk')
+    denied_request = get_object_or_404(FriendRequest, pk=pk)
     denied_request.delete()
     if denied_request.from_user.your_invites:
         notification = Notification(notification_type='your_invites', sender=request.user,
