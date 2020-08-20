@@ -317,7 +317,14 @@ def group_members(request):
         member = get_object_or_404(User, pk=member_id)
     if request.GET.get('action') == 'showMembers':
         members = group.members.all().order_by('followers')
-        return JsonResponse({'members': serialize('json', members)})
+        json_group = {
+            'title': group.title,
+            'id': group.id,
+            'image': group.image.url,
+            'author_username': group.author.username,
+            'admins':serialize('json', group.group_admins.all())
+        }
+        return JsonResponse({'members': serialize('json', members), 'group': json_group})
     elif request.GET.get('action') == 'removeMember':
         if (request.user in group.group_admins.all() and member not in group.group_admins.all() and not member == group.author) or (request.user == group.author):
             group.members.remove(member)
