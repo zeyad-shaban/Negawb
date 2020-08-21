@@ -11,5 +11,4 @@ urlpatterns = [
     path('update_todo/<int:pk>/', views.update_todo, name='update_todo'),
     path('announcements/', views.announcements, name='announcements'),
     path('view/announce/<int:pk>', views.ViewAnnounce.as_view(), name='ViewAnnounce'),
-    path('about/', views.About.as_view(), name='about'),
 ]
