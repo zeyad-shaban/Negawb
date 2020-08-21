@@ -62,14 +62,3 @@ nav li a:hover {
     width: 430px;
     max-height: 568px;
 }
-
-/* Width */
-/* @media only screen and (max-width: 600px) {
-    #notificationDropMenu {
-        
-    } 
-}*/
-
-div>.alert{
-    z-index: 999999;
-}
