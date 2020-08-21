@@ -66,8 +66,7 @@ def addfriend(request):
         from_user=from_user, to_user=to_user)
     friend_request_check_2 = FriendRequest.objects.filter(
         from_user=to_user, to_user=from_user)
-    if pk == request.user.id:
-        # users = User.objects.all()
+    if int(pk) == request.user.id:
         message = {
             'text': 'Adding yourself 😭😿',
             'tags': 'error'

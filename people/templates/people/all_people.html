@@ -171,16 +171,38 @@
                         }
                     }
                     $('#contact-list').html(output)
-                    function addFriend (){
-                            $('.addFriend').click(function (e) { 
-                                e.preventDefault();
-                                console.log('clicked')
-                            });
-                        }
-                        let g = document.createElement('script');
-                        let s = document.getElementsByTagName('script')[0]
-                        g.text = addFriend();
-                        s.parentNode.insertBefore(g, s)
+
+                    function addFriend() {
+                        $('.addFriend').click(function (e) {
+                            e.preventDefault();
+                            let thisElement = $(this)
+                            $.ajax({
+                                url: "{% url 'people:addfriend' %}",
+                                data: {
+                                    'pk': thisElement.attr('data-pk'),
+                                },
+                                dataType: 'json',
+                                success: function (response) {
+                                    thisElement.fadeOut();
+                                    $('#message_area').html('')
+                                    if (data.message.tags === 'error') {
+                                        $('#message_area').append(`
+                            <div class="alert alert-danger fixed-top">${data.message.text}</div>
+                            `)
+                                    } 
+                                    else {
+                                        $('#message_area').append(`
+        <div class="alert alert-${data.message.tags} fixed-top">${data.message.text}</div>
+                                `)
+                                    }
+                                }
+                            })
+                        });
+                    }
+                    let g = document.createElement('script');
+                    let s = document.getElementsByTagName('script')[0]
+                    g.text = addFriend();
+                    s.parentNode.insertBefore(g, s)
                 }
             })
         })
@@ -258,7 +280,8 @@
                                 $.ajax({
                                     url: `addfriend/`,
                                     data: {
-                                        'pk': user_id                                    },
+                                        'pk': user_id
+                                    },
                                     dataType: 'json',
                                     success: function (data) {
                                         $('#message_area').html('')
