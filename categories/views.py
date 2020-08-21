@@ -20,22 +20,30 @@ def home(request):
             Q(followers=request.user), ~Q(friends=request.user))
         friends_posts_list = Post.objects.filter(
             Q(user__in=friends), ~Q(user=request.user)).order_by('-post_date')
-        followed_posts_list = Post.objects.filter(user__in=followed).order_by('-post_date')
-        friends_paginator = Paginator(friends_posts_list, 7)
-        followed_paginator = Paginator(followed_posts_list, 7)
+        followed_posts_list = Post.objects.filter(
+            user__in=followed).order_by('-post_date')
+        friends_paginator = Paginator(friends_posts_list, 5)
         page = request.GET.get('page')
         try:
-            friends_posts = friends_paginator.page(page)
-            followed_posts = followed_paginator.page(page)
+            friends_posts = friends_paginator.page('page')
         except PageNotAnInteger:
             friends_posts = friends_paginator.page(1)
-            followed_posts = followed_paginator.page(1)
         except EmptyPage:
             friends_posts = friends_paginator.page(
                 friends_paginator.num_pages)
-            followed_posts = followed_paginator.page(
-                followed_paginator.num_pages)
-        # Posts Paginator
+        # followed paginator
+        followed_page = request.GET.get('followed_page')
+        followed_paginator = Paginator(followed_posts_list, 5)
+        try:
+            followed_posts = followed_paginator.page(followed_page)
+        except PageNotAnInteger:
+            followed_posts = followed_paginator.page(1)
+        except EmptyPage:
+            followed_posts = []
+        if followed_page:
+            return JsonResponse({'followed_posts': serialize('json', followed_posts)})
+        page = request.GET.get('followed_page')
+        # Homepage Posts Paginator
         if request.user.homepage_posts:
             homepage_posts_list = request.user.homepage_posts.post_set.all().order_by('-post_date')
             homepage_posts_paginator = Paginator(homepage_posts_list, 5)
@@ -47,7 +55,7 @@ def home(request):
             except EmptyPage:
                 homepage_posts = []
             if page:
-                return JsonResponse({'homepage_posts':serialize('json', homepage_posts)})
+                return JsonResponse({'homepage_posts': serialize('json', homepage_posts)})
         else:
             homepage_posts = []
     else:
@@ -55,7 +63,8 @@ def home(request):
         followed_posts = None
         homepage_posts = []
 
-    return render(request, 'categories/index.html', {'categories': categories, 'friends_posts': friends_posts, 'followed_posts': followed_posts, 'homepage_posts': homepage_posts, 'followed_users': followed_users })
+    return render(request, 'categories/index.html', {'categories': categories, 'friends_posts': friends_posts, 'followed_posts': followed_posts, 'homepage_posts': homepage_posts, 'followed_users': followed_users})
+
 
 @login_required
 def view_category(request, pk):
@@ -70,4 +79,3 @@ def view_category(request, pk):
     except EmptyPage:
         posts = paginator.page(paginator.num_pages)
     return render(request, f'categories/{category.title}.html', {'category': category, 'posts': posts})
-
