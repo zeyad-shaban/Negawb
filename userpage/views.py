@@ -176,7 +176,7 @@ def get_user_by_id(request):
         'who_see_avatar': user.who_see_avatar,
         'avatar': user.avatar.url,
         'friends': serialize('json', user.friends.all()),
-        'posts': serialize('json', user.post_set.all().order_by('post_date')),
+        'posts': serialize('json', user.post_set.all().order_by('-post_date')),
     }
     if not user:
         user = request.user

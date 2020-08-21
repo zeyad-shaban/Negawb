@@ -211,6 +211,7 @@ $(document).ready(function () {
                             dataType: 'json',
                             async: false,
                             success: function (response) {
+                                console.log('Paginating followed posts...')
                                 let user = response.user
                                 let output = ''
                                 let userAvatar = ''
@@ -359,7 +360,7 @@ $(document).ready(function () {
         e.preventDefault();
         let output = ''
         $.ajax({
-            url: $('#categoryContainer').attr('data-url'),
+            url: $('#categoryContainer').attr('data-url'), // 'userpage:get_user_by_id'
             data: {
                 'pk': $(this).attr('data-pk'),
             },
