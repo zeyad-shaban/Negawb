@@ -48,6 +48,7 @@ def signupuser(request):
                     # email.send(fail_silently=False)
                 else:
                     user.save()
+                    messages.success(request, 'To allow notifications go <a href="/userpage/">here</a> and click subscribe to push messaging')
                     login(request, user)
                 if request.GET.get('next'):
                     return redirect(request.GET.get('next'))

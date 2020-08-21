@@ -13,6 +13,7 @@ User = get_user_model()
 
 def home(request):
     categories = Category.objects.all()
+    followed_users = []
     if request.user.is_authenticated:
         friends = User.objects.filter(friends=request.user)
         followed_users = User.objects.filter(followers=request.user)
