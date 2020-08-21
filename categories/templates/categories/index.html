@@ -500,7 +500,7 @@
 
     <!-- FOLLOWED POSTS -->
     <div id="followedPosts" class="homepageItem">
-        {% for followed in user.followers.all %}
+        {% for followed in followed_users %}
         <a class="text-center showFollowed" data-pk="{{ followed.id }}">
             {% if followed.who_see_avatar == 'everyone' %}
             <img src="{{followed.avatar.url}}" alt="User Image" width="64" height="64">

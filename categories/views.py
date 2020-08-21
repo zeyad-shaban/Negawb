@@ -15,6 +15,7 @@ def home(request):
     categories = Category.objects.all()
     if request.user.is_authenticated:
         friends = User.objects.filter(friends=request.user)
+        followed_users = User.objects.filter(followers=request.user)
         followed = User.objects.filter(
             Q(followers=request.user), ~Q(friends=request.user))
         friends_posts_list = Post.objects.filter(
@@ -54,7 +55,7 @@ def home(request):
         followed_posts = None
         homepage_posts = []
 
-    return render(request, 'categories/index.html', {'categories': categories, 'friends_posts': friends_posts, 'followed_posts': followed_posts, 'homepage_posts': homepage_posts })
+    return render(request, 'categories/index.html', {'categories': categories, 'friends_posts': friends_posts, 'followed_posts': followed_posts, 'homepage_posts': homepage_posts, 'followed_users': followed_users })
 
 @login_required
 def view_category(request, pk):
