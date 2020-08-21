@@ -275,6 +275,7 @@
 
                         function addFriend() {
                             $('.id_addFriend').click(function (e) {
+                                let thisElement = $(this)
                                 e.preventDefault();
                                 let user_id = $(this).attr('data-pk')
                                 $.ajax({
@@ -284,8 +285,8 @@
                                     },
                                     dataType: 'json',
                                     success: function (data) {
+                                        thisElement.fadeOut()
                                         $('#message_area').html('')
-                                        $(this).toggle();
                                         if (data.message.tags === 'error') {
                                             $('#message_area').append(`
                             <div class="alert alert-danger fixed-top">${data.message.text}</div>
