@@ -51,11 +51,11 @@
 {% if post.image %}
 <a href="{% url 'people:people' user.id %}">
     {% if user.who_see_avatar == 'everyone' %}
-    <img src="{{user.avatar.url}}" alt="User Image" width="64" height="64">
+    <img src="{{post.user.avatar.url}}" alt="User Image" width="64" height="64">
     {% elif user.who_see_avatar == 'friends' and user in user.friends.all %}
-    <img src="{{user.avatar.url}}" alt="User Image" width="64" height="64">
+    <img src="{{post.user.avatar.url}}" alt="User Image" width="64" height="64">
     {% elif user == user %}
-    <img src="{{user.avatar.url}}" alt="User Image" width="64" height="64">
+    <img src="{{post.user.avatar.url}}" alt="User Image" width="64" height="64">
     {% else %}
     <img src="/media/profile_images/DefaultUserImage.WebP" alt="User Image" width="64" height="64">
     {% endif %}
