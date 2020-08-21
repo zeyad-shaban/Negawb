@@ -82,3 +82,6 @@ def announcements(request):
 class ViewAnnounce(generic.DetailView):
     model = Announcement
     template_name = 'production/announce.html'
+
+class About(generic.TemplateView):
+    template_name= 'production/about.html'

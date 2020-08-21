@@ -69,3 +69,7 @@ nav li a:hover {
         
     } 
 }*/
+
+div>.alert{
+    z-index: 999999;
+}

@@ -79,8 +79,9 @@ $(document).ready(function () {
                             let member_id = $(this).attr('data-pk')
                             let confirmation = confirm(`Are you sure you want to remove ${members[member_id-1].fields.username}`)
                             if (confirmation) {
+                                let thisElement = $(this)
                                 $.ajax({
-                                    url: $('#groupMembersSettings').attr('data-url'),
+                                    url: $('#groupMembersSettings').attr('data-url'), // social:group_members   
                                     data: {
                                         'group_id': $('#currChat').attr('data-pk'),
                                         'member_id': member_id,
@@ -89,7 +90,12 @@ $(document).ready(function () {
                                     method: 'get',
                                     dataType: 'json',
                                     success: function (response) {
-                                        $(this).fadeOut()
+                                        if (response.message.includes('You cannot remove')) {
+                                            alert(response.message)
+                                            thisElement.parent().fadeOut()
+                                        } else {
+                                            thisElement.parent().parent().parent().parent().toggle()
+                                        }
                                     }
                                 })
                             }
@@ -109,6 +115,24 @@ $(document).ready(function () {
         if (confirmation) {
             $.ajax({
                 url: $('#deleteGroup').attr('data-url'),
+                data: {
+                    'pk': $('#currChat').attr('data-pk'),
+                },
+                dataType: 'json',
+                success: function (response) {
+                    location.reload();
+                }
+            })
+        }
+    })
+    // Leave Group
+    $('#leaveGroup').click(function(e){
+        e.preventDefault();
+        let currChat = $('#currChat').attr('data-pk')
+        let confirmation = confirm('You are about to leave this group')
+        if (confirmation) {
+            $.ajax({
+                url: $('#leaveGroup').attr('data-url'),
                 data: {
                     'pk': $('#currChat').attr('data-pk'),
                 },

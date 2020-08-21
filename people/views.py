@@ -53,7 +53,7 @@ def all_peopleresults(request):
     query = request.GET.get('q')
     # todo add phone number query
     results = User.objects.filter(
-        Q(username__icontains=query) | Q(email__icontains=query))
+        Q(username__icontains=query) | Q(email__icontains=query), ~Q(id=request.user.id))
     return JsonResponse({'results': serialize('json', results)})
 
 

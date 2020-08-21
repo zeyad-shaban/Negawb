@@ -15,6 +15,7 @@ defusedxml==0.6.0
 dj-database-url==0.5.0
 Django==3.1
 django-channels==0.7.0
+django-cleanup==5.0.0
 django-crispy-forms==1.9.2
 django-webpush==0.3.3
 hiredis==1.1.0
