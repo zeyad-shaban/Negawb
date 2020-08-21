@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'comments',
     'social',
     'production',
+    'django_cleanup'
 ]
 
 MIDDLEWARE = [

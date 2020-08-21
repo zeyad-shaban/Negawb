@@ -162,22 +162,25 @@
                         <span class="text-muted small text-truncate">${ result.fields.email }</span>
                         <br>
                         {% endif %}
-                        <span class="fa fa-fw fa-envelope fa-fw text-muted" data-toggle="tooltip" title="Bio"
-                            data-original-title="${ result.fields.bio }"></span>
                         <span class="small text-truncate">${ result.fields.bio }</span>
-                        <form action="/people/addfriend/${result.pk}/" method="POST">
-                            {% csrf_token %}
-                            <input type="submit" value="Add Friend" name="addfriend,"
-                                class="btn btn-primary float-right">
-                        </form>
+                            <button type="submit" name="addfriend," class="btn btn-primary float-right addFriend" data-pk=${result.pk}>Add Friend</button>
                     </div>
                 </div>
             </li>
             `
                         }
-
                     }
                     $('#contact-list').html(output)
+                    function addFriend (){
+                            $('.addFriend').click(function (e) { 
+                                e.preventDefault();
+                                console.log('clicked')
+                            });
+                        }
+                        let g = document.createElement('script');
+                        let s = document.getElementsByTagName('script')[0]
+                        g.text = addFriend();
+                        s.parentNode.insertBefore(g, s)
                 }
             })
         })
