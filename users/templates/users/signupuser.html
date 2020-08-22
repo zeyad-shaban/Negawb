@@ -12,7 +12,8 @@
             {% csrf_token %}
             <div class="form-group">
                 <label for="username">Username</label>
-                <input type="text" name="username" class="form-control" id="username" aria-describedby="usernameHelp" required maxlength="40">
+                <input type="text" name="username" class="form-control" id="username" aria-describedby="usernameHelp"
+                    required maxlength="40">
             </div>
             <!-- <div class="form-group">
                 <label for="email">Email</label>
@@ -27,6 +28,9 @@
                 <label for="password2">Confirm Password</label>
                 <input type="password" name="password2" class="form-control" id="password2" required>
             </div>
+            <small class="form-text text-muted mb-2">By clicking Sign Up, you agree to our <a
+                    href="{% url 'termsandconditions' %}" target="_blank">Terms and Conditions</a>, <a
+                    href="{% url 'privacypolicy' %}" target="_blank">Privacy Policy</a></small>
             <button type="submit" class="btn btn-primary">Sign Up</button>
         </form>
         <hr>

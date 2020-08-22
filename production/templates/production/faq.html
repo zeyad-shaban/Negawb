@@ -271,7 +271,9 @@
                             <h4 class="mt-0">who is the creater of Dfreemedia</h4>
                             <div class="media mt-3">
                                 <div class="media-body">
-                                    <p><a href="https://zeyadshaban.pythonanywhere.com/people/1/" target="_blank">Zeyad Shaban</a></p>
+                                    <!-- ABSOLUTE URL -->
+                                    <p><a href="https://zeyadshaban.pythonanywhere.com/people/1/" target="_blank">Zeyad
+                                            Shaban</a></p>
                                 </div>
                             </div>
                         </div>
@@ -282,8 +284,9 @@
                             <div class="media mt-3">
                                 <div class="media-body">
                                     <p>Email: dfreemedia@gmail.com</p>
-                                    <p>Official Dfreemedia <a
-                                            href="https://zeyadshaban.pythonanywhere.com/people/6/" target="_blank">account</a></p>
+                                    <!-- ABSOLUTE URL -->
+                                    <p>Official Dfreemedia <a href="https://zeyadshaban.pythonanywhere.com/people/6/"
+                                            target="_blank">account</a></p>
                                 </div>
                             </div>
                         </div>
@@ -294,14 +297,52 @@
                             <div class="media mt-3">
                                 <div class="media-body">
                                     <p>We don't recommand having multiple soical media platforms, our main one is stated
-                                        above, we have one on <a href="https://www.youtube.com/channel/UCNYWoUrGyhKJEeStOYdfRig" target="_blank">youtube</a> in case anything bad happend</p>
+                                        above, we have one on <a
+                                            href="https://www.youtube.com/channel/UCNYWoUrGyhKJEeStOYdfRig"
+                                            target="_blank">youtube</a> in case anything bad happend</p>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- <li class="list-group-item">Rules</li> -->
+            <li class="list-group-item" type="button" data-toggle="collapse" data-target="#rules" aria-expanded="false"
+                aria-controls="rules">Rules</li>
+            <div class="collapse" id="rules">
+                <div class="card card-body">
+                    <div class="media">
+                        <div class="media-body">
+                            <h4 class="mt-0">Terms and Conditions</h4>
+                            <div class="media mt-3">
+                                <div class="media-body">
+                                    <p><a href="{% url 'termsandconditions' %}" target="_blank">Terms and Conditions</a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="media">
+                        <div class="media-body">
+                            <h4 class="mt-0">Privacy Policy</h4>
+                            <div class="media mt-3">
+                                <div class="media-body">
+                                    <p><a href="{% url 'privacypolicy' %}" target="_blank">Privacy policy</a></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="media">
+                        <div class="media-body">
+                            <h4 class="mt-0">Cookie privacy</h4>
+                            <div class="media mt-3">
+                                <div class="media-body">
+                                    <p><a href="{% url 'cookiepolicy' %}" target="_blank">Cookie Policy</a></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
+                </div>
+            </div>
         </ul>
     </div>
 </div>

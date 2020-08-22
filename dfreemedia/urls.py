@@ -33,6 +33,8 @@ urlpatterns = [
     path('about/', production_views.About.as_view(), name='about'),
     path('faq/', production_views.Faq.as_view(), name='faq'),
     path('termsandconditions/', production_views.TermsAndConditions.as_view(), name='termsandconditions'),
+    path('privacypolicy/', production_views.PrivacyPolicy.as_view(), name='privacypolicy'),
+    path('cookiepolicy/', production_views.CookiePolicy.as_view(), name='cookiepolicy'),
     # Includes
     path('category/', include('categories.urls'), name='category'),
     path('comments/', include('comments.urls'), name='comments'),
