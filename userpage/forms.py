@@ -40,5 +40,5 @@ class DistractionFreeForm(ModelForm):
             'your_invites':'Your own invites',
             'homepage_posts': 'Posts to show in homepage <small class="form-text text-muted">choose none if you don\'t want to show posts in homepage</small>',
             'hide_posts_in_homepage':'Hide Followers/Friends posts in homepage',
-            'blocked_categories': 'Blocked categories <small class="form-text text-muted">user command/ctrl for destokp users',
+            'blocked_categories': 'Blocked categories <small class="form-text text-muted">user command/ctrl for destokp users</small>',
         }

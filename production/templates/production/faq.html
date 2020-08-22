@@ -53,6 +53,21 @@
                     </div>
                     <div class="media">
                         <div class="media-body">
+                            <h4 class="mt-0">Can't see posts in homepage</h4>
+                            <div class="media mt-3">
+                                <div class="media-body">
+                                    <p>You should find message saying 'Your Distraction Free settings doesn't allow
+                                        posts to show in homepage' so don't worry this is not a problem, this is the
+                                        default behaviour for Dfreemedia, go to your <a href="{% url 'userpage:home' %}"
+                                            target="_blank">profile</a> and click up Distraction Free, now click on
+                                        'posts to show in homepage' and choose your favourite category</p>
+                                    <img src="{% static 'production/chooseHomepageCategory.WebP' %}" alt="" width="250">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="media">
+                        <div class="media-body">
                             <h4 class="mt-0">Page not loading properly</h4>
                             <div class="media mt-3">
                                 <div class="media-body">
@@ -104,7 +119,9 @@
                             <h4 class="mt-0">Is my password secure?</h4>
                             <div class="media mt-3">
                                 <div class="media-body">
-                                    <p>Yes, as they are turned into hashed passwords first, which make it almost impossible for us and any hacker to crack your password, so ya don't worry buddy ;-)</p>
+                                    <p>Yes, as they are turned into hashed passwords first, which make it almost
+                                        impossible for us and any hacker to crack your password, so ya don't worry buddy
+                                        ;-)</p>
                                 </div>
                             </div>
                         </div>
@@ -114,7 +131,9 @@
                             <h4 class="mt-0">Protect profile picture</h4>
                             <div class="media mt-3">
                                 <div class="media-body">
-                                    <p>Go to your <a href="{% url 'userpage:home' %}" target="_blank">Profile</a> and click on 'privacy', head to 'Who can see profile image', you can either make it every one, friends only, or no one, tho friends only is still beta</p>
+                                    <p>Go to your <a href="{% url 'userpage:home' %}" target="_blank">Profile</a> and
+                                        click on 'privacy', head to 'Who can see profile image', you can either make it
+                                        every one, friends only, or no one, tho friends only is still beta</p>
                                 </div>
                             </div>
                         </div>
@@ -124,10 +143,13 @@
                             <h4 class="mt-0">Stop getting friend and group requests</h4>
                             <div class="media mt-3">
                                 <div class="media-body">
-                                    <p>Again click privacy in your <a href="{% url 'userpage:home' %}" target="_blank">profile</a>, to block friend requests uncheck 'allow friend requests' (the last choice)
-                                    <br>
-                                    to stop getting group requests, click 'Who cann add me to groups', you can either choose everyone, friends only, no one.
-                                </p>
+                                    <p>Again click privacy in your <a href="{% url 'userpage:home' %}"
+                                            target="_blank">profile</a>, to block friend requests uncheck 'allow friend
+                                        requests' (the last choice)
+                                        <br>
+                                        to stop getting group requests, click 'Who cann add me to groups', you can
+                                        either choose everyone, friends only, no one.
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -137,7 +159,9 @@
                             <h4 class="mt-0">How to reset password</h4>
                             <div class="media mt-3">
                                 <div class="media-body">
-                                    <p>For now you can't, the button is there and everything exists, but we are still working very hard to add email vertifications, if you want to help us the simplest way is to share the app with your friends :D</p>
+                                    <p>For now you can't, the button is there and everything exists, but we are still
+                                        working very hard to add email vertifications, if you want to help us the
+                                        simplest way is to share the app with your friends :D</p>
                                 </div>
                             </div>
                         </div>
@@ -145,11 +169,143 @@
                 </div>
             </div>
 
-            <li class="list-group-item">get the most out of dfreemedia</li>
-            <li class="list-group-item">Porta ac consectetur ac</li>
-            <li class="list-group-item">Vestibulum at eros</li>
+            <li class="list-group-item" type="button" data-toggle="collapse" data-target="#getTheMost"
+                aria-expanded="false" aria-controls="getTheMost">Get the most out of dfreemedia</li>
+
+            <div class="collapse" id="getTheMost">
+                <div class="card card-body">
+                    <div class="media">
+                        <div class="media-body">
+                            <p class="alert alert-info">Dfreemedia was made to be as less distractive as possible, so if
+                                you want to get the most
+                                of it you should consider minimizing posts you see, minimizing messages, groups, etc...
+                                please explore the Distraction Free menu in you profile</p>
+                            <h4 class="mt-0">Send important message</h4>
+                            <div class="media mt-3">
+                                <div class="media-body">
+                                    <p>one of the unique features Dfreemedia provides, ability to mark messages as
+                                        important and others as normal, simply check the checkbox beside the send button
+                                        and tada your message is important. <small class="form-text text-muted">You can
+                                            only send 3 important messages each day for each chat room</small></p>
+                                    <img src="{% static 'production/sendImportant.WebP' %}" alt="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="media">
+                        <div class="media-body">
+                            <h4 class="mt-0"></h4>
+                            <div class="media mt-3">
+                                <div class="media-body">
+                                    <p></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="media">
+                        <div class="media-body">
+                            <h4 class="mt-0">Block specific notification</h4>
+                            <div class="media mt-3">
+                                <div class="media-body">
+                                    <p>Yes you heard it right, in Dfreemedia you can have the full control of
+                                        notification types and which ones to receive, go to your <a
+                                            href="{% url 'userpage:home' %}" target="_blank">profile</a>(again) choose
+                                        Distraction Free</p>
+                                    <p class="alert alert-warning">pro tip, you can block Normal messages notifications
+                                        and allow important ones</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="media">
+                        <div class="media-body">
+                            <h4 class="mt-0">Turn Dfreemedia to chat app</h4>
+                            <div class="media mt-3">
+                                <div class="media-body">
+                                    <p>Go to <a href="{% url 'userpage:home' %}" target="_bank">profile</a> and open
+                                        Distraction Free, now check the last option 'Chat only mode'</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="media">
+                        <div class="media-body">
+                            <h4 class="mt-0">limit posts</h4>
+                            <div class="media mt-3">
+                                <div class="media-body">
+                                    <p>We already have a system that doesn't allow users to mkae more than 3 posts/day
+                                        (with the exeption of Fun Area), Go to your <a href="{% url 'userpage:home' %}"
+                                            target="_blank"> profile</a> and choose 'Distraction Free, block all
+                                        categories you don't like to get posts from (last option), you can also 'hide
+                                        Followers/Friends posts in homepage', you can specify which category to be your
+                                        displayed homepage, choose none if you don't like posts to show there
+                                        <br>
+                                        please explore 'Distraction Free' settings because that's where we shine, where
+                                        you have all the power (which none of the other social media platforms provide)
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="media">
+                        <div class="media-body">
+                            <h4 class="mt-0">Hide comments</h4>
+                            <div class="media mt-3">
+                                <div class="media-body">
+                                    <p>Go to your <a href="{% url 'userpage:home' %}" target="_blank">profile</a> and
+                                        check 'Hide comments' (second option)</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <li class="list-group-item" type="button" data-toggle="collapse" data-target="#aboutUs"
+                aria-expanded="false" aria-controls="aboutUs">About and Contact us</li>
+            <div class="collapse" id="aboutUs">
+                <div class="card card-body">
+                    <div class="media">
+                        <div class="media-body">
+                            <h4 class="mt-0">who is the creater of Dfreemedia</h4>
+                            <div class="media mt-3">
+                                <div class="media-body">
+                                    <p><a href="https://zeyadshaban.pythonanywhere.com/people/1/" target="_blank">Zeyad Shaban</a></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="media">
+                        <div class="media-body">
+                            <h4 class="mt-0">Contact Dfreemedia</h4>
+                            <div class="media mt-3">
+                                <div class="media-body">
+                                    <p>Email: dfreemedia@gmail.com</p>
+                                    <p>Official Dfreemedia <a
+                                            href="https://zeyadshaban.pythonanywhere.com/people/6/" target="_blank">account</a></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="media">
+                        <div class="media-body">
+                            <h4 class="mt-0">Social media platforms</h4>
+                            <div class="media mt-3">
+                                <div class="media-body">
+                                    <p>We don't recommand having multiple soical media platforms, our main one is stated
+                                        above, we have one on <a href="https://www.youtube.com/channel/UCNYWoUrGyhKJEeStOYdfRig" target="_blank">youtube</a> in case anything bad happend</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- <li class="list-group-item">Rules</li> -->
         </ul>
     </div>
 </div>
 
 {% endblock content %}
+
+<!-- Are we the best, contact us/ social media platforms, Rules and terms of use, fix not showing posts in homepage todo -->
