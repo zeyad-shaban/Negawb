@@ -86,39 +86,45 @@ def addfriend(request):
         return JsonResponse({'message': message})
 
     else:
-        try:
-            friend_request = FriendRequest(
-                from_user=from_user, to_user=to_user)
-            friend_request.save()
-            if friend_request.to_user.allow_invites:
-                notification = Notification(notification_type='invites', sender=request.user, url="/userpage/friendrequest/", content=f'{friend_request.from_user} wants to be your friend')
-                notification.save()
-                notification.receiver.add(friend_request.to_user)
-                for receiver in notification.receiver.all():
-                    if notification.sender.who_see_avatar == 'everyone':
-                        sender_avatar = notification.sender.avatar.url
-                    elif notification.sender.who_see_avatar == 'friends' and receiver in receiver.friends.all():
-                        sender_avatar = notification.sender.avatar.url
-                    else:
-                        sender_avatar = '/media/profile_images/DefaultUserImage.WebP'
-                    payload = {"head": f"You got a friend request from {notification.sender.username}",
-                    "body": notification.content,
-                    "url": notification.url,
-                    "icon": sender_avatar,
-                    }
-                    send_user_notification(user = receiver, payload = payload,ttl = 1000)
-            message = {
-                'text': f'Successfully sent Friend request to {to_user}',
-                'tags': 'success',
-            }
-            return JsonResponse({'message': message})
-        except:
-            # users = User.objects.all()
-            message = {
-                'text': 'Unknown error, please try again and make sure to report a feedback so we can fix this error',
-                'tags': 'success',
-            }
-            return JsonResponse({'message': message})
+        if to_user.allow_friend_request:
+            try:
+                friend_request = FriendRequest(
+                    from_user=from_user, to_user=to_user)
+                friend_request.save()
+                if friend_request.to_user.allow_invites:
+                    notification = Notification(notification_type='invites', sender=request.user, url="/userpage/friendrequest/", content=f'{friend_request.from_user} wants to be your friend')
+                    notification.save()
+                    notification.receiver.add(friend_request.to_user)
+                    for receiver in notification.receiver.all():
+                        if notification.sender.who_see_avatar == 'everyone':
+                            sender_avatar = notification.sender.avatar.url
+                        elif notification.sender.who_see_avatar == 'friends' and receiver in receiver.friends.all():
+                            sender_avatar = notification.sender.avatar.url
+                        else:
+                            sender_avatar = '/media/profile_images/DefaultUserImage.WebP'
+                        payload = {"head": f"You got a friend request from {notification.sender.username}",
+                        "body": notification.content,
+                        "url": notification.url,
+                        "icon": sender_avatar,
+                        }
+                        send_user_notification(user = receiver, payload = payload,ttl = 1000)
+                message = {
+                    'text': f'Successfully sent Friend request to {to_user}',
+                    'tags': 'success',
+                }
+                return JsonResponse({'message': message})
+            except:
+                # users = User.objects.all()
+                message = {
+                    'text': 'Unknown error, please try again and make sure to report a feedback so we can fix this error',
+                    'tags': 'success',
+                }
+        else:
+                message = {
+                    'text': f'You cannot send friend request to {to_user} due to his privacy settings',
+                    'tags': 'warning',
+                }
+        return JsonResponse({'message': message})
 
 
 def follow(request, pk):

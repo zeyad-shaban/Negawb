@@ -13,8 +13,10 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
         integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <link rel='shortcut icon' href="{% static 'categories/favicon.WebP' %}" type="image/WebP">
-    <meta name="description" content="Can't you stop social media due to that one important group? Wasting all your life on social media! then you must try out Dfreemedia, it provides very unique system for filtering out both messages and posts to help you stay focused. Be more productive with #Dfreemedia">
-    <meta name="keywords" content="dfreemedia, filter, important, social media addiction, productive, production, overcome, social">
+    <meta name="description"
+        content="Can't you stop social media due to that one important group? Wasting all your life on social media! then you must try out Dfreemedia, it provides very unique system for filtering out both messages and posts to help you stay focused. Be more productive with #Dfreemedia">
+    <meta name="keywords"
+        content="dfreemedia, filter, important, social media addiction, productive, production, overcome, social">
     <meta name="author" content="Zeyad Shaban">
     <meta charset=" UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -154,22 +156,22 @@
                 {% endif %}
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                    aria-expanded="false"><i class="fas fa-sort-down"
-                    style="color: white; font-size: 36px;"></i><span class="caret"></span></a>
+                        aria-expanded="false"><i class="fas fa-sort-down"
+                            style="color: white; font-size: 36px;"></i><span class="caret"></span></a>
                     <ul class="dropdown-menu float-right mr-100">
                         <li>
-                            <a style="color: black; text-decoration: none;"
-                            href="{% url 'production:announcements' %}">Announcements </a>
-                            <i class="fas fa-bullhorn"></i>
+                            <a class="btn" href="{% url 'production:feedback' %}">Report a problem</a>
                         </li>
                         <li>
-                            <a class="btn" href="{% url 'production:feedback' %}">FeedBack</a>
+                            <a class="btn" href="{% url 'faq' %}">FAQ</a>
                         </li>
                         <li>
                             <a class="btn" href="{% url 'about' %}">About</a>
                         </li>
                         <li>
-                            <a class="btn" href="#">Q&A</a>
+                            <a style="color: black; text-decoration: none;"
+                                href="{% url 'production:announcements' %}">Announcements </a>
+                            <i class="fas fa-bullhorn"></i>
                         </li>
                         {% if user.is_authenticated %}
                         <li role="separator" class="divider"></li>

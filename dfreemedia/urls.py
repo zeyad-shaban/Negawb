@@ -29,8 +29,9 @@ urlpatterns = [
     path('', category_views.home, name='home'),
     # Chat
     path('chat/', social_views.chat,name='chat'),
-    # About
+    # production
     path('about/', production_views.About.as_view(), name='about'),
+    path('faq/', production_views.Faq.as_view(), name='faq'),
     # Includes
     path('category/', include('categories.urls'), name='category'),
     path('comments/', include('comments.urls'), name='comments'),

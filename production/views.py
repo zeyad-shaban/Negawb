@@ -85,3 +85,7 @@ class ViewAnnounce(generic.DetailView):
 
 class About(generic.TemplateView):
     template_name= 'production/about.html'
+
+
+class Faq(generic.TemplateView):
+    template_name= 'production/faq.html'
