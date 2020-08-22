@@ -10,9 +10,10 @@
 {% block chat_frame %}
 <div id="frame">
     {% endblock chat_frame %}
-    <a class="btn float-left" data-toggle="collapse" href="#sidepanel" role="button" aria-expanded="false" aria-controls="sidepanel" id="sidepanelCollapser">
+    <a class="btn float-left" data-toggle="collapse" href="#sidepanel" role="button" aria-expanded="false"
+        aria-controls="sidepanel" id="sidepanelCollapser">
         <i class="fas fa-address-book" style="font-size: 60px"></i>
-      </a>
+    </a>
     <div id="sidepanel">
         <div id="profile">
             <div class="wrap">
@@ -40,7 +41,7 @@
                     <div class="wrap">
                         <img src="{{group.image.url}}" alt="Group Image"
                             class="img-fluid rounded-circle d-block mx-auto" height="50" width="50"
-                            style="max-height: 50;">
+                            style="max-height: 50px;">
                         <div class="meta">
                             <i class="float-right mr-3 fa fa-users" style="font-size: 24px;"></i>
                             <p class="name">{{ group.title }}</p>
@@ -71,32 +72,43 @@
                                     let chat_messages = JSON.parse(response
                                         .chat_messages)
                                     for (message of chat_messages) {
+                                        let user
+                                        $.ajax({
+                                            url: "{% url 'userpage:get_user_by_id' %}",
+                                            data: {
+                                                'pk': message.fields.message_sender,
+                                            },
+                                            method: 'get',
+                                            dataType: 'json',
+                                            async: false,
+                                            success: function (response) {
+                                                user = response.user
+                                            }
+                                        })
                                         let sender_avatar
-                                        if (message.fields.message_sender
+                                        if (user
                                             .who_see_avatar ==
-                                            'everyone' ||
-                                            message.fields.message_sender
-                                            .who_see_avatar ==
-                                            'friends') {
-                                            sender_avatar = message.fields
-                                                .message_sender
-                                                .avatar
+                                            'everyone') {
+                                            sender_avatar = user.avatar
                                         } else {
                                             sender_avatar =
                                                 '/media/profile_images/DefaultUserImage.WebP'
                                         }
-                                        let messageStyle = "null"
+                                        let messageStyle = ''
                                         if (message.fields.is_important) {
                                             messageStyle =
                                                 'style="background: #d10c0c; color: white;"'
                                         }
-                                        if (message.fields.message_sender !=
+                                        if (user.id !=
                                             "{{user.id}}") {
-                                            outputMessages += `<li class="replies">
+                                            outputMessages += `
+                                            <p class="float-right" style="font-size:1.25em">${user.username}</p>
+                                            <li class="replies">
                                     <img src="${sender_avatar}" alt="" width="22" height="22"/>
                                     <p ${messageStyle}>${message.fields.message}</p>
                                 </li>`
                                         } else {
+                                            sender_avatar = "{{user.avatar.url}}"
                                             outputMessages += `
                                             <li class="sent">
                         <img src="{{user.avatar.url}}" alt="" width="22" height="22"/>
@@ -204,7 +216,8 @@
                                     </script>
                                     {% endfor %}
                                     <hr>
-                                    <h4 class="float-left" style="color: black;">Or search users <i><b>*Beta*</b></i></h4>
+                                    <h4 class="float-left" style="color: black;">Or search users <i><b>*Beta*</b></i>
+                                    </h4>
                                     <form action="" method="get" class="form-inline" id="findUserForm"
                                         data-url="{% url 'people:all_peopleresults' %}">
                                         <input type="text" name="user_username" id="searchUser" class="form-control"
@@ -305,8 +318,11 @@
                                     <h3 style="color: black;">Danger Area</h3>
                                     <br>
                                     <button class="btn btn-outline-danger" id="deleteGroup"
-                                        data-url="{% url 'social:delete_group' %}">DELETE GROUP <i class="far fa-trash-alt"></i></button>
-                                    <button class="btn btn-outline-danger ml-3" data-url="{% url 'social:leave_group' %}" id="leaveGroup">Leave <i class="fas fa-sign-out-alt"></i></button>
+                                        data-url="{% url 'social:delete_group' %}">DELETE GROUP <i
+                                            class="far fa-trash-alt"></i></button>
+                                    <button class="btn btn-outline-danger ml-3"
+                                        data-url="{% url 'social:leave_group' %}" id="leaveGroup">Leave <i
+                                            class="fas fa-sign-out-alt"></i></button>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -459,14 +475,28 @@
                                         )
                                         let outputMessages = ''
                                         for (message of chat_messages) {
-                                            let messageStyle = "null"
+                                            let user
+                                            $.ajax({
+                                                type: "get",
+                                                url: "{% url 'userpage:get_user_by_id' %}",
+                                                data: {
+                                                    'pk': message.fields.message_sender
+                                                },
+                                                dataType: "json",
+                                                async: false,
+                                                success: function (response) {
+                                                    user = response.user
+                                                }
+                                            });
+                                            let messageStyle = ''
                                             if (message.fields.is_important) {
                                                 messageStyle =
                                                     'style="background: #d10c0c; color: white;"'
                                             }
-                                            if (message.fields.message_sender !=
-                                                "{{user.id}}") {
-                                                outputMessages += `<li class="replies">
+                                            if (user.id != "{{user.id}}") {
+                                                outputMessages += `
+                                            <p class="float-right" style="font-size:1.25em">${user.username}</p>
+                                                <li class="replies">
                                     <img src="${senderAvatar}" alt="" width="22" height="22"/>
                                     <p ${messageStyle}>${message.fields.message}</p>
                                 </li>`
@@ -572,7 +602,8 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <form action="{% url 'social:create_chat_group' %}" method="POST" id="newGroupForm">
+                            <form action="{% url 'social:create_chat_group' %}" method="POST" id="newGroupForm"
+                                enctype="multipart/form-data">
                                 {% csrf_token %}
                                 <div class="from-group">
                                     <label for="id_group_title" style="color:black;">Title</label>
@@ -631,7 +662,7 @@
                         </script>
                     </span>
                     <div class="input-group-append" id="messageExtraInputs">
-                    <!-- <i class="fa fa-paperclip attachment" aria-hidden="true"></i> -->
+                        <!-- <i class="fa fa-paperclip attachment" aria-hidden="true"></i> -->
                         <span class="input-group-text d-inline">
                             <label for="id_is_important">Important</label>
                             <input type="checkbox" aria-label="Is Important" id="id_is_important">
