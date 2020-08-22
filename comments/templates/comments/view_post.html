@@ -12,7 +12,7 @@
 
 {% if post.image %}
 <a href="{% url 'people:people' post.user.id %}">
-    <img src="{{ post.user.avatar.url }}" alt="{{ post.user.username }}" widht="64" height="64" class="mr-3 float-left">
+    <img src="{{ post.user.avatar.url }}" alt="{{ post.user.username }}" width="64" height="64" class="mr-3 float-left">
     <span>{{post.user.username}}</span>
 </a>
 <div class="mb-3">
@@ -52,7 +52,7 @@
 <!-- File post -->
 {% elif post.post_file %}
 <a href="{% url 'people:people' post.user.id %}">
-    <img src="{{ post.user.avatar.url }}" alt="{{ post.user.username }}" widht="64" height="64" class="mr-3 float-left">
+    <img src="{{ post.user.avatar.url }}" alt="{{ post.user.username }}" width="64" height="64" class="mr-3 float-left">
     <span>{{post.user.username}}</span>
 </a>
 <div class="mb-3">

@@ -54,7 +54,7 @@ $(document).ready(function () {
                                 let output = ''
                                 let userAvatar = ''
                                 if (user.who_see_avatar == 'everyone') {
-                                    userAvatar = `<img src="${ user.avatar }" alt="${ user.username }" widht="64" height="64" class="mr-3 float-left">`
+                                    userAvatar = `<img src="${ user.avatar }" alt="${ user.username }" width="64" height="64" class="mr-3 float-left">`
                                 } else if (user.who_see_avatar == 'friends' && $('#categoryContainer').attr('data-currUser') in JSON.parse(user.friends)) {
                                     userAvatar = user.avatar
                                 } else if ($('#categoryContainer').attr('data-currUser') == user) {
@@ -65,7 +65,7 @@ $(document).ready(function () {
                                 if (post.fields.image) {
                                     output = `
                                         <a href="/people/${user.id}">
-                                        <img src="${userAvatar}" alt="${ user.username }" widht="64" height="64" class="mr-3 float-left">
+                                        <img src="${userAvatar}" alt="${ user.username }" width="64" height="64" class="mr-3 float-left">
                                             <span>${user.username}</span>
                                         </a>
                                         <div class="mb-3">
@@ -80,7 +80,7 @@ $(document).ready(function () {
                                 } else if (post.fields.post_file) {
                                     output = `
 <a href="/people/${user.id}/">
-    <img src="${ userAvatar }" alt="${ user.username }" widht="64" height="64" class="mr-3 float-left">
+    <img src="${ userAvatar }" alt="${ user.username }" width="64" height="64" class="mr-3 float-left">
     <span>${user.username}</span>
 </a>
 <div class="mb-3">
@@ -101,7 +101,7 @@ $(document).ready(function () {
 <div class="card">
     <div class="card-header">
         <a href="/people/${user.id}/">
-            <img src="${ user.avatar }" alt="${ user.username }" widht="64" height="64"
+            <img src="${ user.avatar }" alt="${ user.username }" width="64" height="64"
                 class="mr-3 float-left">
             ${ user.username }
         </a>
@@ -216,7 +216,7 @@ $(document).ready(function () {
                                 let output = ''
                                 let userAvatar = ''
                                 if (user.who_see_avatar == 'everyone') {
-                                    userAvatar = `<img src="${ user.avatar }" alt="${ user.username }" widht="64" height="64" class="mr-3 float-left">`
+                                    userAvatar = `<img src="${ user.avatar }" alt="${ user.username }" width="64" height="64" class="mr-3 float-left">`
                                 } else if (user.who_see_avatar == 'friends' && $('#categoryContainer').attr('data-currUser') in JSON.parse(user.friends)) {
                                     userAvatar = user.avatar
                                 } else if ($('#categoryContainer').attr('data-currUser') == user) {
@@ -227,7 +227,7 @@ $(document).ready(function () {
                                 if (post.fields.image) {
                                     output = `
                                         <a href="/people/${user.id}">
-                                        <img src="${userAvatar}" alt="${ user.username }" widht="64" height="64" class="mr-3 float-left">
+                                        <img src="${userAvatar}" alt="${ user.username }" width="64" height="64" class="mr-3 float-left">
                                             <span>${user.username}</span>
                                         </a>
                                         <div class="mb-3">
@@ -242,7 +242,7 @@ $(document).ready(function () {
                                 } else if (post.fields.post_file) {
                                     output = `
 <a href="/people/${user.id}/">
-    <img src="${ userAvatar }" alt="${ user.username }" widht="64" height="64" class="mr-3 float-left">
+    <img src="${ userAvatar }" alt="${ user.username }" width="64" height="64" class="mr-3 float-left">
     <span>${user.username}</span>
 </a>
 <div class="mb-3">
@@ -263,7 +263,7 @@ $(document).ready(function () {
 <div class="card">
     <div class="card-header">
         <a href="/people/${user.id}/">
-            <img src="${ user.avatar }" alt="${ user.username }" widht="64" height="64"
+            <img src="${ user.avatar }" alt="${ user.username }" width="64" height="64"
                 class="mr-3 float-left">
             ${ user.username }
         </a>
@@ -372,7 +372,7 @@ $(document).ready(function () {
                 let output = ''
                 let userAvatar = ''
                 if (user.who_see_avatar == 'everyone') {
-                    userAvatar = `<img src="${ user.avatar }" alt="${ user.username }" widht="64" height="64" class="mr-3 float-left">`
+                    userAvatar = `<img src="${ user.avatar }" alt="${ user.username }" width="64" height="64" class="mr-3 float-left">`
                 } else if (user.who_see_avatar == 'friends' && $('#categoryContainer').attr('data-currUser') in JSON.parse(user.friends)) {
                     userAvatar = user.avatar
                 } else if ($('#categoryContainer').attr('data-currUser') == user) {
@@ -386,7 +386,7 @@ $(document).ready(function () {
                     if (post.fields.image) {
                         output = `
                             <a href="/people/${user.id}">
-                            <img src="${userAvatar}" alt="${ user.username }" widht="64" height="64" class="mr-3 float-left">
+                            <img src="${userAvatar}" alt="${ user.username }" width="64" height="64" class="mr-3 float-left">
                                 <span>${user.username}</span>
                             </a>
                             <div class="mb-3">
@@ -401,7 +401,7 @@ $(document).ready(function () {
                     } else if (post.fields.post_file) {
                         output = `
 <a href="/people/${user.id}/">
-<img src="${ userAvatar }" alt="${ user.username }" widht="64" height="64" class="mr-3 float-left">
+<img src="${ userAvatar }" alt="${ user.username }" width="64" height="64" class="mr-3 float-left">
 <span>${user.username}</span>
 </a>
 <div class="mb-3">
@@ -422,7 +422,7 @@ Your browser does not support the video tag.
 <div class="card">
 <div class="card-header">
 <a href="/people/${user.id}/">
-<img src="${ user.avatar }" alt="${ user.username }" widht="64" height="64"
+<img src="${ user.avatar }" alt="${ user.username }" width="64" height="64"
     class="mr-3 float-left">
 ${ user.username }
 </a>
