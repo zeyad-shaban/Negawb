@@ -46,7 +46,7 @@ class User(AbstractUser):
     chat_only_mode = models.BooleanField(default=False)
     hide_posts_in_homepage = models.BooleanField(default=False)
     fixed_navbar = models.BooleanField(default=True)
-    homepage_posts = models.ForeignKey(Category, on_delete= models.CASCADE ,null=True, blank=True)
+    homepage_posts = models.ForeignKey(Category, on_delete= models.CASCADE ,null=True, blank=True, default=2)
     # * notifications
     allow_important_friend_messages = models.BooleanField(default=True)
     allow_important_group_message = models.BooleanField(default=True)
