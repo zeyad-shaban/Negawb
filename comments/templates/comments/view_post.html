@@ -11,8 +11,17 @@
 <script src="{% static 'comments/view_post.js' %}"></script>
 
 {% if post.image %}
-<a href="{% url 'people:people' post.user.id %}">
-    <img src="{{ post.user.avatar.url }}" alt="{{ post.user.username }}" width="64" height="64" class="mr-3 float-left">
+<a href="{% url 'people:people' user.id %}">
+    {% if user.who_see_avatar == 'everyone' %}
+    <img src="{{post.user.avatar.url}}" alt="User Image" width="64" height="64" class="mr-3 float-left">
+    {% elif user.who_see_avatar == 'friends' and user in user.friends.all %}
+    <img src="{{post.user.avatar.url}}" alt="User Image" width="64" height="64" class="mr-3 float-left">
+    {% elif user == user %}
+    <img src="{{post.user.avatar.url}}" alt="User Image" width="64" height="64" class="mr-3 float-left">
+    {% else %}
+    <img src="/media/profile_images/DefaultUserImage.WebP" alt="User Image" width="64" height="64"
+        class="mr-3 float-left">
+    {% endif %}
     <span>{{post.user.username}}</span>
 </a>
 <div class="mb-3">
@@ -34,13 +43,14 @@
 <div class="media">
     <a href="{% url 'people:people' post.user.id %}">
         {% if post.user.who_see_avatar == 'everyone' %}
-        <img src="{{post.user.avatar.url}}" alt="User Image" width="64" height="64">
+        <img src="{{post.user.avatar.url}}" alt="User Image" width="64" height="64" class="mr-3 float-left">
         {% elif post.user.who_see_avatar == 'friends' and user in post.user.friends.all %}
-        <img src="{{post.user.avatar.url}}" alt="User Image" width="64" height="64">
+        <img src="{{post.user.avatar.url}}" alt="User Image" width="64" height="64" class="mr-3 float-left">
         {% elif post.user == user %}
-        <img src="{{post.user.avatar.url}}" alt="User Image" width="64" height="64">
+        <img src="{{post.user.avatar.url}}" alt="User Image" width="64" height="64" class="mr-3 float-left">
         {% else %}
-        <img src="/media/profile_images/DefaultUserImage.WebP" alt="User Image" width="64" height="64">
+        <img src="/media/profile_images/DefaultUserImage.WebP" alt="User Image" width="64" height="64"
+            class="mr-3 float-left">
         {% endif %}
         <div class="media-body">
             <h5 class="mt-0">{{post.user.username}}</h5>
@@ -51,8 +61,17 @@
 </div>
 <!-- File post -->
 {% elif post.post_file %}
-<a href="{% url 'people:people' post.user.id %}">
-    <img src="{{ post.user.avatar.url }}" alt="{{ post.user.username }}" width="64" height="64" class="mr-3 float-left">
+<a href="{% url 'people:people' user.id %}">
+    {% if user.who_see_avatar == 'everyone' %}
+    <img src="{{post.user.avatar.url}}" alt="{{ post.user.username }}" width="64" height="64" class="mr-3 float-left">
+    {% elif user.who_see_avatar == 'friends' and user in user.friends.all %}
+    <img src="{{post.user.avatar.url}}" alt="{{ post.user.username }}" width="64" height="64" class="mr-3 float-left">
+    {% elif user == user %}
+    <img src="{{post.user.avatar.url}}" alt="{{ post.user.username }}" width="64" height="64" class="mr-3 float-left">
+    {% else %}
+    <img src="/media/profile_images/DefaultUserImage.WebP" alt="{{ post.user.username }}" width="64" height="64"
+        class="mr-3 float-left">
+    {% endif %}
     <span>{{post.user.username}}</span>
 </a>
 <div class="mb-3">
@@ -423,5 +442,5 @@
     {% else %}
     <small class="form-text text-muted">Your Distraction Free settings doesn't allow comments to show up😍</small>
     {% endif %}
-<script src="{% static 'social/emojionearea.min.js' %}"></script>
+    <script src="{% static 'social/emojionearea.min.js' %}"></script>
     {% endblock content %}

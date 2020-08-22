@@ -4,7 +4,7 @@
 
 {% block content %}
 <style>
-    .homepageView{
+    .homepageView {
         cursor: pointer;
     }
 </style>
@@ -101,9 +101,22 @@
     {% for post in homepage_posts %}
     {% if post.image %}
     <a href="{% url 'people:people' post.user.id %}">
-        <img src="{{ post.user.avatar.url }}" alt="{{ post.user.username }}" width="64" height="64"
+        {% if post.user.who_see_avatar == 'everyone' %}
+        <img src="{{post.user.avatar.url}}" alt="{{ post.user.username }}" width="64" height="64"
             class="mr-3 float-left">
+        {% elif post.user.who_see_avatar == 'friends' and user in post.user.friends.all %}
+        <img src="{{post.user.avatar.url}}" alt="{{ post.user.username }}" width="64" height="64"
+            class="mr-3 float-left">
+        {% elif post.user == user %}
+        <img src="{{post.user.avatar.url}}" alt="{{ post.user.username }}" width="64" height="64"
+            class="mr-3 float-left">
+        {% else %}
+        <img src="/media/profile_images/DefaultUserImage.WebP" alt="{{ post.user.username }}" width="64" height="64"
+            class="mr-3 float-left">
+        {% endif %}
         <span>{{post.user.username}}</span>
+    </a>
+    <a href="{% url 'people:people' post.user.id %}">
     </a>
     <div class="mb-3">
         <div class="card-body">
@@ -123,9 +136,20 @@
     <div class="card">
         <div class="card-header">
             <a href="{% url 'people:people' post.user.id %}">
-                <img src="{{ post.user.avatar.url }}" alt="{{ post.user.username }}" width="64" height="64"
+                {% if post.user.who_see_avatar == 'everyone' %}
+                <img src="{{post.user.avatar.url}}" alt="{{ post.user.username }}" width="64" height="64"
                     class="mr-3 float-left">
-                {{post.user.username}}
+                {% elif post.user.who_see_avatar == 'friends' and user in post.user.friends.all %}
+                <img src="{{post.user.avatar.url}}" alt="{{ post.user.username }}" width="64" height="64"
+                    class="mr-3 float-left">
+                {% elif post.user == user %}
+                <img src="{{post.user.avatar.url}}" alt="{{ post.user.username }}" width="64" height="64"
+                    class="mr-3 float-left">
+                {% else %}
+                <img src="/media/profile_images/DefaultUserImage.WebP" alt="{{ post.user.username }}" width="64"
+                    height="64" class="mr-3 float-left">
+                {% endif %}
+                <span>{{post.user.username}}</span>
             </a>
         </div>
         <div class="card-body">
@@ -140,8 +164,19 @@
     <!-- File post -->
     {% elif post.post_file %}
     <a href="{% url 'people:people' post.user.id %}">
-        <img src="{{ post.user.avatar.url }}" alt="{{ post.user.username }}" width="64" height="64"
+        {% if post.user.who_see_avatar == 'everyone' %}
+        <img src="{{post.user.avatar.url}}" alt="{{ post.user.username }}" width="64" height="64"
             class="mr-3 float-left">
+        {% elif post.user.who_see_avatar == 'friends' and user in post.user.friends.all %}
+        <img src="{{post.user.avatar.url}}" alt="{{ post.user.username }}" width="64" height="64"
+            class="mr-3 float-left">
+        {% elif post.user == user %}
+        <img src="{{post.user.avatar.url}}" alt="{{ post.user.username }}" width="64" height="64"
+            class="mr-3 float-left">
+        {% else %}
+        <img src="/media/profile_images/DefaultUserImage.WebP" alt="{{ post.user.username }}" width="64" height="64"
+            class="mr-3 float-left">
+        {% endif %}
         <span>{{post.user.username}}</span>
     </a>
     <div class="mb-3">
@@ -521,13 +556,13 @@
                 {% if post.image %}
                 <a href="{% url 'people:people' user.id %}">
                     {% if user.who_see_avatar == 'everyone' %}
-                    <img src="{{post.user.avatar.url}}" alt="User Image" width="64" height="64">
+                    <img src="{{post.user.avatar.url}}" alt="User Image" width="64" height="64" class="mr-3 float-left">
                     {% elif user.who_see_avatar == 'friends' and user in user.friends.all %}
-                    <img src="{{post.user.avatar.url}}" alt="User Image" width="64" height="64">
+                    <img src="{{post.user.avatar.url}}" alt="User Image" width="64" height="64" class="mr-3 float-left">
                     {% elif user == user %}
-                    <img src="{{post.user.avatar.url}}" alt="User Image" width="64" height="64">
+                    <img src="{{post.user.avatar.url}}" alt="User Image" width="64" height="64" class="mr-3 float-left">
                     {% else %}
-                    <img src="/media/profile_images/DefaultUserImage.WebP" alt="User Image" width="64" height="64">
+                    <img src="/media/profile_images/DefaultUserImage.WebP" alt="User Image" width="64" height="64" class="mr-3 float-left">
                     {% endif %}
                     <span>{{post.user.username}}</span>
                 </a>
@@ -549,10 +584,18 @@
                 {% elif post.description and not post.image and not post.post_file %}
                 <div class="card">
                     <div class="card-header">
-                        <a href="{% url 'people:people' post.user.id %}">
-                            <img src="{{ post.user.avatar.url }}" alt="{{ post.user.username }}" width="64" height="64"
-                                class="mr-3 float-left">
-                            {{post.user.username}}
+                        <a href="{% url 'people:people' user.id %}">
+                            {% if user.who_see_avatar == 'everyone' %}
+                            <img src="{{post.user.avatar.url}}" alt="User Image" width="64" height="64" class="mr-3 float-left">
+                            {% elif user.who_see_avatar == 'friends' and user in user.friends.all %}
+                            <img src="{{post.user.avatar.url}}" alt="User Image" width="64" height="64" class="mr-3 float-left">
+                            {% elif user == user %}
+                            <img src="{{post.user.avatar.url}}" alt="User Image" width="64" height="64" class="mr-3 float-left">
+                            {% else %}
+                            <img src="/media/profile_images/DefaultUserImage.WebP" alt="User Image" width="64"
+                                height="64" class="mr-3 float-left">
+                            {% endif %}
+                            <span>{{post.user.username}}</span>
                         </a>
                     </div>
                     <div class="card-body">
@@ -567,9 +610,16 @@
                 </div>
                 <!-- File post -->
                 {% elif post.post_file %}
-                <a href="{% url 'people:people' post.user.id %}">
-                    <img src="{{ post.user.avatar.url }}" alt="{{ post.user.username }}" width="64" height="64"
-                        class="mr-3 float-left">
+                <a href="{% url 'people:people' user.id %}">
+                    {% if user.who_see_avatar == 'everyone' %}
+                    <img src="{{post.user.avatar.url}}" alt="User Image" width="64" height="64">
+                    {% elif user.who_see_avatar == 'friends' and user in user.friends.all %}
+                    <img src="{{post.user.avatar.url}}" alt="User Image" width="64" height="64">
+                    {% elif user == user %}
+                    <img src="{{post.user.avatar.url}}" alt="User Image" width="64" height="64">
+                    {% else %}
+                    <img src="/media/profile_images/DefaultUserImage.WebP" alt="User Image" width="64" height="64" class="mr-3 float-left">
+                    {% endif %}
                     <span>{{post.user.username}}</span>
                 </a>
                 <div class="mb-3">
