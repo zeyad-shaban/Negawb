@@ -89,3 +89,6 @@ class About(generic.TemplateView):
 
 class Faq(generic.TemplateView):
     template_name= 'production/faq.html'
+
+class TermsAndConditions(generic.TemplateView):
+    template_name = 'production/termsandconditions.html'

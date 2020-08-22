@@ -32,6 +32,7 @@ urlpatterns = [
     # production
     path('about/', production_views.About.as_view(), name='about'),
     path('faq/', production_views.Faq.as_view(), name='faq'),
+    path('termsandconditions/', production_views.TermsAndConditions.as_view(), name='termsandconditions'),
     # Includes
     path('category/', include('categories.urls'), name='category'),
     path('comments/', include('comments.urls'), name='comments'),
