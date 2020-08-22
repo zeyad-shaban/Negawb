@@ -170,11 +170,19 @@ def got_offline(sender, user, request, **kwargs):
 def get_user_by_id(request):
     pk = request.GET.get('pk')
     user = get_object_or_404(User, pk=pk)
+    if user.who_see_avatar == 'everyone':
+        user_avatar = user.avatar.url
+    elif user.who_see_avatar == 'friends' and request.user in user.friends.all():
+        user_avatar = user.avatar.url
+    elif user == request.user:
+        user_avatar = user.avatar.url
+    else:
+        user_avatar = '/media/profile_images/DefaultUserImage.WebP'
     json_user = {
         'id': user.id,
         'username':user.username,
         'who_see_avatar': user.who_see_avatar,
-        'avatar': user.avatar.url,
+        'avatar': user_avatar,
         'friends': serialize('json', user.friends.all()),
         'posts': serialize('json', user.post_set.all().order_by('-post_date')),
     }
