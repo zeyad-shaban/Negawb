@@ -1,6 +1,6 @@
 {% extends 'categories/base.html' %}
 {% load static %}
-{% block title %} Home Page {% endblock title %}
+{% block title %} How to avoid distraction from social media with Dfreemedia {% endblock title %}
 
 {% block content %}
 <style>
@@ -648,7 +648,9 @@
                     <span class="row justify-content-center">
                         <!-- Like -->
                         <form method="GET" id="likeFollowedForm{{post.id}}" class="form-inline">
-                            <button type="submit" name="submit" value="like" title="Like" class="btn btn-link">
+                            <button type="submit" name="submit" value="like" UserAdmin.list_display += ('new_field',)  # don't forget the commas
+                            UserAdmin.list_filter += ('new_field',)
+                            UserAdmin.fieldsets += ('new_field',)="Like" class="btn btn-link">
                                 <i class="fa fa-thumbs-o-up" aria-hidden="true" style="font-size:36px"
                                     id="likeFollowedButton{{post.id}}"></i>
                             </button>
