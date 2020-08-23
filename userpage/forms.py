@@ -26,8 +26,8 @@ class UserPrivacyForm(ModelForm):
 class DistractionFreeForm(ModelForm):
     class Meta:
         model = User
-        fields = ('hide_comments', 'fixed_navbar','hide_posts_in_homepage', 'homepage_posts', 'allow_important_friend_messages', 'allow_important_group_message', 'allow_normal_friend_message', 'allow_normal_group_message',
-                'allow_comment_message', 'allow_reply_message', 'allow_invites', 'your_invites', 'blocked_categories', 'chat_only_mode',)
+        fields = ('hide_comments','hide_posts_in_homepage', 'homepage_posts', 'allow_important_friend_messages', 'allow_important_group_message', 'allow_normal_friend_message', 'allow_normal_group_message',
+                'allow_comment_message', 'allow_reply_message', 'allow_invites', 'your_invites', 'blocked_categories', 'chat_only_mode', 'fixed_navbar',)
         labels = {
             'allow_important_friend_messages': 'Friend\'s important message',
             'allow_important_group_message': 'Group important message',
@@ -41,4 +41,6 @@ class DistractionFreeForm(ModelForm):
             'homepage_posts': 'Posts to show in homepage <small class="form-text text-muted">choose none if you don\'t want to show posts in homepage</small>',
             'hide_posts_in_homepage':'Hide Followers/Friends posts in homepage',
             'blocked_categories': 'Blocked categories <small class="form-text text-muted">user command/ctrl for destokp users</small>',
+            'chat_only_mode': '<b>Chat only mode</b>',
+            'fixed_navbar': '<hr>Fixed navbar',
         }

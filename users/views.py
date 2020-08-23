@@ -24,10 +24,10 @@ def signupuser(request):
         else:
             return render(request, 'users/signupuser.html', {'form': UserCreationForm})
     else:
-        if request.POST['password1'] == request.POST['password2']:
+        if request.POST.get('password1') == request.POST.get('password2'):
             try:
                 user = User.objects.create_user(
-                    request.POST['username'], password=request.POST['password1'])
+                    request.POST.get('username'), password=request.POST.get('password1'))
                 if False:
                     pass
                     # user.is_active = False
@@ -87,7 +87,7 @@ def loginuser(request):
             return render(request, 'users/loginuser.html', {'form': AuthenticationForm})
     else:
         user = authenticate(
-            request, username=request.POST['username'], password=request.POST['password'])
+            request, username=request.POST.get('username'), password=request.POST.get('password'))
         if user is None:
             messages.error(
                 request, 'The username that you\'ve entered doesn\'t match any account. Or password didn\'t match')

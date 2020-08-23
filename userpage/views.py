@@ -29,10 +29,10 @@ def home(request):
     total_requests_count = len(requests) + len(group_requests)
     if request.method == 'GET':
         return render(request, 'userpage/index.html', {'user': user, 'form': form, 'privacy_form': privacy_form, 'distraction_free_form': distraction_free_form, 'requests': requests, 'group_requests':group_requests, 'total_requests': total_requests_count})
-    elif request.POST['submit'] == 'Update':
+    elif request.POST.get('submit') == 'Update':
         try:
-            # if request.POST['email']:
-            #     validate_email(request.POST['email'])
+            # if request.POST.get('email'):
+            #     validate_email(request.POST.get('email'))
             form = UserForm(data=request.POST,
                             files=request.FILES, instance=request.user)
             form.save()
@@ -45,13 +45,13 @@ def home(request):
             messages.error(
                 request, 'unknown error occured, please try again and report a feedback so we can fix this error')
             return redirect('userpage:home')
-    elif request.POST['submit'] == 'Update Privacy':
+    elif request.POST.get('submit') == 'Update Privacy':
         form = UserPrivacyForm(
             data=request.POST, files=request.FILES, instance=request.user)
         form.save()
         messages.success(request, 'Successfully updated privacy settings')
         return redirect('userpage:home')
-    elif request.POST['submit'] == 'DFree':
+    elif request.POST.get('submit') == 'Dfree':
         form = DistractionFreeForm(request.POST, instance=request.user)
         form.save()
         messages.success(request, 'DistractionFreeMedia 💪🏻')

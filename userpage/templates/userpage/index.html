@@ -33,7 +33,7 @@
 </div>
 <div class="modal fade " id="editProfile" tabindex="-1" role="dialog" aria-labelledby="editProfileLabel"
     aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Edit {{user.username}} Profile</h5>
@@ -114,7 +114,7 @@
 
 <div class="modal fade " id="distractionFree" tabindex="-1" role="dialog" aria-labelledby="distractionFreeLabel"
     aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Distration Free</h5>
@@ -160,7 +160,7 @@
                     <br>
                     {% endif %}
                     {% endfor %}
-                    <input type="submit" name="submit" value="DFree" class="btn btn-success">
+                    <input type="submit" name="submit" value="Dfree" class="btn btn-success" id="submitDFree" style="display: none;">
                 </form>
                 <script>
                     $(document).ready(function () {
@@ -169,6 +169,10 @@
                         })
                     })
                 </script>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success" onclick="$('#submitDFree').click()">Save Changes</button>
             </div>
         </div>
     </div>
@@ -372,74 +376,74 @@
                                 }
                             }
                         });
-                        
+
                     })
 
                     // ACCEPT INVITE
-        $('.AcceptGroup').submit(function (event) {
-            let thisElement = $(this)
-            event.preventDefault()
-            $.ajax({
-                url: "{% url 'social:join_group' %}",
-                data: {
-                    'pk': $(this).attr('data-pk'),
-                },
-                dataType: 'json',
-                success: function (data) {
-                    thisElement.parent().fadeOut()
-                    $('#message_area').html('')
-                    if (data.message.tags === 'error') {
-                        $('#message_area').append(`
+                    $('.AcceptGroup').submit(function (event) {
+                        let thisElement = $(this)
+                        event.preventDefault()
+                        $.ajax({
+                            url: "{% url 'social:join_group' %}",
+                            data: {
+                                'pk': $(this).attr('data-pk'),
+                            },
+                            dataType: 'json',
+                            success: function (data) {
+                                thisElement.parent().fadeOut()
+                                $('#message_area').html('')
+                                if (data.message.tags === 'error') {
+                                    $('#message_area').append(`
                             <div class="alert alert-danger fixed-top">${data.message.text}</div>
                             `)
-                    } else {
-                        $('#message_area').append(`
+                                } else {
+                                    $('#message_area').append(`
         <div class="alert alert-${data.message.tags} fixed-top">${data.message.text}</div>
                                 `)
-                    }
-                    setTimeout(() => {
-                        $('#{{request.id}}Group').fadeOut()
-                    }, 900);
-                    setTimeout(() => {
-                        $('#message_area').fadeOut()
-                    }, 3200);
-                }
+                                }
+                                setTimeout(() => {
+                                    $('#{{request.id}}Group').fadeOut()
+                                }, 900);
+                                setTimeout(() => {
+                                    $('#message_area').fadeOut()
+                                }, 3200);
+                            }
 
-            })
-        })
-        // DENY INVITE
-        $('.denyGroup').click(function (event) {
-            let thisElement = $(this)
-            event.preventDefault();
-            $.ajax({
-                type: "get",
-                url: "{% url 'social:deny_group' %}",
-                data: {
-                    'pk': $(this).attr('data-pk')
-                },
-                dataType: "json",
-                success: function (data) {
-                    thisElement.parent().fadeOut()
-                    $('#message_area').html('')
-                    if (data.message.tags === 'error') {
-                        $('#message_area').append(`
+                        })
+                    })
+                    // DENY INVITE
+                    $('.denyGroup').click(function (event) {
+                        let thisElement = $(this)
+                        event.preventDefault();
+                        $.ajax({
+                            type: "get",
+                            url: "{% url 'social:deny_group' %}",
+                            data: {
+                                'pk': $(this).attr('data-pk')
+                            },
+                            dataType: "json",
+                            success: function (data) {
+                                thisElement.parent().fadeOut()
+                                $('#message_area').html('')
+                                if (data.message.tags === 'error') {
+                                    $('#message_area').append(`
                             <div class="alert alert-danger fixed-top">${data.message.text}</div>
                             `)
-                    } else {
-                        $('#message_area').append(`
+                                } else {
+                                    $('#message_area').append(`
         <div class="alert alert-${data.message.tags} fixed-top">${data.message.text}</div>
                                 `)
-                    }
-                    setTimeout(() => {
-                        $('#{{request.id}}Group').fadeOut()
-                    }, 900);
-                    setTimeout(() => {
-                        $('#message_area').fadeOut()
-                    }, 3200);
-                },
-            });
-        });
-                    
+                                }
+                                setTimeout(() => {
+                                    $('#{{request.id}}Group').fadeOut()
+                                }, 900);
+                                setTimeout(() => {
+                                    $('#message_area').fadeOut()
+                                }, 3200);
+                            },
+                        });
+                    });
+
                 }
                 var g = document.createElement('script')
                 var s = document.getElementsByTagName('script')[0]
