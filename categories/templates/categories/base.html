@@ -27,8 +27,8 @@
 <body>
     {% block chat_frame %} {% endblock chat_frame %}
     <nav
-        class="navbar navbar-expand-xl navbar-expand-lg navbar-expand-md navbar-expand-sm navbar-dark bg-dark {% if user.fixed_navbar or not user.is_authenticated %}sticky-top{% endif %}">
-        <a class="navbar-brand" href="{% url 'home' %}">
+    class="navbar navbar-expand-xl navbar-expand-lg navbar-expand-md navbar-expand-sm navbar-expand navbar-dark bg-dark {% if user.fixed_navbar or not user.is_authenticated %}sticky-top{% endif %}">
+    <a class="navbar-brand" href="{% url 'home' %}">
             <img src="{% static 'categories/favicon.WebP' %}" width="35" height="30" alt="Website Logo" loading="lazy">
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -42,7 +42,7 @@
                 <div><a href="{% url 'userpage:home' %}" title="Profile">
                         <span>
                             <img id="id_nav_avatar" src="{{ user.avatar.url }}" alt="">
-                            <span>{{user.username}}
+                            <span id="Userusername" data-username="{{user.username}}">{{user.username}}
                             </span>
                         </span>
                     </a>
@@ -53,7 +53,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto ml-">
                 <li class="nav-item">
-                    <a href="{% url 'people:all_people' %}"><span style="color:white;">Find Friends</span>
+                    <a href="{% url 'people:all_people' %}"><span style="color:white;" id="findFriends">Find Friends</span>
                     </a>
                 </li>
                 {% if not user.is_authenticated %}
@@ -63,29 +63,46 @@
                     <a href="{% url 'loginuser' %}">Login</a>
                 </li>
                 {% endif %}
-                {% if user.is_authenticated %}
                 <li class="nav-item">
                     <a href="{% url 'chat' %}" title="Chat">
                         <i class="fa fa-comments" style="font-size:36px;"></i>
                     </a>
-                    {% if user.is_authenticated %}
+                    {% if not user.is_authenticated %}
+                    <script>
+                        $(document).ready(function () {
+                            $('.fas.fa-clipboard-check').click(function (e) {
+                                e.preventDefault();
+                                alert('Please login first')
+                            })
+                        })
+                    </script>
+                    {% endif %}
                     <button type="button" class="btn btn-link" data-toggle="modal" data-target="#todos" title="Tasks">
                         <i class="fas fa-clipboard-check" style="font-size:36px; color:white"></i>
                     </button>
-                    {% endif %}
                 </li>
-                {% endif %}
-                {% if user.is_authenticated %}
                 <div class="btn-group">
                     <div title="Notifications" class="master-menu-right-item" id="app-menu" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-bell" style="font-size: 36px; color: rgb(209, 202, 202); cursor: pointer"></i>
-                        {% if notifications.count > 0 %}
-                        <span class="badge" style="color: white;"
-                            id="currNotificationsCount">{{ notifications.count }}</span>
-                        {% else %}
-                        <span class="badge" style="color: white;" id="currNotificationsCount"></span>
-                        {% endif %}
+                    aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-bell" style="font-size: 36px; color: rgb(209, 202, 202); cursor: pointer"></i>
+                    
+                    {% if not user.is_authenticated %}
+                        <script>
+                            $(document).ready(function () {
+                                $('.fas.fa-bell').click(function (e) {
+                                    e.preventDefault();
+                                    alert('Please log in first')
+                                })
+                            })
+                        </script>
+                        
+                    {% else %}
+                    {% if notifications.count > 0 %}
+                    <span class="badge" style="color: white;"
+                    id="currNotificationsCount">{{ notifications.count }}</span>
+                    {% else %}
+                    <span class="badge" style="color: white;" id="currNotificationsCount"></span>
+                    {% endif %}
                     </div>
                     <div class="dropdown-menu master-menu-dropdown" aria-labelledby="app-menu"
                         id="notificationDropMenu">
@@ -154,7 +171,7 @@
                     </div>
                 </div>
                 {% endif %}
-                <li class="dropdown">
+                <li class="dropdown float-right ml-3">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                         aria-expanded="false"><i class="fas fa-sort-down"
                             style="color: white; font-size: 36px;"></i><span class="caret"></span></a>
