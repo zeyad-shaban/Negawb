@@ -2,12 +2,21 @@
 {% load static %}
 {% block title %} avoid distraction from social media with Dfreemedia | Dfreemedia{% endblock title %}
 
-{% block description %}This new social media platform #Dfreemedia was made to be as less distractive and addictive as possible, join today and explore all of the great features we provide{% endblock description %}
+{% block description %}A new social media platform made to be as less addictive as possible, join today and explore all
+of the great features we provide. Perfect for managing work and school groups due to the message filtering
+system{% endblock description %}
 
 {% block content %}
 <style>
     .homepageView {
         cursor: pointer;
+    }
+
+    @media screen and (max-width: 382px) {
+        .homepageView {
+            margin-left: 0px;
+            padding-left: 0px;
+        }
     }
 </style>
 <ul class="list-group list-group-horizontal">
@@ -20,7 +29,7 @@
     {% endif %}
     {% if not user.hide_posts_in_homepage %}
     <li class="list-group-item homepageView" id="toggleFriendsPosts">Friends Posts</li>
-    <li class="list-group-item homepageView">Followed Posts</li>
+    <li class="list-group-item homepageView" style="overflow: hidden">Followed Posts</li>
     {% endif %}
 </ul>
 <!-- categories -->
@@ -558,13 +567,17 @@
                 {% if post.image %}
                 <a href="{% url 'people:people' user.id %}">
                     {% if user.who_see_avatar == 'everyone' %}
-                    <img src="{{post.user.avatar.url}}" alt="User Image" width="64" height="64" class="mr-3 float-left" loading="lazy">
+                    <img src="{{post.user.avatar.url}}" alt="User Image" width="64" height="64" class="mr-3 float-left"
+                        loading="lazy">
                     {% elif user.who_see_avatar == 'friends' and user in user.friends.all %}
-                    <img src="{{post.user.avatar.url}}" alt="User Image" width="64" height="64" class="mr-3 float-left" loading="lazy">
+                    <img src="{{post.user.avatar.url}}" alt="User Image" width="64" height="64" class="mr-3 float-left"
+                        loading="lazy">
                     {% elif user == user %}
-                    <img src="{{post.user.avatar.url}}" alt="User Image" width="64" height="64" class="mr-3 float-left" loading="lazy">
+                    <img src="{{post.user.avatar.url}}" alt="User Image" width="64" height="64" class="mr-3 float-left"
+                        loading="lazy">
                     {% else %}
-                    <img src="/media/profile_images/DefaultUserImage.WebP" alt="User Image" width="64" height="64" class="mr-3 float-left" loading="lazy">
+                    <img src="/media/profile_images/DefaultUserImage.WebP" alt="User Image" width="64" height="64"
+                        class="mr-3 float-left" loading="lazy">
                     {% endif %}
                     <span>{{post.user.username}}</span>
                 </a>
@@ -588,11 +601,14 @@
                     <div class="card-header">
                         <a href="{% url 'people:people' user.id %}">
                             {% if user.who_see_avatar == 'everyone' %}
-                            <img src="{{post.user.avatar.url}}" alt="User Image" width="64" height="64" class="mr-3 float-left">
+                            <img src="{{post.user.avatar.url}}" alt="User Image" width="64" height="64"
+                                class="mr-3 float-left">
                             {% elif user.who_see_avatar == 'friends' and user in user.friends.all %}
-                            <img src="{{post.user.avatar.url}}" alt="User Image" width="64" height="64" class="mr-3 float-left">
+                            <img src="{{post.user.avatar.url}}" alt="User Image" width="64" height="64"
+                                class="mr-3 float-left">
                             {% elif user == user %}
-                            <img src="{{post.user.avatar.url}}" alt="User Image" width="64" height="64" class="mr-3 float-left">
+                            <img src="{{post.user.avatar.url}}" alt="User Image" width="64" height="64"
+                                class="mr-3 float-left">
                             {% else %}
                             <img src="/media/profile_images/DefaultUserImage.WebP" alt="User Image" width="64"
                                 height="64" class="mr-3 float-left">
@@ -620,7 +636,8 @@
                     {% elif user == user %}
                     <img src="{{post.user.avatar.url}}" alt="User Image" width="64" height="64">
                     {% else %}
-                    <img src="/media/profile_images/DefaultUserImage.WebP" alt="User Image" width="64" height="64" class="mr-3 float-left">
+                    <img src="/media/profile_images/DefaultUserImage.WebP" alt="User Image" width="64" height="64"
+                        class="mr-3 float-left">
                     {% endif %}
                     <span>{{post.user.username}}</span>
                 </a>
@@ -650,9 +667,9 @@
                     <span class="row justify-content-center">
                         <!-- Like -->
                         <form method="GET" id="likeFollowedForm{{post.id}}" class="form-inline">
-                            <button type="submit" name="submit" value="like" UserAdmin.list_display += ('new_field',)  # don't forget the commas
-                            UserAdmin.list_filter += ('new_field',)
-                            UserAdmin.fieldsets += ('new_field',)="Like" class="btn btn-link">
+                            <button type="submit" name="submit" value="like" UserAdmin.list_display +=('new_field',) #
+                                don't forget the commas UserAdmin.list_filter +=('new_field',) UserAdmin.fieldsets
+                                +=('new_field',)="Like" class="btn btn-link">
                                 <i class="fa fa-thumbs-o-up" aria-hidden="true" style="font-size:36px"
                                     id="likeFollowedButton{{post.id}}"></i>
                             </button>

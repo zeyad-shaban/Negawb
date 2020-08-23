@@ -62,3 +62,10 @@ nav li a:hover {
     width: 430px;
     max-height: 568px;
 }
+
+@media screen and (max-width: 563px) {
+    #notificationDropMenu {
+        max-width: 75vw;
+        padding-left: 20px;
+    }
+}
