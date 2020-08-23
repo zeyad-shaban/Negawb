@@ -1,6 +1,7 @@
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse, HttpResponse
+from django.contrib import messages
 from .models import Category
 from comments.models import Post, Comment
 from comments.forms import PostForm
@@ -12,6 +13,9 @@ User = get_user_model()
 
 
 def home(request):
+    if request.user.is_authenticated and request.user.chat_only_mode:
+        messages.warning(request, 'You have enabled Chat only mode, you can disable it from profile Distraction Free settings')
+        return redirect('chat')
     categories = Category.objects.all()
     followed_users = []
     if request.user.is_authenticated:
@@ -69,6 +73,9 @@ def home(request):
 
 @login_required
 def view_category(request, pk):
+    if request.user.chat_only_mode:
+        messages.warning(request, 'You have enabled Chat only mode, you can disable it from profile Distraction Free settings')
+        return redirect('chat')
     category = get_object_or_404(Category, pk=pk)
     post_list = Post.objects.filter(category=category).order_by('-post_date')
     paginator = Paginator(post_list, 7)
