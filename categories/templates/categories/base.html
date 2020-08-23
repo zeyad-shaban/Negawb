@@ -13,8 +13,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
         integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <link rel='shortcut icon' href="{% static 'categories/favicon.WebP' %}" type="image/WebP">
-    <meta name="description"
-        content="{% block description %} {% endblock description %}">
+    <meta name="description" content="{% block description %} {% endblock description %}">
     <meta name="keywords"
         content="dfreemedia, filter, important, social media addiction, productive, production, overcome, social">
     <meta name="author" content="Zeyad Shaban">
@@ -27,9 +26,10 @@
 <body>
     {% block chat_frame %} {% endblock chat_frame %}
     <nav
-    class="navbar navbar-expand-xl navbar-expand-lg navbar-expand-md navbar-expand-sm navbar-expand navbar-dark bg-dark {% if user.fixed_navbar or not user.is_authenticated %}sticky-top{% endif %}">
-    <a class="navbar-brand" href="{% url 'home' %}">
-            <img src="{% static 'categories/favicon.WebP' %}" width="35" height="30" alt="Website Logo" loading="lazy" title="Dfreemedia">
+        class="navbar navbar-expand-xl navbar-expand-lg navbar-expand-md navbar-expand-sm navbar-expand navbar-dark bg-dark {% if user.fixed_navbar or not user.is_authenticated %}sticky-top{% endif %}">
+        <a class="navbar-brand" href="{% url 'home' %}">
+            <img src="{% static 'categories/favicon.WebP' %}" width="35" height="30" alt="Website Logo" loading="lazy"
+                title="Dfreemedia">
         </a>
         {% if user.is_authenticated %}
         <li class="nav-item">
@@ -48,7 +48,8 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto ml-">
                 <li class="nav-item">
-                    <a href="{% url 'people:all_people' %}"><span style="color:white;" id="findFriends">Find Friends</span>
+                    <a href="{% url 'people:all_people' %}"><span style="color:white;" id="findFriends">Find
+                            Friends</span>
                     </a>
                 </li>
                 {% if not user.is_authenticated %}
@@ -78,10 +79,10 @@
                 </li>
                 <div class="btn-group">
                     <div title="Notifications" class="master-menu-right-item" id="app-menu" data-toggle="dropdown"
-                    aria-haspopup="true" aria-expanded="false">
-                    <i class="fas fa-bell" style="font-size: 36px; color: rgb(209, 202, 202); cursor: pointer"></i>
-                    
-                    {% if not user.is_authenticated %}
+                        aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-bell" style="font-size: 36px; color: rgb(209, 202, 202); cursor: pointer"></i>
+
+                        {% if not user.is_authenticated %}
                         <script>
                             $(document).ready(function () {
                                 $('.fas.fa-bell').click(function (e) {
@@ -90,14 +91,14 @@
                                 })
                             })
                         </script>
-                        
-                    {% else %}
-                    {% if notifications.count > 0 %}
-                    <span class="badge" style="color: white;"
-                    id="currNotificationsCount">{{ notifications.count }}</span>
-                    {% else %}
-                    <span class="badge" style="color: white;" id="currNotificationsCount"></span>
-                    {% endif %}
+
+                        {% else %}
+                        {% if notifications.count > 0 %}
+                        <span class="badge" style="color: white;"
+                            id="currNotificationsCount">{{ notifications.count }}</span>
+                        {% else %}
+                        <span class="badge" style="color: white;" id="currNotificationsCount"></span>
+                        {% endif %}
                     </div>
                     <div class="dropdown-menu master-menu-dropdown" aria-labelledby="app-menu"
                         id="notificationDropMenu">
@@ -172,18 +173,21 @@
                             style="color: white; font-size: 36px;"></i><span class="caret"></span></a>
                     <ul class="dropdown-menu float-right mr-100">
                         <li>
-                            <a class="btn" href="{% url 'feedback' %}">Report a problem</a>
-                        </li>
-                        <li>
                             <a class="btn" href="{% url 'faq' %}">FAQ</a>
                         </li>
                         <li>
                             <a class="btn" href="{% url 'about' %}">About</a>
                         </li>
+                        <!-- AddToAny BEGIN -->
+                        <a class="a2a_dd btn" href="https://www.addtoany.com/share"><i class="fas fa-share-alt mr-2" style="font-size: 24px; color: #35A0FE"></i><span>Share</span></a>
+                        <script async src="https://static.addtoany.com/menu/page.js"></script>
+                        <!-- AddToAny END -->
+                        <li>
+                            <a class="btn" href="{% url 'feedback' %}" class="mb-2">Report a problem</a>
+                        </li>
                         <li>
                             <a style="color: black; text-decoration: none;"
                                 href="{% url 'production:announcements' %}">Announcements </a>
-                            <i class="fas fa-bullhorn"></i>
                         </li>
                         {% if user.is_authenticated %}
                         <li role="separator" class="divider"></li>
