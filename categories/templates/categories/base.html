@@ -31,11 +31,6 @@
     <a class="navbar-brand" href="{% url 'home' %}">
             <img src="{% static 'categories/favicon.WebP' %}" width="35" height="30" alt="Website Logo" loading="lazy" title="Dfreemedia">
         </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
         {% if user.is_authenticated %}
         <li class="nav-item">
             <div>
