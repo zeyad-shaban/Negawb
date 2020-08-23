@@ -1,8 +1,13 @@
 {% extends 'categories/base.html' %}
 {% load static %}
-{% block title %}View Comment {% endblock title %}
+{% block title %} {{post.user.username}} {% if post.description %} {{post.description}}{% endif %} | Dfreemedia
+{% endblock title %}
 
-
+{% block description %}
+{% if post.description %}
+{{post.description}}
+{% endif %}
+{% endblock description %}
 
 {% block content %}
 <!-- <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css"> -->

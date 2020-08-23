@@ -1,6 +1,10 @@
 {% extends 'categories/base.html' %}
 
-{% block title %}All People{% endblock title %}
+{% block title %}All Users | Dfreemedia{% endblock title %}
+
+
+{% block description %}Explore out the great Dfreemedia community, find and add friends{% endblock description %}
+
 
 {% block searchbar %}
 <form class="form-inline" id="idSearchForm" action="{% url 'people:all_peopleresults' %}" method="GET">

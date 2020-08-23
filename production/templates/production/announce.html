@@ -1,6 +1,10 @@
 {% extends 'categories/base.html' %}
 
-{% block title %}{{ announcement.title }}{% endblock title %}
+{% block title %}{{ announcement.title }} | Dfreemedia{% endblock title %}
+
+
+{% block description %}{{announcement.content}}{% endblock description %}
+
 
 
 {% block content %}

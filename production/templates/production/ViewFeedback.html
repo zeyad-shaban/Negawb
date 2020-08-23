@@ -1,7 +1,9 @@
 {% extends 'categories/base.html' %}
-{% block title %}View Comment {% endblock title %}
+{% block title %}{{feedback.user.username}} Feedback | Dfreemedia{% endblock title %}
 
 
+{% block description %}{{feedback.review}}{% endblock description %}
+    
 
 {% block content %}
 

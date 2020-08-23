@@ -1,6 +1,12 @@
 {% extends 'categories/base.html' %}
 {% load static %}
-{% block title %} {{view_user.username}} {% endblock title %}
+{% block title %} {{view_user.username}} | Dfreemedia {% endblock title %}
+
+
+{% block description %}
+    {{view_user.bio}}
+{% endblock description %}
+
 
 {% block content %}
 <style>

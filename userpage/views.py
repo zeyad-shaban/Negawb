@@ -98,12 +98,6 @@ def friendrequest(request):
 
 
 @login_required
-def requestssent(request):
-    requests = FriendRequest.objects.filter(from_user=request.user)
-    return render(request, 'userpage/requestssent.html', {'requests': requests})
-
-
-@login_required
 def denyrequest(request):
     pk = request.GET.get('pk')
     denied_request = get_object_or_404(FriendRequest, pk=pk)

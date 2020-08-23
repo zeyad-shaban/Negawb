@@ -2,7 +2,11 @@
 {% load webpush_notifications %}
 {% load static %}
 {% load crispy_forms_tags %}
-{% block title %} {{user.username}} {% endblock title %}
+{% block title %} {{user.username}} | Dfreemedia {% endblock title %}
+
+{% block description %}{{user.bio}}{% endblock description %}
+
+
 {% block content %}
 
 
