@@ -22,18 +22,32 @@ from users import views as users_views
 from social import views as social_views
 from production import views as production_views
 from django.contrib.auth import views as auth_views
+from django.contrib.sitemaps.views import sitemap
+from categories import sitemaps
 
+sitemaps = {
+    'static': sitemaps.StaticViewSitemap,
+    'post': sitemaps.PostSitemap,
+    'people': sitemaps.PeopleSitemap,
+    'feedback': sitemaps.FeedbackSitemap,
+}
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', category_views.home, name='home'),
+    # Sitemap
+    path('sitemap.xml', sitemap, {'sitemaps': sitemaps},
+         name='django.contrib.sitemaps.views.sitemap'),
     # Chat
-    path('chat/', social_views.chat,name='chat'),
+    path('chat/', social_views.chat, name='chat'),
     # production
     path('about/', production_views.About.as_view(), name='about'),
     path('faq/', production_views.Faq.as_view(), name='faq'),
-    path('termsandconditions/', production_views.TermsAndConditions.as_view(), name='termsandconditions'),
-    path('privacypolicy/', production_views.PrivacyPolicy.as_view(), name='privacypolicy'),
+    path('feedback/', production_views.feedback, name='feedback'),
+    path('termsandconditions/', production_views.TermsAndConditions.as_view(),
+         name='termsandconditions'),
+    path('privacypolicy/', production_views.PrivacyPolicy.as_view(),
+         name='privacypolicy'),
     path('cookiepolicy/', production_views.CookiePolicy.as_view(), name='cookiepolicy'),
     # Includes
     path('category/', include('categories.urls'), name='category'),
@@ -46,7 +60,8 @@ urlpatterns = [
     path('signup/', users_views.signupuser, name='signupuser'),
     path('logout/', users_views.logoutuser, name='logoutuser'),
     path('login/', users_views.loginuser, name='loginuser'),
-    path('activate/<uidb64>/<token>/', users_views.VertificationView.as_view(), name='activate'),
+    path('activate/<uidb64>/<token>/',
+         users_views.VertificationView.as_view(), name='activate'),
     path('password-reset/', auth_views.PasswordResetView.as_view(
         template_name='users/password_reset.html'), name='password_reset'),
     path('password-reset/done/', auth_views.PasswordResetDoneView.as_view(

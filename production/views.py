@@ -50,7 +50,7 @@ def feedback(request):
             feedback.save()
             messages.success(
                 request, 'Thank you for your feedback, we promise we will read it as soon as possible')
-            return redirect('production:feedback')
+            return redirect('feedback')
 
 
 class ViewFeedback(generic.DetailView):
