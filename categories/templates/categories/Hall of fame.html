@@ -4,7 +4,7 @@
 {% block description %}Are you famous person with more than 50K followers? or want a great filter system to get famous people only! Then you will our system | Dfreemedia{% endblock description %}
 
 {% block content %}
-
+<div class="text-center mb-2 mr-5 ml-5 rounded" style="background: #1DA1F2"><h1 style="color: white;">{{category.title}}</h1></div>
 {% if user.followers.count >= 50000 %}
 <h1>YOU AREA FAMOUSE!</h1>
 {% else %}
