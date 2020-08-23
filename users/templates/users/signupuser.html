@@ -1,16 +1,32 @@
 {% extends 'categories/base.html' %}
+{% load static %}
 {% block title %} Sign Up for Dfreemedia | Dfreemedia{% endblock title %}
 
-{% block description %}Create an account or log into Dfreemedia. Enjoy the unique filtering system we provide for both posts and friend messages to keep your time and life safe. free 100% free. Be more productive with Dfreemedia.{% endblock description %}
-    
+{% block description %}Create an account or log into Dfreemedia. Enjoy the unique filtering system we provide for both
+posts and friend messages to keep your time and life safe. free 100% free. Be more productive with
+Dfreemedia.{% endblock description %}
+
 {% block content %}
+<style>
+    body {
+        background: url("{% static 'users/authenticationBck.WebP' %}");
+        background-size: cover;
+    }
+
+    #signupForm {
+        background: white;
+    }
+</style>
 <div class="row justify-content-center mt-5">
     <div class="col-md-5">
-        <h2>Sign Up</h2>
     </div>
 </div>
 <div class="row justify-content-center mt-5">
-    <div class="col-md-5">
+    <div class="col-md-5 col-sm-6 col-8" id="signupForm">
+        <div class="text-center">
+            <img src="{% static 'categories/favicon.WebP' %}" alt="Dfreemedia favicon" class="rounded-circle" height="200">
+            <h1>Join Dfreemedia</h1>
+        </div>
         <form method="POST">
             {% csrf_token %}
             <div class="form-group">
@@ -31,10 +47,10 @@
                 <label for="password2">Confirm Password</label>
                 <input type="password" name="password2" class="form-control" id="password2" required>
             </div>
-            <small class="form-text text-muted mb-2"> <input type="checkbox" name="" id="" class="mr-2" required>I agree to <a
-                    href="{% url 'termsandconditions' %}" target="_blank">Terms and Conditions</a>, <a
+            <small class="form-text text-muted mb-2"> <input type="checkbox" name="" id="" class="mr-2" required>I agree
+                to <a href="{% url 'termsandconditions' %}" target="_blank">Terms and Conditions</a>, <a
                     href="{% url 'privacypolicy' %}" target="_blank">Privacy Policy</a></small>
-            <button type="submit" class="btn btn-primary">Sign Up</button>
+            <button type="submit" class="btn btn-success btn-block">Sign Up</button>
         </form>
         <hr>
         <div class="text-center">

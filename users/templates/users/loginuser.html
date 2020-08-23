@@ -1,23 +1,31 @@
 {% extends 'categories/base.html' %}
+{% load static %}
 {% block title %} Login for Dfreemedia | Dfreemedia{% endblock title %}
 
 {% block description %}
 Create an account or log into Dfreemedia. Enjoy the unique filtering system we provide for both posts and friend messages to keep your time and life safe. free 100% free. Be more productive with Dfreemedia.
 {% endblock description %}
 
-
-{% block description %}
-    
-{% endblock description %}
-
 {% block content %}
+<style>
+    body{
+        background: url("{% static 'users/authenticationBck.WebP' %}") ;
+        background-size: cover;
+    }
+    #loginForm{
+        background: white;
+    }
+</style>
 <div class="row justify-content-center mt-5">
     <div class="col-md-5">
-        <h2>Login</h2>
     </div>
 </div>
 <div class="row justify-content-center mt-5">
-    <div class="col-md-5">
+    <div class="col-md-5 col-sm-6 col-8" id="loginForm">
+        <div class="text-center">
+            <img src="{% static 'categories/favicon.WebP' %}" alt="Dfreemedia favicon" class="rounded-circle" height="200">
+            <h1>Log into Dfreemedia</h1>
+        </div>
         <form method="POST">
             {% csrf_token %}
             <div class="form-group">
@@ -28,17 +36,16 @@ Create an account or log into Dfreemedia. Enjoy the unique filtering system we p
                 <label for="password">Password</label>
                 <input type="password" name="password" class="form-control" id="password" required>
             </div>
-            <button type="submit" class="btn btn-primary">Login</button>
+            <button type="submit" class="btn btn-success btn-block">Login</button>
         </form>
         <hr>
         <div class="text-center">
             Need an account? <a href="{% url 'signupuser' %}">Sign Up here</a>
         </div>
-        <hr>
-        <hr>
-        <div class="text-center">
+        <!-- <hr> -->
+        <!-- <div class="text-center">
             Forgot password? If your account was linked with an email then no worries, <a href="{% url 'password_reset' %}">Reset Password</a>
-        </div>
+        </div> -->
     </div>
 </div>
 
