@@ -14,7 +14,6 @@ from django.utils.timezone import now
 import datetime
 
 
-@login_required
 def view_post(request, pk):
     post = get_object_or_404(Post, pk=pk)
     comments = Comment.objects.filter(

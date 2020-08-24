@@ -209,8 +209,12 @@
         })
     </script>
 </span>
-{% if user.hide_comments == False %}
+{% if user.hide_comments == False or not user.is_authenticated %}
 {{comments.count}} Comment{{comments.count|pluralize}}
+
+{% if not user.is_authenticated %}
+<div class="alert alert-danger">please login to write comments</div>
+{% else %}
 <form method="GET" id="commentForm">
     <div class="form-group">
         <textarea type="text" name="description" class="form-control" placeholder="Add comment for this post"
@@ -259,9 +263,9 @@
                         <div class="media-body">
                             <div class="well well-lg">
                                 <h4 class="media-heading reviews">${response.comment.user.username} </h4>
-                                <span class="media-date reviews list-inline">
+                                <small class="form-text text-muted float-right">
                                     ${response.comment.comment_date}
-                                </span>
+                                </small>
                                 <p class="media-comment" id="commentDescription${response.comment.id}">
                                     ${response.comment.description}
                                 </p>
@@ -274,95 +278,93 @@
 </script>
 <br>
 <hr>
-<div class="row">
-    <div class="comment-tabs">
-        <div class="tab-content">
-            <div class="tab-pane active" id="comments-logout">
-                <ul class="media-list" id="commentsList">
-                    {% for comment in comments %}
-                    <li class="media">
-                        <a href="{% url 'people:people' comment.user.id %}">
-                            {% if comment.user.who_see_avatar == 'everyone' %}
-                            <img src="{{comment.user.avatar.url}}" alt="User Image" width="64" height="64"
-                                class="media-object img-circle">
-                            {% elif comment.user.who_see_avatar == 'friends' and user in comment.user.friends.all %}
-                            <img src="{{comment.user.avatar.url}}" alt="User Image" width="64" height="64"
-                                class="media-object img-circle">
-                            {% elif comment.user == user %}
-                            <img src="{{comment.user.avatar.url}}" alt="User Image" width="64" height="64"
-                                class="media-object img-circle">
-                            {% else %}
-                            <img src="/media/profile_images/DefaultUserImage.WebP" alt="User Image" width="64"
-                                height="64" class="media-object img-circle">
-                            {% endif %}
-                        </a>
-                        <div class="media-body">
-                            <div class="well well-lg">
-                                <h4 class="media-heading reviews">{{comment.user.username}} </h4>
-                                <span class="media-date reviews list-inline">
-                                    {{comment.comment_date}}
-                                </span>
-                                <p class="media-comment" id="commentDescription{{comment.id}}">
-                                    {{comment.description|truncatechars:300}}
-                                    {% if comment.description|length >= 300 %} <a href="#"
-                                        id="commentReadMore{{comment.id}}">Read More</a>{% endif %}
-                                </p>
-                                <script>
-                                    $(document).ready(function () {
-                                        $('#commentReadMore{{comment.id}}').click(function (event) {
-                                            event.preventDefault()
-                                            $('#commentDescription{{comment.id}}').html(
-                                                `{{comment.description}}`)
-                                        })
+{% endif %}
+<div class="comment-tabs">
+                {% for comment in comments %}
+                <li class="media">
+                    <a href="{% url 'people:people' comment.user.id %}">
+                        {% if comment.user.who_see_avatar == 'everyone' %}
+                        <img src="{{comment.user.avatar.url}}" alt="User Image" width="64" height="64"
+                            class="media-object img-circle">
+                        {% elif comment.user.who_see_avatar == 'friends' and user in comment.user.friends.all %}
+                        <img src="{{comment.user.avatar.url}}" alt="User Image" width="64" height="64"
+                            class="media-object img-circle">
+                        {% elif comment.user == user %}
+                        <img src="{{comment.user.avatar.url}}" alt="User Image" width="64" height="64"
+                            class="media-object img-circle">
+                        {% else %}
+                        <img src="/media/profile_images/DefaultUserImage.WebP" alt="User Image" width="64" height="64"
+                            class="media-object img-circle">
+                        {% endif %}
+                    </a>
+                    <div class="media-body">
+                        <div class="well well-lg">
+                            <small class="form-text text-muted float-right">
+                                {{comment.comment_date}}
+                            </small>
+                            <h4 class="media-heading reviews">{{comment.user.username}} </h4>
+                            <p class="media-comment" id="commentDescription{{comment.id}}">
+                                {{comment.description|truncatechars:300}}
+                                {% if comment.description|length >= 300 %} <a href="#"
+                                    id="commentReadMore{{comment.id}}">Read More</a>{% endif %}
+                            </p>
+                            <script>
+                                $(document).ready(function () {
+                                    $('#commentReadMore{{comment.id}}').click(function (event) {
+                                        event.preventDefault()
+                                        $('#commentDescription{{comment.id}}').html(
+                                            `{{comment.description}}`)
                                     })
-                                </script>
-                                <a class="btn btn-info btn-circle" href="#" id="addReply{{comment.id}}"><span
-                                        class="glyphicon glyphicon-share-alt"></span> Reply</a>
-                                <a class="btn btn-warning btn-circle" data-toggle="collapse" href="#replyOne"
-                                    id="showReplies{{comment.id}}"><span
-                                        class="glyphicon glyphicon-comment"></span>{{comment.reply_set.count}}
-                                    Replies</a>
-                                <script>
-                                    $(document).ready(function () {
-                                        $('#showReplies{{comment.id}}').click(function (event) {
-                                            event.preventDefault();
-                                            $('#replyList{{comment.id}}').slideToggle()
-                                        })
+                                })
+                            </script>
+                            <a class="btn btn-info btn-circle" href="#" id="addReply{{comment.id}}"><span
+                                    class="glyphicon glyphicon-share-alt"></span> Reply</a>
+                            <a class="btn btn-warning btn-circle" data-toggle="collapse" href="#replyOne"
+                                id="showReplies{{comment.id}}"><span
+                                    class="glyphicon glyphicon-comment"></span>{{comment.reply_set.count}}
+                                Replies</a>
+                            <script>
+                                $(document).ready(function () {
+                                    $('#showReplies{{comment.id}}').click(function (event) {
+                                        event.preventDefault();
+                                        $('#replyList{{comment.id}}').slideToggle()
+                                    })
+                                    $('#replyForm{{comment.id}}').slideToggle()
+                                    $('#addReply{{comment.id}}').click(function (event) {
+                                        event.preventDefault();
                                         $('#replyForm{{comment.id}}').slideToggle()
-                                        $('#addReply{{comment.id}}').click(function (event) {
-                                            event.preventDefault();
-                                            $('#replyForm{{comment.id}}').slideToggle()
-                                        })
-                                        $('#cancelCommentReply{{comment.id}}').click(function (event) {
-                                            event.preventDefault;
-                                            $('#replyForm{{comment.id}}').toggle();
-                                            $('#commentReplyInput{{comment.id}}').val('')
-                                        })
-                                        $('#replyForm{{comment.id}}').submit(function (event) {
-                                            event.preventDefault();
-                                            $.ajax({
-                                                url: "{% url 'comments:create_reply' comment.id %}",
-                                                data: {
-                                                    'description': $(
-                                                            '#commentReplyInput{{comment.id}}')
-                                                        .val(),
-                                                },
-                                                dataType: 'json',
-                                                success: function (response) {
-                                                    let avatarImage
-                                                    if (response.reply.user
-                                                        .who_see_avatar == 'everyone') {
-                                                        avatarImage = response.reply.user
-                                                            .avatar.url
-                                                    } else if (response.reply.user ==
-                                                        "{{user}}") {
-                                                        avatarImage = response.reply.user
-                                                            .avatar.url
-                                                    } else {
-                                                        avatarImage =
-                                                            "/media/profile_images/DefaultUserImage.WebP"
-                                                    }
-                                                    $('#replyList{{comment.id}}').prepend(`
+                                        $('#showReplies{{comment.id}}').click()
+                                    })
+                                    $('#cancelCommentReply{{comment.id}}').click(function (event) {
+                                        event.preventDefault;
+                                        $('#replyForm{{comment.id}}').toggle();
+                                        $('#commentReplyInput{{comment.id}}').val('')
+                                    })
+                                    $('#replyForm{{comment.id}}').submit(function (event) {
+                                        event.preventDefault();
+                                        $.ajax({
+                                            url: "{% url 'comments:create_reply' comment.id %}",
+                                            data: {
+                                                'description': $(
+                                                        '#commentReplyInput{{comment.id}}')
+                                                    .val(),
+                                            },
+                                            dataType: 'json',
+                                            success: function (response) {
+                                                let avatarImage
+                                                if (response.reply.user
+                                                    .who_see_avatar == 'everyone') {
+                                                    avatarImage = response.reply.user
+                                                        .avatar.url
+                                                } else if (response.reply.user ==
+                                                    "{{user}}") {
+                                                    avatarImage = response.reply.user
+                                                        .avatar.url
+                                                } else {
+                                                    avatarImage =
+                                                        "/media/profile_images/DefaultUserImage.WebP"
+                                                }
+                                                $('#replyList{{comment.id}}').prepend(`
                                                     <li class="media media-replied">
                                 <a href="/people/${response.reply.id}">
                                     <img src="${avatarImage}" alt="User Image" width="64"
@@ -373,9 +375,9 @@
                                         <h4 class="media-heading reviews"><span
                                                 class="glyphicon glyphicon-share-alt"></span> ${response.reply.user.username}
                                         </h4>
-                                        <span class="media-date reviews list-inline">
+                                        <smal class="form-text text-muted float-right">
                                             ${response.reply.date}
-                                        </span>
+                                        </smal>
                                         <p class="media-comment">
                                             ${response.reply.description}
                                         </p>
@@ -383,69 +385,72 @@
                                 </div>
                             </li>
                                                     `)
-                                                    $('#commentReplyInput{{comment.id}}')
-                                                        .val('')
-                                                }
-                                            })
+                                                $('#commentReplyInput{{comment.id}}')
+                                                    .val('')
+                                            }
                                         })
                                     })
-                                </script>
-                            </div>
+                                })
+                            </script>
                         </div>
-                    </li>
-                    <form action="" method="get" id="replyForm{{comment.id}}">
-                        <div class="form-group">
-                            <textarea type="text" name="description" class="form-control"
-                                placeholder="Add comment for this post" id="commentReplyInput{{comment.id}}"></textarea>
-                        </div>
-                        <span class="float-right" id="commentCancelButtons">
-                            <button class="btn btn-secondary" id="cancelCommentReply{{comment.id}}">Cancel</button>
-                            <input class="btn btn-primary" type="submit" value="Comment" id="addCommentReply">
-                        </span>
-                    </form>
-                    <div class="collapse" id="replyList{{comment.id}}">
-                        <ul class="media-list">
-                            {% for reply in comment.reply_set.all %}
-                            <li class="media media-replied">
-                                <a href="{% url 'people:people' reply.user.id %}">
-                                    {% if reply.user.who_see_avatar == 'everyone' %}
-                                    <img src="{{reply.user.avatar.url}}" alt="User Image" width="64" height="64"
-                                        class="media-object img-circle">
-                                    {% elif reply.user.who_see_avatar == 'friends' and user in reply.user.friends.all %}
-                                    <img src="{{reply.user.avatar.url}}" alt="User Image" width="64" height="64"
-                                        class="media-object img-circle">
-                                    {% elif reply.user == user %}
-                                    <img src="{{reply.user.avatar.url}}" alt="User Image" width="64" height="64"
-                                        class="media-object img-circle">
-                                    {% else %}
-                                    <img src="/media/profile_images/DefaultUserImage.WebP" alt="User Image" width="64"
-                                        height="64">
-                                    {% endif %}
-                                </a>
-                                <div class="media-body">
-                                    <div class="well well-lg">
-                                        <h4 class="media-heading reviews"><span
-                                                class="glyphicon glyphicon-share-alt"></span> {{reply.user.username}}
-                                        </h4>
-                                        <span class="media-date reviews list-inline">
-                                            {{reply.date}}
-                                        </span>
-                                        <p class="media-comment">
-                                            {{reply.description}}
-                                        </p>
-                                    </div>
-                                </div>
-                            </li>
-                            {% endfor %}
-                        </ul>
                     </div>
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
-    </div>
-    {% else %}
-    <small class="form-text text-muted">Your Distraction Free settings doesn't allow comments to show up😍</small>
-    {% endif %}
-    <script src="{% static 'social/emojionearea.min.js' %}"></script>
-    {% endblock content %}
+                </li>
+                {% if user.is_authenticated %}
+                <form action="" method="get" id="replyForm{{comment.id}}" class="col-md-7 col-sm-7">
+                    <div class="form-group">
+                        <textarea type="text" name="description" class="form-control"
+                            placeholder="Add comment for this post" id="commentReplyInput{{comment.id}}"></textarea>
+                    </div>
+                    <span class="float-right" id="commentCancelButtons">
+                        <button class="btn btn-secondary" id="cancelCommentReply{{comment.id}}">Cancel</button>
+                        <input class="btn btn-primary" type="submit" value="Comment" id="addCommentReply">
+                    </span>
+                </form>
+                {% else %}
+                <div id="replyForm{{comment.id}}">
+                    <p class="alert alert-danger">Please login to reply</p>
+                </div>
+                {% endif %}
+                <div class="collapse" id="replyList{{comment.id}}">
+                    <ul class="media-list">
+                        {% for reply in comment.reply_set.all %}
+                        <li class="media media-replied">
+                            <a href="{% url 'people:people' reply.user.id %}">
+                                {% if reply.user.who_see_avatar == 'everyone' %}
+                                <img src="{{reply.user.avatar.url}}" alt="User Image" width="64" height="64"
+                                    class="media-object img-circle">
+                                {% elif reply.user.who_see_avatar == 'friends' and user in reply.user.friends.all %}
+                                <img src="{{reply.user.avatar.url}}" alt="User Image" width="64" height="64"
+                                    class="media-object img-circle">
+                                {% elif reply.user == user %}
+                                <img src="{{reply.user.avatar.url}}" alt="User Image" width="64" height="64"
+                                    class="media-object img-circle">
+                                {% else %}
+                                <img src="/media/profile_images/DefaultUserImage.WebP" alt="User Image" width="64"
+                                    height="64">
+                                {% endif %}
+                            </a>
+                            <div class="media-body">
+                                <div class="well well-lg">
+                                    <h4 class="media-heading reviews"><span
+                                            class="glyphicon glyphicon-share-alt"></span> {{reply.user.username}}
+                                    </h4>
+                                    <small class="form-text text-muted float-right">
+                                        {{reply.date}}
+                                    </small>
+                                    <p class="media-comment">
+                                        {{reply.description}}
+                                    </p>
+                                </div>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endfor %}
+</div>
+{% else %}
+<small class="form-text text-muted">Your Distraction Free settings doesn't allow comments to show up</small>
+{% endif %}
+<script src="{% static 'social/emojionearea.min.js' %}"></script>
+{% endblock content %}
