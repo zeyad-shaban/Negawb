@@ -60,7 +60,7 @@ $(document).ready(function () {
                                 } else if ($('#categoryContainer').attr('data-currUser') == user) {
                                     userAvatar = user.avatar
                                 } else {
-                                    userAvatar = `/media/profile_images/DefaultUserImage.WebP`
+                                    userAvatar = `/media/profile_images/DefaultUserImage.jpg`
                                 }
                                 if (post.fields.image) {
                                     output = `
@@ -222,7 +222,7 @@ $(document).ready(function () {
                                 } else if ($('#categoryContainer').attr('data-currUser') == user) {
                                     userAvatar = user.avatar
                                 } else {
-                                    userAvatar = `/media/profile_images/DefaultUserImage.WebP`
+                                    userAvatar = `/media/profile_images/DefaultUserImage.jpg`
                                 }
                                 if (post.fields.image) {
                                     output = `
@@ -378,7 +378,7 @@ $(document).ready(function () {
                 } else if ($('#categoryContainer').attr('data-currUser') == user) {
                     userAvatar = user.avatar
                 } else {
-                    userAvatar = `/media/profile_images/DefaultUserImage.WebP`
+                    userAvatar = `/media/profile_images/DefaultUserImage.jpg`
                 }
                 posts = JSON.parse(user.posts)
                 $('#followedPostsContainer').html('')

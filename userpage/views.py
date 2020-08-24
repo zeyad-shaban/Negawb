@@ -171,7 +171,7 @@ def get_user_by_id(request):
     elif user == request.user:
         user_avatar = user.avatar.url
     else:
-        user_avatar = '/media/profile_images/DefaultUserImage.WebP'
+        user_avatar = '/media/profile_images/DefaultUserImage.jpg'
     json_user = {
         'id': user.id,
         'username':user.username,

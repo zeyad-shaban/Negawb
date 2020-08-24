@@ -101,7 +101,7 @@ def addfriend(request):
                         elif notification.sender.who_see_avatar == 'friends' and receiver in receiver.friends.all():
                             sender_avatar = notification.sender.avatar.url
                         else:
-                            sender_avatar = '/media/profile_images/DefaultUserImage.WebP'
+                            sender_avatar = '/media/profile_images/DefaultUserImage.jpg'
                         payload = {"head": f"You got a friend request from {notification.sender.username}",
                         "body": notification.content,
                         "url": notification.url,

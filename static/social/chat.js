@@ -47,7 +47,7 @@ $(document).ready(function () {
                                 <div class="row w-100">
                                     <div class="col-12 col-sm-6 col-md-3 px-0">
                                         <a href="/people/${members[i].pk }">
-                                            <img src="/media/profile_images/DefaultUserImage.WebP" alt="${ members[i].fields.username }"
+                                            <img src="/media/profile_images/DefaultUserImage.jpg" alt="${ members[i].fields.username }"
                                             class="img-fluid rounded-circle d-block mx-auto" height="73" width="73">
                                     </a>
                                     </div>

@@ -25,7 +25,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
         integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-    <link rel='shortcut icon' href="{% static 'categories/favicon.WebP' %}" type="image/WebP">
+    <link rel='shortcut icon' href="{% static 'categories/favicon.jpg' %}" type="image/WebP">
     <meta name="description" content="{% block description %} {% endblock description %}">
     <meta name="keywords"
         content="dfreemedia, filter, important, social media addiction, productive, production, overcome, social">
@@ -40,7 +40,7 @@
     <nav
         class="navbar navbar-expand-xl navbar-expand-lg navbar-expand-md navbar-expand-sm navbar-expand navbar-dark bg-dark {% if user.fixed_navbar or not user.is_authenticated %}sticky-top{% endif %}">
         <a class="navbar-brand" href="{% url 'home' %}">
-            <img src="{% static 'categories/favicon.WebP' %}" width="35" height="30" alt="Website Logo" loading="lazy"
+            <img src="{% static 'categories/favicon.jpg' %}" width="35" height="30" alt="Website Logo" loading="lazy"
                 title="Dfreemedia">
         </a>
         {% if user.is_authenticated %}
@@ -159,7 +159,7 @@
                                         <img src="{{notification.sender.avatar.url}}" alt="User Image" width="50"
                                             height="50">
                                         {% else %}
-                                        <img src="/media/profile_images/DefaultUserImage.WebP" alt="User Image"
+                                        <img src="/media/profile_images/DefaultUserImage.jpg" alt="User Image"
                                             width="50" height="64">
                                         {% endif %}
                                         <div class="media-body">
@@ -229,7 +229,7 @@
     {% if not user.is_authenticated %}
     <div class="float-right col-md-3 col-sm-4 col-3" id="floatAuthForm">
         <div class="text-center">
-            <img src="{% static 'categories/favicon.WebP' %}" alt="Dfreemedia favicon" id="signupDfreemediaImage"
+            <img src="{% static 'categories/favicon.jpg' %}" alt="Dfreemedia favicon" id="signupDfreemediaImage"
                 class="rounded-circle" height="100">
             <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#signupFloatForm">Sign
                 Up</button>
@@ -244,7 +244,7 @@
                         </div>
                         <div class="modal-body">
                             <div class="text-center">
-                                <img src="{% static 'categories/favicon.WebP' %}" alt="Dfreemedia favicon"
+                                <img src="{% static 'categories/favicon.jpg' %}" alt="Dfreemedia favicon"
                                     class="rounded-circle" height="200">
                                 <h1>Join Dfreemedia</h1>
                             </div>
@@ -299,7 +299,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="text-center">
-                        <img src="{% static 'categories/favicon.WebP' %}" alt="Dfreemedia favicon"
+                        <img src="{% static 'categories/favicon.jpg' %}" alt="Dfreemedia favicon"
                             class="rounded-circle" height="200">
                         <h1>Log into Dfreemedia</h1>
                     </div>

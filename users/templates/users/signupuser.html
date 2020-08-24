@@ -9,7 +9,7 @@ Dfreemedia.{% endblock description %}
 {% block content %}
 <style>
     body {
-        background: url("{% static 'users/authenticationBck.WebP' %}");
+        background: url("{% static 'users/authenticationBck.jpg' %}");
         background-size: cover;
     }
 
@@ -27,7 +27,7 @@ Dfreemedia.{% endblock description %}
 <div class="row justify-content-center mt-5">
     <div class="col-md-5 col-sm-6 col-8" id="signupForm">
         <div class="text-center">
-            <img src="{% static 'categories/favicon.WebP' %}" alt="Dfreemedia favicon" class="rounded-circle" height="200">
+            <img src="{% static 'categories/favicon.jpg' %}" alt="Dfreemedia favicon" class="rounded-circle" height="200">
             <h1>Join Dfreemedia</h1>
         </div>
         <form method="POST" action="{% url 'signupuser' %}">

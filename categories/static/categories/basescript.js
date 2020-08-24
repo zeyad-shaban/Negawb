@@ -62,7 +62,7 @@ $(document).ready(function () {
                                     senderAvatar = sender.avatar
                                     // } else if (sender.who_see_avatar == 'friends' && currUser in sender_friends) {
                                 } else {
-                                    senderAvatar = '/media/profile_images/DefaultUserImage.WebP'
+                                    senderAvatar = '/media/profile_images/DefaultUserImage.jpg'
                                 }
                                 output = `
                                 <a href="${notifications[i].fields.url}" style="text-decoration: none; color: black">
@@ -123,7 +123,7 @@ $(document).ready(function () {
                                     senderAvatar = sender.avatar
                                     // } else if (sender.who_see_avatar == 'friends' && currUser in sender_friends) {
                                 } else {
-                                    senderAvatar = '/media/profile_images/DefaultUserImage.WebP'
+                                    senderAvatar = '/media/profile_images/DefaultUserImage.jpg'
                                 }
                                 output = `
                                 <a href="${notifications[i].fields.url}" style="text-decoration: none; color: black">

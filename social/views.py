@@ -92,7 +92,7 @@ def send_message(request):
                         elif notification.sender.who_see_avatar == 'friends' and receiver in receiver.friends.all():
                             sender_avatar = notification.sender.avatar.url
                         else:
-                            sender_avatar = '/media/profile_images/DefaultUserImage.WebP'
+                            sender_avatar = '/media/profile_images/DefaultUserImage.jpg'
                         payload = {"head": f"An Important message from {notification.sender.username}",
                         "body": notification.content,
                         "url": notification.url,
@@ -113,7 +113,7 @@ def send_message(request):
                     elif notification.sender.who_see_avatar == 'friends' and receiver in receiver.friends.all():
                         sender_avatar = notification.sender.avatar.url
                     else:
-                        sender_avatar = '/media/profile_images/DefaultUserImage.WebP'
+                        sender_avatar = '/media/profile_images/DefaultUserImage.jpg'
                     payload = {"head": f"Message from {notification.sender}",
                     "body": notification.content,
                     "url": notification.url,
@@ -229,7 +229,7 @@ def create_invite(request,):
                 elif notification.sender.who_see_avatar == 'friends' and receiver in receiver.friends.all():
                     sender_avatar = notification.sender.avatar.url
                 else:
-                    sender_avatar = '/media/profile_images/DefaultUserImage.WebP'
+                    sender_avatar = '/media/profile_images/DefaultUserImage.jpg'
                 payload = {"head": f"{notification.sender.username} wants you to join {group.title}",
                 "body": notification.content,
                 "url": notification.url,

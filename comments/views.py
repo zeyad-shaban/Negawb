@@ -40,7 +40,7 @@ def view_post(request, pk):
                         elif notification.sender.who_see_avatar == 'friends' and receiver in receiver.friends.all():
                             sender_avatar = notification.sender.avatar.url
                         else:
-                            sender_avatar = '/media/profile_images/DefaultUserImage.WebP'
+                            sender_avatar = '/media/profile_images/DefaultUserImage.jpg'
                         payload = {"head": f"new comment on your post{post.description}",
                         "body": notification.content,
                         "url": notification.url,
@@ -178,7 +178,7 @@ def create_reply(request, pk):
             elif notification.sender.who_see_avatar == 'friends' and receiver in receiver.friends.all():
                 sender_avatar = notification.sender.avatar.url
             else:
-                sender_avatar = '/media/profile_images/DefaultUserImage.WebP'
+                sender_avatar = '/media/profile_images/DefaultUserImage.jpg'
             payload = {"head": f"{notification.sender.username} Replied to your comment",
             "body": notification.content,
             "url": notification.url,
