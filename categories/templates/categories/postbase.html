@@ -73,8 +73,8 @@
 </div>
 <!-- Descriptin only post -->
 {% elif post.description and not post.image and not post.post_file %}
-<div class="card">
-    <div class="card-header">
+<div class="">
+    <div class="">
         <a href="{% url 'people:people' post.user.id %}">
             {% if post.user.who_see_avatar == 'everyone' %}
             <img src="{{post.user.avatar.url}}" alt="User Image" width="64" height="64" class="mr-3 float-left">

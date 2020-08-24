@@ -41,7 +41,7 @@ of the great features we provide.{% endblock description %}
     {% if not category.id == 7 %}
     {% if not category in user.blocked_categories.all %}
     <div class="col mb-4">
-        <div class="card">
+        <div class="">
             <a href="{% url 'categories:view_category' category.id %}">
                 <img src="{{ category.image.url }}" class="card-img-top" alt="Couldn't upload image">
             </a>
@@ -141,8 +141,8 @@ of the great features we provide.{% endblock description %}
     </div>
     <!-- Descriptin only post -->
     {% elif post.description and not post.image and not post.post_file %}
-    <div class="card">
-        <div class="card-header">
+    <div class="">
+        <div class="">
             <a href="{% url 'people:people' post.user.id %}">
                 {% if post.user.who_see_avatar == 'everyone' %}
                 <img src="{{post.user.avatar.url}}" alt="{{ post.user.username }}" width="64" height="64"
@@ -367,8 +367,8 @@ of the great features we provide.{% endblock description %}
     <div id="friendsPosts" class="homepageItem">
         {% for post in friends_posts %}
         {% if not post.category in user.blocked_categories.all %}
-        <div class="card">
-            <div class="card-header">
+        <div class="">
+            <div class="">
                 <a href="{% url 'people:people' post.user.id %}">
                     {{ post.user}}
                 </a>
@@ -560,7 +560,7 @@ of the great features we provide.{% endblock description %}
 
         <span id="followedPostsContainer">
             {% for post in followed_posts %}
-            <div class="card">
+            <div class="">
                 {% if post.image %}
                 <a href="{% url 'people:people' user.id %}">
                     {% if user.who_see_avatar == 'everyone' %}
@@ -594,8 +594,8 @@ of the great features we provide.{% endblock description %}
                 </div>
                 <!-- Descriptin only post -->
                 {% elif post.description and not post.image and not post.post_file %}
-                <div class="card">
-                    <div class="card-header">
+                <div class="">
+                    <div class="">
                         <a href="{% url 'people:people' user.id %}">
                             {% if user.who_see_avatar == 'everyone' %}
                             <img src="{{post.user.avatar.url}}" alt="User Image" width="64" height="64"
