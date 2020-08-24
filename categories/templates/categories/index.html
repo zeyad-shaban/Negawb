@@ -32,7 +32,7 @@ of the great features we provide.{% endblock description %}
     {% endif %}
 </ul>
 <!-- categories -->
-{% if not user.homepage_posts %}
+{% if not user.homepage_posts and user.is_authenticated %}
 <small class="form-text text-muted">Your Distraction Free settings doesn't allow posts to show in homepage</small>
 {% endif %}
 <div class="row row-cols-1 row-cols-md-3 homepageItem" id="categoryContainer"
@@ -62,7 +62,7 @@ of the great features we provide.{% endblock description %}
 </div>
 
 <!-- Homepage posts -->
-{% if user.homepage_posts %}
+{% if user.homepage_posts and user.is_authenticated or not user.is_authenticated %}
 <div class="homepageItem" id="postsContainer">
     <link rel="stylesheet" href="{% static 'social/emojionearea.min.css' %}">
     <style>
@@ -106,8 +106,8 @@ of the great features we provide.{% endblock description %}
     </form>
     {% else %}
     <div class="alert alert-danger">You must be logged in to add posts</div>
-    {% endif %}
 
+    {% endif %}
     {% for post in homepage_posts %}
     {% if post.image %}
     <a href="{% url 'people:people' post.user.id %}">

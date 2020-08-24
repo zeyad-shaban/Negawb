@@ -17,6 +17,7 @@ def home(request):
         messages.warning(request, 'You have enabled Chat only mode, you can disable it from profile Distraction Free settings')
         return redirect('chat')
     categories = Category.objects.all()
+    
     followed_users = []
     if request.user.is_authenticated:
         friends = User.objects.filter(friends=request.user)
@@ -66,8 +67,9 @@ def home(request):
     else:
         friends_posts = None
         followed_posts = None
-        homepage_posts = []
-
+        homepage_posts = Category.objects.get(title = 'Fun Area').post_set.all().order_by('-post_date')
+    print(homepage_posts)
+    print('hallo???????')
     return render(request, 'categories/index.html', {'categories': categories, 'friends_posts': friends_posts, 'followed_posts': followed_posts, 'homepage_posts': homepage_posts, 'followed_users': followed_users})
 
 
