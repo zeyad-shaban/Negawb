@@ -41,12 +41,12 @@
     <input type="submit" value="Add Post" class="btn btn-primary" id="addPostButton">
 </form>
 {% else %}
-<div class="alert alert-danger">You must be logged in to add posts</div>
+<span class="alert alert-danger">Please login to add posts</span>
 {% endif %}
 
 {% for post in posts %}
 {% if post.image %}
-<a href="{% url 'people:people' user.id %}">
+<a href="{% url 'people:people' post.user.id %}">
     {% if post.user.who_see_avatar == 'everyone' %}
     <img src="{{post.user.avatar.url}}" alt="User Image" width="64" height="64" class="mr-3 float-left" loading="lazy">
     {% elif post.user.who_see_avatar == 'friends' and user in user.friends.all %}
@@ -75,7 +75,7 @@
 {% elif post.description and not post.image and not post.post_file %}
 <div class="card">
     <div class="card-header">
-        <a href="{% url 'people:people' user.id %}">
+        <a href="{% url 'people:people' post.user.id %}">
             {% if post.user.who_see_avatar == 'everyone' %}
             <img src="{{post.user.avatar.url}}" alt="User Image" width="64" height="64" class="mr-3 float-left">
             {% elif post.user.who_see_avatar == 'friends' and user in user.friends.all %}
@@ -100,7 +100,7 @@
 </div>
 <!-- File post -->
 {% elif post.post_file %}
-<a href="{% url 'people:people' user.id %}">
+<a href="{% url 'people:people' post.user.id %}">
     {% if post.user.who_see_avatar == 'everyone' %}
     <img src="{{post.user.avatar.url}}" alt="User Image" width="64" height="64" class="mr-3 float-left">
     {% elif post.user.who_see_avatar == 'friends' and user in user.friends.all %}

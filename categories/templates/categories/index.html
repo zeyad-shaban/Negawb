@@ -19,17 +19,15 @@ of the great features we provide.{% endblock description %}
     }
 </style>
 <ul class="list-group list-group-horizontal">
-    {% if user.homepage_posts %}
+    {% if user.homepage_posts or not user.is_authenticated %}
     <li class="list-group-item active homepageView">Posts</li>
     <li class="list-group-item homepageView">Categories</li>
     {% else %}
     <li class="list-group-item homepageView">Posts</li>
     <li class="list-group-item active homepageView">Categories</li>
     {% endif %}
-    {% if not user.hide_posts_in_homepage %}
     <li class="list-group-item homepageView" id="toggleFriendsPosts">Friends Posts</li>
     <li class="list-group-item homepageView" style="overflow: hidden">Followed Posts</li>
-    {% endif %}
 </ul>
 <!-- categories -->
 {% if not user.homepage_posts and user.is_authenticated %}
@@ -105,7 +103,7 @@ of the great features we provide.{% endblock description %}
         <input type="submit" value="Add Post" class="btn btn-primary" id="addPostButton">
     </form>
     {% else %}
-    <div class="alert alert-danger">You must be logged in to add posts</div>
+    <span class="alert alert-danger">Please login to add posts</span>
 
     {% endif %}
     {% for post in homepage_posts %}

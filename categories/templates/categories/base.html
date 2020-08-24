@@ -64,13 +64,6 @@
                             Friends</span>
                     </a>
                 </li>
-                {% if not user.is_authenticated %}
-                <li class="nav-item"><a href="{% url 'signupuser' %}">Sign Up</a>
-                </li>
-                <li class="nav-item">
-                    <a href="{% url 'loginuser' %}">Login</a>
-                </li>
-                {% endif %}
                 <li class="nav-item">
                     <a href="{% url 'chat' %}" title="Chat">
                         <i class="fa fa-comments" style="font-size:36px;"></i>
@@ -95,130 +88,131 @@
                         <i class="fas fa-bell" style="font-size: 36px; color: rgb(209, 202, 202); cursor: pointer"></i>
 
                         {% if not user.is_authenticated %}
-                        <script>
-                            $(document).ready(function () {
-                                $('.fas.fa-bell').click(function (e) {
-                                    e.preventDefault();
-                                    alert('Please log in first')
-                                })
-                            })
-                        </script>
-
-                        {% else %}
-                        {% if notifications.count > 0 %}
-                        <span class="badge" style="color: white;"
-                            id="currNotificationsCount">{{ notifications.count }}</span>
-                        {% else %}
-                        <span class="badge" style="color: white;" id="currNotificationsCount"></span>
-                        {% endif %}
                     </div>
-                    <li class="dropleft mt-5">
-                        <div class="dropdown-menu master-menu-dropdown" aria-labelledby="app-menu"
-                            id="notificationDropMenu">
-                            <audio id="notificationSound">
-                                <source src="{% static 'social/notificationsound.wav' %}" type="audio/wav">
-                                <source src="{% static 'social/notificationsound.wav' %}" type="audio/mp3">
-                                <source src="{% static 'social/notificationsound.wav' %}" type="audio/ogg">
-                                <source src="{% static 'social/notificationsound.wav' %}" type="audio/mpeg">
-                                Your browser does not support the audio element.
-                            </audio>
-                            <div id="notificationsList" data-url="{% url 'social:load_notifications' %}"
-                                data-getUserUrl="{% url 'userpage:get_user_by_id' %}" data-currUser="{{ user }}">
-                                <h4>Notifications</h4>
-                                <div class="dropdown-divider"></div>
-                                <ul class="list-group list-group-horizontal">
-                                    <li class="list-group-item active notificationType" date-wantedType="all">All</li>
-                                    {% if user.allow_important_friend_messages or user.allow_important_group_message or user.allow_normal_friend_message or user.allow_normal_group_message %}
-                                    <li class="list-group-item notificationType" date-wantedType="messages">Messages
-                                    </li>
-                                    {% endif %}
+                    <script>
+                        $(document).ready(function () {
+                            $('.fas.fa-bell').click(function (e) {
+                                e.preventDefault();
+                                alert('Please log in first')
+                            })
+                        })
+                    </script>
 
-                                    {% if user.allow_comment_message or user.allow_reply_message %}
-                                    <li class="list-group-item notificationType" date-wantedType="society">
-                                        Comments/Replies
-                                    </li>
-                                    {% endif %}
-                                </ul>
-                                <ul class="list-group list-group-horizontal">
-                                    {% if user.allow_invites %}
-                                    <li class="list-group-item notificationType" date-wantedType="invites">Invites</li>
-                                    {% endif %}
-
-                                    {% if user.your_invites %}
-                                    <li class="list-group-item notificationType" date-wantedType="your_invites">Your
-                                        invites
-                                    </li>
-                                    {% endif %}
-                                </ul>
-                                <div id="notificationsContainer">
-                                    {% if notifications.count > 0 %}
-                                    {% for notification in notifications %}
-                                    <a href="{{ notification.url }}" style="text-decoration: none; color: black">
-                                        <div class="media" style="background: #F7F7F7;">
-                                            {% if notification.sender.who_see_avatar == 'everyone' %}
-                                            <img src="{{notification.sender.avatar.url}}" alt="User Image" width="50"
-                                                height="50">
-                                            {% elif notification.sender.who_see_avatar == 'friends' and user in notification.sender.friends.all %}
-                                            <img src="{{notification.sender.avatar.url}}" alt="User Image" width="50"
-                                                height="50">
-                                            {% elif notification.sender == user %}
-                                            <img src="{{notification.sender.avatar.url}}" alt="User Image" width="50"
-                                                height="50">
-                                            {% else %}
-                                            <img src="/media/profile_images/DefaultUserImage.WebP" alt="User Image"
-                                                width="50" height="64">
-                                            {% endif %}
-                                            <div class="media-body">
-                                                <h5 class="mt-0">{{ notification.sender.username }}</h5>
-                                                <p>{{ notification.content }}</p>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <hr>
-                                    {% endfor %}
-                                    {% endif %}
-                                </div>
-                                <div class="dropdown-divider"></div>
-                            </div>
-                        </div>
-                    </li>
+                    {% else %}
+                    {% if notifications.count > 0 %}
+                    <span class="badge" style="color: white;"
+                        id="currNotificationsCount">{{ notifications.count }}</span>
+                    {% else %}
+                    <span class="badge" style="color: white;" id="currNotificationsCount"></span>
+                    {% endif %}
                 </div>
-                {% endif %}
-                <li class="dropdown ml-3 dropleft">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                        aria-expanded="false"><i class="fas fa-sort-down"
-                            style="color: white; font-size: 36px;"></i><span class="caret"></span></a>
-                    <ul class="dropdown-menu float-right mr-100 mt-5">
-                        <li>
-                            <a class="btn" href="{% url 'faq' %}">FAQ</a>
-                        </li>
-                        <li>
-                            <a class="btn" href="{% url 'about' %}">About</a>
-                        </li>
-                        <!-- AddToAny BEGIN -->
-                        <a class="a2a_dd btn" href="https://www.addtoany.com/share"><i class="fas fa-share-alt mr-2"
-                                style="font-size: 24px; color: #35A0FE"></i><span>Share</span></a>
-                        <script async src="https://static.addtoany.com/menu/page.js"></script>
-                        <!-- AddToAny END -->
-                        <li>
-                            <a class="btn" href="{% url 'feedback' %}" class="mb-2">Report a problem</a>
-                        </li>
-                        <li>
-                            <a style="color: black; text-decoration: none;"
-                                href="{% url 'production:announcements' %}">Announcements </a>
-                        </li>
-                        {% if user.is_authenticated %}
-                        <li role="separator" class="divider"></li>
-                        <br>
-                        <form action="{% url 'logoutuser' %}" method="POST">
-                            {% csrf_token %}
-                            <input class="btn" type="submit" value="Logout">
-                        </form>
-                        {% endif %}
-                    </ul>
+                <li class="dropleft mt-5">
+                    <div class="dropdown-menu master-menu-dropdown" aria-labelledby="app-menu"
+                        id="notificationDropMenu">
+                        <audio id="notificationSound">
+                            <source src="{% static 'social/notificationsound.wav' %}" type="audio/wav">
+                            <source src="{% static 'social/notificationsound.wav' %}" type="audio/mp3">
+                            <source src="{% static 'social/notificationsound.wav' %}" type="audio/ogg">
+                            <source src="{% static 'social/notificationsound.wav' %}" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                        <div id="notificationsList" data-url="{% url 'social:load_notifications' %}"
+                            data-getUserUrl="{% url 'userpage:get_user_by_id' %}" data-currUser="{{ user }}">
+                            <h4>Notifications</h4>
+                            <div class="dropdown-divider"></div>
+                            <ul class="list-group list-group-horizontal">
+                                <li class="list-group-item active notificationType" date-wantedType="all">All</li>
+                                {% if user.allow_important_friend_messages or user.allow_important_group_message or user.allow_normal_friend_message or user.allow_normal_group_message %}
+                                <li class="list-group-item notificationType" date-wantedType="messages">Messages
+                                </li>
+                                {% endif %}
+
+                                {% if user.allow_comment_message or user.allow_reply_message %}
+                                <li class="list-group-item notificationType" date-wantedType="society">
+                                    Comments/Replies
+                                </li>
+                                {% endif %}
+                            </ul>
+                            <ul class="list-group list-group-horizontal">
+                                {% if user.allow_invites %}
+                                <li class="list-group-item notificationType" date-wantedType="invites">Invites</li>
+                                {% endif %}
+
+                                {% if user.your_invites %}
+                                <li class="list-group-item notificationType" date-wantedType="your_invites">Your
+                                    invites
+                                </li>
+                                {% endif %}
+                            </ul>
+                            <div id="notificationsContainer">
+                                {% if notifications.count > 0 %}
+                                {% for notification in notifications %}
+                                <a href="{{ notification.url }}" style="text-decoration: none; color: black">
+                                    <div class="media" style="background: #F7F7F7;">
+                                        {% if notification.sender.who_see_avatar == 'everyone' %}
+                                        <img src="{{notification.sender.avatar.url}}" alt="User Image" width="50"
+                                            height="50">
+                                        {% elif notification.sender.who_see_avatar == 'friends' and user in notification.sender.friends.all %}
+                                        <img src="{{notification.sender.avatar.url}}" alt="User Image" width="50"
+                                            height="50">
+                                        {% elif notification.sender == user %}
+                                        <img src="{{notification.sender.avatar.url}}" alt="User Image" width="50"
+                                            height="50">
+                                        {% else %}
+                                        <img src="/media/profile_images/DefaultUserImage.WebP" alt="User Image"
+                                            width="50" height="64">
+                                        {% endif %}
+                                        <div class="media-body">
+                                            <h5 class="mt-0">{{ notification.sender.username }}</h5>
+                                            <p>{{ notification.content }}</p>
+                                        </div>
+                                    </div>
+                                </a>
+                                <hr>
+                                {% endfor %}
+                                {% endif %}
+                            </div>
+                            <div class="dropdown-divider"></div>
+                        </div>
+                    </div>
                 </li>
+        </div>
+        {% endif %}
+        <li class="dropdown ml-3 dropleft">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                aria-expanded="false"><i class="fas fa-sort-down" style="color: white; font-size: 36px;"></i><span
+                    class="caret"></span></a>
+            <ul class="dropdown-menu float-right mr-100 mt-5">
+                <li>
+                    <a class="btn" href="{% url 'faq' %}">FAQ</a>
+                </li>
+                <li>
+                    <a class="btn" href="{% url 'about' %}">About</a>
+                </li>
+                <!-- AddToAny BEGIN -->
+                <a class="a2a_dd btn" href="https://www.addtoany.com/share"><i class="fas fa-share-alt mr-2"
+                        style="font-size: 24px; color: #35A0FE"></i><span>Share</span></a>
+                <script async src="https://static.addtoany.com/menu/page.js"></script>
+                <!-- AddToAny END -->
+                <li>
+                    <a class="btn" href="{% url 'feedback' %}" class="mb-2">Report a problem</a>
+                </li>
+                <li>
+                    <a style="color: black; text-decoration: none;"
+                        href="{% url 'production:announcements' %}">Announcements </a>
+                </li>
+                {% if user.is_authenticated %}
+                <li role="separator" class="divider"></li>
+                <br>
+                <form action="{% url 'logoutuser' %}" method="POST">
+                    {% csrf_token %}
+                    <input class="btn" type="submit" value="Logout">
+                </form>
+                {% endif %}
             </ul>
-            {% block searchbar %} {% endblock searchbar %}
+        </li>
+        </ul>
+        {% block searchbar %} {% endblock searchbar %}
         </div>
     </nav>
     <span id="message_area">
@@ -232,7 +226,108 @@
         {% endfor %}
         {% endif %}
     </span>
-
+    {% if not user.is_authenticated %}
+    <div class="float-right col-md-3 col-sm-4 col-3" id="floatAuthForm">
+        <div class="text-center">
+            <img src="{% static 'categories/favicon.WebP' %}" alt="Dfreemedia favicon" id="signupDfreemediaImage"
+                class="rounded-circle" height="100">
+            <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#signupFloatForm">Sign
+                Up</button>
+            <div class="modal fade" id="signupFloatForm" tabindex="-1" role="dialog"
+                aria-labelledby="signupFloatFormLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-scrollable">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="text-center">
+                                <img src="{% static 'categories/favicon.WebP' %}" alt="Dfreemedia favicon"
+                                    class="rounded-circle" height="200">
+                                <h1>Join Dfreemedia</h1>
+                            </div>
+                            <form method="POST" action="{% url 'signupuser' %}">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label for="username">Username</label>
+                                    <input type="text" name="username" class="form-control" id="username"
+                                        aria-describedby="usernameHelp" required maxlength="40">
+                                </div>
+                                <!-- <div class="form-group">
+                                            <label for="email">Email</label>
+                                            <small class="form-text text-muted">optional</small>
+                                            <input type="text" name="email" class="form-control" id="email" aria-describedby="usernameHelp">
+                                        </div> -->
+                                <div class="form-group">
+                                    <label for="password1">Password</label>
+                                    <input type="password" name="password1" class="form-control" id="password1"
+                                        required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="password2">Confirm Password</label>
+                                    <input type="password" name="password2" class="form-control" id="password2"
+                                        required>
+                                </div>
+                                <small class="form-text text-muted mb-2"> <input type="checkbox" name="" id=""
+                                        class="mr-2" required>I agree
+                                    to <a href="{% url 'termsandconditions' %}" target="_blank">Terms and
+                                        Conditions</a>, <a href="{% url 'privacypolicy' %}" target="_blank">Privacy
+                                        Policy</a></small>
+                                <button type="submit" class="btn btn-success btn-block">Sign Up</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="text-center">
+            <button type="button" class="btn btn-success btn-sm" data-toggle="modal"
+                data-target="#loginFloatForm">Login</button>
+        </div>
+        <hr>
+    </div>
+    <div class="modal fade" id="loginFloatForm" tabindex="-1" role="dialog" aria-labelledby="loginFloatFormLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center">
+                        <img src="{% static 'categories/favicon.WebP' %}" alt="Dfreemedia favicon"
+                            class="rounded-circle" height="200">
+                        <h1>Log into Dfreemedia</h1>
+                    </div>
+                    <form method="POST" action="{% url 'loginuser' %}" id="loginForm">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="text" name="username" class="form-control" id="username" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" name="password" class="form-control" id="password" required>
+                        </div>
+                        <button type="submit" class="btn btn-success btn-block">Login</button>
+                    </form>
+                    <hr>
+                    <div class="text-center">
+                        Need an account? <a href="{% url 'signupuser' %}">Sign Up here</a>
+                    </div>
+                    <!-- <hr> -->
+                    <!-- <div class="text-center">
+                                        Forgot password? If your account was linked with an email then no worries, <a href="{% url 'password_reset' %}">Reset Password</a>
+                                    </div> -->
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
     {% block content %} {% endblock content %}
 
     {% if user.is_authenticated %}

@@ -16,6 +16,9 @@ Dfreemedia.{% endblock description %}
     #signupForm {
         background: white;
     }
+    #floatAuthForm{
+        display: none;
+    }
 </style>
 <div class="row justify-content-center mt-5">
     <div class="col-md-5">
@@ -27,7 +30,7 @@ Dfreemedia.{% endblock description %}
             <img src="{% static 'categories/favicon.WebP' %}" alt="Dfreemedia favicon" class="rounded-circle" height="200">
             <h1>Join Dfreemedia</h1>
         </div>
-        <form method="POST">
+        <form method="POST" action="{% url 'signupuser' %}">
             {% csrf_token %}
             <div class="form-group">
                 <label for="username">Username</label>
@@ -54,7 +57,7 @@ Dfreemedia.{% endblock description %}
         </form>
         <hr>
         <div class="text-center">
-            Do you already have an account? <a href="{% url 'loginuser' %}">Login here</a>
+            Already have an account? <a href="{% url 'loginuser' %}">Login</a>
         </div>
     </div>
 </div>
