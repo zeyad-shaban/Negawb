@@ -2,22 +2,11 @@
 {% load static %}
 {% block title %} New social media platform for avoiding distraction from | Dfreemedia{% endblock title %}
 
-{% block description %}Perfect for managing work and school groups due to unique message highlighting system. explore all
+{% block description %}Perfect for managing work and school groups due to unique message highlighting system. explore
+all
 of the great features we provide.{% endblock description %}
 
 {% block content %}
-<style>
-    .homepageView {
-        cursor: pointer;
-    }
-
-    @media screen and (max-width: 382px) {
-        .homepageView {
-            margin-left: 0px;
-            padding-left: 0px;
-        }
-    }
-</style>
 <ul class="list-group list-group-horizontal">
     {% if user.homepage_posts or not user.is_authenticated %}
     <li class="list-group-item active homepageView">Posts</li>
@@ -63,17 +52,6 @@ of the great features we provide.{% endblock description %}
 {% if user.homepage_posts and user.is_authenticated or not user.is_authenticated %}
 <div class="homepageItem" id="postsContainer">
     <link rel="stylesheet" href="{% static 'social/emojionearea.min.css' %}">
-    <style>
-        .card.bg-dark.text-white {
-            width: 397px;
-            height: 262;
-        }
-
-        .card-img-overlay {
-            display: none;
-        }
-    </style>
-
     {% if user.is_authenticated %}
     <form method="POST" class="mb-4" enctype="multipart/form-data"
         action="{% url 'comments:create_post' user.homepage_posts.id %}">
@@ -81,13 +59,6 @@ of the great features we provide.{% endblock description %}
         <div class="form-group">
             <label for="id_post_description">Description</label>
             <textarea type="text" name="description" id="id_post_description" class="form-control"></textarea>
-            <script>
-                $(document).ready(function () {
-                    $('textarea').emojioneArea({
-                        pickerPosition: "bottom",
-                    })
-                })
-            </script>
         </div>
         <div class="form-group">
             <p><label for="id_post_image">Optional Image</label>
@@ -107,7 +78,6 @@ of the great features we provide.{% endblock description %}
 
     {% endif %}
     {% for post in homepage_posts %}
-    {% if post.image %}
     <a href="{% url 'people:people' post.user.id %}">
         {% if post.user.who_see_avatar == 'everyone' %}
         <img src="{{post.user.avatar.url}}" alt="{{ post.user.username }}" width="64" height="64"
@@ -129,82 +99,25 @@ of the great features we provide.{% endblock description %}
     <div class="mb-3">
         <div class="card-body">
             {% if post.description %}
-            <p class="card-text">{{post.description|truncatechars:200}}{% if post.description|length > 200%}<a
-                    href="{% url 'comments:view_post' post.id %}">Read
-                    More</a>{% endif %}</p>
-            {% endif %}
-            <img src="{{ post.image.url }}" alt="{{ post.user.username }}" height="250" width="40%">
-            <p class="card-text"><small class="form-text text-muted">Published at
-                    {{ post.post_date|date:'d M Y' }}</small>
-            </p>
-        </div>
-    </div>
-    <!-- Descriptin only post -->
-    {% elif post.description and not post.image and not post.post_file %}
-    <div class="">
-        <div class="">
-            <a href="{% url 'people:people' post.user.id %}">
-                {% if post.user.who_see_avatar == 'everyone' %}
-                <img src="{{post.user.avatar.url}}" alt="{{ post.user.username }}" width="64" height="64"
-                    class="mr-3 float-left">
-                {% elif post.user.who_see_avatar == 'friends' and user in post.user.friends.all %}
-                <img src="{{post.user.avatar.url}}" alt="{{ post.user.username }}" width="64" height="64"
-                    class="mr-3 float-left">
-                {% elif post.user == user %}
-                <img src="{{post.user.avatar.url}}" alt="{{ post.user.username }}" width="64" height="64"
-                    class="mr-3 float-left">
-                {% else %}
-                <img src="/media/profile_images/DefaultUserImage.jpg" alt="{{ post.user.username }}" width="64"
-                    height="64" class="mr-3 float-left">
-                {% endif %}
-                <span>{{post.user.username}}</span>
-            </a>
-        </div>
-        <div class="card-body">
             <blockquote class="blockquote mb-0">
                 <p class="text-break">{{post.description|truncatechars:450}} {% if post.description|length > 450%}<a
                         href="{% url 'comments:view_post' post.id %}">Read
                         More</a>{% endif %}</p>
-                <small class="form-text text-muted">Published at {{ post.post_date|date:'d M Y' }}</small>
             </blockquote>
-        </div>
-    </div>
-    <!-- File post -->
-    {% elif post.post_file %}
-    <a href="{% url 'people:people' post.user.id %}">
-        {% if post.user.who_see_avatar == 'everyone' %}
-        <img src="{{post.user.avatar.url}}" alt="{{ post.user.username }}" width="64" height="64"
-            class="mr-3 float-left">
-        {% elif post.user.who_see_avatar == 'friends' and user in post.user.friends.all %}
-        <img src="{{post.user.avatar.url}}" alt="{{ post.user.username }}" width="64" height="64"
-            class="mr-3 float-left">
-        {% elif post.user == user %}
-        <img src="{{post.user.avatar.url}}" alt="{{ post.user.username }}" width="64" height="64"
-            class="mr-3 float-left">
-        {% else %}
-        <img src="/media/profile_images/DefaultUserImage.jpg" alt="{{ post.user.username }}" width="64" height="64"
-            class="mr-3 float-left">
-        {% endif %}
-        <span>{{post.user.username}}</span>
-    </a>
-    <div class="mb-3">
-        <div class="card-body">
-            {% if post.description %}
-            <p class="card-text">{{post.description|truncatechars:200}}{% if post.description|length > 200%}<a
-                    href="{% url 'comments:view_post' post.id %}">Read
-                    More</a>{% endif %}</p>
             {% endif %}
+            <small class="form-text text-muted">Published at {{ post.post_date|date:'d M Y' }}</small>
+
+            {% if post.image %}
+            <img src="{{ post.image.url }}" alt="{{ post.user.username }}" height="250" width="40%">
+            {% elif post.post_file %}
             <video width="400" height="320" controls>
                 <source src="{{ post.post_file.url }}" type="video/mp4">
                 <source src="{{ post.post_file.url }}" type="video/ogg">
                 Your browser does not support the video tag.
             </video>
-            <p class="card-text"><small class="form-text text-muted">Published at
-                    {{ post.post_date|date:'d M Y' }}</small>
-            </p>
+            {% endif %}
         </div>
     </div>
-    {% endif %}
     <span class="row justify-content-center">
         <span><a href="{% url 'comments:view_post' post.id %}" style="text-decoration: none; color:black;"><i
                     class="far fa-comment-dots" style="font-size:36px;"></i></a></span>
@@ -223,46 +136,46 @@ of the great features we provide.{% endblock description %}
         </span>
         <!-- add like script -->
         <script>
-            $(document).ready(function () {
-
-                $('#likeForm{{post.id}}').click((event) => {
-                    event.preventDefault()
-                })
-                $('#likeButton{{post.id}}').click(function (event) {
-                    $.ajax({
-                        url: "{% url 'comments:post_like_dislike' post.id %}",
-                        data: {
-                            'submit': 'like',
-                        },
-                        method: 'get',
-                        dataType: 'json',
-                        success: function (data) {
-                            let likes = "{{post.likes.count}}";
-                            let dislikes = "{{ post.dislikes.count }}"
-                            if (data.action == 'undislike_and_like') {
-                                dislikes -= 1
-                                likes++
-                                $('#id_dislikes{{post.id}}').html(
-                                    '<p style="color:black;">' +
-                                    dislikes + '</p>')
-                                $('#id_likes{{post.id}}').html(
-                                    '<p style="color:#065FD4;"><b>' +
-                                    likes + '</b></p>')
-                            } else if (data.action == 'unlike') {
-                                likes -= 1
-                                $('#id_likes{{post.id}}').html('<p style="color:#black;"' +
-                                    likes +
-                                    '</p>')
-                            } else {
-                                likes++
-                                $('#id_likes{{post.id}}').html(
-                                    '<p style="color:#065FD4;"><b>' +
-                                    likes + '</b></p>')
+            document.addEventListener('DOMContentLoaded', function () {
+                window.addEventListener('load', function () {
+                    $('#likeForm{{post.id}}').click((event) => {
+                        event.preventDefault()
+                        $.ajax({
+                            url: "{% url 'comments:post_like_dislike' post.id %}",
+                            data: {
+                                'submit': 'like',
+                            },
+                            method: 'get',
+                            dataType: 'json',
+                            success: function (data) {
+                                let likes = "{{post.likes.count}}";
+                                let dislikes = "{{ post.dislikes.count }}"
+                                if (data.action == 'undislike_and_like') {
+                                    dislikes -= 1
+                                    likes++
+                                    $('#id_dislikes{{post.id}}').html(
+                                        '<p style="color:black;">' +
+                                        dislikes + '</p>')
+                                    $('#id_likes{{post.id}}').html(
+                                        '<p style="color:#065FD4;"><b>' +
+                                        likes + '</b></p>')
+                                } else if (data.action == 'unlike') {
+                                    likes -= 1
+                                    $('#id_likes{{post.id}}').html(
+                                        '<p style="color:#black;"' +
+                                        likes +
+                                        '</p>')
+                                } else {
+                                    likes++
+                                    $('#id_likes{{post.id}}').html(
+                                        '<p style="color:#065FD4;"><b>' +
+                                        likes + '</b></p>')
+                                }
                             }
-                        }
+                        })
                     })
-                })
 
+                })
             })
         </script>
         <!-- Dislike -->
@@ -796,4 +709,17 @@ of the great features we provide.{% endblock description %}
 {% endif %}
 </div>
 <script src="{% static 'categories/index.js' %}"></script>
+<style>
+    .homepageView {
+        cursor: pointer;
+        background: yellow;
+    }
+
+    @media screen and (max-width: 382px) {
+        .homepageView {
+            margin-left: 0px;
+            padding-left: 0px;
+        }
+    }
+</style>
 {% endblock content %}

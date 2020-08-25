@@ -4,7 +4,8 @@
 {% block title %}Chat with a friend | Dfreemedia{% endblock title %}
 
 
-{% block description %}Join Dfreemedia and send messages to anyone you know, enjoy our message filtering system and the ability to highlight messages as important, perfect for work and school groups{% endblock description %}
+{% block description %}Join Dfreemedia and send messages to anyone you know, enjoy our message filtering system and the
+ability to highlight messages as important, perfect for work and school groups{% endblock description %}
 
 
 {% block content %}
@@ -484,7 +485,8 @@
                                                 type: "get",
                                                 url: "{% url 'userpage:get_user_by_id' %}",
                                                 data: {
-                                                    'pk': message.fields.message_sender
+                                                    'pk': message.fields
+                                                        .message_sender
                                                 },
                                                 dataType: "json",
                                                 async: false,
@@ -660,8 +662,10 @@
                         <input type="text" placeholder="Write your message..." id="inputMessage" style="display:none"
                             required />
                         <script>
-                            $(document).ready(function () {
-                                $('#inputMessage').emojioneArea()
+                            document.addEventListener('DOMContentLoaded', function () {
+                                window.addEventListener('load', function () {
+                                    $('#inputMessage').emojioneArea()
+                                })
                             })
                         </script>
                     </span>
