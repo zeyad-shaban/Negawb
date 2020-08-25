@@ -4,7 +4,7 @@
 
 
 {% block description %}
-    {{view_user.bio}}
+{{view_user.bio}}
 {% endblock description %}
 
 
@@ -18,8 +18,8 @@
     {% elif view_user == user %}
     <img src="{{view_user.avatar.url}}" alt="User Image" class="img-fluid float-left mr-4" width="170" height="170">
     {% else %}
-    <img src="/media/profile_images/DefaultUserImage.jpg" alt="User Image" class="img-fluid float-left mr-4"
-        width="170" height="170">
+    <img src="/media/profile_images/DefaultUserImage.jpg" alt="User Image" class="img-fluid float-left mr-4" width="170"
+        height="170">
     {% endif %}
 </a>
 <div class="">
@@ -76,12 +76,6 @@
     <input id="addFriendRequest" type="submit" name='submit' value="Add Friend" class="btn btn-success">
     {% endif %}
     {% endif %}
-</div>
-<div class="profile-img">
-</div>
-</div>
-</div>
-</div>
 </div>
 <!-- Adding Friend and Follow -->
 <script>
@@ -153,11 +147,14 @@
     {% if post.image %}
     <a href="{% url 'people:people' user.id %}">
         {% if post.user.who_see_avatar == 'everyone' %}
-        <img src="{{post.user.avatar.url}}" alt="User Image" width="64" height="64" class="mr-3 float-left" loading="lazy">
+        <img src="{{post.user.avatar.url}}" alt="User Image" width="64" height="64" class="mr-3 float-left"
+            loading="lazy">
         {% elif post.user.who_see_avatar == 'friends' and user in user.friends.all %}
-        <img src="{{post.user.avatar.url}}" alt="User Image" width="64" height="64" class="mr-3 float-left" loading="lazy">
+        <img src="{{post.user.avatar.url}}" alt="User Image" width="64" height="64" class="mr-3 float-left"
+            loading="lazy">
         {% elif post.user == user %}
-        <img src="{{post.user.avatar.url}}" alt="User Image" width="64" height="64" class="mr-3 float-left" loading="lazy">
+        <img src="{{post.user.avatar.url}}" alt="User Image" width="64" height="64" class="mr-3 float-left"
+            loading="lazy">
         {% else %}
         <img src="/media/profile_images/DefaultUserImage.jpg" alt="User Image" width="64" height="64"
             class="mr-3 float-left" loading="lazy">

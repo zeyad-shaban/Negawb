@@ -12,6 +12,7 @@
         display: none;
     }
 </style>
+<h1>Your Dfreemedia posts</h1>
 {% for post in posts %}
 {% if post.image %}
 <a href="{% url 'people:people' post.user.id %}">
