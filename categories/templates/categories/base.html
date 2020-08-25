@@ -74,119 +74,119 @@
                         aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-bell" style="font-size: 36px; color: rgb(209, 202, 202); cursor: pointer"></i>
 
-                    {% if notifications.count > 0 %}
-                    <span class="badge" style="color: white;"
-                        id="currNotificationsCount">{{ notifications.count }}</span>
-                    {% else %}
-                    <span class="badge" style="color: white;" id="currNotificationsCount"></span>
-                    {% endif %}
-                </div>
-                <li class="dropleft mt-5">
-                    <div class="dropdown-menu master-menu-dropdown" aria-labelledby="app-menu"
-                        id="notificationDropMenu">
-                        <audio id="notificationSound">
-                            <source src="{% static 'social/notificationsound.wav' %}" type="audio/wav">
-                            <source src="{% static 'social/notificationsound.wav' %}" type="audio/mp3">
-                            <source src="{% static 'social/notificationsound.wav' %}" type="audio/ogg">
-                            <source src="{% static 'social/notificationsound.wav' %}" type="audio/mpeg">
-                            Your browser does not support the audio element.
-                        </audio>
-                        <div id="notificationsList" data-url="{% url 'social:load_notifications' %}"
-                            data-getUserUrl="{% url 'userpage:get_user_by_id' %}" data-currUser="{{ user }}">
-                            <h4>Notifications</h4>
-                            <div class="dropdown-divider"></div>
-                            <ul class="list-group list-group-horizontal">
-                                <li class="list-group-item active notificationType" date-wantedType="all">All</li>
-                                {% if user.allow_important_friend_messages or user.allow_important_group_message or user.allow_normal_friend_message or user.allow_normal_group_message %}
-                                <li class="list-group-item notificationType" date-wantedType="messages">Messages
-                                </li>
-                                {% endif %}
-
-                                {% if user.allow_comment_message or user.allow_reply_message %}
-                                <li class="list-group-item notificationType" date-wantedType="society">
-                                    Comments/Replies
-                                </li>
-                                {% endif %}
-                            </ul>
-                            <ul class="list-group list-group-horizontal">
-                                {% if user.allow_invites %}
-                                <li class="list-group-item notificationType" date-wantedType="invites">Invites</li>
-                                {% endif %}
-
-                                {% if user.your_invites %}
-                                <li class="list-group-item notificationType" date-wantedType="your_invites">Your
-                                    invites
-                                </li>
-                                {% endif %}
-                            </ul>
-                            <div id="notificationsContainer">
-                                {% if notifications.count > 0 %}
-                                {% for notification in notifications %}
-                                <a href="{{ notification.url }}" style="text-decoration: none; color: black">
-                                    <div class="media" style="background: #F7F7F7;">
-                                        {% if notification.sender.who_see_avatar == 'everyone' %}
-                                        <img src="{{notification.sender.avatar.url}}" alt="User Image" width="50"
-                                            height="50">
-                                        {% elif notification.sender.who_see_avatar == 'friends' and user in notification.sender.friends.all %}
-                                        <img src="{{notification.sender.avatar.url}}" alt="User Image" width="50"
-                                            height="50">
-                                        {% elif notification.sender == user %}
-                                        <img src="{{notification.sender.avatar.url}}" alt="User Image" width="50"
-                                            height="50">
-                                        {% else %}
-                                        <img src="/media/profile_images/DefaultUserImage.jpg" alt="User Image"
-                                            width="50" height="64">
-                                        {% endif %}
-                                        <div class="media-body">
-                                            <h5 class="mt-0">{{ notification.sender.username }}</h5>
-                                            <p>{{ notification.content }}</p>
-                                        </div>
-                                    </div>
-                                </a>
-                                <hr>
-                                {% endfor %}
-                                {% endif %}
-                            </div>
-                            <div class="dropdown-divider"></div>
-                        </div>
+                        {% if notifications.count > 0 %}
+                        <span class="badge" style="color: white;"
+                            id="currNotificationsCount">{{ notifications.count }}</span>
+                        {% else %}
+                        <span class="badge" style="color: white;" id="currNotificationsCount"></span>
+                        {% endif %}
                     </div>
+                    <li class="dropleft mt-5">
+                        <div class="dropdown-menu master-menu-dropdown" aria-labelledby="app-menu"
+                            id="notificationDropMenu">
+                            <audio id="notificationSound">
+                                <source src="{% static 'social/notificationsound.wav' %}" type="audio/wav">
+                                <source src="{% static 'social/notificationsound.wav' %}" type="audio/mp3">
+                                <source src="{% static 'social/notificationsound.wav' %}" type="audio/ogg">
+                                <source src="{% static 'social/notificationsound.wav' %}" type="audio/mpeg">
+                                Your browser does not support the audio element.
+                            </audio>
+                            <div id="notificationsList" data-url="{% url 'social:load_notifications' %}"
+                                data-getUserUrl="{% url 'userpage:get_user_by_id' %}" data-currUser="{{ user }}">
+                                <h4>Notifications</h4>
+                                <div class="dropdown-divider"></div>
+                                <ul class="list-group list-group-horizontal">
+                                    <li class="list-group-item active notificationType" date-wantedType="all">All</li>
+                                    {% if user.allow_important_friend_messages or user.allow_important_group_message or user.allow_normal_friend_message or user.allow_normal_group_message %}
+                                    <li class="list-group-item notificationType" date-wantedType="messages">Messages
+                                    </li>
+                                    {% endif %}
+
+                                    {% if user.allow_comment_message or user.allow_reply_message %}
+                                    <li class="list-group-item notificationType" date-wantedType="society">
+                                        Comments/Replies
+                                    </li>
+                                    {% endif %}
+                                </ul>
+                                <ul class="list-group list-group-horizontal">
+                                    {% if user.allow_invites %}
+                                    <li class="list-group-item notificationType" date-wantedType="invites">Invites</li>
+                                    {% endif %}
+
+                                    {% if user.your_invites %}
+                                    <li class="list-group-item notificationType" date-wantedType="your_invites">Your
+                                        invites
+                                    </li>
+                                    {% endif %}
+                                </ul>
+                                <div id="notificationsContainer">
+                                    {% if notifications.count > 0 %}
+                                    {% for notification in notifications %}
+                                    <a href="{{ notification.url }}" style="text-decoration: none; color: black">
+                                        <div class="media" style="background: #F7F7F7;">
+                                            {% if notification.sender.who_see_avatar == 'everyone' %}
+                                            <img src="{{notification.sender.avatar.url}}" alt="User Image" width="50"
+                                                height="50">
+                                            {% elif notification.sender.who_see_avatar == 'friends' and user in notification.sender.friends.all %}
+                                            <img src="{{notification.sender.avatar.url}}" alt="User Image" width="50"
+                                                height="50">
+                                            {% elif notification.sender == user %}
+                                            <img src="{{notification.sender.avatar.url}}" alt="User Image" width="50"
+                                                height="50">
+                                            {% else %}
+                                            <img src="/media/profile_images/DefaultUserImage.jpg" alt="User Image"
+                                                width="50" height="64">
+                                            {% endif %}
+                                            <div class="media-body">
+                                                <h5 class="mt-0">{{ notification.sender.username }}</h5>
+                                                <p>{{ notification.content }}</p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <hr>
+                                    {% endfor %}
+                                    {% endif %}
+                                </div>
+                                <div class="dropdown-divider"></div>
+                            </div>
+                        </div>
+                    </li>
+                </div>
+                <li class="dropdown ml-3 dropleft">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                        aria-expanded="false"><i class="fas fa-sort-down"
+                            style="color: white; font-size: 36px;"></i><span class="caret"></span></a>
+                    <ul class="dropdown-menu float-right mr-100 mt-5">
+                        <li>
+                            <a class="btn" href="{% url 'faq' %}">FAQ</a>
+                        </li>
+                        <li>
+                            <a class="btn" href="{% url 'about' %}">About</a>
+                        </li>
+                        <!-- AddToAny BEGIN -->
+                        <a class="a2a_dd btn" href="https://www.addtoany.com/share"><i class="fas fa-share-alt mr-2"
+                                style="font-size: 24px; color: #35A0FE"></i><span>Share</span></a>
+                        <script async src="https://static.addtoany.com/menu/page.js"></script>
+                        <!-- AddToAny END -->
+                        <li>
+                            <a class="btn" href="{% url 'feedback' %}" class="mb-2">Report a problem</a>
+                        </li>
+                        <li>
+                            <a style="color: black; text-decoration: none;"
+                                href="{% url 'production:announcements' %}">Announcements </a>
+                        </li>
+                        {% if user.is_authenticated %}
+                        <li role="separator" class="divider"></li>
+                        <br>
+                        <form action="{% url 'logoutuser' %}" method="POST">
+                            {% csrf_token %}
+                            <input class="btn" type="submit" value="Logout">
+                        </form>
+                        {% endif %}
+                    </ul>
                 </li>
-        </div>
-        <li class="dropdown ml-3 dropleft">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                aria-expanded="false"><i class="fas fa-sort-down" style="color: white; font-size: 36px;"></i><span
-                    class="caret"></span></a>
-            <ul class="dropdown-menu float-right mr-100 mt-5">
-                <li>
-                    <a class="btn" href="{% url 'faq' %}">FAQ</a>
-                </li>
-                <li>
-                    <a class="btn" href="{% url 'about' %}">About</a>
-                </li>
-                <!-- AddToAny BEGIN -->
-                <a class="a2a_dd btn" href="https://www.addtoany.com/share"><i class="fas fa-share-alt mr-2"
-                        style="font-size: 24px; color: #35A0FE"></i><span>Share</span></a>
-                <script async src="https://static.addtoany.com/menu/page.js"></script>
-                <!-- AddToAny END -->
-                <li>
-                    <a class="btn" href="{% url 'feedback' %}" class="mb-2">Report a problem</a>
-                </li>
-                <li>
-                    <a style="color: black; text-decoration: none;"
-                        href="{% url 'production:announcements' %}">Announcements </a>
-                </li>
-                {% if user.is_authenticated %}
-                <li role="separator" class="divider"></li>
-                <br>
-                <form action="{% url 'logoutuser' %}" method="POST">
-                    {% csrf_token %}
-                    <input class="btn" type="submit" value="Logout">
-                </form>
-                {% endif %}
             </ul>
-        </li>
-        </ul>
-        {% block searchbar %} {% endblock searchbar %}
+            {% block searchbar %} {% endblock searchbar %}
         </div>
     </nav>
     <span id="message_area">
@@ -248,6 +248,7 @@
                                         class="mr-2" required>I agree
                                     to <a href="{% url 'termsandconditions' %}" target="_blank">Terms and
                                         Conditions</a>, <a href="{% url 'privacypolicy' %}" target="_blank">Privacy
+                                        Policy</a>, and <a href="{% url 'cookiepolicy' %}" target="_blank">Cookie
                                         Policy</a></small>
                                 <button type="submit" class="btn btn-success btn-block">Sign Up</button>
                             </form>

@@ -20,7 +20,7 @@
 
         <ul class="list-group">
             <li class="list-group-item" type="button" data-toggle="collapse" data-target="#fixProblem"
-                aria-expanded="false" aria-controls="fixProblem">Fix Problem</li>
+                aria-expanded="false" aria-controls="fixProblem">Fix a problem</li>
             <div class="collapse" id="fixProblem">
                 <div class="card card-body">
                     <div class="media">
@@ -109,6 +109,7 @@
                             </div>
                         </div>
                     </div>
+                    <div class="alert alert-warning">If your issue wasn't mentioned please report a problem <a href="{% url 'feedback' %}" target="_blank">here</a></div>
                 </div>
             </div>
 
@@ -310,7 +311,7 @@
                 </div>
             </div>
             <li class="list-group-item" type="button" data-toggle="collapse" data-target="#rules" aria-expanded="false"
-                aria-controls="rules">Rules</li>
+                aria-controls="rules">Privacy, cookies, and agreements</li>
             <div class="collapse" id="rules">
                 <div class="card card-body">
                     <div class="media">
@@ -330,6 +331,20 @@
                             <div class="media mt-3">
                                 <div class="media-body">
                                     <p><a href="{% url 'privacypolicy' %}" target="_blank">Privacy policy</a></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="media">
+                        <div class="media-body">
+                            <h4 class="mt-0">Cookie Policy</h4>
+                            <div class="media mt-3">
+                                <div class="media-body">
+                                    <ul>
+                                        <li>CSRF TOKEN, a must include cookie to prevent the data you post from getting leaked</li>
+                                        <li>Third party Google analytics cookie, to make google analyse our website so we can know if we are moving forward or backward</li>
+                                    </ul>
+                                    <p>For more information <a href="{% url 'cookiepolicy' %}" target="_blank">Cookie Policy</a></p>
                                 </div>
                             </div>
                         </div>
