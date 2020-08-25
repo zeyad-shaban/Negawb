@@ -64,7 +64,7 @@
                         {%  else %}
                         <form action="{% url 'people:addfriend' %}" method="GET" id="idAddFriendForm">
                             <input type="button" value="Add Friend" onclick="$(this).fadeOut()" name="addfriend,"
-                                class="btn btn-primary float-right" id='idAddFriendButton{{ view_user.id }}'>
+                                class="btn btn-success float-right" id='idAddFriendButton{{ view_user.id }}'>
                         </form>
                         {% endif %}
                     </div>
@@ -170,7 +170,7 @@
                         <br>
                         {% endif %}
                         <span class="small text-truncate">${ result.fields.bio }</span>
-                            <button type="submit" name="addfriend," class="btn btn-primary float-right addFriend" data-pk=${result.pk}>Add Friend</button>
+                            <button type="submit" name="addfriend," class="btn btn-success float-right addFriend" data-pk=${result.pk}>Add Friend</button>
                     </div>
                 </div>
             </li>
@@ -269,7 +269,7 @@
                         <span class="small text-truncate">${ user.fields.bio }</span>
                         <form action="/people/addfriend/${user.pk}" method="GET" id="idAddFriendForm">
                             <input type="button" value="Add Friend" name="addfriend,"
-                                class="btn btn-primary float-right id_addFriend" id='idAddFriendButton${user.pk}' data-pk="${user.pk}">
+                                class="btn btn-success float-right id_addFriend" id='idAddFriendButton${user.pk}' data-pk="${user.pk}">
                         </form>
                     </div>
                         </div>
