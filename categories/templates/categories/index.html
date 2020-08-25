@@ -6,7 +6,7 @@
 all
 of the great features we provide.{% endblock description %}
 
-{% block content %}
+{% block content %} 
 <ul class="list-group list-group-horizontal">
     {% if user.homepage_posts or not user.is_authenticated %}
     <li class="list-group-item active homepageView">Posts</li>
@@ -32,7 +32,7 @@ of the great features we provide.{% endblock description %}
     <div class="col mb-4">
         <div class="">
             <a href="{% url 'categories:view_category' category.id %}">
-                <img src="{{ category.image.url }}" class="card-img-top" alt="Couldn't upload image">
+                <img src="{{ category.image.url }}" class="card-img-top" alt="If you like those kinds of posts then {{ category.title }} is the perfect place for you, enter here and avoid getting distracted between other posts type">
             </a>
             <div class="card-body">
                 <h5 class="card-title">{{ category.title }}</h5>
@@ -51,6 +51,7 @@ of the great features we provide.{% endblock description %}
 <!-- Homepage posts -->
 {% if user.homepage_posts and user.is_authenticated or not user.is_authenticated %}
 <div class="homepageItem" id="postsContainer">
+    <h1 class="text-center">{{ user.homepage_posts.title }}</h1>
     <link rel="stylesheet" href="{% static 'social/emojionearea.min.css' %}">
     {% if user.is_authenticated %}
     <form method="POST" class="mb-4" enctype="multipart/form-data"

@@ -5,12 +5,7 @@
 {% block title %} {{user.username}} | Dfreemedia {% endblock title %}
 
 {% block description %}{{user.bio}}{% endblock description %}
-
-
 {% block content %}
-
-
-
 <img src="{{user.avatar.url}}" class="col-xl-2 col-lg-2 " alt="" width="200" height="200"
     style="max-width:200px; max-height:200px;">
 <link rel="stylesheet" href="{% static 'userpage/index.css' %}">
@@ -19,8 +14,6 @@
 <span class="ml-5">
     {% webpush_button with_class="btn btn-outline-info" %}
 </span>
-<br>
-<br>
 <br>
 
 <ul class="list-group list-group-horizontal row justify-content-center mb-5 mt-5">
