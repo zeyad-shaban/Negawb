@@ -9,11 +9,6 @@
 
 
 {% block content %}
-<style>
-    body {
-        background: #E9EBEE;
-    }
-</style>
 
 <a href="{% url 'people:people' view_user.id %}">
     {% if view_user.who_see_avatar == 'everyone' %}
