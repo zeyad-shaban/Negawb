@@ -5,6 +5,7 @@
 <div class="text-center mb-2 mr-5 ml-5 rounded" style="background: #1DA1F2">
     <h1 style="color: white;">{{category.title}}</h1>
 </div>
+<p class="text-center">{{ category.description }}</p>
 {% if user.is_authenticated %}
 <form method="POST" class="mb-4" enctype="multipart/form-data" action="{% url 'comments:create_post' category.id %}">
     {% csrf_token %}
@@ -25,8 +26,6 @@
 
     <input type="submit" value="Add Post" class="btn btn-success" id="addPostButton">
 </form>
-{% else %}
-<span class="alert alert-danger">Please login to add posts</span>
 {% endif %}
 
 {% for post in posts %}

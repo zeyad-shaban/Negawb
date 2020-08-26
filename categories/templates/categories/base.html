@@ -238,7 +238,14 @@
                         <div class="modal-body">
                             <div class="text-center">
                                 <h1>Join Dfreemedia</h1>
-                                <h4>First 1000 users will enter a givaway for 10$ as well as profile frame</h4>
+                                <h4>First 1000 users will enter a givaway for <b>10$</b> as well as profile frame <i class="fas fa-question-circle" id="moreInfoGivaway"></i></h4>
+                                <script>
+                                        document.addEventListener('DOMContentLoaded', function () {
+                                            window.addEventListener('load', function () {
+                                                $('#moreInfoGivaway').click(()=>alert('We will choose 5 lucky users to win 20$, winners will be announced once we hit 1500 users'))
+                                            });
+                                        });
+                                    </script>
                                 <p>Don't miss out this chance!</p>
                             </div>
                             <form method="POST" action="{% url 'signupuser' %}">
