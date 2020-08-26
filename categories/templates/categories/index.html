@@ -12,7 +12,6 @@ other features{% endblock description %}
     <li class="list-group-item active homepageView">Posts</li>
     <li class="list-group-item homepageView">Types</li>
     {% else %}
-    <li class="list-group-item homepageView">Posts</li>
     <li class="list-group-item active homepageView">Types</li>
     {% endif %}
 
@@ -22,9 +21,6 @@ other features{% endblock description %}
     {% endif %}
 </ul>
 <!-- categories -->
-{% if not user.homepage_posts and user.is_authenticated %}
-<small class="form-text text-muted">Your Distraction Free settings doesn't allow posts to show in homepage</small>
-{% endif %}
 <div class="homepageItem" id="categoryContainer" data-url="{% url 'userpage:get_user_by_id' %}" data-currUser="{{user}}"
     data-likeUrl="{% url 'comments:post_like_dislike' 1%}">
     <h1 class="text-center mb-3">Post types</h1>
@@ -53,9 +49,14 @@ other features{% endblock description %}
 <!-- Homepage posts -->
 {% if user.homepage_posts and user.is_authenticated or not user.is_authenticated %}
 <div class="homepageItem" id="postsContainer">
-    <h1 class="text-center">{{ user.homepage_posts.title }}</h1>
+    
+    {% if not user.is_authenticated %}
+        <h1 class="text-center">Homepage posts</h1>
+        <p>Homepage posts are currently set for every post type, you can change it from the Distraction Free menu if you are logged in</p>
+        <p>Also you have to login to add posts</p>
+        {% else %}
+        <h1 class="text-center">{{ user.homepage_posts.title }}</h1>
     <link rel="stylesheet" href="{% static 'social/emojionearea.min.css' %}">
-    {% if user.is_authenticated %}
     <form method="POST" class="mb-4" enctype="multipart/form-data"
         action="{% url 'comments:create_post' user.homepage_posts.id %}">
         {% csrf_token %}
@@ -76,9 +77,6 @@ other features{% endblock description %}
 
         <input type="submit" value="Add Post" class="btn btn-success" id="addPostButton">
     </form>
-    {% else %}
-    <span class="alert-danger">Please login to add posts</span>
-    <br>
     {% endif %}
     {% for post in homepage_posts %}
     <a href="{% url 'people:people' post.user.id %}">

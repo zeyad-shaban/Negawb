@@ -5,6 +5,13 @@
 <html lang="en">
 
 <head>
+    <style>
+        @media screen and (max-width: 776px) {
+            #notificationDropMenu {
+                max-width: 45vw;
+            }
+        }
+    </style>
     {% webpush_header %}
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script src="https://www.googletagmanager.com/gtag/js?id=UA-176113474-1"></script>
@@ -79,7 +86,7 @@
                         <span class="badge" style="color: white;" id="currNotificationsCount"></span>
                         {% endif %}
                     </div>
-                    <li class="dropleft mt-5">
+                    <li class="dropright mt-5">
                         <div class="dropdown-menu master-menu-dropdown" aria-labelledby="app-menu"
                             id="notificationDropMenu">
                             <audio id="notificationSound">
