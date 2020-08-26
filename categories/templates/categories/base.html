@@ -304,9 +304,7 @@
             window.addEventListener('load', function () {
                 function popSignUpForm() {
                     if (!$('#signupFloatForm').hasClass('show') && !$('#loginFloatForm')
-                        .hasClass('show') && window.location.href !=
-                        'https://www.dfreemedia.com/signup/' && window.location.href !=
-                        'https://www.dfreemedia.com/login/') {
+                        .hasClass('show') && !window.location.href.includes('dfreemedia.com/signup') && !window.location.href.includes('dfreemedia.com/login')) {
                         $('#signupFloatForm').modal('show')
                     }
                 }
@@ -315,7 +313,7 @@
                 }, 2700);
                 setInterval(() => {
                     popSignUpForm()
-                }, 7000);
+                }, 8000);
             });
         });
     </script>
