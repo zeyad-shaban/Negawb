@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function(){
             $('.homepageView').removeClass('active')
             $(this).addClass('active')
             $('.homepageItem').hide()
-            if ($(this).html() === 'Types') {
+            if ($(this).html() === 'Topics') {
                 $('#categoryContainer').show()
             } else if ($(this).html() === 'Posts') {
                 $('#postsContainer').show()
