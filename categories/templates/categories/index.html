@@ -77,7 +77,7 @@ other features{% endblock description %}
         <input type="submit" value="Add Post" class="btn btn-success" id="addPostButton">
     </form>
     {% else %}
-    <span class="alert alert-danger">Please login to add posts</span>
+    <span class="alert-danger">Please login to add posts</span>
 
     {% endif %}
     {% for post in homepage_posts %}
@@ -113,7 +113,7 @@ other features{% endblock description %}
             {% if post.image %}
             <img src="{{ post.image.url }}" alt="{{ post.user.username }}" height="250" width="40%">
             {% elif post.post_file %}
-            <video width="400" height="320" controls>
+            <video width="100%"  controls class="col-md-10 col-lg-8">
                 <source src="{{ post.post_file.url }}" type="video/mp4">
                 <source src="{{ post.post_file.url }}" type="video/ogg">
                 Your browser does not support the video tag.
