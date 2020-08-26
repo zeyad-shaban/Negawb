@@ -252,6 +252,8 @@ other features{% endblock description %}
     {% if not user.hide_posts_in_homepage %}
     <!-- FRIENDS POSTS -->
     <div id="friendsPosts" class="homepageItem">
+
+        {% for post in friends_posts %}
         <a href="{% url 'people:people' post.user.id %}">
             {% if post.user.who_see_avatar == 'everyone' %}
             <img src="{{post.user.avatar.url}}" alt="{{ post.user.username }}" width="64" height="64"

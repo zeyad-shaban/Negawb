@@ -14,11 +14,12 @@ def add_variable_to_context(request):
             # Notifications
             notifications = Notification.objects.filter(
                 receiver=request.user).order_by('-date')
+            all_categories = []
         else:
             todos = []
             done_todos = []
             notifications = []
-            categories = Category.objects.all()
+            all_categories = Category.objects.all()
     except NameError:
         done_todos = []
         todos = []
@@ -29,5 +30,5 @@ def add_variable_to_context(request):
         'todo_form': TodoForm,
         'done_todos': done_todos,
         'notifications': notifications,
-        'categories': categories,
+        'all_categories': all_categories,
     }
