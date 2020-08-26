@@ -1,23 +1,4 @@
 document.addEventListener('DOMContentLoaded', function () {
-    window.addEventListener('load', function () {
-        function displayNav() {
-            if ($(window).width() < 562) {
-                $('#Userusername').html('')
-            }
-            if ($(window).width() > 562) {
-                $('#Userusername').html($('#Userusername').attr('data-username'))
-            }
-            if ($(window).width() < 526) {
-                $('#findFriends').html('<i class="fas fa-user-plus" style="font-size: 36px;"></i>')
-            }
-            if ($(window).width() > 526) {
-                $('#findFriends').html('Find Friends')
-            }
-        }
-        displayNav();
-        $(window).resize(function (e) {
-            displayNav();
-        })
         $('.todoNote').css('display', 'none')
         $('.todoItem').on('click', function (event) {
             // $('.todoNote').toggle()

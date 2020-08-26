@@ -31,34 +31,39 @@
 <body>
     {% block chat_frame %} {% endblock chat_frame %}
     <nav
-        class="navbar navbar-expand-xl navbar-expand-lg navbar-expand-md navbar-expand-sm navbar-expand navbar-dark bg-dark {% if user.fixed_navbar or not user.is_authenticated %}sticky-top{% endif %}">
+        class="navbar navbar-expand-xl navbar-expand-lg navbar-expand-md navbar-expand-sm navbar-dark bg-dark {% if user.fixed_navbar or not user.is_authenticated %}sticky-top{% endif %}">
         <a class="navbar-brand" href="{% url 'home' %}">
             <img src="{% static 'categories/favicon.jpg' %}" width="35" height="30" alt="Website Logo" loading="lazy"
                 title="Dfreemedia">
         </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
         {% if user.is_authenticated %}
-        <li class="nav-item">
-            <div><a href="{% url 'userpage:home' %}" title="Profile">
-                    <span>
-                        <img id="id_nav_avatar" src="{{ user.avatar.url }}"
-                            class="{% if user.id <= 1000 %}oldUser{% endif %}" alt="">
-                        <span id="Userusername" data-username="{{user.username}}">{{user.username}}
-                        </span>
-                    </span>
-                </a>
-            </div>
-        </li>
         {% endif %}
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto ml-">
                 <li class="nav-item">
-                    <a href="{% url 'people:all_people' %}"><span style="color:rgb(255, 255, 255);" id="findFriends">Find
+                    <div><a href="{% url 'userpage:home' %}" title="Profile">
+                            <span>
+                                <img id="id_nav_avatar" src="{{ user.avatar.url }}"
+                                    class="{% if user.id <= 1000 %}oldUser{% endif %}" alt="">
+                                <span id="Userusername" data-username="{{user.username}}">{{user.username}}
+                                </span>
+                            </span>
+                        </a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'people:all_people' %}"><span style="color:rgb(255, 255, 255);"
+                            id="findFriends"><i class="fas fa-user-plus mr-1" style="font-size: 24px;"></i>Find
                             Friends</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="{% url 'chat' %}" title="Chat">
-                        <i class="fas fa-comment-alt" style="font-size:36px; color: rgb(255, 255, 255)"></i>
+                        <i class="fas fa-comment-alt mr-1" style="font-size:24px; color: rgb(255, 255, 255)"></i><span>Chat</span>
                     </a>
                 </li>
                 <div class="btn-group">
