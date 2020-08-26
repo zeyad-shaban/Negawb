@@ -67,7 +67,7 @@ def home(request):
     else:
         friends_posts = None
         followed_posts = None
-        homepage_posts = Category.objects.get(title = 'Funny posts').post_set.all().order_by('-post_date')
+        homepage_posts = Post.objects.all().order_by('-post_date')
     return render(request, 'categories/index.html', {'categories': categories, 'friends_posts': friends_posts, 'followed_posts': followed_posts, 'homepage_posts': homepage_posts, 'followed_users': followed_users})
 
 

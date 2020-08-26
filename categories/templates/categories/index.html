@@ -78,7 +78,7 @@ other features{% endblock description %}
     </form>
     {% else %}
     <span class="alert-danger">Please login to add posts</span>
-
+    <br>
     {% endif %}
     {% for post in homepage_posts %}
     <a href="{% url 'people:people' post.user.id %}">
