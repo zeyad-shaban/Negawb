@@ -16,7 +16,7 @@
 {% for post in posts %}
 {% if post.image %}
 <a href="{% url 'people:people' post.user.id %}">
-    <img src="{{ post.user.avatar.url }}" alt="{{ post.user.username }}" width="64" height="64" class="mr-3 float-left" loading="lazy">
+    <img src="{{ post.user.avatar.url }}" alt="{{ post.user.username }}" width="64" height="64" class="mr-3 float-left {% if user.id <= 1000 %}oldUser{% endif %}" loading="lazy">
     <span>{{post.user.username}}</span>
 </a>
 <div class="mb-3">
@@ -37,7 +37,7 @@
     <div class="card-header">
         <a href="{% url 'people:people' post.user.id %}">
             <img src="{{ post.user.avatar.url }}" alt="{{ post.user.username }}" width="64" height="64"
-                class="mr-3 float-left">
+                class="mr-3 float-left {% if user.id <= 1000 %}oldUser{% endif %}">
             {{post.user.username}}
         </a>
     </div>
@@ -53,7 +53,7 @@
 <!-- File post -->
 {% elif post.post_file %}
 <a href="{% url 'people:people' post.user.id %}">
-    <img src="{{ post.user.avatar.url }}" alt="{{ post.user.username }}" width="64" height="64" class="mr-3 float-left">
+    <img src="{{ post.user.avatar.url }}" alt="{{ post.user.username }}" width="64" height="64" class="mr-3 float-left {% if user.id <= 1000 %}oldUser{% endif %}">
     <span>{{post.user.username}}</span>
 </a>
 <div class="mb-3">

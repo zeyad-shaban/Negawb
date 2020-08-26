@@ -69,3 +69,7 @@ nav li a:hover {
         padding-left: 20px;
     }
 }
+
+.oldUser {
+    border: 5px groove gold;
+}

@@ -23,7 +23,7 @@ highlighting messages as important, perfect for managing work and school groups{
         <div id="profile">
             <div class="wrap">
                 <a href="{% url 'userpage:home' %}">
-                    <img src="{{ user.avatar.url }}" class="online" alt="" />
+                    <img src="{{ user.avatar.url }}" class="online {% if user.id <= 1000 %}oldUser{% endif %}" alt="" />
                 </a>
                 <p>{{ user.username }}</p>
             </div>
@@ -109,14 +109,14 @@ highlighting messages as important, perfect for managing work and school groups{
                                             outputMessages += `
                                             <p class="float-right" style="font-size:1.25em">${user.username}</p>
                                             <li class="replies">
-                                    <img src="${sender_avatar}" alt="" width="22" height="22"/>
+                                    <img src="${sender_avatar}" alt="" width="22" height="22" class="{% if user.id <= 1000 %}oldUser{% endif %}"/>
                                     <p ${messageStyle}>${message.fields.message}</p>
                                 </li>`
                                         } else {
                                             sender_avatar = "{{user.avatar.url}}"
                                             outputMessages += `
                                             <li class="sent">
-                        <img src="{{user.avatar.url}}" alt="" width="22" height="22"/>
+                        <img src="{{user.avatar.url}}" alt="" width="22" height="22" class="{% if user.id <= 1000 %}oldUser{% endif %}"/>
                         <p id="messageContent" data-currMessagesCount="${chat_messages.length}" ${messageStyle}>${message.fields.message}</p>
                     </li>
                                             `
@@ -155,16 +155,16 @@ highlighting messages as important, perfect for managing work and school groups{
                                                 <a href="{% url 'people:people' friend.id %}">
                                                     {% if friend.who_see_avatar == 'everyone' %}
                                                     <img src="{{friend.avatar.url}}" alt="User Image" width="64"
-                                                        height="64">
+                                                        height="64" class="{% if user.id <= 1000 %}oldUser{% endif %}">
                                                     {% elif friend.who_see_avatar == 'friends' and user in friend.friends.all %}
                                                     <img src="{{friend.avatar.url}}" alt="User Image" width="64"
-                                                        height="64">
+                                                        height="64" class="{% if user.id <= 1000 %}oldUser{% endif %}">
                                                     {% elif friend == user %}
                                                     <img src="{{friend.avatar.url}}" alt="User Image" width="64"
-                                                        height="64">
+                                                        height="64" class="{% if user.id <= 1000 %}oldUser{% endif %}">
                                                     {% else %}
                                                     <img src="/media/profile_images/DefaultUserImage.jpg"
-                                                        alt="User Image" width="64" height="64">
+                                                        alt="User Image" width="64" height="64" class="{% if user.id <= 1000 %}oldUser{% endif %}">
                                                     {% endif %}
                                                 </a>
                                             </div>
@@ -268,7 +268,7 @@ highlighting messages as important, perfect for managing work and school groups{
                                                                                 <a href="/people/${result.pk }">
                                                                                     {% if result.fields.who_see_avatar == 'everyone' %}
                                                                                     <img src="${ result.fields.avatar.url }" alt="${ result.fields.username }"
-                                                                                    class="img-fluid rounded-circle d-block mx-auto" height="73" width="73">
+                                                                                    class="img-fluid rounded-circle d-block mx-auto {% if user.id <= 1000 %}oldUser{% endif %}" height="73" width="73">
                                                                                     {% else %}
                                                                                     <img src="/media/profile_images/DefaultUserImage.jpg" alt="${ result.fields.username }"
                                                                                     class="img-fluid rounded-circle d-block mx-auto" height="73" width="73">
@@ -348,19 +348,19 @@ highlighting messages as important, perfect for managing work and school groups{
                         {% endif %}
                         {% if friend.who_see_avatar == 'everyone' %}
                         <img src="{{friend.avatar.url}}" alt="User Image"
-                            class="img-fluid rounded-circle d-block mx-auto" height="50" width="50"
+                            class="img-fluid rounded-circle d-block mx-auto {% if user.id <= 1000 %}oldUser{% endif %}" height="50" width="50"
                             style="max-height: 50px;">
                         {% elif friend.who_see_avatar == 'friends' and user in friend.friends.all %}
                         <img src="{{friend.avatar.url}}" alt="User Image"
-                            class="img-fluid rounded-circle d-block mx-auto" height="50" width="50"
+                            class="img-fluid rounded-circle d-block mx-auto {% if user.id <= 1000 %}oldUser{% endif %}" height="50" width="50"
                             style="max-height: 50px;">
                         {% elif friend == user %}
                         <img src="{{friend.avatar.url}}" alt="User Image"
-                            class="img-fluid rounded-circle d-block mx-auto" height="50" width="50"
+                            class="img-fluid rounded-circle d-block mx-auto {% if user.id <= 1000 %}oldUser{% endif %}" height="50" width="50"
                             style="max-height: 50px;">
                         {% else %}
                         <img src="/media/profile_images/DefaultUserImage.jpg" alt="User Image"
-                            class="img-fluid rounded-circle d-block mx-auto" height="50" width="50"
+                            class="img-fluid rounded-circle d-block mx-auto {% if user.id <= 1000 %}oldUser{% endif %}" height="50" width="50"
                             style="max-height: 50px;">
                         {% endif %}
                         <div class="meta">
@@ -393,7 +393,7 @@ highlighting messages as important, perfect for managing work and school groups{
                                     $('#friendProfile').html(
                                         // ! STATIC URL todo
                                         `<a href="/people/${response.friend.id}/">
-                                            <img src="${friend_image}" width="40" height="40"/>
+                                            <img src="${friend_image}" width="40" height="40" class="{% if user.id <= 1000 %}oldUser{% endif %}"/>
                                             </a>
                                             <p id="currChat" data-pk="${response.friend.id}" data-action="friend">${response.friend.username}</p>`
                                     )
@@ -415,7 +415,7 @@ highlighting messages as important, perfect for managing work and school groups{
                                         } else {
                                             outputMessages += `
                                             <li class="sent">
-                        <img src="{{user.avatar.url}}" alt="" width="22" height="22"/>
+                        <img src="{{user.avatar.url}}" alt="" width="22" height="22" class="{% if user.id <= 1000 %}oldUser{% endif %}"/>
                         <p id="messageContent" data-currMessagesCount="${chat_messages.length}" ${messageStyle}>${message.fields.message}</p>
                     </li>
                                             `
@@ -474,7 +474,7 @@ highlighting messages as important, perfect for managing work and school groups{
                                         $('#friendProfile').html(
                                             // ! STATIC URL todo
                                             `<a href="${chat_url}">
-                                                <img src="${senderAvatar}" id="groupImage" data-img="${senderAvatar}" width="40" height="40"/>
+                                                <img src="${senderAvatar}" id="groupImage" data-img="${senderAvatar}" width="40" height="40" class="{% if user.id <= 1000 %}oldUser{% endif %}"/>
                                                 </a>
                                                 <p id="currChat" data-pk="${pk}" data-action="${action}">${chat_label}</p>`
                                         )
@@ -509,7 +509,7 @@ highlighting messages as important, perfect for managing work and school groups{
                                             } else {
                                                 outputMessages += `
                                             <li class="sent">
-                        <img src="{{user.avatar.url}}" alt="" width="22" height="22"/>
+                        <img src="{{user.avatar.url}}" alt="" width="22" height="22" class="{% if user.id <= 1000 %}oldUser{% endif %}"/>
                         <p id="messageContent" data-currMessagesCount="${chat_messages.length}" ${messageStyle}>${message.fields.message}</p>
                     </li>
                                             `
