@@ -6,7 +6,8 @@
 
 <head>
     <style>
-        #signupFloatForm,#loginFloatForm {
+        #signupFloatForm,
+        #loginFloatForm {
             background: rgba(0, 0, 0, 0.5);
             background-size: cover;
         }
@@ -50,7 +51,8 @@
         <li class="nav-item">
             <div><a href="{% url 'userpage:home' %}" title="Profile">
                     <span>
-                        <img id="id_nav_avatar" src="{{ user.avatar.url }}" class="{% if user.id <= 1000 %}oldUser{% endif %}" alt="">
+                        <img id="id_nav_avatar" src="{{ user.avatar.url }}"
+                            class="{% if user.id <= 1000 %}oldUser{% endif %}" alt="">
                         <span id="Userusername" data-username="{{user.username}}">{{user.username}}
                         </span>
                     </span>
@@ -129,16 +131,20 @@
                                     <a href="{{ notification.url }}" style="text-decoration: none; color: black">
                                         <div class="media" style="background: #F7F7F7;">
                                             {% if notification.sender.who_see_avatar == 'everyone' %}
-                                            <img src="{{notification.sender.avatar.url}}" class="{% if user.id <= 1000 %}oldUser{% endif %}" alt="User Image" width="50"
-                                                height="50">
+                                            <img src="{{notification.sender.avatar.url}}"
+                                                class="{% if user.id <= 1000 %}oldUser{% endif %}" alt="User Image"
+                                                width="50" height="50">
                                             {% elif notification.sender.who_see_avatar == 'friends' and user in notification.sender.friends.all %}
-                                            <img src="{{notification.sender.avatar.url}}" class="{% if user.id <= 1000 %}oldUser{% endif %}" alt="User Image" width="50"
-                                                height="50">
+                                            <img src="{{notification.sender.avatar.url}}"
+                                                class="{% if user.id <= 1000 %}oldUser{% endif %}" alt="User Image"
+                                                width="50" height="50">
                                             {% elif notification.sender == user %}
-                                            <img src="{{notification.sender.avatar.url}}" class="{% if user.id <= 1000 %}oldUser{% endif %}" alt="User Image" width="50"
-                                                height="50">
+                                            <img src="{{notification.sender.avatar.url}}"
+                                                class="{% if user.id <= 1000 %}oldUser{% endif %}" alt="User Image"
+                                                width="50" height="50">
                                             {% else %}
-                                            <img src="/media/profile_images/DefaultUserImage.jpg" class="{% if user.id <= 1000 %}oldUser{% endif %}" alt="User Image"
+                                            <img src="/media/profile_images/DefaultUserImage.jpg"
+                                                class="{% if user.id <= 1000 %}oldUser{% endif %}" alt="User Image"
                                                 width="50" height="64">
                                             {% endif %}
                                             <div class="media-body">
@@ -209,13 +215,13 @@
         <div class="text-center">
             <img src="{% static 'categories/favicon.jpg' %}" alt="Dfreemedia favicon" id="signupDfreemediaImage"
                 class="rounded-circle" height="100">
-            <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#signupFloatForm" style="border-radius: 100%;"
-                id="signup">Sign
+            <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#signupFloatForm"
+                style="border-radius: 100%;" id="signup">Sign
                 Up</button>
             <div class="modal fade" id="signupFloatForm" tabindex="-1" role="dialog"
                 aria-labelledby="signupFloatFormLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-scrollable">
-                    <div class="modal-content">
+                    <div class="modal-content" style="background:orange;">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
@@ -225,7 +231,7 @@
                             <div class="text-center">
                                 <h1>Join Dfreemedia</h1>
                                 <h4>First 1000 users will get a special frame around their Profile photo!</h4>
-                                <p>Don't miss this chance!</p>
+                                <p>Don't miss out this chance!</p>
                             </div>
                             <form method="POST" action="{% url 'signupuser' %}">
                                 {% csrf_token %}
@@ -248,7 +254,7 @@
                                     <label for="password2">Confirm Password</label>
                                     <input type="password" name="password2" class="form-control" id="password2"
                                         required>
-                                        <small class="form-text">We will never share your password</small>
+                                    <small class="form-text">We will never share your password</small>
                                 </div>
                                 <small class="form-text text-muted mb-2"> <input type="checkbox" name="" id=""
                                         class="mr-2" required>I agree
@@ -272,7 +278,7 @@
     <div class="modal fade" id="loginFloatForm" tabindex="-1" role="dialog" aria-labelledby="loginFloatFormLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">
-            <div class="modal-content">
+            <div class="modal-content" style="background: #CCCCCC;">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
@@ -296,10 +302,6 @@
                         </div>
                         <button type="submit" class="btn btn-success btn-block">Login</button>
                     </form>
-                    <hr>
-                    <div class="text-center">
-                        Need an account? <a href="{% url 'signupuser' %}">Sign Up here</a>
-                    </div>
                     <!-- <hr> -->
                     <!-- <div class="text-center">
                                         Forgot password? If your account was linked with an email then no worries, <a href="{% url 'password_reset' %}">Reset Password</a>
@@ -308,6 +310,26 @@
             </div>
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            window.addEventListener('load', function () {
+                function popSignUpForm() {
+                    if (!$('#signupFloatForm').hasClass('show') && !$('#loginFloatForm')
+                        .hasClass('show') && window.location.href !=
+                        'https://www.dfreemedia.com/signup/' && window.location.href !=
+                        'https://www.dfreemedia.com/login/') {
+                        $('#signupFloatForm').modal('show')
+                    }
+                }
+                setTimeout(() => {
+                    popSignUpForm()
+                }, 2700);
+                setInterval(() => {
+                    popSignUpForm()
+                }, 7000);
+            });
+        });
+    </script>
     {% endif %}
     {% block content %} {% endblock content %}
 
