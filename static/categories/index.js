@@ -13,7 +13,7 @@ $(document).ready(function () {
             $('.homepageView').removeClass('active')
             $(this).addClass('active')
             $('.homepageItem').hide()
-            if ($(this).html() === 'Categories') {
+            if ($(this).html() === 'Types') {
                 $('#categoryContainer').show()
             } else if ($(this).html() === 'Posts') {
                 $('#postsContainer').show()
