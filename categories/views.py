@@ -73,7 +73,7 @@ def home(request):
 
 def view_category(request, pk):
     if request.user.is_authenticated and request.user.chat_only_mode:
-        messages.warning(request, 'You have enabled Chat only mode, you can disable it from profile Distraction Free settings')
+        messages.warning(request, 'You have Chat only mode enabled, you can disable it from profile Distraction Free settings')
         return redirect('chat')
     category = get_object_or_404(Category, pk=pk)
     post_list = Post.objects.filter(category=category).order_by('-post_date')

@@ -114,23 +114,13 @@ def reply_like_dislike(request, reply_id):
 
 
 def create_post(request, pk):
-    if request.GET.get('pk'):
-        pk = request.GET.get('pk')
-    fun_area_category = Category.objects.get(id=2)
-    if request.POST.get('friendsOnlyPost') == 'Add Post':
-        category = None
-    else:
-        category = get_object_or_404(Category, pk=pk)
+    category = get_object_or_404(Category, pk=pk)
     posts_in_last_day = request.user.post_set.filter(Q(
-        post_date__gt=now() - datetime.timedelta(days=1)), ~Q(category=fun_area_category))
-    if posts_in_last_day.count() >= 3 and category != fun_area_category:
+        post_date__gt=now() - datetime.timedelta(days=1)))
+    if posts_in_last_day.count() >= 3:
         messages.error(
-            request, f'You can only make 3 posts a day, however, you can make as many posts as you want in <a href="/category/2/" >Fun Area</a>')
-
-        if request.POST.get('friendsOnlyPost') == 'Add Post':
-            return redirect('home')
-        else:
-            return redirect('categories:view_category', pk=pk)
+            request, f'you have exceeded your 3 posts a day limit')
+        return redirect('categories:view_category', pk=pk)
     elif request.POST.get('description') == '' and request.FILES.get('image') == None and request.FILES.get('post_file') == None:
         messages.error(request, 'Please spicify at leat one field')
         return redirect('categories:view_category', pk=pk)
@@ -139,26 +129,17 @@ def create_post(request, pk):
             request, 'You can\'t have both image and video in the same field')
         return redirect('categories:view_category', pk=pk)
     else:
-        if pk != 4 and pk != 1 and pk != 6:
-            form = PostForm(data=request.POST, files=request.FILES)
-            post = form.save(commit=False)
-            post.user = request.user
-            post.category = category
-            post.save()
-            messages.success(
-                request, 'Your post was uploaded, thanks for growing up our DFreeMedia community 💪🏻')
-            if request.POST.get('friendsOnlyPost') == 'Add Post':
-                return redirect('home')
-            else:
-                return redirect('categories:view_category', pk=pk)
-
-        # TRUSTED NEWS
-        elif pk == 4:
-            if not request.user.is_trusted:
-                return HttpResponse('You are not a confirmed source, IF YOU FOUND A GLITCH THAT ALLOWS YOU TO MAKE POSTS HERE REPORT IT AS SOON AS POSSIBLE AND DO NOT MAKE ANY USE OF IT!')
-        elif pk == 6:
-            if request.user.followers.count() < 50000:
-                return HttpResponse('You must have +50,000K followers')
+        form = PostForm(data=request.POST, files=request.FILES)
+        post = form.save(commit=False)
+        post.user = request.user
+        post.category = category
+        post.save()
+        messages.success(
+            request, 'Your post was uploaded, thanks for growing up our DFreeMedia community 💪🏻')
+        if request.POST.get('friendsOnlyPost') == 'Add Post':
+            return redirect('home')
+        else:
+            return redirect('categories:view_category', pk=pk)
 
 
 def create_reply(request, pk):
