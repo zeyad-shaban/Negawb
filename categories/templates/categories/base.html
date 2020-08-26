@@ -5,29 +5,18 @@
 <html lang="en">
 
 <head>
-    <style>
-        #signupFloatForm,
-        #loginFloatForm {
-            background: rgba(0, 0, 0, 0.5);
-            background-size: cover;
-        }
-    </style>
     {% webpush_header %}
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script src="https://www.googletagmanager.com/gtag/js?id=UA-176113474-1"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            window.addEventListener('load', function () {
-                window.dataLayer = window.dataLayer || [];
+        window.dataLayer = window.dataLayer || [];
 
-                function gtag() {
-                    dataLayer.push(arguments);
-                }
-                gtag('js', new Date());
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
 
-                gtag('config', 'UA-176113474-1');
-            })
-        })
+        gtag('config', 'UA-176113474-1');
     </script>
     <script async src="https://kit.fontawesome.com/78f2495e06.js" crossorigin="anonymous"></script>
     <script async src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
