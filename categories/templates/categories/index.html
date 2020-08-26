@@ -10,43 +10,44 @@ other features{% endblock description %}
 <ul class="list-group list-group-horizontal">
     {% if user.homepage_posts or not user.is_authenticated %}
     <li class="list-group-item active homepageView">Posts</li>
-    <li class="list-group-item homepageView">Categories</li>
+    <li class="list-group-item homepageView">Types</li>
     {% else %}
     <li class="list-group-item homepageView">Posts</li>
-    <li class="list-group-item active homepageView">Categories</li>
+    <li class="list-group-item active homepageView">Types</li>
     {% endif %}
+    
+    {% if not user.hide_posts_in_homepage and user.is_authenticated %}
     <li class="list-group-item homepageView" id="toggleFriendsPosts">Friends Posts</li>
     <li class="list-group-item homepageView" style="overflow: hidden">Followed Posts</li>
+    {% endif %}
 </ul>
 <!-- categories -->
 {% if not user.homepage_posts and user.is_authenticated %}
 <small class="form-text text-muted">Your Distraction Free settings doesn't allow posts to show in homepage</small>
 {% endif %}
-<div class="row row-cols-1 row-cols-md-3 homepageItem" id="categoryContainer"
-    data-url="{% url 'userpage:get_user_by_id' %}" data-currUser="{{user}}"
+<div class="homepageItem" id="categoryContainer" data-url="{% url 'userpage:get_user_by_id' %}" data-currUser="{{user}}"
     data-likeUrl="{% url 'comments:post_like_dislike' 1%}">
-    {% for category in categories %}
-    {% if not category.id == 1 %}
-    {% if not category.id == 7 %}
-    {% if not category in user.blocked_categories.all %}
-    <div class="col mb-4">
-        <div class="">
-            <a href="{% url 'categories:view_category' category.id %}">
-                <img src="{{ category.image.url }}" class="card-img-top"
-                    alt="If you like those kinds of posts then {{ category.title }} is the perfect place for you, enter here and avoid getting distracted between other posts type">
-            </a>
-            <div class="card-body">
-                <h5 class="card-title">{{ category.title }}</h5>
-                {% if category.description %}
-                <p class="card-text">{{ category.description|safe }}</p>
-                {% endif %}
+    <h1 class="text-center mb-3">Post types</h1>
+    <p>We divide posts according to their type for easier post searching method, you can block any type from the
+        Distraction Free menu in your <a href="{% url 'userpage:home' %}">profile</a> for you not getting distracted.
+    </p>
+    <div class="container-fluid">
+        <div class="row">
+            {% for category in categories %}
+            <div class="col-md-4">
+                <a href="{% url 'categories:view_category' category.id %}" class="text-white btn">
+                    <div class="card text-white bg-{{category.display}} mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ category.title }}</h5>
+                            <p class="card-text">{{category.description}}.</p>
+                            <a href="{% url 'categories:view_category' category.id %}" class="btn btn-dark">Visit</a>
+                        </div>
+                    </div>
+                </a>
             </div>
+            {% endfor %}
         </div>
     </div>
-    {% endif %}
-    {% endif %}
-    {% endif %}
-    {% endfor %}
 </div>
 
 <!-- Homepage posts -->
@@ -456,13 +457,17 @@ other features{% endblock description %}
     {% for followed in followed_users %}
     <a class="text-center showFollowed" data-pk="{{ followed.id }}">
         {% if followed.who_see_avatar == 'everyone' %}
-        <img src="{{followed.avatar.url}}" class="{% if user.id <= 1000 %}oldUser{% endif %}" alt="User Image" width="64" height="64">
+        <img src="{{followed.avatar.url}}" class="{% if user.id <= 1000 %}oldUser{% endif %}" alt="User Image"
+            width="64" height="64">
         {% elif followed.who_see_avatar == 'friends' and user in followed.friends.all %}
-        <img src="{{followed.avatar.url}}" class="{% if user.id <= 1000 %}oldUser{% endif %}" alt="User Image" width="64" height="64">
+        <img src="{{followed.avatar.url}}" class="{% if user.id <= 1000 %}oldUser{% endif %}" alt="User Image"
+            width="64" height="64">
         {% elif followed == user %}
-        <img src="{{followed.avatar.url}}" class="{% if user.id <= 1000 %}oldUser{% endif %}" alt="User Image" width="64" height="64">
+        <img src="{{followed.avatar.url}}" class="{% if user.id <= 1000 %}oldUser{% endif %}" alt="User Image"
+            width="64" height="64">
         {% else %}
-        <img src="/media/profile_images/DefaultUserImage.jpg" class="{% if user.id <= 1000 %}oldUser{% endif %}" alt="User Image" width="64" height="64">
+        <img src="/media/profile_images/DefaultUserImage.jpg" class="{% if user.id <= 1000 %}oldUser{% endif %}"
+            alt="User Image" width="64" height="64">
         {% endif %}
     </a>
     <p>{{followed.username}}</p>
@@ -648,17 +653,5 @@ other features{% endblock description %}
 {% endif %}
 </div>
 <script src="{% static 'categories/index.js' %}"></script>
-<style>
-    .homepageView {
-        cursor: pointer;
-        background: yellow;
-    }
-
-    @media screen and (max-width: 382px) {
-        .homepageView {
-            margin-left: 0px;
-            padding-left: 0px;
-        }
-    }
-</style>
+<link rel="stylesheet" href="{% static 'categories/index.css' %}">
 {% endblock content %}

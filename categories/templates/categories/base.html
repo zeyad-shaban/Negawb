@@ -52,17 +52,14 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto ml-">
                 <li class="nav-item">
-                    <a href="{% url 'people:all_people' %}"><span style="color:white;" id="findFriends">Find
+                    <a href="{% url 'people:all_people' %}"><span style="color:rgb(255, 255, 255);" id="findFriends">Find
                             Friends</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="{% url 'chat' %}" title="Chat">
-                        <i class="fa fa-comments" style="font-size:36px;"></i>
+                        <i class="fas fa-comment-alt" style="font-size:36px; color: rgb(255, 255, 255)"></i>
                     </a>
-                    <button type="button" class="btn btn-link" data-toggle="modal" data-target="#todos" title="Tasks">
-                        <i class="fas fa-clipboard-check" style="font-size:36px; color:white"></i>
-                    </button>
                 </li>
                 <div class="btn-group">
                     <div title="Notifications" class="master-menu-right-item" id="app-menu" data-toggle="dropdown"
@@ -162,6 +159,15 @@
                         <li>
                             <a class="btn" href="{% url 'about' %}">About</a>
                         </li>
+
+                        {% if user.is_authenticated %}
+                        <li>
+                            <button type="button" class="btn" data-toggle="modal" data-target="#todos" title="Tasks">
+                                <i class="fas fa-list-ul mr-1" style="font-size: 24px; color:black"></i><span>To
+                                    Do</span>
+                            </button>
+                        </li>
+                        {% endif %}
                         <!-- AddToAny BEGIN -->
                         <a class="a2a_dd btn" href="https://www.addtoany.com/share"><i class="fas fa-share-alt mr-2"
                                 style="font-size: 24px; color: #35A0FE"></i><span>Share</span></a>
@@ -219,7 +225,7 @@
                         <div class="modal-body">
                             <div class="text-center">
                                 <h1>Join Dfreemedia</h1>
-                                <h4>First 1000 users will get a special frame around their Profile photo!</h4>
+                                <h4>First 1000 users will enter a givaway for 10$ as well as profile frame</h4>
                                 <p>Don't miss out this chance!</p>
                             </div>
                             <form method="POST" action="{% url 'signupuser' %}">
@@ -304,16 +310,14 @@
             window.addEventListener('load', function () {
                 function popSignUpForm() {
                     if (!$('#signupFloatForm').hasClass('show') && !$('#loginFloatForm')
-                        .hasClass('show') && !window.location.href.includes('dfreemedia.com/signup') && !window.location.href.includes('dfreemedia.com/login')) {
+                        .hasClass('show') && !window.location.href.includes('dfreemedia.com/signup') &&
+                        !window.location.href.includes('dfreemedia.com/login')) {
                         $('#signupFloatForm').modal('show')
                     }
                 }
                 setTimeout(() => {
                     popSignUpForm()
-                }, 2700);
-                setInterval(() => {
-                    popSignUpForm()
-                }, 8000);
+                }, 3000);
             });
         });
     </script>

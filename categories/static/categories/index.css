@@ -1,0 +1,11 @@
+.homepageView {
+    cursor: pointer;
+    background: yellow;
+}
+
+@media screen and (max-width: 382px) {
+    .homepageView {
+        margin-left: 0px;
+        padding-left: 0px;
+    }
+}
