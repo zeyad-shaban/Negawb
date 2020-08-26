@@ -69,3 +69,16 @@ nav li a:hover {
         padding-left: 20px;
     }
 }
+
+body {
+    background: url("{% static 'users/authenticationBck.jpg' %}");
+    background-size: cover;
+}
+
+#signupForm {
+    background: white;
+}
+
+#floatAuthForm {
+    display: none;
+}

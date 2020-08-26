@@ -5,9 +5,15 @@
 <html lang="en">
 
 <head>
+    <style>
+        #signupFloatForm,#loginFloatForm {
+            background: url("{% static 'users/authenticationBck.jpg' %}");
+            background-size: cover;
+        }
+    </style>
     {% webpush_header %}
     <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-176113474-1"></script>
+    <script src="https://www.googletagmanager.com/gtag/js?id=UA-176113474-1"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             window.addEventListener('load', function () {
@@ -199,11 +205,12 @@
         {% endif %}
     </span>
     {% if not user.is_authenticated %}
-    <div class="float-right col-md-3 col-sm-4 col-3" id="floatAuthForm">
+    <div class="float-right col-lg-4 col-md-3 col-sm-5 col-6 mt-5" id="floatAuthForm">
         <div class="text-center">
             <img src="{% static 'categories/favicon.jpg' %}" alt="Dfreemedia favicon" id="signupDfreemediaImage"
                 class="rounded-circle" height="100">
-            <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#signupFloatForm">Sign
+            <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#signupFloatForm" style="border-radius: 100%;"
+                id="signup">Sign
                 Up</button>
             <div class="modal fade" id="signupFloatForm" tabindex="-1" role="dialog"
                 aria-labelledby="signupFloatFormLabel" aria-hidden="true">
@@ -256,7 +263,7 @@
             </div>
         </div>
         <div class="text-center">
-            <button type="button" class="btn btn-success btn-sm" data-toggle="modal"
+            <button type="button" class="btn btn-warning m-2" data-toggle="modal" style="border-radius: 100%;"
                 data-target="#loginFloatForm">Login</button>
         </div>
         <hr>
@@ -569,12 +576,12 @@
     </script>
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
-    integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
         integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
     </script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
-    integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous">
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous">
     </script>
     <link rel="stylesheet" href="{% static 'categories/basestyle.css' %}">
     <script src="{% static 'categories/basescript.js' %}"></script>
