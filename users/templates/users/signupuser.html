@@ -54,6 +54,19 @@ Dfreemedia.{% endblock description %}
                 <label for="password2">Confirm Password</label>
                 <input type="password" name="password2" class="form-control" id="password2" required>
             </div>
+            <div class="form-group">
+                <label for="password2">Default posts type</label>
+                <select name="homepage_posts" id="id_homepage_posts">
+                    <option value="" selected="">---------</option>
+                    {% for category in categories %}
+                    <option value="{{ category.id }}">{{ category.title }}</option>
+                    
+                    {% endfor %}
+                </select>
+                <br>
+                <small class="form-text-text-muted">Will be displayed as your default homepage
+                    posts</small>
+            </div>
             <small class="form-text text-muted mb-2"> <input type="checkbox" name="" id="" class="mr-2" required>I agree
                 to <a href="{% url 'termsandconditions' %}" target="_blank">Terms and Conditions</a>, <a
                     href="{% url 'privacypolicy' %}" target="_blank">Privacy Policy</a>, and <a

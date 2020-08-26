@@ -2,6 +2,7 @@ from production.models import Todo
 from production.forms import TodoForm
 from social.models import Notification
 from django.db.models import Q
+from .models import Category
 
 
 def add_variable_to_context(request):
@@ -17,6 +18,7 @@ def add_variable_to_context(request):
             todos = []
             done_todos = []
             notifications = []
+            categories = Category.objects.all()
     except NameError:
         done_todos = []
         todos = []
@@ -27,4 +29,5 @@ def add_variable_to_context(request):
         'todo_form': TodoForm,
         'done_todos': done_todos,
         'notifications': notifications,
+        'categories': categories,
     }

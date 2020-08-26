@@ -6,12 +6,13 @@ from django.template.loader import render_to_string
 # from django.utils.encoding import force_bytes, force_text, DjangoUnicodeDecodeError
 # from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.sites.shortcuts import get_current_site
-from django.shortcuts import render, redirect
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.forms import AuthenticationForm
 from django.http import HttpResponse
 from django.contrib.auth import login, logout, authenticate
 from django.db import IntegrityError
 from django.contrib import messages
+from categories.models import Category
 from django.contrib.auth import get_user_model as user_model
 User = user_model()
 
@@ -22,12 +23,16 @@ def signupuser(request):
             messages.warning(request, 'You are already logged in')
             return redirect('home')
         else:
-            return render(request, 'users/signupuser.html', {'form': UserCreationForm})
+            return render(request, 'users/signupuser.html', {'categories': Category.objects.all()})
     else:
         if request.POST.get('password1') == request.POST.get('password2'):
             try:
+                if request.POST.get('homepage_posts'):
+                    homepage_posts_category = get_object_or_404(Category, pk=request.POST.get('homepage_posts'))
+                else:
+                    homepage_posts_category = None
                 user = User.objects.create_user(
-                    request.POST.get('username'), password=request.POST.get('password1'))
+                    request.POST.get('username'), password=request.POST.get('password1'), homepage_posts=homepage_posts_category)
                 if False:
                     pass
                     # user.is_active = False
