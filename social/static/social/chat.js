@@ -1,4 +1,5 @@
-$(document).ready(function () {
+document.addEventListener('DOMContentLoaded', function(){
+    window.addEventListener('load', function(){
     $('#addGroupButton').click(function (e) {
         e.preventDefault();
         $('#newGroupForm').submit()
@@ -168,4 +169,5 @@ $(document).ready(function () {
     $(window).resize(function (event) {
         windowResizing()
     })
+});
 });

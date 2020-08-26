@@ -18,11 +18,14 @@
 {% if post.image %}
 <a href="{% url 'people:people' user.id %}">
     {% if user.who_see_avatar == 'everyone' %}
-    <img src="{{post.user.avatar.url}}" alt="User Image" width="64" height="64" class="mr-3 float-left {% if user.id <= 1000 %}oldUser{% endif %}">
+    <img src="{{post.user.avatar.url}}" alt="User Image" width="64" height="64"
+        class="mr-3 float-left {% if user.id <= 1000 %}oldUser{% endif %}">
     {% elif user.who_see_avatar == 'friends' and user in user.friends.all %}
-    <img src="{{post.user.avatar.url}}" alt="User Image" width="64" height="64" class="mr-3 float-left {% if user.id <= 1000 %}oldUser{% endif %}">
+    <img src="{{post.user.avatar.url}}" alt="User Image" width="64" height="64"
+        class="mr-3 float-left {% if user.id <= 1000 %}oldUser{% endif %}">
     {% elif user == user %}
-    <img src="{{post.user.avatar.url}}" alt="User Image" width="64" height="64" class="mr-3 float-left {% if user.id <= 1000 %}oldUser{% endif %}">
+    <img src="{{post.user.avatar.url}}" alt="User Image" width="64" height="64"
+        class="mr-3 float-left {% if user.id <= 1000 %}oldUser{% endif %}">
     {% else %}
     <img src="/media/profile_images/DefaultUserImage.jpg" alt="User Image" width="64" height="64"
         class="mr-3 float-left {% if user.id <= 1000 %}oldUser{% endif %}">
@@ -48,11 +51,14 @@
 <div class="media">
     <a href="{% url 'people:people' post.user.id %}">
         {% if post.user.who_see_avatar == 'everyone' %}
-        <img src="{{post.user.avatar.url}}" alt="User Image" width="64" height="64" class="mr-3 float-left {% if user.id <= 1000 %}oldUser{% endif %}">
+        <img src="{{post.user.avatar.url}}" alt="User Image" width="64" height="64"
+            class="mr-3 float-left {% if user.id <= 1000 %}oldUser{% endif %}">
         {% elif post.user.who_see_avatar == 'friends' and user in post.user.friends.all %}
-        <img src="{{post.user.avatar.url}}" alt="User Image" width="64" height="64" class="mr-3 float-left {% if user.id <= 1000 %}oldUser{% endif %}">
+        <img src="{{post.user.avatar.url}}" alt="User Image" width="64" height="64"
+            class="mr-3 float-left {% if user.id <= 1000 %}oldUser{% endif %}">
         {% elif post.user == user %}
-        <img src="{{post.user.avatar.url}}" alt="User Image" width="64" height="64" class="mr-3 float-left {% if user.id <= 1000 %}oldUser{% endif %}">
+        <img src="{{post.user.avatar.url}}" alt="User Image" width="64" height="64"
+            class="mr-3 float-left {% if user.id <= 1000 %}oldUser{% endif %}">
         {% else %}
         <img src="/media/profile_images/DefaultUserImage.jpg" alt="User Image" width="64" height="64"
             class="mr-3 float-left {% if user.id <= 1000 %}oldUser{% endif %}">
@@ -68,11 +74,14 @@
 {% elif post.post_file %}
 <a href="{% url 'people:people' user.id %}">
     {% if user.who_see_avatar == 'everyone' %}
-    <img src="{{post.user.avatar.url}}" alt="{{ post.user.username }}" width="64" height="64" class="mr-3 float-left {% if user.id <= 1000 %}oldUser{% endif %}">
+    <img src="{{post.user.avatar.url}}" alt="{{ post.user.username }}" width="64" height="64"
+        class="mr-3 float-left {% if user.id <= 1000 %}oldUser{% endif %}">
     {% elif user.who_see_avatar == 'friends' and user in user.friends.all %}
-    <img src="{{post.user.avatar.url}}" alt="{{ post.user.username }}" width="64" height="64" class="mr-3 float-left {% if user.id <= 1000 %}oldUser{% endif %}">
+    <img src="{{post.user.avatar.url}}" alt="{{ post.user.username }}" width="64" height="64"
+        class="mr-3 float-left {% if user.id <= 1000 %}oldUser{% endif %}">
     {% elif user == user %}
-    <img src="{{post.user.avatar.url}}" alt="{{ post.user.username }}" width="64" height="64" class="mr-3 float-left {% if user.id <= 1000 %}oldUser{% endif %}">
+    <img src="{{post.user.avatar.url}}" alt="{{ post.user.username }}" width="64" height="64"
+        class="mr-3 float-left {% if user.id <= 1000 %}oldUser{% endif %}">
     {% else %}
     <img src="/media/profile_images/DefaultUserImage.jpg" alt="{{ post.user.username }}" width="64" height="64"
         class="mr-3 float-left {% if user.id <= 1000 %}oldUser{% endif %}">
@@ -112,43 +121,49 @@
     </span>
     <!-- add like script -->
     <script>
-        $(document).ready(function () {
+        document.addEventListener('DOMContentLoaded', function () {
+            window.addEventListener('load', function () {
 
-            $('#likeForm{{post.id}}').click((event) => {
-                event.preventDefault()
-            })
-            $('#likeButton{{post.id}}').click(function (event) {
-                $.ajax({
-                    url: "{% url 'comments:post_like_dislike' post.id %}",
-                    data: {
-                        'submit': 'like',
-                    },
-                    method: 'get',
-                    dataType: 'json',
-                    success: function (data) {
-                        let likes = "{{post.likes.count}}";
-                        let dislikes = "{{ post.dislikes.count }}"
-                        if (data.action == 'undislike_and_like') {
-                            dislikes -= 1
-                            likes++
-                            $('#id_dislikes{{post.id}}').html('<p style="color:black;">' +
-                                dislikes + '</p>')
-                            $('#id_likes{{post.id}}').html('<p style="color:#065FD4;"><b>' +
-                                likes + '</b></p>')
-                        } else if (data.action == 'unlike') {
-                            likes -= 1
-                            $('#id_likes{{post.id}}').html('<p style="color:#black;"' +
-                                likes +
-                                '</p>')
-                        } else {
-                            likes++
-                            $('#id_likes{{post.id}}').html('<p style="color:#065FD4;"><b>' +
-                                likes + '</b></p>')
-                        }
-                    }
+                $('#likeForm{{post.id}}').click((event) => {
+                    event.preventDefault()
                 })
-            })
+                $('#likeButton{{post.id}}').click(function (event) {
+                    $.ajax({
+                        url: "{% url 'comments:post_like_dislike' post.id %}",
+                        data: {
+                            'submit': 'like',
+                        },
+                        method: 'get',
+                        dataType: 'json',
+                        success: function (data) {
+                            let likes = "{{post.likes.count}}";
+                            let dislikes = "{{ post.dislikes.count }}"
+                            if (data.action == 'undislike_and_like') {
+                                dislikes -= 1
+                                likes++
+                                $('#id_dislikes{{post.id}}').html(
+                                    '<p style="color:black;">' +
+                                    dislikes + '</p>')
+                                $('#id_likes{{post.id}}').html(
+                                    '<p style="color:#065FD4;"><b>' +
+                                    likes + '</b></p>')
+                            } else if (data.action == 'unlike') {
+                                likes -= 1
+                                $('#id_likes{{post.id}}').html(
+                                    '<p style="color:#black;"' +
+                                    likes +
+                                    '</p>')
+                            } else {
+                                likes++
+                                $('#id_likes{{post.id}}').html(
+                                    '<p style="color:#065FD4;"><b>' +
+                                    likes + '</b></p>')
+                            }
+                        }
+                    })
+                })
 
+            })
         })
     </script>
     <!-- Dislike -->
@@ -168,44 +183,48 @@
     </span>
     <!-- Dislike script -->
     <script>
-        $(document).ready(function () {
+        document.addEventListener('DOMContentLoaded', function () {
+            window.addEventListener('load', function () {
 
-            $('#dislikeForm{{post.id}}').click((event) => {
-                event.preventDefault()
-            })
-            $('#dislikeButton{{post.id}}').click(function (event) {
-                $.ajax({
-                    url: "{% url 'comments:post_like_dislike' post.id %}",
-                    data: {
-                        'submit': 'dislike',
-                    },
-                    dataType: 'json',
-                    success: function (data) {
-                        let likes = "{{post.likes.count}}";
-                        let dislikes = "{{ post.dislikes.count }}"
-                        if (data.action == 'unlike_and_dislike') {
-                            dislikes++
-                            likes -= 1
-                            $('#id_dislikes{{post.id}}').html(
-                                '<p style="color:#065FD4;"><b>' +
-                                dislikes + '</b></p>')
-                            $('#id_likes{{post.id}}').html('<p style="color:black;">' +
-                                likes + '</p>')
-                        } else if (data.action == 'undislike') {
-                            dislikes -= 1
-                            $('#id_dislikes{{post.id}}').html('<p style="color:#black;"' +
-                                dislikes +
-                                '</p>')
-                        } else {
-                            dislikes++
-                            $('#id_dislikes{{post.id}}').html(
-                                '<p style="color:#065FD4;"><b>' +
-                                dislikes + '</b></p>')
-                        }
-                    }
+                $('#dislikeForm{{post.id}}').click((event) => {
+                    event.preventDefault()
                 })
-            })
+                $('#dislikeButton{{post.id}}').click(function (event) {
+                    $.ajax({
+                        url: "{% url 'comments:post_like_dislike' post.id %}",
+                        data: {
+                            'submit': 'dislike',
+                        },
+                        dataType: 'json',
+                        success: function (data) {
+                            let likes = "{{post.likes.count}}";
+                            let dislikes = "{{ post.dislikes.count }}"
+                            if (data.action == 'unlike_and_dislike') {
+                                dislikes++
+                                likes -= 1
+                                $('#id_dislikes{{post.id}}').html(
+                                    '<p style="color:#065FD4;"><b>' +
+                                    dislikes + '</b></p>')
+                                $('#id_likes{{post.id}}').html(
+                                    '<p style="color:black;">' +
+                                    likes + '</p>')
+                            } else if (data.action == 'undislike') {
+                                dislikes -= 1
+                                $('#id_dislikes{{post.id}}').html(
+                                    '<p style="color:#black;"' +
+                                    dislikes +
+                                    '</p>')
+                            } else {
+                                dislikes++
+                                $('#id_dislikes{{post.id}}').html(
+                                    '<p style="color:#065FD4;"><b>' +
+                                    dislikes + '</b></p>')
+                            }
+                        }
+                    })
+                })
 
+            })
         })
     </script>
 </span>
@@ -226,28 +245,29 @@
     </span>
 </form>
 <script>
-    $(document).ready(function () {
-        $('#commentForm').submit(function (event) {
-            event.preventDefault()
-        })
-        $('#addComment').click(function (event) {
-            event.preventDefault();
-            $.ajax({
-                url: "{% url 'comments:view_post' post.id %}",
-                method: "get",
-                dataType: 'json',
-                data: {
-                    'description': $('#commentInput').val(),
-                    'action': 'addComment'
-                },
-                success: function (response) {
-                    let userImage
-                    if (response.comment.user.who_see_avatar == "everyone") {
-                        userImage = "{response.comment.user.avatar.url}"
-                    } else {
-                        userImage = "/media/profile_images/DefaultUserImage.jpg"
-                    }
-                    $('#commentsList').prepend(`
+    document.addEventListener('DOMContentLoaded', function () {
+        window.addEventListener('load', function () {
+            $('#commentForm').submit(function (event) {
+                event.preventDefault()
+            })
+            $('#addComment').click(function (event) {
+                event.preventDefault();
+                $.ajax({
+                    url: "{% url 'comments:view_post' post.id %}",
+                    method: "get",
+                    dataType: 'json',
+                    data: {
+                        'description': $('#commentInput').val(),
+                        'action': 'addComment'
+                    },
+                    success: function (response) {
+                        let userImage
+                        if (response.comment.user.who_see_avatar == "everyone") {
+                            userImage = "{response.comment.user.avatar.url}"
+                        } else {
+                            userImage = "/media/profile_images/DefaultUserImage.jpg"
+                        }
+                        $('#commentsList').prepend(`
                     <li class="media">
                         <a href="/people/${response.comment.user.id}/">
                             <img src="${userImage}" alt="User Image" width="64"
@@ -263,8 +283,9 @@
                                     ${response.comment.description}
                                 </p>
                     `)
-                    $('#commentInput').val('')
-                }
+                        $('#commentInput').val('')
+                    }
+                })
             })
         })
     })
@@ -273,91 +294,94 @@
 <hr>
 {% endif %}
 <div class="comment-tabs">
-                {% for comment in comments %}
-                <li class="media">
-                    <a href="{% url 'people:people' comment.user.id %}">
-                        {% if comment.user.who_see_avatar == 'everyone' %}
-                        <img src="{{comment.user.avatar.url}}" alt="User Image" width="64" height="64"
-                            class="media-object img-circle {% if user.id <= 1000 %}oldUser{% endif %}">
-                        {% elif comment.user.who_see_avatar == 'friends' and user in comment.user.friends.all %}
-                        <img src="{{comment.user.avatar.url}}" alt="User Image" width="64" height="64"
-                            class="media-object img-circle {% if user.id <= 1000 %}oldUser{% endif %}">
-                        {% elif comment.user == user %}
-                        <img src="{{comment.user.avatar.url}}" alt="User Image" width="64" height="64"
-                            class="media-object img-circle {% if user.id <= 1000 %}oldUser{% endif %}">
-                        {% else %}
-                        <img src="/media/profile_images/DefaultUserImage.jpg" alt="User Image" width="64" height="64"
-                            class="media-object img-circle {% if user.id <= 1000 %}oldUser{% endif %}">
-                        {% endif %}
-                    </a>
-                    <div class="media-body">
-                        <div class="well well-lg">
-                            <small class="form-text text-muted float-right">
-                                {{comment.comment_date}}
-                            </small>
-                            <h4 class="media-heading reviews">{{comment.user.username}} </h4>
-                            <p class="media-comment" id="commentDescription{{comment.id}}">
-                                {{comment.description|truncatechars:300}}
-                                {% if comment.description|length >= 300 %} <a href="#"
-                                    id="commentReadMore{{comment.id}}">Read More</a>{% endif %}
-                            </p>
-                            <script>
-                                $(document).ready(function () {
-                                    $('#commentReadMore{{comment.id}}').click(function (event) {
-                                        event.preventDefault()
-                                        $('#commentDescription{{comment.id}}').html(
-                                            `{{comment.description}}`)
-                                    })
-                                })
-                            </script>
-                            <a class="btn btn-info btn-circle" href="#" id="addReply{{comment.id}}"><span
-                                    class="glyphicon glyphicon-share-alt"></span> Reply</a>
-                            <a class="btn btn-warning btn-circle" data-toggle="collapse" href="#replyOne"
-                                id="showReplies{{comment.id}}"><span
-                                    class="glyphicon glyphicon-comment"></span>{{comment.reply_set.count}}
-                                Replies</a>
-                            <script>
-                                $(document).ready(function () {
-                                    $('#showReplies{{comment.id}}').click(function (event) {
-                                        event.preventDefault();
-                                        $('#replyList{{comment.id}}').slideToggle()
-                                    })
-                                    $('#replyForm{{comment.id}}').slideToggle()
-                                    $('#addReply{{comment.id}}').click(function (event) {
-                                        event.preventDefault();
-                                        $('#replyForm{{comment.id}}').slideToggle()
-                                        $('#showReplies{{comment.id}}').click()
-                                    })
-                                    $('#cancelCommentReply{{comment.id}}').click(function (event) {
-                                        event.preventDefault;
-                                        $('#replyForm{{comment.id}}').toggle();
-                                        $('#commentReplyInput{{comment.id}}').val('')
-                                    })
-                                    $('#replyForm{{comment.id}}').submit(function (event) {
-                                        event.preventDefault();
-                                        $.ajax({
-                                            url: "{% url 'comments:create_reply' comment.id %}",
-                                            data: {
-                                                'description': $(
-                                                        '#commentReplyInput{{comment.id}}')
-                                                    .val(),
-                                            },
-                                            dataType: 'json',
-                                            success: function (response) {
-                                                let avatarImage
-                                                if (response.reply.user
-                                                    .who_see_avatar == 'everyone') {
-                                                    avatarImage = response.reply.user
-                                                        .avatar.url
-                                                } else if (response.reply.user ==
-                                                    "{{user}}") {
-                                                    avatarImage = response.reply.user
-                                                        .avatar.url
-                                                } else {
-                                                    avatarImage =
-                                                        "/media/profile_images/DefaultUserImage.jpg"
-                                                }
-                                                $('#replyList{{comment.id}}').prepend(`
+    {% for comment in comments %}
+    <li class="media">
+        <a href="{% url 'people:people' comment.user.id %}">
+            {% if comment.user.who_see_avatar == 'everyone' %}
+            <img src="{{comment.user.avatar.url}}" alt="User Image" width="64" height="64"
+                class="media-object img-circle {% if user.id <= 1000 %}oldUser{% endif %}">
+            {% elif comment.user.who_see_avatar == 'friends' and user in comment.user.friends.all %}
+            <img src="{{comment.user.avatar.url}}" alt="User Image" width="64" height="64"
+                class="media-object img-circle {% if user.id <= 1000 %}oldUser{% endif %}">
+            {% elif comment.user == user %}
+            <img src="{{comment.user.avatar.url}}" alt="User Image" width="64" height="64"
+                class="media-object img-circle {% if user.id <= 1000 %}oldUser{% endif %}">
+            {% else %}
+            <img src="/media/profile_images/DefaultUserImage.jpg" alt="User Image" width="64" height="64"
+                class="media-object img-circle {% if user.id <= 1000 %}oldUser{% endif %}">
+            {% endif %}
+        </a>
+        <div class="media-body">
+            <div class="well well-lg">
+                <small class="form-text text-muted float-right">
+                    {{comment.comment_date}}
+                </small>
+                <h4 class="media-heading reviews">{{comment.user.username}} </h4>
+                <p class="media-comment" id="commentDescription{{comment.id}}">
+                    {{comment.description|truncatechars:300}}
+                    {% if comment.description|length >= 300 %} <a href="#" id="commentReadMore{{comment.id}}">Read
+                        More</a>{% endif %}
+                </p>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        window.addEventListener('load', function () {
+                            $('#commentReadMore{{comment.id}}').click(function (event) {
+                                event.preventDefault()
+                                $('#commentDescription{{comment.id}}').html(
+                                    `{{comment.description}}`)
+                            })
+                        })
+                    })
+                </script>
+                <a class="btn btn-info btn-circle" href="#" id="addReply{{comment.id}}"><span
+                        class="glyphicon glyphicon-share-alt"></span> Reply</a>
+                <a class="btn btn-warning btn-circle" data-toggle="collapse" href="#replyOne"
+                    id="showReplies{{comment.id}}"><span
+                        class="glyphicon glyphicon-comment"></span>{{comment.reply_set.count}}
+                    Replies</a>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        window.addEventListener('load', function () {
+                            $('#showReplies{{comment.id}}').click(function (event) {
+                                event.preventDefault();
+                                $('#replyList{{comment.id}}').slideToggle()
+                            })
+                            $('#replyForm{{comment.id}}').slideToggle()
+                            $('#addReply{{comment.id}}').click(function (event) {
+                                event.preventDefault();
+                                $('#replyForm{{comment.id}}').slideToggle()
+                                $('#showReplies{{comment.id}}').click()
+                            })
+                            $('#cancelCommentReply{{comment.id}}').click(function (event) {
+                                event.preventDefault;
+                                $('#replyForm{{comment.id}}').toggle();
+                                $('#commentReplyInput{{comment.id}}').val('')
+                            })
+                            $('#replyForm{{comment.id}}').submit(function (event) {
+                                event.preventDefault();
+                                $.ajax({
+                                    url: "{% url 'comments:create_reply' comment.id %}",
+                                    data: {
+                                        'description': $(
+                                                '#commentReplyInput{{comment.id}}')
+                                            .val(),
+                                    },
+                                    dataType: 'json',
+                                    success: function (response) {
+                                        let avatarImage
+                                        if (response.reply.user
+                                            .who_see_avatar == 'everyone') {
+                                            avatarImage = response.reply.user
+                                                .avatar.url
+                                        } else if (response.reply.user ==
+                                            "{{user}}") {
+                                            avatarImage = response.reply.user
+                                                .avatar.url
+                                        } else {
+                                            avatarImage =
+                                                "/media/profile_images/DefaultUserImage.jpg"
+                                        }
+                                        $('#replyList{{comment.id}}').prepend(`
                                                     <li class="media media-replied">
                                 <a href="/people/${response.reply.id}">
                                     <img src="${avatarImage}" alt="User Image" width="64"
@@ -378,69 +402,70 @@
                                 </div>
                             </li>
                                                     `)
-                                                $('#commentReplyInput{{comment.id}}')
-                                                    .val('')
-                                            }
-                                        })
-                                    })
+                                        $('#commentReplyInput{{comment.id}}')
+                                            .val('')
+                                    }
                                 })
-                            </script>
-                        </div>
+                            })
+                        })
+                    })
+                </script>
+            </div>
+        </div>
+    </li>
+    {% if user.is_authenticated %}
+    <form action="" method="get" id="replyForm{{comment.id}}" class="col-md-7 col-sm-7">
+        <div class="form-group">
+            <textarea type="text" name="description" class="form-control" placeholder="Add comment for this post"
+                id="commentReplyInput{{comment.id}}"></textarea>
+        </div>
+        <span class="float-right" id="commentCancelButtons">
+            <button class="btn btn-secondary" id="cancelCommentReply{{comment.id}}">Cancel</button>
+            <input class="btn btn-primary" type="submit" value="Comment" id="addCommentReply">
+        </span>
+    </form>
+    {% else %}
+    <div id="replyForm{{comment.id}}">
+        <p class="alert alert-danger">Please login to reply</p>
+    </div>
+    {% endif %}
+    <div class="collapse" id="replyList{{comment.id}}">
+        <ul class="media-list">
+            {% for reply in comment.reply_set.all %}
+            <li class="media media-replied">
+                <a href="{% url 'people:people' reply.user.id %}">
+                    {% if reply.user.who_see_avatar == 'everyone' %}
+                    <img src="{{reply.user.avatar.url}}" alt="User Image" width="64" height="64"
+                        class="media-object img-circle {% if user.id <= 1000 %}oldUser{% endif %}">
+                    {% elif reply.user.who_see_avatar == 'friends' and user in reply.user.friends.all %}
+                    <img src="{{reply.user.avatar.url}}" alt="User Image" width="64" height="64"
+                        class="media-object img-circle {% if user.id <= 1000 %}oldUser{% endif %}">
+                    {% elif reply.user == user %}
+                    <img src="{{reply.user.avatar.url}}" alt="User Image" width="64" height="64"
+                        class="media-object img-circle {% if user.id <= 1000 %}oldUser{% endif %}">
+                    {% else %}
+                    <img src="/media/profile_images/DefaultUserImage.jpg" alt="User Image" width="64" height="64"
+                        class="media-object img-circle {% if user.id <= 1000 %}oldUser{% endif %}">
+                    {% endif %}
+                </a>
+                <div class="media-body">
+                    <div class="well well-lg">
+                        <h4 class="media-heading reviews"><span class="glyphicon glyphicon-share-alt"></span>
+                            {{reply.user.username}}
+                        </h4>
+                        <small class="form-text text-muted float-right">
+                            {{reply.date}}
+                        </small>
+                        <p class="media-comment">
+                            {{reply.description}}
+                        </p>
                     </div>
-                </li>
-                {% if user.is_authenticated %}
-                <form action="" method="get" id="replyForm{{comment.id}}" class="col-md-7 col-sm-7">
-                    <div class="form-group">
-                        <textarea type="text" name="description" class="form-control"
-                            placeholder="Add comment for this post" id="commentReplyInput{{comment.id}}"></textarea>
-                    </div>
-                    <span class="float-right" id="commentCancelButtons">
-                        <button class="btn btn-secondary" id="cancelCommentReply{{comment.id}}">Cancel</button>
-                        <input class="btn btn-primary" type="submit" value="Comment" id="addCommentReply">
-                    </span>
-                </form>
-                {% else %}
-                <div id="replyForm{{comment.id}}">
-                    <p class="alert alert-danger">Please login to reply</p>
                 </div>
-                {% endif %}
-                <div class="collapse" id="replyList{{comment.id}}">
-                    <ul class="media-list">
-                        {% for reply in comment.reply_set.all %}
-                        <li class="media media-replied">
-                            <a href="{% url 'people:people' reply.user.id %}">
-                                {% if reply.user.who_see_avatar == 'everyone' %}
-                                <img src="{{reply.user.avatar.url}}" alt="User Image" width="64" height="64"
-                                    class="media-object img-circle {% if user.id <= 1000 %}oldUser{% endif %}">
-                                {% elif reply.user.who_see_avatar == 'friends' and user in reply.user.friends.all %}
-                                <img src="{{reply.user.avatar.url}}" alt="User Image" width="64" height="64"
-                                    class="media-object img-circle {% if user.id <= 1000 %}oldUser{% endif %}">
-                                {% elif reply.user == user %}
-                                <img src="{{reply.user.avatar.url}}" alt="User Image" width="64" height="64"
-                                    class="media-object img-circle {% if user.id <= 1000 %}oldUser{% endif %}">
-                                {% else %}
-                                <img src="/media/profile_images/DefaultUserImage.jpg" alt="User Image" width="64"
-                                    height="64" class="media-object img-circle {% if user.id <= 1000 %}oldUser{% endif %}">
-                                {% endif %}
-                            </a>
-                            <div class="media-body">
-                                <div class="well well-lg">
-                                    <h4 class="media-heading reviews"><span
-                                            class="glyphicon glyphicon-share-alt"></span> {{reply.user.username}}
-                                    </h4>
-                                    <small class="form-text text-muted float-right">
-                                        {{reply.date}}
-                                    </small>
-                                    <p class="media-comment">
-                                        {{reply.description}}
-                                    </p>
-                                </div>
-                            </div>
-                        </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-                {% endfor %}
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endfor %}
 </div>
 {% else %}
 <small class="form-text text-muted">Your Distraction Free settings doesn't allow comments to show up</small>

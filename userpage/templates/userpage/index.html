@@ -6,8 +6,8 @@
 
 {% block description %}{{user.bio}}{% endblock description %}
 {% block content %}
-<img src="{{user.avatar.url}}" class="col-xl-2 col-lg-2 {% if user.id <= 1000 %}oldUser{% endif %}" alt="" width="200" height="200"
-    style="max-width:200px; max-height:200px;">
+<img src="{{user.avatar.url}}" class="col-xl-2 col-lg-2 {% if user.id <= 1000 %}oldUser{% endif %}" alt="" width="200"
+    height="200" style="max-width:200px; max-height:200px;">
 <link rel="stylesheet" href="{% static 'userpage/index.css' %}">
 <button type="button" class="btn btn-outline-secondary float-right mr-5 mt-4" data-toggle="modal"
     data-target="#editProfile" data-whatever="editProfile"><i class="fas fa-edit"></i></button>
@@ -142,12 +142,14 @@
                     <br>
                     {% elif field.html_name == 'allow_important_friend_messages' or field.html_name == 'allow_important_group_message' or field.html_name == 'allow_normal_friend_message' or field.html_name == 'allow_normal_group_message' or field.html_name == 'allow_comment_message' or field.html_name == 'allow_reply_message' or field.html_name == 'allow_invites' or field.html_name == 'your_invites' %}
                     <script>
-                        $(document).ready(function () {
-                            $('#notificationFields').append(`
+                        document.addEventListener('DOMContentLoaded', function () {
+                            window.addEventListener('load', function () {
+                                $('#notificationFields').append(`
                             {{field.label|safe}}
                             {{field}}
                             <br>
                             `)
+                            })
                         })
                     </script>
                     {% else %}
@@ -157,12 +159,15 @@
                     <br>
                     {% endif %}
                     {% endfor %}
-                    <input type="submit" name="submit" value="Dfree" class="btn btn-success" id="submitDFree" style="display: none;">
+                    <input type="submit" name="submit" value="Dfree" class="btn btn-success" id="submitDFree"
+                        style="display: none;">
                 </form>
                 <script>
-                    $(document).ready(function () {
-                        $('#notificationFields').click(function (event) {
-                            event.stopPropagation();
+                    document.addEventListener('DOMContentLoaded', function () {
+                        window.addEventListener('load', function () {
+                            $('#notificationFields').click(function (event) {
+                                event.stopPropagation();
+                            })
                         })
                     })
                 </script>
@@ -176,20 +181,21 @@
 </div>
 <script src="{% static 'userpage/index.js' %}"></script>
 <script>
-    $(document).ready(function () {
-        $('.userMenuItem').click(function (e) {
-            e.preventDefault();
-            $('.userMenuItem').removeClass('active');
-            $(this).addClass('active');
-            if ($(this).html() == 'Home') {
-                $('#mainContainer').html(`
+    document.addEventListener('DOMContentLoaded', function () {
+        window.addEventListener('load', function () {
+            $('.userMenuItem').click(function (e) {
+                e.preventDefault();
+                $('.userMenuItem').removeClass('active');
+                $(this).addClass('active');
+                if ($(this).html() == 'Home') {
+                    $('#mainContainer').html(`
         <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#privacy" data-whatever="privacy"><i
             class="fas fa-unlock"></i>Privacy</button>
     <button type="button" class="btn btn-success" data-toggle="modal" data-target="#distractionFree"
         data-whatever="distractionFree">Distraction Free</button>
         `)
-            } else if ($(this).html().includes('Friends')) {
-                $('#mainContainer').html(`
+                } else if ($(this).html().includes('Friends')) {
+                    $('#mainContainer').html(`
             <div class="card card-default" id="card_contacts">
     <div id="contacts" class="panel-collapse collapse show" aria-expanded="true">
         <ul class="list-group pull-down" id="contact-list">
@@ -238,34 +244,35 @@
 </div>
             `)
 
-                $('.unfriend').click(function (e) {
-                    e.preventDefault();
-                    let confirmation = confirm('Are you sure you want to unfriend ' + $(
-                            this)
-                        .attr('data-username') + '')
-                    if (confirmation) {
-                        let friendUsername = $(this).attr('data-username') + ''
-                        let thisButton = $(this)
-                        $.ajax({
-                            url: "{% url 'userpage:unfriend' %}",
-                            data: {
-                                'pk': $(this).attr('data-pk')
-                            },
-                            method: 'get',
-                            dataType: 'json',
-                            success: function (response) {
-                                thisButton.parent().parent().fadeOut()
-                                $('#message_area').html(
-                                    `<div class="alert alert-success"> You unfriended ${friendUsername}`
-                                )
-                            }
-                        })
-                    }
-                });
-            } else if ($(this).html().includes('Followers')) {
-                $('#mainContainer').html("Followers")
-            } else if ($(this).html().includes('Requests')) {
-                $('#mainContainer').html(`
+                    $('.unfriend').click(function (e) {
+                        e.preventDefault();
+                        let confirmation = confirm(
+                            'Are you sure you want to unfriend ' + $(
+                                this)
+                            .attr('data-username') + '')
+                        if (confirmation) {
+                            let friendUsername = $(this).attr('data-username') + ''
+                            let thisButton = $(this)
+                            $.ajax({
+                                url: "{% url 'userpage:unfriend' %}",
+                                data: {
+                                    'pk': $(this).attr('data-pk')
+                                },
+                                method: 'get',
+                                dataType: 'json',
+                                success: function (response) {
+                                    thisButton.parent().parent().fadeOut()
+                                    $('#message_area').html(
+                                        `<div class="alert alert-success"> You unfriended ${friendUsername}`
+                                    )
+                                }
+                            })
+                        }
+                    });
+                } else if ($(this).html().includes('Followers')) {
+                    $('#mainContainer').html("Followers")
+                } else if ($(this).html().includes('Requests')) {
+                    $('#mainContainer').html(`
                 <small class="from-text text-muted float-right mr-3"><a href="{% url 'people:all_people' %}">Find Friend</a></small>
 <h1>Friends Requests</h1>
 <p>{{requests.count}} Friend Request{{requests.count|pluralize}}</p>
@@ -326,129 +333,132 @@
 {% endfor %}
                 `)
 
-                function RequestHandler() {
-                    // ACCEPT 
-                    $('.acceptFriendForm').submit(function (event) {
-                        let thisElement = $(this)
-                        event.preventDefault()
-                        event.preventDefault();
-                        $.ajax({
-                            type: "get",
-                            url: "{% url 'userpage:acceptrequest' %}",
-                            data: {
-                                'pk': $('.acceptFriend').attr('data-pk')
-                            },
-                            dataType: "json",
-                            success: function (data) {
-                                thisElement.parent().fadeOut()
-                                $('#message_area').html('')
-                                $('#message_area').html(
-                                    `<div class="alert alert-success">${thisElement.attr('data-username')} is now a friend</div>`
-                                )
-                            }
+                    function RequestHandler() {
+                        // ACCEPT 
+                        $('.acceptFriendForm').submit(function (event) {
+                            let thisElement = $(this)
+                            event.preventDefault()
+                            event.preventDefault();
+                            $.ajax({
+                                type: "get",
+                                url: "{% url 'userpage:acceptrequest' %}",
+                                data: {
+                                    'pk': $('.acceptFriend').attr('data-pk')
+                                },
+                                dataType: "json",
+                                success: function (data) {
+                                    thisElement.parent().fadeOut()
+                                    $('#message_area').html('')
+                                    $('#message_area').html(
+                                        `<div class="alert alert-success">${thisElement.attr('data-username')} is now a friend</div>`
+                                    )
+                                }
+                            });
                         });
-                    });
-                    // DENNY
-                    $('.denyRequest').click(function (event) {
-                        event.preventDefault();
-                        let thisElement = $(this);
-                        $.ajax({
-                            method: "get",
-                            url: "{% url 'userpage:denyrequest' %}",
-                            data: {
-                                'pk': $(this).attr('data-pk')
-                            },
-                            dataType: "json",
-                            success: function (data) {
-                                $('#message_area').html('')
-                                thisElement.parent().fadeOut();
-                                if (data.message.tags === 'error') {
-                                    $('#message_area').append(`
+                        // DENNY
+                        $('.denyRequest').click(function (event) {
+                            event.preventDefault();
+                            let thisElement = $(this);
+                            $.ajax({
+                                method: "get",
+                                url: "{% url 'userpage:denyrequest' %}",
+                                data: {
+                                    'pk': $(this).attr('data-pk')
+                                },
+                                dataType: "json",
+                                success: function (data) {
+                                    $('#message_area').html('')
+                                    thisElement.parent().fadeOut();
+                                    if (data.message.tags === 'error') {
+                                        $('#message_area').append(`
                             <div class="alert alert-danger fixed-top">${data.message.text}</div>
                             `)
-                                } else {
-                                    $('#message_area').append(`
+                                    } else {
+                                        $('#message_area').append(`
         <div class="alert alert-${data.message.tags} fixed-top">${data.message.text}</div>
                                 `)
+                                    }
                                 }
-                            }
-                        });
-
-                    })
-
-                    // ACCEPT INVITE
-                    $('.AcceptGroup').submit(function (event) {
-                        let thisElement = $(this)
-                        event.preventDefault()
-                        $.ajax({
-                            url: "{% url 'social:join_group' %}",
-                            data: {
-                                'pk': $(this).attr('data-pk'),
-                            },
-                            dataType: 'json',
-                            success: function (data) {
-                                thisElement.parent().fadeOut()
-                                $('#message_area').html('')
-                                if (data.message.tags === 'error') {
-                                    $('#message_area').append(`
-                            <div class="alert alert-danger fixed-top">${data.message.text}</div>
-                            `)
-                                } else {
-                                    $('#message_area').append(`
-        <div class="alert alert-${data.message.tags} fixed-top">${data.message.text}</div>
-                                `)
-                                }
-                                setTimeout(() => {
-                                    $('#{{request.id}}Group').fadeOut()
-                                }, 900);
-                                setTimeout(() => {
-                                    $('#message_area').fadeOut()
-                                }, 3200);
-                            }
+                            });
 
                         })
-                    })
-                    // DENY INVITE
-                    $('.denyGroup').click(function (event) {
-                        let thisElement = $(this)
-                        event.preventDefault();
-                        $.ajax({
-                            type: "get",
-                            url: "{% url 'social:deny_group' %}",
-                            data: {
-                                'pk': $(this).attr('data-pk')
-                            },
-                            dataType: "json",
-                            success: function (data) {
-                                thisElement.parent().fadeOut()
-                                $('#message_area').html('')
-                                if (data.message.tags === 'error') {
-                                    $('#message_area').append(`
+
+                        // ACCEPT INVITE
+                        $('.AcceptGroup').submit(function (event) {
+                            let thisElement = $(this)
+                            event.preventDefault()
+                            $.ajax({
+                                url: "{% url 'social:join_group' %}",
+                                data: {
+                                    'pk': $(this).attr('data-pk'),
+                                },
+                                dataType: 'json',
+                                success: function (data) {
+                                    thisElement.parent().fadeOut()
+                                    $('#message_area').html('')
+                                    if (data.message.tags === 'error') {
+                                        $('#message_area').append(`
                             <div class="alert alert-danger fixed-top">${data.message.text}</div>
                             `)
-                                } else {
-                                    $('#message_area').append(`
+                                    } else {
+                                        $('#message_area').append(`
         <div class="alert alert-${data.message.tags} fixed-top">${data.message.text}</div>
                                 `)
+                                    }
+                                    setTimeout(() => {
+                                        $('#{{request.id}}Group')
+                                            .fadeOut()
+                                    }, 900);
+                                    setTimeout(() => {
+                                        $('#message_area').fadeOut()
+                                    }, 3200);
                                 }
-                                setTimeout(() => {
-                                    $('#{{request.id}}Group').fadeOut()
-                                }, 900);
-                                setTimeout(() => {
-                                    $('#message_area').fadeOut()
-                                }, 3200);
-                            },
-                        });
-                    });
 
+                            })
+                        })
+                        // DENY INVITE
+                        $('.denyGroup').click(function (event) {
+                            let thisElement = $(this)
+                            event.preventDefault();
+                            $.ajax({
+                                type: "get",
+                                url: "{% url 'social:deny_group' %}",
+                                data: {
+                                    'pk': $(this).attr('data-pk')
+                                },
+                                dataType: "json",
+                                success: function (data) {
+                                    thisElement.parent().fadeOut()
+                                    $('#message_area').html('')
+                                    if (data.message.tags === 'error') {
+                                        $('#message_area').append(`
+                            <div class="alert alert-danger fixed-top">${data.message.text}</div>
+                            `)
+                                    } else {
+                                        $('#message_area').append(`
+        <div class="alert alert-${data.message.tags} fixed-top">${data.message.text}</div>
+                                `)
+                                    }
+                                    setTimeout(() => {
+                                        $('#{{request.id}}Group')
+                                            .fadeOut()
+                                    }, 900);
+                                    setTimeout(() => {
+                                        $('#message_area').fadeOut()
+                                    }, 3200);
+                                },
+                            });
+                        });
+
+                    }
+                    var g = document.createElement('script')
+                    var s = document.getElementsByTagName('script')[0]
+                    g.text(RequestHandler())
+                    s.parentNode.insertBefore(g, s)
+                } else if ($(this).html().includes('My Requests')) {
+                    $('#mainContainer').html("Myyyy Requests")
                 }
-                var g = document.createElement('script')
-                var s = document.getElementsByTagName('script')[0]
-                g.text(RequestHandler())
-                s.parentNode.insertBefore(g, s)
-            } else if ($(this).html().includes('My Requests')) {
-                $('#mainContainer').html("Myyyy Requests")
-            }
+            });
         });
     });
 </script>

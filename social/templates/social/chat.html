@@ -4,7 +4,8 @@
 {% block title %}Social media chatting with message filtering | Dfreemedia{% endblock title %}
 
 
-{% block description %}Join the new social media playtformDfreemedia and send messages to people, enjoy our message filtering system and the
+{% block description %}Join the new social media playtformDfreemedia and send messages to people, enjoy our message
+filtering system and the
 highlighting messages as important, perfect for managing work and school groups{% endblock description %}
 
 
@@ -56,74 +57,79 @@ highlighting messages as important, perfect for managing work and school groups{
                 </li>
                 <!-- LOAD GROUP MESSAGES -->
                 <script>
-                    $(document).ready(function () {
-                        $('#chatGroupButton{{group.id}}').click(function loadMessages(e) {
-                            $.ajax({
-                                url: "{% url 'social:chat_friend' %}",
-                                data: {
-                                    'pk': "{{group.id}}",
-                                    'action': 'group',
-                                },
-                                dataType: 'json',
-                                success: function (response) {
-                                    $('#friendProfile').html(
-                                        // ! STATIC URL todo
-                                        `<a href="/people/${response.group.id}/" data-toggle="modal" data-target="#addMembers">
+                    document.addEventListener('DOMContentLoaded', function () {
+                        window.addEventListener('load', function () {
+                            $('#chatGroupButton{{group.id}}').click(function loadMessages(e) {
+                                $.ajax({
+                                    url: "{% url 'social:chat_friend' %}",
+                                    data: {
+                                        'pk': "{{group.id}}",
+                                        'action': 'group',
+                                    },
+                                    dataType: 'json',
+                                    success: function (response) {
+                                        $('#friendProfile').html(
+                                            // ! STATIC URL todo
+                                            `<a href="/people/${response.group.id}/" data-toggle="modal" data-target="#addMembers">
                                             <img src="${response.group.image}" id="groupImage" data-img="${response.group.image}" width="40" height="40"/>
                                             </a>
                                             <p id="currChat" data-pk="${response.group.id}" data-action="group">${response.group.title}</p>`
-                                    )
-                                    let outputMessages = ''
-                                    let chat_messages = JSON.parse(response
-                                        .chat_messages)
-                                    for (message of chat_messages) {
-                                        let user
-                                        $.ajax({
-                                            url: "{% url 'userpage:get_user_by_id' %}",
-                                            data: {
-                                                'pk': message.fields.message_sender,
-                                            },
-                                            method: 'get',
-                                            dataType: 'json',
-                                            async: false,
-                                            success: function (response) {
-                                                user = response.user
+                                        )
+                                        let outputMessages = ''
+                                        let chat_messages = JSON.parse(response
+                                            .chat_messages)
+                                        for (message of chat_messages) {
+                                            let user
+                                            $.ajax({
+                                                url: "{% url 'userpage:get_user_by_id' %}",
+                                                data: {
+                                                    'pk': message.fields
+                                                        .message_sender,
+                                                },
+                                                method: 'get',
+                                                dataType: 'json',
+                                                async: false,
+                                                success: function (
+                                                response) {
+                                                    user = response.user
+                                                }
+                                            })
+                                            let sender_avatar
+                                            if (user
+                                                .who_see_avatar ==
+                                                'everyone') {
+                                                sender_avatar = user.avatar
+                                            } else {
+                                                sender_avatar =
+                                                    '/media/profile_images/DefaultUserImage.jpg'
                                             }
-                                        })
-                                        let sender_avatar
-                                        if (user
-                                            .who_see_avatar ==
-                                            'everyone') {
-                                            sender_avatar = user.avatar
-                                        } else {
-                                            sender_avatar =
-                                                '/media/profile_images/DefaultUserImage.jpg'
-                                        }
-                                        let messageStyle = ''
-                                        if (message.fields.is_important) {
-                                            messageStyle =
-                                                'style="background: #d10c0c; color: white;"'
-                                        }
-                                        if (user.id !=
-                                            "{{user.id}}") {
-                                            outputMessages += `
+                                            let messageStyle = ''
+                                            if (message.fields.is_important) {
+                                                messageStyle =
+                                                    'style="background: #d10c0c; color: white;"'
+                                            }
+                                            if (user.id !=
+                                                "{{user.id}}") {
+                                                outputMessages += `
                                             <p class="float-right" style="font-size:1.25em">${user.username}</p>
                                             <li class="replies">
                                     <img src="${sender_avatar}" alt="" width="22" height="22" class="{% if user.id <= 1000 %}oldUser{% endif %}"/>
                                     <p ${messageStyle}>${message.fields.message}</p>
                                 </li>`
-                                        } else {
-                                            sender_avatar = "{{user.avatar.url}}"
-                                            outputMessages += `
+                                            } else {
+                                                sender_avatar =
+                                                    "{{user.avatar.url}}"
+                                                outputMessages += `
                                             <li class="sent">
                         <img src="{{user.avatar.url}}" alt="" width="22" height="22" class="{% if user.id <= 1000 %}oldUser{% endif %}"/>
                         <p id="messageContent" data-currMessagesCount="${chat_messages.length}" ${messageStyle}>${message.fields.message}</p>
                     </li>
                                             `
+                                            }
                                         }
+                                        $('#chatMessages').html(outputMessages)
                                     }
-                                    $('#chatMessages').html(outputMessages)
-                                }
+                                })
                             })
                         })
                     })
@@ -164,7 +170,8 @@ highlighting messages as important, perfect for managing work and school groups{
                                                         height="64" class="{% if user.id <= 1000 %}oldUser{% endif %}">
                                                     {% else %}
                                                     <img src="/media/profile_images/DefaultUserImage.jpg"
-                                                        alt="User Image" width="64" height="64" class="{% if user.id <= 1000 %}oldUser{% endif %}">
+                                                        alt="User Image" width="64" height="64"
+                                                        class="{% if user.id <= 1000 %}oldUser{% endif %}">
                                                     {% endif %}
                                                 </a>
                                             </div>
@@ -200,23 +207,26 @@ highlighting messages as important, perfect for managing work and school groups{
                                         </div>
                                     </li>
                                     <script>
-                                        $(document).ready(function () {
-                                            $('#id_inviteForm{{friend.id}}').submit(function (e) {
-                                                e.preventDefault();
-                                                $.ajax({
-                                                    url: "{% url 'social:create_invite' %}",
-                                                    data: {
-                                                        'user_pk': "{{friend.id}}",
-                                                        'group_pk': $('#currChat').attr(
-                                                            'data-pk'),
-                                                    },
-                                                    dataType: 'json',
-                                                    success: function (response) {
-                                                        $('#id_inviteButton{{friend.id}}')
-                                                            .fadeOut();
-                                                    }
-                                                })
-                                            });
+                                        document.addEventListener('DOMContentLoaded', function () {
+                                            window.addEventListener('load', function () {
+                                                $('#id_inviteForm{{friend.id}}').submit(function (e) {
+                                                    e.preventDefault();
+                                                    $.ajax({
+                                                        url: "{% url 'social:create_invite' %}",
+                                                        data: {
+                                                            'user_pk': "{{friend.id}}",
+                                                            'group_pk': $('#currChat')
+                                                                .attr(
+                                                                    'data-pk'),
+                                                        },
+                                                        dataType: 'json',
+                                                        success: function (response) {
+                                                            $('#id_inviteButton{{friend.id}}')
+                                                                .fadeOut();
+                                                        }
+                                                    })
+                                                });
+                                            })
                                         })
                                     </script>
                                     {% endfor %}
@@ -231,37 +241,52 @@ highlighting messages as important, perfect for managing work and school groups{
                                     <div id="userResults"></div>
                                     <!-- Get user results -->
                                     <script>
-                                        $(document).ready(function () {
-                                            $('#searchUser').keyup(function (event) {
-                                                event.preventDefault();
-                                                $('#userResults').html(`<div class="spinner-border text-success" role="status">
+                                        document.addEventListener('DOMContentLoaded', function () {
+                                            window.addEventListener('load', function () {
+                                                $('#searchUser').keyup(function (event) {
+                                                    event.preventDefault();
+                                                    $('#userResults').html(`<div class="spinner-border text-success" role="status">
                                                 <span class="sr-only">Loading...</span>
                                                 </div>`)
-                                                setTimeout(() => {
-                                                    $.ajax({
-                                                        url: $('#findUserForm').attr(
-                                                            'data-url'),
-                                                        data: {
-                                                            'q': $('#searchUser').val(),
-                                                        },
-                                                        dataType: 'json',
-                                                        success: function (data) {
-                                                            let results = JSON
-                                                                .parse(data.results)
-                                                            let output = ''
+                                                    setTimeout(() => {
+                                                        $.ajax({
+                                                            url: $(
+                                                                    '#findUserForm')
+                                                                .attr(
+                                                                    'data-url'),
+                                                            data: {
+                                                                'q': $(
+                                                                        '#searchUser')
+                                                                    .val(),
+                                                            },
+                                                            dataType: 'json',
+                                                            success: function (
+                                                                data) {
+                                                                let results =
+                                                                    JSON
+                                                                    .parse(
+                                                                        data
+                                                                        .results
+                                                                        )
+                                                                let output =
+                                                                    ''
 
-                                                            if (results.length ===
-                                                                0) {
-                                                                $('#userResults')
-                                                                    .html(
-                                                                        '<h4>User not found</h4>'
-                                                                    )
-                                                            } else {
+                                                                if (results
+                                                                    .length ===
+                                                                    0) {
+                                                                    $('#userResults')
+                                                                        .html(
+                                                                            '<h4>User not found</h4>'
+                                                                        )
+                                                                } else {
 
-                                                                for (result of
-                                                                    results) {
-                                                                    // !DOESN'T USE [DJANGO URL
-                                                                    output += `
+                                                                    for (
+                                                                        result of
+                                                                        results
+                                                                        ) {
+                                                                        // !DOESN'T USE [DJANGO URL
+                                                                        output
+                                                                            += `
                                                                     <li class="list-group-item">
                                                                         <div class="row w-100">
                                                                             <div class="col-12 col-sm-6 col-md-3 px-0">
@@ -304,14 +329,17 @@ highlighting messages as important, perfect for managing work and school groups{
                                         </div>
                                         </li>
                                         `
-                                                                }
+                                                                    }
 
+                                                                }
+                                                                $('#userResults')
+                                                                    .html(
+                                                                        output
+                                                                        )
                                                             }
-                                                            $('#userResults').html(
-                                                                output)
-                                                        }
-                                                    })
-                                                }, 2000);
+                                                        })
+                                                    }, 2000);
+                                                })
                                             })
                                         })
                                     </script>
@@ -348,20 +376,20 @@ highlighting messages as important, perfect for managing work and school groups{
                         {% endif %}
                         {% if friend.who_see_avatar == 'everyone' %}
                         <img src="{{friend.avatar.url}}" alt="User Image"
-                            class="img-fluid rounded-circle d-block mx-auto {% if user.id <= 1000 %}oldUser{% endif %}" height="50" width="50"
-                            style="max-height: 50px;">
+                            class="img-fluid rounded-circle d-block mx-auto {% if user.id <= 1000 %}oldUser{% endif %}"
+                            height="50" width="50" style="max-height: 50px;">
                         {% elif friend.who_see_avatar == 'friends' and user in friend.friends.all %}
                         <img src="{{friend.avatar.url}}" alt="User Image"
-                            class="img-fluid rounded-circle d-block mx-auto {% if user.id <= 1000 %}oldUser{% endif %}" height="50" width="50"
-                            style="max-height: 50px;">
+                            class="img-fluid rounded-circle d-block mx-auto {% if user.id <= 1000 %}oldUser{% endif %}"
+                            height="50" width="50" style="max-height: 50px;">
                         {% elif friend == user %}
                         <img src="{{friend.avatar.url}}" alt="User Image"
-                            class="img-fluid rounded-circle d-block mx-auto {% if user.id <= 1000 %}oldUser{% endif %}" height="50" width="50"
-                            style="max-height: 50px;">
+                            class="img-fluid rounded-circle d-block mx-auto {% if user.id <= 1000 %}oldUser{% endif %}"
+                            height="50" width="50" style="max-height: 50px;">
                         {% else %}
                         <img src="/media/profile_images/DefaultUserImage.jpg" alt="User Image"
-                            class="img-fluid rounded-circle d-block mx-auto {% if user.id <= 1000 %}oldUser{% endif %}" height="50" width="50"
-                            style="max-height: 50px;">
+                            class="img-fluid rounded-circle d-block mx-auto {% if user.id <= 1000 %}oldUser{% endif %}"
+                            height="50" width="50" style="max-height: 50px;">
                         {% endif %}
                         <div class="meta">
                             <p class="name">{{ friend.username }}</p>
@@ -371,139 +399,46 @@ highlighting messages as important, perfect for managing work and school groups{
                 </li>
                 <!-- LOAD FRIEND CHAT -->
                 <script>
-                    $(document).ready(function () {
-                        function loadMessages(e) {
-                            let friend_id = "{{friend.id}}"
-                            $.ajax({
-                                url: "{% url 'social:chat_friend' %}",
-                                data: {
-                                    'pk': "{{friend.id}}",
-                                    'action': 'friend',
-                                },
-                                dataType: 'json',
-                                success: function (response) {
-                                    let friend_image
-                                    if (response.friend.who_see_avatar == 'everyone' ||
-                                        response.friend.who_see_avatar == 'friends') {
-                                        friend_image = response.friend.avatar
-                                    } else {
-                                        friend_image =
-                                            '/media/profile_images/DefaultUserImage.jpg'
-                                    }
-                                    $('#friendProfile').html(
-                                        // ! STATIC URL todo
-                                        `<a href="/people/${response.friend.id}/">
-                                            <img src="${friend_image}" width="40" height="40" class="{% if user.id <= 1000 %}oldUser{% endif %}"/>
-                                            </a>
-                                            <p id="currChat" data-pk="${response.friend.id}" data-action="friend">${response.friend.username}</p>`
-                                    )
-                                    let outputMessages = ''
-                                    let chat_messages = JSON.parse(response
-                                        .chat_messages)
-                                    for (message of chat_messages) {
-                                        let messageStyle = "null"
-                                        if (message.fields.is_important) {
-                                            messageStyle =
-                                                'style="background: #d10c0c; color: white"'
-                                        }
-                                        if (message.fields.message_sender == response
-                                            .friend.id) {
-                                            outputMessages += `<li class="replies">
-                                    <img src="${friend_image}" alt="" width="22" height="22"/>
-                                    <p ${messageStyle}>${message.fields.message}</p>
-                                </li>`
+                    document.addEventListener('DOMContentLoaded', function () {
+                        window.addEventListener('load', function () {
+                            function loadMessages(e) {
+                                let friend_id = "{{friend.id}}"
+                                $.ajax({
+                                    url: "{% url 'social:chat_friend' %}",
+                                    data: {
+                                        'pk': "{{friend.id}}",
+                                        'action': 'friend',
+                                    },
+                                    dataType: 'json',
+                                    success: function (response) {
+                                        let friend_image
+                                        if (response.friend.who_see_avatar == 'everyone' ||
+                                            response.friend.who_see_avatar == 'friends') {
+                                            friend_image = response.friend.avatar
                                         } else {
-                                            outputMessages += `
-                                            <li class="sent">
-                        <img src="{{user.avatar.url}}" alt="" width="22" height="22" class="{% if user.id <= 1000 %}oldUser{% endif %}"/>
-                        <p id="messageContent" data-currMessagesCount="${chat_messages.length}" ${messageStyle}>${message.fields.message}</p>
-                    </li>
-                                            `
-                                        }
-                                    }
-                                    $('#chatMessages').html(outputMessages)
-                                }
-                            })
-                        }
-                        $('#chatFriendButton{{friend.id}}').click(loadMessages)
-                    })
-                </script>
-                {% endfor %}
-                <!-- LOAD NEW MESSAGES -->
-                <script>
-                    $(document).ready(function () {
-                        setInterval(function loadMessages(e) {
-                            let pk = $('#currChat').attr('data-pk')
-                            let action = $('#currChat').attr('data-action')
-                            let currMessagesCount = $('#messageContent').attr(
-                                'data-currMessagesCount')
-                            $.ajax({
-                                url: "{% url 'social:chat_friend' %}",
-                                data: {
-                                    'pk': pk,
-                                    'action': action,
-                                },
-                                dataType: 'json',
-                                success: function (response) {
-                                    let chat_messages = JSON.parse(response
-                                        .chat_messages)
-                                    if (chat_messages.length > currMessagesCount) {
-                                        let senderAvatar
-                                        let chat
-                                        let chat_url
-                                        if (action == 'friend') {
-                                            chat = response.friend
-                                            chat_url = "/people/$" + chat.id + "/"
-                                            chat_label = chat.username
-                                            if (chat.who_see_avatar ==
-                                                'everyone' ||
-                                                chat.who_see_avatar == 'friends'
-                                            ) {
-                                                senderAvatar = chat.avatar
-                                            } else {
-                                                senderAvatar =
-                                                    '/media/profile_images/DefaultUserImage.jpg'
-                                            }
-                                        } else if (action == 'group') {
-                                            chat = response.group
-                                            chat_url =
-                                                `" data-toggle="modal" data-target="#addMembers`
-                                            chat_label = chat.title
-                                            senderAvatar = chat['image']
+                                            friend_image =
+                                                '/media/profile_images/DefaultUserImage.jpg'
                                         }
                                         $('#friendProfile').html(
                                             // ! STATIC URL todo
-                                            `<a href="${chat_url}">
-                                                <img src="${senderAvatar}" id="groupImage" data-img="${senderAvatar}" width="40" height="40" class="{% if user.id <= 1000 %}oldUser{% endif %}"/>
-                                                </a>
-                                                <p id="currChat" data-pk="${pk}" data-action="${action}">${chat_label}</p>`
+                                            `<a href="/people/${response.friend.id}/">
+                                            <img src="${friend_image}" width="40" height="40" class="{% if user.id <= 1000 %}oldUser{% endif %}"/>
+                                            </a>
+                                            <p id="currChat" data-pk="${response.friend.id}" data-action="friend">${response.friend.username}</p>`
                                         )
                                         let outputMessages = ''
+                                        let chat_messages = JSON.parse(response
+                                            .chat_messages)
                                         for (message of chat_messages) {
-                                            let user
-                                            $.ajax({
-                                                type: "get",
-                                                url: "{% url 'userpage:get_user_by_id' %}",
-                                                data: {
-                                                    'pk': message.fields
-                                                        .message_sender
-                                                },
-                                                dataType: "json",
-                                                async: false,
-                                                success: function (response) {
-                                                    user = response.user
-                                                }
-                                            });
-                                            let messageStyle = ''
+                                            let messageStyle = "null"
                                             if (message.fields.is_important) {
                                                 messageStyle =
-                                                    'style="background: #d10c0c; color: white;"'
+                                                    'style="background: #d10c0c; color: white"'
                                             }
-                                            if (user.id != "{{user.id}}") {
-                                                outputMessages += `
-                                            <p class="float-right" style="font-size:1.25em">${user.username}</p>
-                                                <li class="replies">
-                                    <img src="${senderAvatar}" alt="" width="22" height="22"/>
+                                            if (message.fields.message_sender == response
+                                                .friend.id) {
+                                                outputMessages += `<li class="replies">
+                                    <img src="${friend_image}" alt="" width="22" height="22"/>
                                     <p ${messageStyle}>${message.fields.message}</p>
                                 </li>`
                                             } else {
@@ -517,74 +452,185 @@ highlighting messages as important, perfect for managing work and school groups{
                                         }
                                         $('#chatMessages').html(outputMessages)
                                     }
-                                }
-                            })
-                        }, 3000);
+                                })
+                            }
+                            $('#chatFriendButton{{friend.id}}').click(loadMessages)
+                        })
+                    })
+                </script>
+                {% endfor %}
+                <!-- LOAD NEW MESSAGES -->
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        window.addEventListener('load', function () {
+                            setInterval(function loadMessages(e) {
+                                let pk = $('#currChat').attr('data-pk')
+                                let action = $('#currChat').attr('data-action')
+                                let currMessagesCount = $('#messageContent').attr(
+                                    'data-currMessagesCount')
+                                $.ajax({
+                                    url: "{% url 'social:chat_friend' %}",
+                                    data: {
+                                        'pk': pk,
+                                        'action': action,
+                                    },
+                                    dataType: 'json',
+                                    success: function (response) {
+                                        let chat_messages = JSON.parse(response
+                                            .chat_messages)
+                                        if (chat_messages.length >
+                                            currMessagesCount) {
+                                            let senderAvatar
+                                            let chat
+                                            let chat_url
+                                            if (action == 'friend') {
+                                                chat = response.friend
+                                                chat_url = "/people/$" + chat.id +
+                                                    "/"
+                                                chat_label = chat.username
+                                                if (chat.who_see_avatar ==
+                                                    'everyone' ||
+                                                    chat.who_see_avatar == 'friends'
+                                                ) {
+                                                    senderAvatar = chat.avatar
+                                                } else {
+                                                    senderAvatar =
+                                                        '/media/profile_images/DefaultUserImage.jpg'
+                                                }
+                                            } else if (action == 'group') {
+                                                chat = response.group
+                                                chat_url =
+                                                    `" data-toggle="modal" data-target="#addMembers`
+                                                chat_label = chat.title
+                                                senderAvatar = chat['image']
+                                            }
+                                            $('#friendProfile').html(
+                                                // ! STATIC URL todo
+                                                `<a href="${chat_url}">
+                                                <img src="${senderAvatar}" id="groupImage" data-img="${senderAvatar}" width="40" height="40" class="{% if user.id <= 1000 %}oldUser{% endif %}"/>
+                                                </a>
+                                                <p id="currChat" data-pk="${pk}" data-action="${action}">${chat_label}</p>`
+                                            )
+                                            let outputMessages = ''
+                                            for (message of chat_messages) {
+                                                let user
+                                                $.ajax({
+                                                    type: "get",
+                                                    url: "{% url 'userpage:get_user_by_id' %}",
+                                                    data: {
+                                                        'pk': message.fields
+                                                            .message_sender
+                                                    },
+                                                    dataType: "json",
+                                                    async: false,
+                                                    success: function (
+                                                        response) {
+                                                        user = response
+                                                            .user
+                                                    }
+                                                });
+                                                let messageStyle = ''
+                                                if (message.fields.is_important) {
+                                                    messageStyle =
+                                                        'style="background: #d10c0c; color: white;"'
+                                                }
+                                                if (user.id != "{{user.id}}") {
+                                                    outputMessages += `
+                                            <p class="float-right" style="font-size:1.25em">${user.username}</p>
+                                                <li class="replies">
+                                    <img src="${senderAvatar}" alt="" width="22" height="22"/>
+                                    <p ${messageStyle}>${message.fields.message}</p>
+                                </li>`
+                                                } else {
+                                                    outputMessages += `
+                                            <li class="sent">
+                        <img src="{{user.avatar.url}}" alt="" width="22" height="22" class="{% if user.id <= 1000 %}oldUser{% endif %}"/>
+                        <p id="messageContent" data-currMessagesCount="${chat_messages.length}" ${messageStyle}>${message.fields.message}</p>
+                    </li>
+                                            `
+                                                }
+                                            }
+                                            $('#chatMessages').html(outputMessages)
+                                        }
+                                    }
+                                })
+                            }, 3000);
+                        })
                     })
                 </script>
                 <!-- SEND MESSAGE -->
                 <script>
-                    $(document).ready(function () {
-                        $('#sendMessageForm').submit(function (event) {
-                            event.preventDefault()
-                            let pk = $('#currChat').attr('data-pk')
-                            let action = $('#currChat').attr('data-action')
-                            let userInput = document.getElementById('inputMessage').value;
-                            let isImportant = $('#id_is_important').is(':checked')
-                            let is_important
-                            if (isImportant) {
-                                is_important = "True"
-                            } else {
-                                is_important = "False"
-                            }
-                            if (userInput) {
-                                $.ajax({
-                                    url: "{% url 'social:send_message' %}",
-                                    data: {
-                                        "pk": pk,
-                                        "action": action,
-                                        "message": userInput,
-                                        "is_important": is_important
-                                    },
-                                    dataType: 'json',
-                                    success: function (response) {
+                    document.addEventListener('DOMContentLoaded', function () {
+                        window.addEventListener('load', function () {
+                            $('#sendMessageForm').submit(function (event) {
+                                event.preventDefault()
+                                let pk = $('#currChat').attr('data-pk')
+                                let action = $('#currChat').attr('data-action')
+                                let userInput = document.getElementById('inputMessage').value;
+                                let isImportant = $('#id_is_important').is(':checked')
+                                let is_important
+                                if (isImportant) {
+                                    is_important = "True"
+                                } else {
+                                    is_important = "False"
+                                }
+                                if (userInput) {
+                                    $.ajax({
+                                        url: "{% url 'social:send_message' %}",
+                                        data: {
+                                            "pk": pk,
+                                            "action": action,
+                                            "message": userInput,
+                                            "is_important": is_important
+                                        },
+                                        dataType: 'json',
+                                        success: function (response) {
 
-                                        if (response.message) {
-                                            $('#message_area').html('')
-                                            if (response.message.tags === 'error') {
-                                                $('#message_area').append(`
+                                            if (response.message) {
+                                                $('#message_area').html('')
+                                                if (response.message.tags ===
+                                                    'error') {
+                                                    $('#message_area').append(`
                             <div class="alert alert-danger fixed-top">${response.message.text}</div>
                             `)
-                                            } else {
-                                                $('#message_area').append(`
+                                                } else {
+                                                    $('#message_area').append(`
         <div class="alert alert-${response.message.tags} fixed-top">${response.message.text}</div>
                                 `)
+                                                }
+                                                setInterval(() => {
+                                                    $('#message_area').html(
+                                                        '')
+                                                }, 3000);
                                             }
-                                            setInterval(() => {
-                                                $('#message_area').html('')
-                                            }, 3000);
+                                            $('#inputMessage').val('')
+                                            $('.emojionearea-editor').html('')
+                                            $("#id_is_important").prop("checked",
+                                                false);
+                                            $('<li class="sent"><img src="{{ user }}" alt="" /><p>' +
+                                                    userInput + '</p></li>')
+                                                .appendTo($(
+                                                    '.messages ul'));
+                                            $('.message-input input').val(null);
+                                            $('.contact.active .preview').html(
+                                                '<span>You: </span>' + userInput
+                                                );
+                                            $(".messages").animate({
+                                                scrollTop: $(document)
+                                                    .height()
+                                            }, "fast");
+                                            document.getElementById(
+                                                    'notificationSound')
+                                                .play()
+                                            var element = document.getElementById(
+                                                'chatMessages');
+                                            element.scrollTop = element
+                                                .scrollHeight -
+                                                element.clientHeight;
                                         }
-                                        $('#inputMessage').val('')
-                                        $('.emojionearea-editor').html('')
-                                        $("#id_is_important").prop("checked", false);
-                                        $('<li class="sent"><img src="{{ user }}" alt="" /><p>' +
-                                            userInput + '</p></li>').appendTo($(
-                                            '.messages ul'));
-                                        $('.message-input input').val(null);
-                                        $('.contact.active .preview').html(
-                                            '<span>You: </span>' + userInput);
-                                        $(".messages").animate({
-                                            scrollTop: $(document).height()
-                                        }, "fast");
-                                        document.getElementById('notificationSound')
-                                            .play()
-                                        var element = document.getElementById(
-                                            'chatMessages');
-                                        element.scrollTop = element.scrollHeight -
-                                            element.clientHeight;
-                                    }
-                                })
-                            }
+                                    })
+                                }
+                            })
                         })
                     })
                 </script>

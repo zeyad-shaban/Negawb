@@ -1,4 +1,5 @@
-$(document).ready(function () {
+document.addEventListener('DOMContentLoaded', function(){
+    window.addEventListener('load', function(){
     let homepage_post_page = 2
     let followed_post_page = 2
     $('.homepageItem').hide()
@@ -507,4 +508,5 @@ id="dislikeForm${post.pk}">
             }
         })
     })
+})
 })

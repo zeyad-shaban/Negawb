@@ -1,4 +1,5 @@
-$(document).ready(function () {
+document.addEventListener('DOMContentLoaded', function(){
+    window.addEventListener('load', function(){
     // $('#commentCancelButtons').css('display', 'none')
     // $('#commentInput').keyup(() => $('#commentCancelButtons').css('display', 'inline-block'))
     // $('#cancelCommentButton').click((e) => {
@@ -6,4 +7,5 @@ $(document).ready(function () {
         // $('#commentCancelButtons').css('display', 'none')
         // $('#commentInput').val('')
     // })
+})
 })

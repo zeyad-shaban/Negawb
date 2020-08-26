@@ -56,14 +56,15 @@
                     </div>
                 </li>
                 <li class="nav-item">
-                    <a href="{% url 'people:all_people' %}"><span style="color:rgb(255, 255, 255);"
-                            id="findFriends"><i class="fas fa-user-plus mr-1" style="font-size: 24px;"></i>Find
+                    <a href="{% url 'people:all_people' %}"><span style="color:rgb(255, 255, 255);" id="findFriends"><i
+                                class="fas fa-user-plus mr-1" style="font-size: 24px;"></i>Find
                             Friends</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="{% url 'chat' %}" title="Chat">
-                        <i class="fas fa-comment-alt mr-1" style="font-size:24px; color: rgb(255, 255, 255)"></i><span>Chat</span>
+                        <i class="fas fa-comment-alt mr-1"
+                            style="font-size:24px; color: rgb(255, 255, 255)"></i><span>Chat</span>
                     </a>
                 </li>
                 <div class="btn-group">
@@ -358,34 +359,36 @@
                         <input type="submit" value="Add" name="submit" class="btn btn-success">
                     </form>
                     <script>
-                        $(document).ready(function () {
+                        document.addEventListener('DOMContentLoaded', function () {
+                            window.addEventListener('load', function () {
 
-                            $('#TodoTagForm').submit(function (event) {
-                                event.preventDefault();
-                                $.ajax({
-                                    url: "{% url 'production:add_tag' %}",
-                                    data: {
-                                        'title': $('#id_tag_title').val()
-                                    },
-                                    dataType: 'json',
-                                    success: function (data) {
-                                        $('#message_area').html('')
-                                        if (data.message.tags === 'error') {
-                                            $('#message_area').append(`
+                                $('#TodoTagForm').submit(function (event) {
+                                    event.preventDefault();
+                                    $.ajax({
+                                        url: "{% url 'production:add_tag' %}",
+                                        data: {
+                                            'title': $('#id_tag_title').val()
+                                        },
+                                        dataType: 'json',
+                                        success: function (data) {
+                                            $('#message_area').html('')
+                                            if (data.message.tags === 'error') {
+                                                $('#message_area').append(`
                             <div class="alert alert-danger fixed-top">${data.message.text}</div>
                             `)
-                                        } else {
-                                            $('#message_area').append(`
+                                            } else {
+                                                $('#message_area').append(`
         <div class="alert alert-${data.message.tags} fixed-top">${data.message.text}</div>
                                 `)
+                                            }
                                         }
-                                    }
+                                    })
+                                    setTimeout(() => {
+                                        $('#message_area').html('')
+                                    }, 4500);
                                 })
-                                setTimeout(() => {
-                                    $('#message_area').html('')
-                                }, 4500);
-                            })
 
+                            })
                         })
                     </script>
                 </div>
@@ -415,10 +418,11 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                     <script>
-                        $(document).ready(function () {
-                            $('#doneTodosButton').click(function (event) {
-                                event.preventDefault();
-                                $('#todosList').html(`
+                        document.addEventListener('DOMContentLoaded', function () {
+                            window.addEventListener('load', function () {
+                                $('#doneTodosButton').click(function (event) {
+                                    event.preventDefault();
+                                    $('#todosList').html(`
                                     {% for todo in done_todos %}
                         <div class="card">
                             {% if todo.is_important %}
@@ -442,10 +446,10 @@
                         </div>
                         {% endfor %}
                                     `)
-                            })
-                            $('#showTodosButton').click(function (event) {
-                                event.preventDefault();
-                                $('#todosList').html(`
+                                })
+                                $('#showTodosButton').click(function (event) {
+                                    event.preventDefault();
+                                    $('#todosList').html(`
                                     {% for todo in todos %}
                         <div class="card">
                             {% if todo.is_important %}
@@ -469,6 +473,7 @@
                         </div>
                         {% endfor %}
                                     `)
+                                })
                             })
                         })
                     </script>
@@ -484,18 +489,21 @@
                                 {% if not todo.is_completed %}
                                 <i class="far fa-circle" id="checkTodo{{todo.id}}" style="font-size: 24px;"></i>
                                 <script>
-                                    $(document).ready(function () {
-                                        $('#checkTodo{{todo.id}}').click(function (event) {
-                                            event.preventDefault();
-                                            $.ajax({
-                                                url: "{% url 'production:update_todo' todo.id %}",
-                                                data: {
-                                                    'action': 'check_todo',
-                                                },
-                                                dataType: 'json',
-                                                success: function (response) {
-                                                    $('#todoItem{{todo.id}}').toggle()
-                                                }
+                                    document.addEventListener('DOMContentLoaded', function () {
+                                        window.addEventListener('load', function () {
+                                            $('#checkTodo{{todo.id}}').click(function (event) {
+                                                event.preventDefault();
+                                                $.ajax({
+                                                    url: "{% url 'production:update_todo' todo.id %}",
+                                                    data: {
+                                                        'action': 'check_todo',
+                                                    },
+                                                    dataType: 'json',
+                                                    success: function (response) {
+                                                        $('#todoItem{{todo.id}}')
+                                                            .toggle()
+                                                    }
+                                                })
                                             })
                                         })
                                     })
@@ -527,37 +535,38 @@
         {% endif %}
     </div>
     <script>
-        $(document).ready(function () {
+        document.addEventListener('DOMContentLoaded', function () {
+            window.addEventListener('load', function () {
 
-            $('#todoForm').submit(function (event) {
-                event.preventDefault()
-            })
-            $('#addTodoButton').click(function (event) {
-                let check_box
-                let isImportant = $('#id_is_important').is(":checked")
-                if (isImportant) {
-                    check_box = 'True'
-                } else {
-                    check_box = 'False'
-                }
-                $.ajax({
-                    url: "{% url 'production:create_todo' %}",
-                    data: {
-                        'title': $('#id_title').val(),
-                        'note': $('#id_note').val(),
-                        'is_important': check_box,
-                        'tag': $('#id_tag').val()
-                    },
-                    dataType: 'json',
-                    success: function (data) {
-                        $('#id_title').val('')
-                        $('#id_note').val('')
-                        let todoStyle = 'style="'
-                        if (data.todo.is_important) {
-                            todoStyle += "background: rgb(226, 29, 29)"
-                        }
-                        todoStyle += '"'
-                        let newTodoOutput = `
+                $('#todoForm').submit(function (event) {
+                    event.preventDefault()
+                })
+                $('#addTodoButton').click(function (event) {
+                    let check_box
+                    let isImportant = $('#id_is_important').is(":checked")
+                    if (isImportant) {
+                        check_box = 'True'
+                    } else {
+                        check_box = 'False'
+                    }
+                    $.ajax({
+                        url: "{% url 'production:create_todo' %}",
+                        data: {
+                            'title': $('#id_title').val(),
+                            'note': $('#id_note').val(),
+                            'is_important': check_box,
+                            'tag': $('#id_tag').val()
+                        },
+                        dataType: 'json',
+                        success: function (data) {
+                            $('#id_title').val('')
+                            $('#id_note').val('')
+                            let todoStyle = 'style="'
+                            if (data.todo.is_important) {
+                                todoStyle += "background: rgb(226, 29, 29)"
+                            }
+                            todoStyle += '"'
+                            let newTodoOutput = `
                         <div class="card">
                             <div class="card-body todoItem" id="" ${todoStyle}>
                                     {% if not todo.is_completed %}
@@ -574,22 +583,23 @@
                             </div>
                         </div>
                         `
-                        $('#todosList').append(newTodoOutput)
-                        $('#message_area').html('')
-                        if (data.message.tags === 'error') {
-                            $('#message_area').append(`
+                            $('#todosList').append(newTodoOutput)
+                            $('#message_area').html('')
+                            if (data.message.tags === 'error') {
+                                $('#message_area').append(`
                             <div class="alert alert-danger fixed-top">${data.message.text}</div>
                             `)
-                        } else {
-                            $('#message_area').append(`
+                            } else {
+                                $('#message_area').append(`
         <div class="alert alert-${data.message.tags} fixed-top">${data.message.text}</div>
                                 `)
+                            }
                         }
-                    }
+                    })
+                    setTimeout(() => {
+                        $('#message_area').html('')
+                    }, 2000);
                 })
-                setTimeout(() => {
-                    $('#message_area').html('')
-                }, 2000);
             })
         })
     </script>

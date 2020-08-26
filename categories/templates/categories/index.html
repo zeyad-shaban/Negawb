@@ -15,7 +15,7 @@ other features{% endblock description %}
     <li class="list-group-item homepageView">Posts</li>
     <li class="list-group-item active homepageView">Types</li>
     {% endif %}
-    
+
     {% if not user.hide_posts_in_homepage and user.is_authenticated %}
     <li class="list-group-item homepageView" id="toggleFriendsPosts">Friends Posts</li>
     <li class="list-group-item homepageView" style="overflow: hidden">Followed Posts</li>
@@ -313,47 +313,49 @@ other features{% endblock description %}
                 </span>
 
                 <script>
-                    $(document).ready(function () {
+                    document.addEventListener('DOMContentLoaded', function () {
+                        window.addEventListener('load', function () {
 
-                        $('#likeFriendForm{{post.id}}').click((event) => {
-                            event.preventDefault()
-                        })
-                        $('#likeFriendButton{{post.id}}').click(function (event) {
-                            $.ajax({
-                                url: "{% url 'comments:post_like_dislike' post.id %}",
-                                data: {
-                                    'submit': 'like',
-                                },
-                                method: 'get',
-                                dataType: 'json',
-                                success: function (data) {
-                                    let likes = "{{post.likes.count}}";
-                                    let dislikes = "{{ post.dislikes.count }}"
-                                    if (data.action == 'undislike_and_like') {
-                                        dislikes -= 1
-                                        likes++
-                                        $('#id_friendDislikes{{post.id}}').html(
-                                            '<p style="color:black;">' +
-                                            dislikes + '</p>')
-                                        $('#id_friendLikes{{post.id}}').html(
-                                            '<p style="color:#065FD4;"><b>' +
-                                            likes + '</b></p>')
-                                    } else if (data.action == 'unlike') {
-                                        likes -= 1
-                                        $('#id_friendLikes{{post.id}}').html(
-                                            '<p style="color:#black;"' +
-                                            likes +
-                                            '</p>')
-                                    } else {
-                                        likes++
-                                        $('#id_friendLikes{{post.id}}').html(
-                                            '<p style="color:#065FD4;"><b>' +
-                                            likes + '</b></p>')
-                                    }
-                                }
+                            $('#likeFriendForm{{post.id}}').click((event) => {
+                                event.preventDefault()
                             })
-                        })
+                            $('#likeFriendButton{{post.id}}').click(function (event) {
+                                $.ajax({
+                                    url: "{% url 'comments:post_like_dislike' post.id %}",
+                                    data: {
+                                        'submit': 'like',
+                                    },
+                                    method: 'get',
+                                    dataType: 'json',
+                                    success: function (data) {
+                                        let likes = "{{post.likes.count}}";
+                                        let dislikes = "{{ post.dislikes.count }}"
+                                        if (data.action == 'undislike_and_like') {
+                                            dislikes -= 1
+                                            likes++
+                                            $('#id_friendDislikes{{post.id}}').html(
+                                                '<p style="color:black;">' +
+                                                dislikes + '</p>')
+                                            $('#id_friendLikes{{post.id}}').html(
+                                                '<p style="color:#065FD4;"><b>' +
+                                                likes + '</b></p>')
+                                        } else if (data.action == 'unlike') {
+                                            likes -= 1
+                                            $('#id_friendLikes{{post.id}}').html(
+                                                '<p style="color:#black;"' +
+                                                likes +
+                                                '</p>')
+                                        } else {
+                                            likes++
+                                            $('#id_friendLikes{{post.id}}').html(
+                                                '<p style="color:#065FD4;"><b>' +
+                                                likes + '</b></p>')
+                                        }
+                                    }
+                                })
+                            })
 
+                        })
                     })
                 </script>
 
@@ -375,46 +377,48 @@ other features{% endblock description %}
                 </span>
 
                 <script>
-                    $(document).ready(function () {
+                    document.addEventListener('DOMContentLoaded', function () {
+                        window.addEventListener('load', function () {
 
-                        $('#friendDislikeForm{{post.id}}').click((event) => {
-                            event.preventDefault()
-                        })
-                        $('#friendDislikeButton{{post.id}}').click(function (event) {
-                            $.ajax({
-                                url: "{% url 'comments:post_like_dislike' post.id %}",
-                                data: {
-                                    'submit': 'dislike',
-                                },
-                                dataType: 'json',
-                                success: function (data) {
-                                    let likes = "{{post.likes.count}}";
-                                    let dislikes = "{{ post.dislikes.count }}"
-                                    if (data.action == 'unlike_and_dislike') {
-                                        dislikes++
-                                        likes -= 1
-                                        $('#id_friendDislikes{{post.id}}').html(
-                                            '<p style="color:#065FD4;"><b>' +
-                                            dislikes + '</b></p>')
-                                        $('#id_friendLikes{{post.id}}').html(
-                                            '<p style="color:black;">' +
-                                            likes + '</p>')
-                                    } else if (data.action == 'undislike') {
-                                        dislikes -= 1
-                                        $('#id_friendDislikes{{post.id}}').html(
-                                            '<p style="color:#black;"' +
-                                            dislikes +
-                                            '</p>')
-                                    } else {
-                                        dislikes++
-                                        $('#id_friendDislikes{{post.id}}').html(
-                                            '<p style="color:#065FD4;"><b>' +
-                                            dislikes + '</b></p>')
-                                    }
-                                }
+                            $('#friendDislikeForm{{post.id}}').click((event) => {
+                                event.preventDefault()
                             })
-                        })
+                            $('#friendDislikeButton{{post.id}}').click(function (event) {
+                                $.ajax({
+                                    url: "{% url 'comments:post_like_dislike' post.id %}",
+                                    data: {
+                                        'submit': 'dislike',
+                                    },
+                                    dataType: 'json',
+                                    success: function (data) {
+                                        let likes = "{{post.likes.count}}";
+                                        let dislikes = "{{ post.dislikes.count }}"
+                                        if (data.action == 'unlike_and_dislike') {
+                                            dislikes++
+                                            likes -= 1
+                                            $('#id_friendDislikes{{post.id}}').html(
+                                                '<p style="color:#065FD4;"><b>' +
+                                                dislikes + '</b></p>')
+                                            $('#id_friendLikes{{post.id}}').html(
+                                                '<p style="color:black;">' +
+                                                likes + '</p>')
+                                        } else if (data.action == 'undislike') {
+                                            dislikes -= 1
+                                            $('#id_friendDislikes{{post.id}}').html(
+                                                '<p style="color:#black;"' +
+                                                dislikes +
+                                                '</p>')
+                                        } else {
+                                            dislikes++
+                                            $('#id_friendDislikes{{post.id}}').html(
+                                                '<p style="color:#065FD4;"><b>' +
+                                                dislikes + '</b></p>')
+                                        }
+                                    }
+                                })
+                            })
 
+                        })
                     })
                 </script>
 
@@ -537,47 +541,50 @@ other features{% endblock description %}
                 </span>
 
                 <script>
-                    $(document).ready(function () {
+                    document.addEventListener('DOMContentLoaded', function () {
+                        window.addEventListener('load', function () {
 
-                        $('#likeFollowedForm{{post.id}}').click((event) => {
-                            event.preventDefault()
-                        })
-                        $('#likeFollowedButton{{post.id}}').click(function (event) {
-                            $.ajax({
-                                url: "{% url 'comments:post_like_dislike' post.id %}",
-                                data: {
-                                    'submit': 'like',
-                                },
-                                method: 'get',
-                                dataType: 'json',
-                                success: function (data) {
-                                    let likes = "{{post.likes.count}}";
-                                    let dislikes = "{{ post.dislikes.count }}"
-                                    if (data.action == 'undislike_and_like') {
-                                        dislikes -= 1
-                                        likes++
-                                        $('#id_followedDislikes{{post.id}}').html(
-                                            '<p style="color:black;">' +
-                                            dislikes + '</p>')
-                                        $('#id_followedLikes{{post.id}}').html(
-                                            '<p style="color:#065FD4;"><b>' +
-                                            likes + '</b></p>')
-                                    } else if (data.action == 'unlike') {
-                                        likes -= 1
-                                        $('#id_followedLikes{{post.id}}').html(
-                                            '<p style="color:#black;"' +
-                                            likes +
-                                            '</p>')
-                                    } else {
-                                        likes++
-                                        $('#id_followedLikes{{post.id}}').html(
-                                            '<p style="color:#065FD4;"><b>' +
-                                            likes + '</b></p>')
-                                    }
-                                }
+                            $('#likeFollowedForm{{post.id}}').click((event) => {
+                                event.preventDefault()
                             })
-                        })
+                            $('#likeFollowedButton{{post.id}}').click(function (event) {
+                                $.ajax({
+                                    url: "{% url 'comments:post_like_dislike' post.id %}",
+                                    data: {
+                                        'submit': 'like',
+                                    },
+                                    method: 'get',
+                                    dataType: 'json',
+                                    success: function (data) {
+                                        let likes = "{{post.likes.count}}";
+                                        let dislikes = "{{ post.dislikes.count }}"
+                                        if (data.action == 'undislike_and_like') {
+                                            dislikes -= 1
+                                            likes++
+                                            $('#id_followedDislikes{{post.id}}')
+                                                .html(
+                                                    '<p style="color:black;">' +
+                                                    dislikes + '</p>')
+                                            $('#id_followedLikes{{post.id}}').html(
+                                                '<p style="color:#065FD4;"><b>' +
+                                                likes + '</b></p>')
+                                        } else if (data.action == 'unlike') {
+                                            likes -= 1
+                                            $('#id_followedLikes{{post.id}}').html(
+                                                '<p style="color:#black;"' +
+                                                likes +
+                                                '</p>')
+                                        } else {
+                                            likes++
+                                            $('#id_followedLikes{{post.id}}').html(
+                                                '<p style="color:#065FD4;"><b>' +
+                                                likes + '</b></p>')
+                                        }
+                                    }
+                                })
+                            })
 
+                        })
                     })
                 </script>
 
@@ -599,46 +606,51 @@ other features{% endblock description %}
                 </span>
 
                 <script>
-                    $(document).ready(function () {
+                    document.addEventListener('DOMContentLoaded', function () {
+                        window.addEventListener('load', function () {
 
-                        $('#followedDislikeForm{{post.id}}').click((event) => {
-                            event.preventDefault()
-                        })
-                        $('#followedDislikeButton{{post.id}}').click(function (event) {
-                            $.ajax({
-                                url: "{% url 'comments:post_like_dislike' post.id %}",
-                                data: {
-                                    'submit': 'dislike',
-                                },
-                                dataType: 'json',
-                                success: function (data) {
-                                    let likes = "{{post.likes.count}}";
-                                    let dislikes = "{{ post.dislikes.count }}"
-                                    if (data.action == 'unlike_and_dislike') {
-                                        dislikes++
-                                        likes -= 1
-                                        $('#id_followedDislikes{{post.id}}').html(
-                                            '<p style="color:#065FD4;"><b>' +
-                                            dislikes + '</b></p>')
-                                        $('#id_followedLikes{{post.id}}').html(
-                                            '<p style="color:black;">' +
-                                            likes + '</p>')
-                                    } else if (data.action == 'undislike') {
-                                        dislikes -= 1
-                                        $('#id_followedDislikes{{post.id}}').html(
-                                            '<p style="color:#black;"' +
-                                            dislikes +
-                                            '</p>')
-                                    } else {
-                                        dislikes++
-                                        $('#id_followedDislikes{{post.id}}').html(
-                                            '<p style="color:#065FD4;"><b>' +
-                                            dislikes + '</b></p>')
-                                    }
-                                }
+                            $('#followedDislikeForm{{post.id}}').click((event) => {
+                                event.preventDefault()
                             })
-                        })
+                            $('#followedDislikeButton{{post.id}}').click(function (event) {
+                                $.ajax({
+                                    url: "{% url 'comments:post_like_dislike' post.id %}",
+                                    data: {
+                                        'submit': 'dislike',
+                                    },
+                                    dataType: 'json',
+                                    success: function (data) {
+                                        let likes = "{{post.likes.count}}";
+                                        let dislikes = "{{ post.dislikes.count }}"
+                                        if (data.action == 'unlike_and_dislike') {
+                                            dislikes++
+                                            likes -= 1
+                                            $('#id_followedDislikes{{post.id}}')
+                                                .html(
+                                                    '<p style="color:#065FD4;"><b>' +
+                                                    dislikes + '</b></p>')
+                                            $('#id_followedLikes{{post.id}}').html(
+                                                '<p style="color:black;">' +
+                                                likes + '</p>')
+                                        } else if (data.action == 'undislike') {
+                                            dislikes -= 1
+                                            $('#id_followedDislikes{{post.id}}')
+                                                .html(
+                                                    '<p style="color:#black;"' +
+                                                    dislikes +
+                                                    '</p>')
+                                        } else {
+                                            dislikes++
+                                            $('#id_followedDislikes{{post.id}}')
+                                                .html(
+                                                    '<p style="color:#065FD4;"><b>' +
+                                                    dislikes + '</b></p>')
+                                        }
+                                    }
+                                })
+                            })
 
+                        })
                     })
                 </script>
 

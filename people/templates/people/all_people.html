@@ -3,7 +3,8 @@
 {% block title %}All Users | Dfreemedia{% endblock title %}
 
 
-{% block description %}Explore out the new social media platform Dfreemedia community, find and add your friends.{% endblock description %}
+{% block description %}Explore out the new social media platform Dfreemedia community, find and add your
+friends.{% endblock description %}
 
 
 {% block searchbar %}
@@ -30,13 +31,16 @@
                         <a href="{% url 'people:people' view_user.id %}">
                             {% if view_user.who_see_avatar == 'everyone' %}
                             <img src="{{ view_user.avatar.url }}" alt="{{ view_user.username }}"
-                                class="img-fluid rounded-circle d-block mx-auto {% if user.id <= 1000 %}oldUser{% endif %}" height="73" width="73">
+                                class="img-fluid rounded-circle d-block mx-auto {% if user.id <= 1000 %}oldUser{% endif %}"
+                                height="73" width="73">
                             {% elif view_user.who_see_avatar == 'friends' and user in view_user.friends.all %}
                             <img src="{{ view_user.avatar.url }}" alt="{{ view_user.username }}"
-                                class="img-fluid rounded-circle d-block mx-auto {% if user.id <= 1000 %}oldUser{% endif %}" height="73" width="73">
+                                class="img-fluid rounded-circle d-block mx-auto {% if user.id <= 1000 %}oldUser{% endif %}"
+                                height="73" width="73">
                             {% else %}
                             <img src="/media/profile_images/DefaultUserImage.jpg" alt="{{ view_user.username }}"
-                                class="img-fluid rounded-circle d-block mx-auto {% if user.id <= 1000 %}oldUser{% endif %}" height="73" width="73">
+                                class="img-fluid rounded-circle d-block mx-auto {% if user.id <= 1000 %}oldUser{% endif %}"
+                                height="73" width="73">
                             {% endif %}
                         </a>
                     </div>
@@ -71,38 +75,40 @@
                 </div>
             </li>
             <script>
-                $(document).ready(function () {
+                document.addEventListener('DOMContentLoaded', function () {
+                    window.addEventListener('load', function () {
 
-                    // * Add Friend Button
-                    $('#idAddFriendForm').submit(function (event) {
-                        event.preventDefault()
-                    })
-                    $('#idAddFriendButton{{ view_user.id }}').click(function () {
-                        let thisElement = $(this)
-                        $.ajax({
-                            url: "{% url 'people:addfriend' %}",
-                            data: {
-                                'pk': "{{ view_user.id }}"
-                            },
-                            dataType: 'json',
-                            success: function (data) {
-                                thisElement.parent().fadeOut()
-                                $('#message_area').html('')
-                                if (data.message.tags === 'error') {
-                                    $('#message_area').append(`
+                        // * Add Friend Button
+                        $('#idAddFriendForm').submit(function (event) {
+                            event.preventDefault()
+                        })
+                        $('#idAddFriendButton{{ view_user.id }}').click(function () {
+                            let thisElement = $(this)
+                            $.ajax({
+                                url: "{% url 'people:addfriend' %}",
+                                data: {
+                                    'pk': "{{ view_user.id }}"
+                                },
+                                dataType: 'json',
+                                success: function (data) {
+                                    thisElement.parent().fadeOut()
+                                    $('#message_area').html('')
+                                    if (data.message.tags === 'error') {
+                                        $('#message_area').append(`
                             <div class="alert alert-danger fixed-top">${data.message.text}</div>
                             `)
-                                } else {
-                                    $('#message_area').append(`
+                                    } else {
+                                        $('#message_area').append(`
         <div class="alert alert-${data.message.tags} fixed-top">${data.message.text}</div>
                                 `)
+                                    }
+                                    $(this).fadeOut()
                                 }
-                                $(this).fadeOut()
-                            }
+                            })
+                            setTimeout(() => {
+                                $('#message_area').fadeOut()
+                            }, 3200);
                         })
-                        setTimeout(() => {
-                            $('#message_area').fadeOut()
-                        }, 3200);
                     })
                 })
             </script>
@@ -113,30 +119,31 @@
 </div>
 <!-- Search people -->
 <script>
-    $(document).ready(function () {
+    document.addEventListener('DOMContentLoaded', function () {
+        window.addEventListener('load', function () {
 
-        // Search people
-        $('#idSearchForm').submit(function (event) {
-            event.preventDefault()
-        })
-        $('#idSearchInput').keyup(function (event) {
-            $.ajax({
-                url: "{% url 'people:all_peopleresults' %}",
-                data: {
-                    'q': $('#idSearchInput').val(),
-                },
-                dataType: 'json',
-                success: function (data) {
-                    let results = JSON.parse(data.results)
-                    let output = ''
+            // Search people
+            $('#idSearchForm').submit(function (event) {
+                event.preventDefault()
+            })
+            $('#idSearchInput').keyup(function (event) {
+                $.ajax({
+                    url: "{% url 'people:all_peopleresults' %}",
+                    data: {
+                        'q': $('#idSearchInput').val(),
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        let results = JSON.parse(data.results)
+                        let output = ''
 
-                    if (results.length === 0) {
-                        $('#contact-list').html('<h4>User not found</h4>')
-                    } else {
+                        if (results.length === 0) {
+                            $('#contact-list').html('<h4>User not found</h4>')
+                        } else {
 
-                        for (result of results) {
-                            // !DOESN'T USE [DJANGO URL
-                            output += `
+                            for (result of results) {
+                                // !DOESN'T USE [DJANGO URL
+                                output += `
                         <li class="list-group-item">
                 <div class="row w-100">
                     <div class="col-12 col-sm-6 col-md-3 px-0">
@@ -175,83 +182,94 @@
                 </div>
             </li>
             `
+                            }
                         }
-                    }
-                    $('#contact-list').html(output)
+                        $('#contact-list').html(output)
 
-                    function addFriend() {
-                        $('.addFriend').click(function (e) {
-                            e.preventDefault();
-                            let thisElement = $(this)
-                            $.ajax({
-                                url: "{% url 'people:addfriend' %}",
-                                data: {
-                                    'pk': thisElement.attr('data-pk'),
-                                },
-                                dataType: 'json',
-                                success: function (response) {
-                                    thisElement.fadeOut();
-                                    $('#message_area').html('')
-                                    if (data.message.tags === 'error') {
-                                        $('#message_area').append(`
+                        function addFriend() {
+                            $('.addFriend').click(function (e) {
+                                e.preventDefault();
+                                let thisElement = $(this)
+                                $.ajax({
+                                    url: "{% url 'people:addfriend' %}",
+                                    data: {
+                                        'pk': thisElement.attr(
+                                            'data-pk'),
+                                    },
+                                    dataType: 'json',
+                                    success: function (response) {
+                                        thisElement.fadeOut();
+                                        $('#message_area').html(
+                                            '')
+                                        if (data.message
+                                            .tags === 'error') {
+                                            $('#message_area')
+                                                .append(`
                             <div class="alert alert-danger fixed-top">${data.message.text}</div>
                             `)
-                                    } else {
-                                        $('#message_area').append(`
+                                        } else {
+                                            $('#message_area')
+                                                .append(`
         <div class="alert alert-${data.message.tags} fixed-top">${data.message.text}</div>
                                 `)
+                                        }
                                     }
-                                }
-                            })
-                        });
+                                })
+                            });
+                        }
+                        let g = document.createElement('script');
+                        let s = document.getElementsByTagName('script')[0]
+                        g.text = addFriend();
+                        s.parentNode.insertBefore(g, s)
                     }
-                    let g = document.createElement('script');
-                    let s = document.getElementsByTagName('script')[0]
-                    g.text = addFriend();
-                    s.parentNode.insertBefore(g, s)
-                }
+                })
             })
         })
     })
 </script>
 <script>
-    $(document).ready(function () {
-        let i = 2;
+    document.addEventListener('DOMContentLoaded', function () {
+        window.addEventListener('load', function () {
+            let i = 2;
 
-        function bottomScroll(event) {
-            if ($(window).scrollTop() + $(window).height() == $(document).height()) {
-                $.ajax({
-                    url: "{% url 'people:all_people' %}", // todo use data-url
-                    data: {
-                        'page': i
-                    },
-                    method: 'get',
-                    dataType: 'json',
-                    async: false,
-                    success: function (response) {
-                        i++
-                        users = JSON.parse(response.users)
-                        for (user of users) {
-                            let userAvatar
-                            let userPhoneNum = ''
-                            if (user.fields.who_see_avatar == 'everyone') {
-                                userAvatar = `<img src="/media/${user.fields.avatar}" alt="{{ view_user.username }}"
+            function bottomScroll(event) {
+                if ($(window).scrollTop() + $(window).height() == $(document).height()) {
+                    $.ajax({
+                        url: "{% url 'people:all_people' %}", // todo use data-url
+                        data: {
+                            'page': i
+                        },
+                        method: 'get',
+                        dataType: 'json',
+                        async: false,
+                        success: function (response) {
+                            i++
+                            users = JSON.parse(response.users)
+                            for (user of users) {
+                                let userAvatar
+                                let userPhoneNum = ''
+                                if (user.fields.who_see_avatar == 'everyone') {
+                                    userAvatar =
+                                        `<img src="/media/${user.fields.avatar}" alt="{{ view_user.username }}"
                                 class="img-fluid rounded-circle d-block mx-auto {% if user.id <= 1000 %}oldUser{% endif %}" height="73" width="73">`
-                            } else if (user.fields.who_see_avatar == 'friends' && "{{user}}" in user
-                                .fields.friends) {
-                                userAvatar = `<img src="/media/${user.fields.avatar}" alt="${user.fields.username}"
+                                } else if (user.fields.who_see_avatar == 'friends' &&
+                                    "{{user}}" in user
+                                    .fields.friends) {
+                                    userAvatar =
+                                        `<img src="/media/${user.fields.avatar}" alt="${user.fields.username}"
                                 class="img-fluid rounded-circle d-block mx-auto {% if user.id <= 1000 %}oldUser{% endif %}" height="73" width="73">`
-                            } else {
-                                userAvatar = `<img src="/media/profile_images/DefaultUserImage.jpg" alt="${user.fields.username}"
+                                } else {
+                                    userAvatar =
+                                        `<img src="/media/profile_images/DefaultUserImage.jpg" alt="${user.fields.username}"
                                     class="img-fluid rounded-circle d-block mx-auto {% if user.id <= 1000 %}oldUser{% endif %}" height="73" width="73">`
-                            }
-                            if (user.fields.phone) {
-                                userPhoneNum = `<span class="fa fa-fw fa-phone fa-fw text-muted" data-toggle="tooltip" title="Phone Number"
+                                }
+                                if (user.fields.phone) {
+                                    userPhoneNum = `<span class="fa fa-fw fa-phone fa-fw text-muted" data-toggle="tooltip" title="Phone Number"
                             data-original-title="${ user.fields.phone }"></span>
                         <span class="text-muted small">${ user.fields.phone }</span>
                         <br>`
-                            }
-                            output = `
+                                }
+                                output = `
                         <li class="list-group-item">
                         <div class="row w-100">
                         <div class="col-12 col-sm-6 col-md-3 px-0">
@@ -275,51 +293,55 @@
                         </div>
                         </li>
                             `
-                            $('#contact-list').append(output)
-                        }
-                        var g = document.createElement('script')
+                                $('#contact-list').append(output)
+                            }
+                            var g = document.createElement('script')
 
-                        function addFriend() {
-                            $('.id_addFriend').click(function (e) {
-                                let thisElement = $(this)
-                                e.preventDefault();
-                                let user_id = $(this).attr('data-pk')
-                                $.ajax({
-                                    url: `addfriend/`,
-                                    data: {
-                                        'pk': user_id
-                                    },
-                                    dataType: 'json',
-                                    success: function (data) {
-                                        thisElement.fadeOut()
-                                        $('#message_area').html('')
-                                        if (data.message.tags === 'error') {
-                                            $('#message_area').append(`
+                            function addFriend() {
+                                $('.id_addFriend').click(function (e) {
+                                    let thisElement = $(this)
+                                    e.preventDefault();
+                                    let user_id = $(this).attr('data-pk')
+                                    $.ajax({
+                                        url: `addfriend/`,
+                                        data: {
+                                            'pk': user_id
+                                        },
+                                        dataType: 'json',
+                                        success: function (data) {
+                                            thisElement.fadeOut()
+                                            $('#message_area').html('')
+                                            if (data.message.tags ===
+                                                'error') {
+                                                $('#message_area')
+                                                    .append(`
                             <div class="alert alert-danger fixed-top">${data.message.text}</div>
                             `)
-                                        } else {
-                                            $('#message_area').append(`
+                                            } else {
+                                                $('#message_area')
+                                                    .append(`
         <div class="alert alert-${data.message.tags} fixed-top">${data.message.text}</div>
                                 `)
+                                            }
                                         }
-                                    }
+                                    })
+                                    setTimeout(() => {
+                                        $('#message_area').fadeOut()
+                                    }, 3200);
                                 })
-                                setTimeout(() => {
-                                    $('#message_area').fadeOut()
-                                }, 3200);
-                            })
+                            }
+                            var s = document.getElementsByName('script')[0]
+                            g.text = addFriend();
+                            s.parentNode.insertBefore(g, s)
                         }
-                        var s = document.getElementsByName('script')[0]
-                        g.text = addFriend();
-                        s.parentNode.insertBefore(g, s)
-                    }
-                })
+                    })
+                }
             }
-        }
-        bottomScroll()
-        $(window).scroll(function () {
             bottomScroll()
-        });
+            $(window).scroll(function () {
+                bottomScroll()
+            });
+        })
     })
 </script>
 {% endblock content %}
