@@ -3,36 +3,32 @@ from django.views import generic
 from django.http import JsonResponse
 from django.forms.models import model_to_dict
 from django.contrib import messages
-from .forms import TodoForm, FeedbackForm
-from .models import Feedback, Todo, Announcement
+from .forms import NoteForm, FeedbackForm
+from .models import Feedback, Note, Announcement
 import datetime
 from django.utils.timezone import now
 
 
 
 
-def todo(request):
+def note(request):
     if request.GET.get('action') == 'create':
-        form = TodoForm(request.GET)
-        todo = form.save(commit=False)
-        todo.user = request.user
-        todo.save()
-        message = {
-            'text': 'Successfully created todo',
-            'tags': 'success',
-        }
-        return JsonResponse({'todo': model_to_dict(todo), 'message': message})
+        form = NoteForm(request.GET)
+        note = form.save(commit=False)
+        note.user = request.user
+        note.save()
+        return JsonResponse({'note': model_to_dict(note)})
     elif request.GET.get('action') == 'update':
         # if request.GET.get('pk'):
         # pk = request.GET.get('pk')
-        # if request.GET.get('action') == 'check_todo':
-        #     todo = get_object_or_404(Todo, pk=pk)
-        #     todo.is_completed = True
-        #     todo.save()
+        # if request.GET.get('action') == 'check_note':
+        #     note = get_object_or_404(Note, pk=pk)
+        #     note.is_completed = True
+        #     note.save()
         #     return JsonResponse({'done': True})
         pass
     else:
-        return render(request, 'production/todo.html', {'form':TodoForm})
+        return render(request, 'production/note.html', {'form':NoteForm})
 
 
 def feedback(request):

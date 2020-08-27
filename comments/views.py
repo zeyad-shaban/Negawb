@@ -79,7 +79,6 @@ def post_like_dislike(request, post_id):
             return JsonResponse({'action': 'dislike_only'})
 
 
-# todo fix MultiDictValue
 @login_required
 def reply_like_dislike(request, reply_id):
     reply = get_object_or_404(Comment, pk=reply_id)

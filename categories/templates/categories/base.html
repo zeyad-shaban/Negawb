@@ -168,8 +168,9 @@
 
                         {% if user.is_authenticated %}
                         <li>
-                            <a href="{% url 'production:todo' %}" class="btn">
-                                <i class="fas fa-list-ul mr-1" style="font-size: 24px; color:black"></i><span>To Do</span>
+                            <a href="{% url 'production:note' %}" class="btn">
+                                <i class="far fa-sticky-note mr-1"
+                                    style="font-size: 24px; color:black"></i><span>Notes</span>
                             </a>
                         </li>
                         {% endif %}
@@ -179,11 +180,11 @@
                         <script async src="https://static.addtoany.com/menu/page.js"></script>
                         <!-- AddToAny END -->
                         <li>
-                            <a class="btn" href="{% url 'feedback' %}" class="mb-2">Report a problem</a>
-                        </li>
-                        <li>
                             <a style="color: black; text-decoration: none;"
                                 href="{% url 'production:announcements' %}">Announcements </a>
+                        </li>
+                        <li>
+                            <a class="btn" href="{% url 'feedback' %}" class="mb-2">Report a problem</a>
                         </li>
                         {% if user.is_authenticated %}
                         <li role="separator" class="divider"></li>

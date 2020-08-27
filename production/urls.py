@@ -7,5 +7,5 @@ urlpatterns = [
     path('feedback/<int:pk>/', views.ViewFeedback.as_view(), name='ViewFeedback'),
     path('announcements/', views.announcements, name='announcements'),
     path('view/announce/<int:pk>', views.ViewAnnounce.as_view(), name='ViewAnnounce'),
-    path('todo/', views.todo, name='todo'),
+    path('note/', views.note, name='note'),
 ]

@@ -235,7 +235,7 @@ friends.{% endblock description %}
             function bottomScroll(event) {
                 if ($(window).scrollTop() + $(window).height() == $(document).height()) {
                     $.ajax({
-                        url: "{% url 'people:all_people' %}", // todo use data-url
+                        url: "{% url 'people:all_people' %}",
                         data: {
                             'page': i
                         },

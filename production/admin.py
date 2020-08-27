@@ -1,8 +1,8 @@
 from django.contrib import admin
-from .models import Todo, Feedback, Announcement
+from .models import Note, Feedback, Announcement
 
-@admin.register(Todo)
-class TodoAdmin(admin.ModelAdmin):
+@admin.register(Note)
+class NoteAdmin(admin.ModelAdmin):
     readonly_fields = ('date_created',)
 
 @admin.register(Feedback)

@@ -1,10 +1,10 @@
 from django import forms
-from .models import Todo, Feedback
+from .models import Note, Feedback
 
 
-class TodoForm(forms.ModelForm):
+class NoteForm(forms.ModelForm):
     class Meta:
-        model = Todo
+        model = Note
         fields = ('title', 'note', 'is_important')
         labels = {'is_important': 'Is Important', }
 
