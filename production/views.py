@@ -4,13 +4,15 @@ from django.http import JsonResponse
 from django.forms.models import model_to_dict
 from django.contrib import messages
 from .forms import TodoForm, FeedbackForm
-from .models import Feedback, Todo, Tag, Announcement
+from .models import Feedback, Todo, Announcement
 import datetime
 from django.utils.timezone import now
 
 
-def create_todo(request):
-    if request.method == 'GET':
+
+
+def todo(request):
+    if request.GET.get('action') == 'create':
         form = TodoForm(request.GET)
         todo = form.save(commit=False)
         todo.user = request.user
@@ -20,16 +22,17 @@ def create_todo(request):
             'tags': 'success',
         }
         return JsonResponse({'todo': model_to_dict(todo), 'message': message})
-
-
-def update_todo(request, pk):
-    if request.GET.get('pk'):
-        pk = request.GET.get('pk')
-    if request.GET.get('action') == 'check_todo':
-        todo = get_object_or_404(Todo, pk=pk)
-        todo.is_completed = True
-        todo.save()
-        return JsonResponse({'done': True})
+    elif request.GET.get('action') == 'update':
+        # if request.GET.get('pk'):
+        # pk = request.GET.get('pk')
+        # if request.GET.get('action') == 'check_todo':
+        #     todo = get_object_or_404(Todo, pk=pk)
+        #     todo.is_completed = True
+        #     todo.save()
+        #     return JsonResponse({'done': True})
+        pass
+    else:
+        return render(request, 'production/todo.html', {'form':TodoForm})
 
 
 def feedback(request):
@@ -56,24 +59,6 @@ def feedback(request):
 class ViewFeedback(generic.DetailView):
     model = Feedback
     template_name = 'production/ViewFeedback.html'
-
-
-def add_tag(request):
-    title = request.GET.get('title')
-    if title == '':
-        message = {
-            'text': 'The tag title can\'t be emtpy',
-            'tags': 'error'
-        }
-        return JsonResponse({'message': message})
-    else:
-        tag = Tag(title=request.GET.get('title'), user=request.user)
-        tag.save()
-        message = {
-            'text': 'Successfully created the tag, please refresh the page to see changes',
-            'tags': 'success'
-        }
-        return JsonResponse({'message': message})
 
 
 def announcements(request):
