@@ -27,7 +27,7 @@ class Post(models.Model):
         ]
 
     def __str__(self):
-        return f'Post by user: {self.user}'
+        return f'[USER] {self.user} 👍{self.likes.count()}👍 👎🏿{self.dislikes.count()}👎🏿 [DESC] {self.description[:80]} [FILE] {self.post_file} [IMAGE] {self.image}'
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
@@ -45,11 +45,11 @@ class Comment(models.Model):
     comment_date = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, null=True, blank=True)
-    likes = models.ManyToManyField(User, related_name='comment_like')
-    dislikes = models.ManyToManyField(User, related_name='comment_dislike')
+    likes = models.ManyToManyField(User, related_name='comment_like', blank=True)
+    dislikes = models.ManyToManyField(User, related_name='comment_dislike', blank=True)
 
     def __str__(self):
-        return f'user: {self.user}'
+        return f'[USER] {self.user} 👍{self.likes.count()}👍 👎🏿{self.dislikes.count()}👎🏿 [POST] {self.post.description[:30]} [DESC] {self.description[:80]}'
 
 
 class Reply(models.Model):
@@ -59,4 +59,4 @@ class Reply(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'{self.comment}, {self.user}'
+        return f'[USER] {self.user} [COMMENT] {self.comment.description[:30]} [DESC] {self.description[:80]}'

@@ -12,7 +12,7 @@ class ChatBox(models.Model):
     created_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'{self.user_1} | {self.user_2}'
+        return f'{self.user_1} and {self.user_2}'
 
 
 class Message(models.Model):
@@ -25,7 +25,7 @@ class Message(models.Model):
     is_important = models.BooleanField(default=False)
 
     def __str__(self):
-        return f'message_sender: {self.message_sender}, chat_box: {self.chat_box}'
+        return f'{self.message_sender} to ({self.chat_box}) ⚠️{self.is_important}⚠️'
 
 
 class ChatGroup(models.Model):
@@ -43,7 +43,7 @@ class ChatGroup(models.Model):
         User, related_name='group_memebers', blank=True)
 
     def __str__(self):
-        return f'Title: {self.title}, author: {self.author}'
+        return f'[AUTHOR] {self.author} [TITLE] {self.title} [MEMBERS] {self.members.count()} '
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
@@ -63,7 +63,7 @@ class GroupRequest(models.Model):
     sent_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'{self.request_sender} To {self.reciever}'
+        return f'[GROUP] {self.group.title} | {self.request_sender} To {self.reciever}'
 
 
 class GroupMessage(models.Model):
