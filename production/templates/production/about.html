@@ -3,53 +3,36 @@
 {% block title %}Overcome social media addiction | Dfreemedia{% endblock title %}
 
 
-{% block description %}Tried to delete social media but returned it again due to your work or school group? but those people don't care about your time, spamming text messages! Then try out Dfreemedia, we provide a unique message filtering system for both posts and messages, including marking messages as important and normal{% endblock description %}
-    
+{% block description %}Tried to delete social media but returned it again due to your work or school group? but those
+people don't care about your time, spamming text messages! Then try out Dfreemedia, we provide a unique message
+filtering system for both posts and messages, including marking messages as important and
+normal{% endblock description %}
+
 
 {% block content %}
 <style>
     body {
-        font-size: 1.25em;
+        font-size: 2.25em;
+        background-color: #65bbf18c !important;
     }
 </style>
-<h3>Let me tell you a day in you life{% if user.is_authenticated %} {{user.username}}{% endif %}...</h3>
-<p>Wake up from bed, check facebook, do your boring work check facebook again, then go to bed</p>
-<b>Dreaming about owning your own buisness...</b>
-<p>wake up and complain for not having time</p>
 <div class="text-center">
-    <img src="https://cdn.pixabay.com/photo/2018/10/14/23/12/addiction-3747769_960_720.jpg" alt=""
-        class="rounded" height="300">
+    <video width="100%" controls class="col-md-10 col-lg-8">
+        <source src="{% static 'production/DFMPres.mp4' %}" type="video/mp4">
+        <source src="{% static 'production/DFMPres.mp4' %}" type="video/ogg">
+        Your browser does not support the video tag.
+    </video>
+    <h1>Is Social media is wasting your life?</h1>
+    <h1> Are you getting distracted and forgetting why you even opened the app?</h1>
+    <h4>do you get distracted between too many topics and can't focus on things you want?</h4>
+    <h1>No worries that's why Dfreemedia is here</h1>
+    <br>
+    <br>
+    <br>
+    <h1>We divide posts according to their topic to help you stay focused and receive relevant topics
+        only, giving users the power to hide unwanted topics</h1>
+    <br><br>
+    <h4>As well as the ability to highlight friends messages so you don't get distracted between unimportant messages
+    </h4>
 </div>
-<br>
-<br>
-<h3>Finally you realize it's the time, but...</h3>
-<p>It's that day were you managed to break away from social media, opened your phone and threw them away, after few
-    minutes
-    you rememberd <b>the one important group owned by your teacher or boss which you can't leave</b> so you
-    returned social media to your life again </p>
-<p>Finding out that <b><i>Those people doesn't care about your time</i></b></p>
-<p>they keep spamming messages in a place supposed to be only for imoprtant stuff</p>
-<div class="text-center">
-    <img src="https://cdn.pixabay.com/photo/2017/12/11/12/52/whatsapp-3012138_960_720.png" alt="" height="350">
-</div>
-<h3>But your time is valiable for us</h3>
-<p>I won't hide it, i used to spend 16 hourse daily on whatsapp, i didn't have any goals. I was completly
-    wasting my life</p>
-<p>But once i broke out of this addiction everything in my life changed</p>
-<p>my goal is help you acheive your <b>great brain's power</b> and be the best of yourself!</p>
-<h1>How are we unique?</h1>
-<p>We give our users the full control of what they see and what they don't, what they would like to receive and what
-    they won't</p>
-<p>Go to your <a href="{% url 'userpage:home' %}" target="_blank"> Profile </a> and choose <b>Distraction Free</b> </p>
-<p>This menu will give you the full control of our app. This can be from hiding any post in homepage to completly
-    turning the app into a Chat Only app</p>
-<a href="{% url 'userpage:home' %}">
-    <img src="{% static 'production/DFMenu.jpg' %}" alt="" class="img-fuid" height="350">
-</a>
-<p>also we provide a unique filtering system for both chats and posts</p>
-<p>for chats, we allow users to mark their message as important and others as non important, so you can easily find any
-    important message (if any) and also blocking notifications for non imoprtant messages</p>
-<p>This was just a summary, go ahead and explore <b>other great features</b> we provide to keep your time and life safe
-</p>
-<h4>Be more productive with DFreeMedia</h4>
 {% endblock content %}

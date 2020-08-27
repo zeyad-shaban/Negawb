@@ -160,10 +160,10 @@
                             style="color: white; font-size: 36px;"></i><span class="caret"></span></a>
                     <ul class="dropdown-menu float-right mr-100 mt-5">
                         <li>
-                            <a class="btn" href="{% url 'faq' %}">FAQ</a>
+                            <a class="btn" href="{% url 'about' %}">About</a>
                         </li>
                         <li>
-                            <a class="btn" href="{% url 'about' %}">About</a>
+                            <a class="btn" href="{% url 'faq' %}">FAQ</a>
                         </li>
 
                         {% if user.is_authenticated %}
@@ -219,7 +219,7 @@
             <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#signupFloatForm"
                 style="border-radius: 100%;" id="signup">Sign
                 Up</button>
-                <br>
+            <br>
             <button type="button" class="btn btn-warning m-2" data-toggle="modal" style="border-radius: 100%;"
                 data-target="#loginFloatForm">Login</button>
         </div>

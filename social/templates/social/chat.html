@@ -10,11 +10,6 @@ highlighting messages as important, perfect for managing work and school groups{
 
 
 {% block content %}
-<style>
-    #floatAuthForm {
-        display: none;
-    }
-</style>
 <link rel="stylesheet" href="{% static 'social/emojionearea.min.css' %}">
 <link rel="stylesheet" href="{% static 'social/chat.css' %}">
 <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css'>
@@ -706,6 +701,8 @@ highlighting messages as important, perfect for managing work and school groups{
         </div>
         <div class="messages" id="chatMessagesContainer">
             <ul id="chatMessages">
+
+                {% if not user.is_authenticated %}
                 <li class="replies">
                     <p><button type="button" class="btn btn-warning d-inline" data-toggle="modal"
                             data-target="#signupFloatForm" style="border-radius: 100%;" id="signup">Sign
@@ -715,6 +712,7 @@ highlighting messages as important, perfect for managing work and school groups{
                     <p><button type="button" class="btn btn-warning m-2 d-inline" data-toggle="modal"
                             style="border-radius: 100%;" data-target="#loginFloatForm">Login</button></p>
                 </li>
+                {% endif %}
                 <p class="float-right" style="font-size:1.25em">Dfreemedia</p>
                 <li class="replies">
                     <img src="{% static 'categories/favicon.jpg' %}" alt="" width="50" height="50" />
