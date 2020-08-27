@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
+    window.addEventListener('load', function () {
         $('.todoNote').css('display', 'none')
         $('.todoItem').on('click', function (event) {
             // $('.todoNote').toggle()

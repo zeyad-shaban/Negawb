@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
+    window.addEventListener('load', function () {
         $('.todoNote').css('display', 'none')
         $('.todoItem').on('click', function (event) {
             // $('.todoNote').toggle()
@@ -135,8 +136,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 }, 4000);
             }
         }, 4000);
+        $('textarea,input[type=text]').emojioneArea({
+            pickerPosition: "bottom",
+        })
     });
-    $('textarea,input[type=text]').emojioneArea({
-        pickerPosition: "bottom",
-    })
 });

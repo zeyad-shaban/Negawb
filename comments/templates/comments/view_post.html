@@ -248,9 +248,6 @@
     document.addEventListener('DOMContentLoaded', function () {
         window.addEventListener('load', function () {
             $('#commentForm').submit(function (event) {
-                event.preventDefault()
-            })
-            $('#addComment').click(function (event) {
                 event.preventDefault();
                 $.ajax({
                     url: "{% url 'comments:view_post' post.id %}",
@@ -261,21 +258,26 @@
                         'action': 'addComment'
                     },
                     success: function (response) {
-                        let userImage
-                        if (response.comment.user.who_see_avatar == "everyone") {
-                            userImage = "{response.comment.user.avatar.url}"
-                        } else {
-                            userImage = "/media/profile_images/DefaultUserImage.jpg"
-                        }
-                        $('#commentsList').prepend(`
+                        $('.emojionearea-editor').html('')
+                        $.ajax({
+                            url: "{% url 'userpage:get_user_by_id' %}",
+                            data: {
+                                'pk': response.comment.user,
+                            },
+                            method: 'get',
+                            dataType: 'json',
+                            async: false,
+                            success: function (userResponse) {
+                                let user = userResponse.user
+                                $('.comment-tabs').prepend(`
                     <li class="media">
-                        <a href="/people/${response.comment.user.id}/">
-                            <img src="${userImage}" alt="User Image" width="64"
+                        <a href="/people/${user.id}/">
+                            <img src="${user.avatar}" alt="User Image" width="64"
                                 height="64" class="media-object img-circle">
                         </a>
                         <div class="media-body">
                             <div class="well well-lg">
-                                <h4 class="media-heading reviews">${response.comment.user.username} </h4>
+                                <h4 class="media-heading reviews">${user.username} </h4>
                                 <small class="form-text text-muted float-right">
                                     ${response.comment.comment_date}
                                 </small>
@@ -283,7 +285,9 @@
                                     ${response.comment.description}
                                 </p>
                     `)
-                        $('#commentInput').val('')
+                                $('#commentInput').val('')
+                            }
+                        })
                     }
                 })
             })
@@ -368,29 +372,28 @@
                                     },
                                     dataType: 'json',
                                     success: function (response) {
-                                        let avatarImage
-                                        if (response.reply.user
-                                            .who_see_avatar == 'everyone') {
-                                            avatarImage = response.reply.user
-                                                .avatar.url
-                                        } else if (response.reply.user ==
-                                            "{{user}}") {
-                                            avatarImage = response.reply.user
-                                                .avatar.url
-                                        } else {
-                                            avatarImage =
-                                                "/media/profile_images/DefaultUserImage.jpg"
-                                        }
-                                        $('#replyList{{comment.id}}').prepend(`
+                                        $.ajax({
+                                            url: "{% url 'userpage:get_user_by_id' %}",
+                                            data: {
+                                                'pk': response.reply.user,
+                                            },
+                                            method: 'get',
+                                            dataType: 'json',
+                                            async: false,
+                                            success: function (
+                                            userResponse) {
+                                                let user = userResponse.user
+                                                $('#replyList{{comment.id}}')
+                                                    .prepend(`
                                                     <li class="media media-replied">
-                                <a href="/people/${response.reply.id}">
-                                    <img src="${avatarImage}" alt="User Image" width="64"
+                                <a href="/people/${user.id}">
+                                    <img src="${user.avatar}" alt="User Image" width="64"
                                         height="64">
                                 </a>
                                 <div class="media-body">
                                     <div class="well well-lg">
                                         <h4 class="media-heading reviews"><span
-                                                class="glyphicon glyphicon-share-alt"></span> ${response.reply.user.username}
+                                                class="glyphicon glyphicon-share-alt"></span> ${user.username}
                                         </h4>
                                         <smal class="form-text text-muted float-right">
                                             ${response.reply.date}
@@ -402,8 +405,10 @@
                                 </div>
                             </li>
                                                     `)
-                                        $('#commentReplyInput{{comment.id}}')
-                                            .val('')
+                                                $('#commentReplyInput{{comment.id}}')
+                                                    .val('')
+                                            }
+                                        })
                                     }
                                 })
                             })
