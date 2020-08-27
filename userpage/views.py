@@ -1,6 +1,5 @@
 from django.dispatch import receiver
 from django.core.serializers import serialize
-from django.contrib.auth.signals import user_logged_in, user_logged_out
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, HttpResponseRedirect
@@ -148,18 +147,6 @@ def unfriend(request):
         notification.receiver.add(friend)
     return JsonResponse({})
 
-
-# Is online?
-@receiver(user_logged_in)
-def got_online(sender, user, request, **kwargs):
-    user.is_online = True
-    user.save()
-
-
-@receiver(user_logged_out)
-def got_offline(sender, user, request, **kwargs):
-    user.is_online = False
-    user.save()
 
 def get_user_by_id(request):
     pk = request.GET.get('pk')

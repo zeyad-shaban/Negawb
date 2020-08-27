@@ -371,11 +371,7 @@ highlighting messages as important, perfect for managing work and school groups{
                 {% for friend in friends %}
                 <li class="contact">
                     <div class="wrap" id="chatFriendButton{{friend.id}}">
-                        {% if friend.is_online %}
                         <span class="contact-status online"></span>
-                        {% else %}
-                        <span class="contact-status offline"></span>
-                        {% endif %}
                         {% if friend.who_see_avatar == 'everyone' %}
                         <img src="{{friend.avatar.url}}" alt="User Image"
                             class="img-fluid rounded-circle d-block mx-auto {% if user.id <= 1000 %}oldUser{% endif %}"
