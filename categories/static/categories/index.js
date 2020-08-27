@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', function(){
 <div class="mb-3">
     <div class="card-body">
         <p class="card-text">${ post.fields.description }</p>
-        <video width="400" height="320" controls>
+        <video width="100%" controls class="col-md-10 col-lg-8" preload="none">
             <source src="/media/${ post.fields.post_file }" type="video/mp4">
             <source src="/media/${ post.fields.post_file }" type="video/ogg">
             Your browser does not support the video tag.
@@ -249,7 +249,7 @@ document.addEventListener('DOMContentLoaded', function(){
 <div class="mb-3">
     <div class="card-body">
         <p class="card-text">${ post.fields.description }</p>
-        <video width="400" height="320" controls>
+        <video width="100%" controls class="col-md-10 col-lg-8" preload="none">
             <source src="/media/${ post.fields.post_file }" type="video/mp4">
             <source src="/media/${ post.fields.post_file }" type="video/ogg">
             Your browser does not support the video tag.
@@ -408,7 +408,7 @@ document.addEventListener('DOMContentLoaded', function(){
 <div class="mb-3">
 <div class="card-body">
 <p class="card-text">${ post.fields.description }</p>
-<video width="400" height="320" controls>
+<video width="100%" controls class="col-md-10 col-lg-8" preload="none">
 <source src="/media/${ post.fields.post_file }" type="video/mp4">
 <source src="/media/${ post.fields.post_file }" type="video/ogg">
 Your browser does not support the video tag.

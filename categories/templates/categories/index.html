@@ -112,7 +112,7 @@ only, giving users the power to hide unwanted topics{% endblock description %}
             {% if post.image %}
             <img src="{{ post.image.url }}" alt="{{ post.user.username }}" height="250" width="40%">
             {% elif post.post_file %}
-            <video width="100%" controls class="col-md-10 col-lg-8">
+            <video width="100%" controls class="col-md-10 col-lg-8" preload="none">
                 <source src="{{ post.post_file.url }}" type="video/mp4">
                 <source src="{{ post.post_file.url }}" type="video/ogg">
                 Your browser does not support the video tag.
@@ -285,7 +285,7 @@ only, giving users the power to hide unwanted topics{% endblock description %}
                 {% if post.image %}
                 <img src="{{ post.image.url }}" alt="{{ post.user.username }}" height="250" width="40%">
                 {% elif post.post_file %}
-                <video width="100%" controls class="col-md-10 col-lg-8">
+                <video width="100%" controls class="col-md-10 col-lg-8" preload="none">
                     <source src="{{ post.post_file.url }}" type="video/mp4">
                     <source src="{{ post.post_file.url }}" type="video/ogg">
                     Your browser does not support the video tag.
@@ -510,7 +510,7 @@ only, giving users the power to hide unwanted topics{% endblock description %}
                 {% if post.image %}
                 <img src="{{ post.image.url }}" alt="{{ post.user.username }}" height="250" width="40%">
                 {% elif post.post_file %}
-                <video width="100%" controls class="col-md-10 col-lg-8">
+                <video width="100%" controls class="col-md-10 col-lg-8" preload="none">
                     <source src="{{ post.post_file.url }}" type="video/mp4">
                     <source src="{{ post.post_file.url }}" type="video/ogg">
                     Your browser does not support the video tag.
