@@ -51,11 +51,14 @@ def chat_friend(request):
         return JsonResponse({'chat_messages': serialize('json', chat_messages), 'group': json_group, })
 
 
-@login_required
 def chat(request):
     if request.method == 'GET':
-        friends = User.objects.filter(friends=request.user)
-        groups = ChatGroup.objects.filter(members=request.user)
+        if request.user.is_authenticated:
+            friends = User.objects.filter(friends=request.user)
+            groups = ChatGroup.objects.filter(members=request.user)
+        else:
+            friends = []
+            groups = []
         return render(request, 'social/chat.html', {'friends': friends, 'groups': groups})
 
 

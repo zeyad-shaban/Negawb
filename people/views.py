@@ -30,7 +30,6 @@ def people(request, pk):
     return render(request, 'people/index.html', {'view_user': view_user, 'friends': friends, 'posts': posts})
 
 
-@login_required
 def all_people(request):
     users_list = User.objects.all().order_by('-id')
     paginator = Paginator(users_list, 4)
@@ -41,7 +40,10 @@ def all_people(request):
         users = paginator.page(1)
     except EmptyPage:
         users = []
-    user_friends = User.objects.filter(friends=request.user)
+    if request.user.is_authenticated:
+        user_friends = User.objects.filter(friends=request.user)
+    else:
+        user_friends = []
     if request.GET.get('page'):
         
         return JsonResponse({'users': serialize('json', users)})

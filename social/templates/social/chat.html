@@ -10,6 +10,11 @@ highlighting messages as important, perfect for managing work and school groups{
 
 
 {% block content %}
+<style>
+    #floatAuthForm {
+        display: none;
+    }
+</style>
 <link rel="stylesheet" href="{% static 'social/emojionearea.min.css' %}">
 <link rel="stylesheet" href="{% static 'social/chat.css' %}">
 <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css'>
@@ -90,7 +95,7 @@ highlighting messages as important, perfect for managing work and school groups{
                                                 dataType: 'json',
                                                 async: false,
                                                 success: function (
-                                                response) {
+                                                    response) {
                                                     user = response.user
                                                 }
                                             })
@@ -251,12 +256,14 @@ highlighting messages as important, perfect for managing work and school groups{
                                                     setTimeout(() => {
                                                         $.ajax({
                                                             url: $(
-                                                                    '#findUserForm')
+                                                                    '#findUserForm'
+                                                                )
                                                                 .attr(
                                                                     'data-url'),
                                                             data: {
                                                                 'q': $(
-                                                                        '#searchUser')
+                                                                        '#searchUser'
+                                                                    )
                                                                     .val(),
                                                             },
                                                             dataType: 'json',
@@ -267,7 +274,7 @@ highlighting messages as important, perfect for managing work and school groups{
                                                                     .parse(
                                                                         data
                                                                         .results
-                                                                        )
+                                                                    )
                                                                 let output =
                                                                     ''
 
@@ -283,7 +290,7 @@ highlighting messages as important, perfect for managing work and school groups{
                                                                     for (
                                                                         result of
                                                                         results
-                                                                        ) {
+                                                                    ) {
                                                                         // !DOESN'T USE [DJANGO URL
                                                                         output
                                                                             += `
@@ -335,7 +342,7 @@ highlighting messages as important, perfect for managing work and school groups{
                                                                 $('#userResults')
                                                                     .html(
                                                                         output
-                                                                        )
+                                                                    )
                                                             }
                                                         })
                                                     }, 2000);
@@ -569,12 +576,37 @@ highlighting messages as important, perfect for managing work and school groups{
                                 let userInput = document.getElementById('inputMessage').value;
                                 let isImportant = $('#id_is_important').is(':checked')
                                 let is_important
+                                let style = ''
                                 if (isImportant) {
                                     is_important = "True"
+                                    style = "style=\"background:#D10C0C\""
                                 } else {
                                     is_important = "False"
                                 }
                                 if (userInput) {
+                                    $('.emojionearea-editor').html('')
+                                    $("#id_is_important").prop("checked",
+                                        false);
+                                    $(`<li class="sent"><img src="{{ user }}" alt="" /><p ${style}>${userInput}</p></li>`)
+                                        .appendTo($(
+                                            '.messages ul'));
+                                    $('.message-input input').val(null);
+                                    $('.contact.active .preview').html(
+                                        '<span>You: </span>' + userInput
+                                    );
+                                    $(".messages").animate({
+                                        scrollTop: $(document)
+                                            .height()
+                                    }, "fast");
+                                    document.getElementById(
+                                            'notificationSound')
+                                        .play()
+                                    var element = document.getElementById(
+                                        'chatMessages');
+                                    element.scrollTop = element
+                                        .scrollHeight -
+                                        element.clientHeight;
+                                    $('.emojionearea-editor').html('')
                                     $.ajax({
                                         url: "{% url 'social:send_message' %}",
                                         data: {
@@ -603,30 +635,6 @@ highlighting messages as important, perfect for managing work and school groups{
                                                         '')
                                                 }, 3000);
                                             }
-                                            $('#inputMessage').val('')
-                                            $('.emojionearea-editor').html('')
-                                            $("#id_is_important").prop("checked",
-                                                false);
-                                            $('<li class="sent"><img src="{{ user }}" alt="" /><p>' +
-                                                    userInput + '</p></li>')
-                                                .appendTo($(
-                                                    '.messages ul'));
-                                            $('.message-input input').val(null);
-                                            $('.contact.active .preview').html(
-                                                '<span>You: </span>' + userInput
-                                                );
-                                            $(".messages").animate({
-                                                scrollTop: $(document)
-                                                    .height()
-                                            }, "fast");
-                                            document.getElementById(
-                                                    'notificationSound')
-                                                .play()
-                                            var element = document.getElementById(
-                                                'chatMessages');
-                                            element.scrollTop = element
-                                                .scrollHeight -
-                                                element.clientHeight;
                                         }
                                     })
                                 }
@@ -698,7 +706,33 @@ highlighting messages as important, perfect for managing work and school groups{
         </div>
         <div class="messages" id="chatMessagesContainer">
             <ul id="chatMessages">
-                <img src="{% static 'users/authenticationBck.jpg' %}" alt="" width="100%">
+                <li class="replies">
+                    <p><button type="button" class="btn btn-warning d-inline" data-toggle="modal"
+                            data-target="#signupFloatForm" style="border-radius: 100%;" id="signup">Sign
+                            Up</button></p>
+                </li>
+                <li class="replies">
+                    <p><button type="button" class="btn btn-warning m-2 d-inline" data-toggle="modal"
+                            style="border-radius: 100%;" data-target="#loginFloatForm">Login</button></p>
+                </li>
+                <p class="float-right" style="font-size:1.25em">Dfreemedia</p>
+                <li class="replies">
+                    <img src="{% static 'categories/favicon.jpg' %}" alt="" width="50" height="50" />
+                    <p>We allow users to hilight their messages for other members to easily find them</p>
+                </li>
+                <li class="replies">
+                    <img src="{% static 'categories/favicon.jpg' %}" alt="" width="50" height="50" />
+                    <p>To highlight a message click on the 'important' checkbox</p>
+                </li>
+                <li class="replies">
+                    <img src="{% static 'categories/favicon.jpg' %}" alt="" width="50" height="50" />
+                    <p>You can only send 3 important messages per day for each chat</p>
+                </li>
+                <li class="replies">
+                    <img src="{% static 'categories/favicon.jpg' %}" alt="" width="50" height="50" />
+                    <p>you can block unhighlighted messages from the Distraction Free menu in your <a
+                            href="{% url 'userpage:home' %}" target="_blank">profile</a></p>
+                </li>
             </ul>
         </div>
         <div class="message-input">

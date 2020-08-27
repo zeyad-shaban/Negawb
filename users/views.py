@@ -8,7 +8,6 @@ from django.template.loader import render_to_string
 from django.contrib.sites.shortcuts import get_current_site
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import AuthenticationForm
-from django.http import HttpResponse
 from django.contrib.auth import login, logout, authenticate
 from django.db import IntegrityError
 from django.contrib import messages

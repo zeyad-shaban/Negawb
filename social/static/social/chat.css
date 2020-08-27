@@ -802,59 +802,69 @@ body {
 }
 
 
-#sendMessageContainer{
-    width:80%;
-}
-#messageExtraInputs{
-    width:20%;
+#sendMessageContainer {
+    width: 80%;
 }
 
-@media screen and (max-width:1000px){
-
-    #sendMessageContainer{
-        width:75%;
-    }
-    #messageExtraInputs{
-        width:25%;
-    }
-
+#messageExtraInputs {
+    width: 20%;
 }
-@media screen and (max-width:908px){
 
-    #sendMessageContainer{
-        width:70%;
+@media screen and (max-width:1000px) {
+
+    #sendMessageContainer {
+        width: 75%;
     }
-    #messageExtraInputs{
-        width:30%;
+
+    #messageExtraInputs {
+        width: 25%;
     }
 
 }
-@media screen and (max-width:584px){
 
-    #sendMessageContainer{
-        width:55%;
+@media screen and (max-width:908px) {
+
+    #sendMessageContainer {
+        width: 70%;
     }
-    #messageExtraInputs{
-        width:45%;
+
+    #messageExtraInputs {
+        width: 30%;
     }
 
 }
-@media screen and (max-width:379px){
 
-    #sendMessageContainer{
-        width:100%;
+@media screen and (max-width:584px) {
+
+    #sendMessageContainer {
+        width: 55%;
     }
-    #messageExtraInputs{
-        width:100%;
+
+    #messageExtraInputs {
+        width: 45%;
+    }
+
+}
+
+@media screen and (max-width:379px) {
+
+    #sendMessageContainer {
+        width: 100%;
+    }
+
+    #messageExtraInputs {
+        width: 100%;
     }
 }
-@media screen and (max-width:335px){
 
-    #sendMessageContainer{
-        width:70%;
+@media screen and (max-width:335px) {
+
+    #sendMessageContainer {
+        width: 70%;
     }
-    #messageExtraInputs{
-        width:100%;
+
+    #messageExtraInputs {
+        width: 100%;
     }
 }
 
@@ -883,4 +893,8 @@ body {
         width: calc(100% - 100px);
         min-width: 300px !important;
     }
+}
+
+#floatAuthForm {
+    display: none;
 }
