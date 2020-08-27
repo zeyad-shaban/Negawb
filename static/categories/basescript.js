@@ -136,8 +136,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 }, 4000);
             }
         }, 4000);
+        $('textarea,input[type=text]').emojioneArea({
+            pickerPosition: "bottom",
+        })
     });
-    $('textarea,input[type=text]').emojioneArea({
-        pickerPosition: "bottom",
-    })
 });
