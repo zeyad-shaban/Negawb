@@ -14,10 +14,11 @@ User = get_user_model()
 
 def home(request):
     if request.user.is_authenticated and request.user.chat_only_mode:
-        messages.warning(request, 'You have enabled Chat only mode, you can disable it from profile Distraction Free settings')
+        messages.warning(
+            request, 'You have enabled Chat only mode, you can disable it from profile Distraction Free settings')
         return redirect('chat')
     categories = Category.objects.all()
-    
+
     followed_users = []
     if request.user.is_authenticated:
         friends = User.objects.filter(friends=request.user)
@@ -52,18 +53,19 @@ def home(request):
         # Homepage Posts Paginator
         if request.user.homepage_posts:
             homepage_posts_list = request.user.homepage_posts.post_set.all().order_by('-post_date')
-            homepage_posts_paginator = Paginator(homepage_posts_list, 5)
-            page = request.GET.get('homepage_posts_page')
-            try:
-                homepage_posts = homepage_posts_paginator.page(page)
-            except PageNotAnInteger:
-                homepage_posts = homepage_posts_paginator.page(1)
-            except EmptyPage:
-                homepage_posts = []
-            if page:
-                return JsonResponse({'homepage_posts': serialize('json', homepage_posts)})
         else:
+            homepage_posts_list = Post.objects.all().order_by('-post_date')
+            print(homepage_posts_list.count())
+        homepage_posts_paginator = Paginator(homepage_posts_list, 5)
+        page = request.GET.get('homepage_posts_page')
+        try:
+            homepage_posts = homepage_posts_paginator.page(page)
+        except PageNotAnInteger:
+            homepage_posts = homepage_posts_paginator.page(1)
+        except EmptyPage:
             homepage_posts = []
+        if page:
+            return JsonResponse({'homepage_posts': serialize('json', homepage_posts)})
     else:
         friends_posts = None
         followed_posts = None
@@ -73,7 +75,8 @@ def home(request):
 
 def view_category(request, pk):
     if request.user.is_authenticated and request.user.chat_only_mode:
-        messages.warning(request, 'You have Chat only mode enabled, you can disable it from profile Distraction Free settings')
+        messages.warning(
+            request, 'You have Chat only mode enabled, you can disable it from profile Distraction Free settings')
         return redirect('chat')
     category = get_object_or_404(Category, pk=pk)
     post_list = Post.objects.filter(category=category).order_by('-post_date')

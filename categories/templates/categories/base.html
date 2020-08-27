@@ -272,7 +272,7 @@
                         <div class="form-group">
                             <label for="password2">Default posts type</label>
                             <select name="homepage_posts" id="id_homepage_posts">
-                                <option value="" selected="">---------</option>
+                                <option value="" selected="">All</option>
                                 {% for category in all_categories %}
                                 <option value="{{ category.id }}">{{ category.title }}</option>
 

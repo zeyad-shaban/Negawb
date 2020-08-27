@@ -38,7 +38,7 @@ class DistractionFreeForm(ModelForm):
             'allow_reply_message': 'Comment replies',
             'allow_invites': 'friend and group <b>Invites</b>',
             'your_invites':'Your own invites',
-            'homepage_posts': 'Posts to show in homepage <small class="form-text text-muted">choose none if you don\'t want to show posts in homepage</small>',
+            'homepage_posts': 'Homepage posts <small class="form-text text-muted">Choose the ----- for all topics</small>',
             'hide_posts_in_homepage':'Hide Followers/Friends posts in homepage',
             'blocked_categories': 'Blocked categories <small class="form-text">hold ctrl/command for destokp users to block categories</small>',
             'chat_only_mode': '<b>Chat only mode</b>',

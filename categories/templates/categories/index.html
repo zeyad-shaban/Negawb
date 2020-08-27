@@ -7,12 +7,8 @@ only, giving users the power to hide unwanted topics{% endblock description %}
 
 {% block content %}
 <ul class="list-group list-group-horizontal">
-    {% if user.homepage_posts or not user.is_authenticated %}
     <li class="list-group-item active homepageView">Posts</li>
     <li class="list-group-item homepageView">Topics</li>
-    {% else %}
-    <li class="list-group-item active homepageView">Topics</li>
-    {% endif %}
 
     {% if not user.hide_posts_in_homepage and user.is_authenticated %}
     <li class="list-group-item homepageView" id="toggleFriendsPosts">Friends Posts</li>
@@ -47,15 +43,14 @@ only, giving users the power to hide unwanted topics{% endblock description %}
 </div>
 
 <!-- Homepage posts -->
-{% if user.homepage_posts and user.is_authenticated or not user.is_authenticated %}
 <div class="homepageItem" id="postsContainer">
-
     {% if not user.is_authenticated %}
     <h1 class="text-center">Homepage posts</h1>
     <p>Homepage posts are currently set for every topic of posts, you can change it from the Distraction Free menu if
         you are logged in</p>
     <p>Also you have to login to add posts</p>
     {% else %}
+    {% if user.homepage_posts %}
     <h1 class="text-center">{{ user.homepage_posts.title }}</h1>
     <link rel="stylesheet" href="{% static 'social/emojionearea.min.css' %}">
     <form method="POST" class="mb-4" enctype="multipart/form-data"
@@ -78,6 +73,9 @@ only, giving users the power to hide unwanted topics{% endblock description %}
 
         <input type="submit" value="Add Post" class="btn btn-success" id="addPostButton">
     </form>
+    {% else %}
+    <h1 class="text-center">All topics</h1>
+    {% endif %}
     {% endif %}
     {% for post in homepage_posts %}
     <a href="{% url 'people:people' post.user.id %}">
@@ -245,7 +243,6 @@ only, giving users the power to hide unwanted topics{% endblock description %}
     </span>
     {% endfor %}
 </div>
-{% endif %}
 
 <div class="m-4">
     {% if not user.hide_posts_in_homepage %}
