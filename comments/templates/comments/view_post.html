@@ -95,7 +95,7 @@
                 href="{% url 'comments:view_post' post.id %}">Read
                 More</a>{% endif %}</p>
         {% endif %}
-        <video width="100%" controls class="col-md-10 col-lg-8" preload="none">
+        <video width="100%" controls class="col-md-10 col-lg-8">
             <source src="{{ post.post_file.url }}" type="video/mp4">
             <source src="{{ post.post_file.url }}" type="video/ogg">
             Your browser does not support the video tag.
