@@ -15,97 +15,49 @@
 <link rel="stylesheet" href="{% static 'social/emojionearea.min.css' %}">
 <script src="{% static 'comments/view_post.js' %}"></script>
 
-{% if post.image %}
-<a href="{% url 'people:people' user.id %}">
-    {% if user.who_see_avatar == 'everyone' %}
-    <img src="{{post.user.avatar.url}}" alt="User Image" width="64" height="64"
-        class="mr-3 float-left {% if user.id <= 1000 %}oldUser{% endif %}">
-    {% elif user.who_see_avatar == 'friends' and user in user.friends.all %}
-    <img src="{{post.user.avatar.url}}" alt="User Image" width="64" height="64"
-        class="mr-3 float-left {% if user.id <= 1000 %}oldUser{% endif %}">
-    {% elif user == user %}
-    <img src="{{post.user.avatar.url}}" alt="User Image" width="64" height="64"
-        class="mr-3 float-left {% if user.id <= 1000 %}oldUser{% endif %}">
-    {% else %}
-    <img src="/media/profile_images/DefaultUserImage.jpg" alt="User Image" width="64" height="64"
-        class="mr-3 float-left {% if user.id <= 1000 %}oldUser{% endif %}">
-    {% endif %}
-    <span>{{post.user.username}}</span>
-</a>
-<div class="mb-3">
-    <div class="card-body">
-        {% if post.description %}
-        <p class="card-text">{{post.description|truncatechars:200}}{% if post.description|length > 200%}<a
-                href="{% url 'comments:view_post' post.id %}">Read
-                More</a>{% endif %}</p>
-        {% endif %}
-        <div class="text-center">
-            <img src="{{ post.image.url }}" alt="{{ post.user.username }}" class="img-fluid rounded">
-        </div>
-        <p class="card-text"><small class="form-text text-muted">Published at {{ post.post_date|date:'d M Y' }}</small>
-        </p>
-    </div>
-</div>
-<!-- Descriptin only post -->
-{% elif post.description and not post.image and not post.post_file %}
-<div class="media">
-    <a href="{% url 'people:people' post.user.id %}">
-        {% if post.user.who_see_avatar == 'everyone' %}
-        <img src="{{post.user.avatar.url}}" alt="User Image" width="64" height="64"
-            class="mr-3 float-left {% if user.id <= 1000 %}oldUser{% endif %}">
-        {% elif post.user.who_see_avatar == 'friends' and user in post.user.friends.all %}
-        <img src="{{post.user.avatar.url}}" alt="User Image" width="64" height="64"
-            class="mr-3 float-left {% if user.id <= 1000 %}oldUser{% endif %}">
-        {% elif post.user == user %}
-        <img src="{{post.user.avatar.url}}" alt="User Image" width="64" height="64"
-            class="mr-3 float-left {% if user.id <= 1000 %}oldUser{% endif %}">
-        {% else %}
-        <img src="/media/profile_images/DefaultUserImage.jpg" alt="User Image" width="64" height="64"
-            class="mr-3 float-left {% if user.id <= 1000 %}oldUser{% endif %}">
-        {% endif %}
-        <div class="media-body">
-            <h5 class="mt-0">{{post.user.username}}</h5>
-    </a>
-    <br>
-    {{post.description}}
-</div>
-</div>
-<!-- File post -->
-{% elif post.post_file %}
-<a href="{% url 'people:people' user.id %}">
-    {% if user.who_see_avatar == 'everyone' %}
+<a href="{% url 'people:people' post.user.id %}">
+    {% if post.user.who_see_avatar == 'everyone' %}
     <img src="{{post.user.avatar.url}}" alt="{{ post.user.username }}" width="64" height="64"
-        class="mr-3 float-left {% if user.id <= 1000 %}oldUser{% endif %}">
-    {% elif user.who_see_avatar == 'friends' and user in user.friends.all %}
+        class="mr-3 float-left {% if post.user.id <= 1000 %}oldUser{% endif %}" loading="lazy">
+    {% elif post.user.who_see_avatar == 'friends' and user in post.user.friends.all %}
     <img src="{{post.user.avatar.url}}" alt="{{ post.user.username }}" width="64" height="64"
-        class="mr-3 float-left {% if user.id <= 1000 %}oldUser{% endif %}">
-    {% elif user == user %}
+        class="mr-3 float-left {% if post.user.id <= 1000 %}oldUser{% endif %}" loading="lazy">
+    {% elif post.user == user %}
     <img src="{{post.user.avatar.url}}" alt="{{ post.user.username }}" width="64" height="64"
-        class="mr-3 float-left {% if user.id <= 1000 %}oldUser{% endif %}">
+        class="mr-3 float-left {% if post.user.id <= 1000 %}oldUser{% endif %}" loading="lazy">
     {% else %}
     <img src="/media/profile_images/DefaultUserImage.jpg" alt="{{ post.user.username }}" width="64" height="64"
-        class="mr-3 float-left {% if user.id <= 1000 %}oldUser{% endif %}">
+        class="mr-3 float-left {% if post.user.id <= 1000 %}oldUser{% endif %}" loading="lazy">
     {% endif %}
     <span>{{post.user.username}}</span>
+</a>
+<a href="{% url 'people:people' post.user.id %}">
 </a>
 <div class="mb-3">
     <div class="card-body">
         {% if post.description %}
-        <p class="card-text">{{post.description|truncatechars:200}}{% if post.description|length > 200%}<a
-                href="{% url 'comments:view_post' post.id %}">Read
-                More</a>{% endif %}</p>
+        <blockquote class="blockquote mb-0">
+            <p class="text-break">{{post.description|truncatechars:450}} {% if post.description|length > 450%}<a
+                    href="{% url 'comments:view_post' post.id %}">Read
+                    More</a>{% endif %}</p>
+        </blockquote>
         {% endif %}
-        <video width="100%" controls class="col-md-10 col-lg-8">
+        <small class="form-text text-muted">Published at {{ post.post_date|date:'d M Y' }}</small>
+
+        {% if post.image %}
+        <img src="{{ post.image.url }}" alt="{{ post.user.username }}" height="w" width="40%">
+        {% elif post.post_file %}
+        <video width="100%" controls class="col-md-10 col-lg-8" preload="none">
             <source src="{{ post.post_file.url }}" type="video/mp4">
             <source src="{{ post.post_file.url }}" type="video/ogg">
             Your browser does not support the video tag.
         </video>
-        <p class="card-text"><small class="form-text text-muted">Published at {{ post.post_date|date:'d M Y' }}</small>
-        </p>
+        {% endif %}
     </div>
 </div>
-{% endif %}
 <span class="row justify-content-center">
+    <span><a href="{% url 'comments:view_post' post.id %}" style="text-decoration: none; color:black;"><i
+                class="far fa-comment-dots" style="font-size:36px;"></i></a></span>
     <!-- Like -->
     <form method="GET" id="likeForm{{post.id}}" class="form-inline">
         <button type="submit" name="submit" value="like" title="Like" class="btn btn-link">
@@ -303,16 +255,16 @@
         <a href="{% url 'people:people' comment.user.id %}">
             {% if comment.user.who_see_avatar == 'everyone' %}
             <img src="{{comment.user.avatar.url}}" alt="User Image" width="64" height="64"
-                class="media-object img-circle {% if user.id <= 1000 %}oldUser{% endif %}">
+                class="media-object img-circle {% if comment.user.id <= 1000 %}oldUser{% endif %}">
             {% elif comment.user.who_see_avatar == 'friends' and user in comment.user.friends.all %}
             <img src="{{comment.user.avatar.url}}" alt="User Image" width="64" height="64"
-                class="media-object img-circle {% if user.id <= 1000 %}oldUser{% endif %}">
+                class="media-object img-circle {% if comment.user.id <= 1000 %}oldUser{% endif %}">
             {% elif comment.user == user %}
             <img src="{{comment.user.avatar.url}}" alt="User Image" width="64" height="64"
-                class="media-object img-circle {% if user.id <= 1000 %}oldUser{% endif %}">
+                class="media-object img-circle {% if comment.user.id <= 1000 %}oldUser{% endif %}">
             {% else %}
             <img src="/media/profile_images/DefaultUserImage.jpg" alt="User Image" width="64" height="64"
-                class="media-object img-circle {% if user.id <= 1000 %}oldUser{% endif %}">
+                class="media-object img-circle {% if comment.user.id <= 1000 %}oldUser{% endif %}">
             {% endif %}
         </a>
         <div class="media-body">
@@ -441,16 +393,16 @@
                 <a href="{% url 'people:people' reply.user.id %}">
                     {% if reply.user.who_see_avatar == 'everyone' %}
                     <img src="{{reply.user.avatar.url}}" alt="User Image" width="64" height="64"
-                        class="media-object img-circle {% if user.id <= 1000 %}oldUser{% endif %}">
+                        class="media-object img-circle {% if reply.user.id <= 1000 %}oldUser{% endif %}">
                     {% elif reply.user.who_see_avatar == 'friends' and user in reply.user.friends.all %}
                     <img src="{{reply.user.avatar.url}}" alt="User Image" width="64" height="64"
-                        class="media-object img-circle {% if user.id <= 1000 %}oldUser{% endif %}">
+                        class="media-object img-circle {% if reply.user.id <= 1000 %}oldUser{% endif %}">
                     {% elif reply.user == user %}
                     <img src="{{reply.user.avatar.url}}" alt="User Image" width="64" height="64"
-                        class="media-object img-circle {% if user.id <= 1000 %}oldUser{% endif %}">
+                        class="media-object img-circle {% if reply.user.id <= 1000 %}oldUser{% endif %}">
                     {% else %}
                     <img src="/media/profile_images/DefaultUserImage.jpg" alt="User Image" width="64" height="64"
-                        class="media-object img-circle {% if user.id <= 1000 %}oldUser{% endif %}">
+                        class="media-object img-circle {% if reply.user.id <= 1000 %}oldUser{% endif %}">
                     {% endif %}
                 </a>
                 <div class="media-body">

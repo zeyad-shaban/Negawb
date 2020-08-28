@@ -3,12 +3,15 @@
 {% block title %}Add feedback or report a problem | Dfreemedia{% endblock title %}
 
 
-{% block description %}Having issues with the new social media app Dfreemedia? Report your problem here and we will fix it as soon as possible{% endblock description %}
+{% block description %}Having issues with the new social media app Dfreemedia? Report your problem here and we will fix
+it as soon as possible{% endblock description %}
 
 
 {% block content %}
 <h4>Add FeedBack and report a problem</h4>
 <small class="form-text text-muted">We wil read it as soon as possible</small>
+<span class="alert-danger">You must be logged in</span>
+{% if user.is_authenticated %}
 <form action="" method="post" class="">
     {% csrf_token %}
     <textarea class="form-control float-left col-md-9 col-lg-7 col-sm-12 col-12" aria-label="With textarea"
@@ -30,9 +33,10 @@
     </span>
     <input type="submit" value="Submit FeedBack" class="btn btn-success col-lg-2 col-md-12 col-sm-6 col-12">
 </form>
+{% endif %}
 <br><br>
 <hr>
-<h3>Others Feedbacks</h3>
+<h3>Feedbacks</h3>
 <small class="text-muted form-text">{{feedbacks.count}}</small>
 
 <div class="card card-default" id="card_contacts">
@@ -45,13 +49,16 @@
                         <a href="{% url 'people:people' feedback.user.id %}">
                             {% if feedback.user.who_see_avatar == 'everyone' %}
                             <img src="{{ feedback.user.avatar.url }}" alt="{{ feedback.user.username }}"
-                                class="img-fluid rounded-circle d-block mx-auto {% if user.id <= 1000 %}oldUser{% endif %}" height="73" width="73">
+                                class="img-fluid rounded-circle d-block mx-auto {% if feedback.user.id <= 1000 %}oldUser{% endif %}"
+                                height="73" width="73">
                             {% elif feedback.user.who_see_avatar == 'friends' and user in feedback.user.friends %}
                             <img src="{{ feedback.user.avatar.url }}" alt="{{ feedback.user.username }}"
-                                class="img-fluid rounded-circle d-block mx-auto {% if user.id <= 1000 %}oldUser{% endif %}" height="73" width="73">
+                                class="img-fluid rounded-circle d-block mx-auto {% if feedback.user.id <= 1000 %}oldUser{% endif %}"
+                                height="73" width="73">
                             {% else %}
                             <img src="/media/profile_images/DefaultUserImage.jpg" alt="{{ feedback.user.username }}"
-                                class="img-fluid rounded-circle d-block mx-auto {% if user.id <= 1000 %}oldUser{% endif %}" height="73" width="73">
+                                class="img-fluid rounded-circle d-block mx-auto {% if feedback.user.id <= 1000 %}oldUser{% endif %}"
+                                height="73" width="73">
                             {% endif %}
                         </a>
                     </div>
@@ -61,20 +68,10 @@
                             <label class="name lead">{{ feedback.user.username }}</label>
                         </a>
                         <br>
-                        <span class="fa fa-fw fa-envelope fa-fw text-muted" data-toggle="tooltip" title="Bio"
-                            data-original-title="{{ feedback.user.bio }}"></span>
                         <span class="small text-break">{{ feedback.review|truncatechars:500 }}</span>
                         {% if feedback.review|length > 500 %}
                         <a href="{% url 'production:ViewFeedback' feedback.id %}" class="btn btn-link">Read More</a>
                         {% endif %}
-                        <!-- <form action="{% url 'social:create_ChatBox' feedback.user.id%}" method="GET">
-                            <input type="submit" value="Chat" name="displayChat" class="btn btn-primary float-right">
-                        </form>
-
-                        <button type="button" class="btn btn-danger float-right" data-toggle="modal"
-                            data-target="#unfeedback.user">
-                            UnFriend
-                        </button> -->
                     </div>
                 </div>
             </li>

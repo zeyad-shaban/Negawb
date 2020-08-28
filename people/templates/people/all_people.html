@@ -31,15 +31,15 @@ friends.{% endblock description %}
                         <a href="{% url 'people:people' view_user.id %}">
                             {% if view_user.who_see_avatar == 'everyone' %}
                             <img src="{{ view_user.avatar.url }}" alt="{{ view_user.username }}"
-                                class="img-fluid rounded-circle d-block mx-auto {% if user.id <= 1000 %}oldUser{% endif %}"
+                                class="img-fluid rounded-circle d-block mx-auto {% if view_user.id <= 1000 %}oldUser{% endif %}"
                                 height="73" width="73">
                             {% elif view_user.who_see_avatar == 'friends' and user in view_user.friends.all %}
                             <img src="{{ view_user.avatar.url }}" alt="{{ view_user.username }}"
-                                class="img-fluid rounded-circle d-block mx-auto {% if user.id <= 1000 %}oldUser{% endif %}"
+                                class="img-fluid rounded-circle d-block mx-auto {% if view_user.id <= 1000 %}oldUser{% endif %}"
                                 height="73" width="73">
                             {% else %}
                             <img src="/media/profile_images/DefaultUserImage.jpg" alt="{{ view_user.username }}"
-                                class="img-fluid rounded-circle d-block mx-auto {% if user.id <= 1000 %}oldUser{% endif %}"
+                                class="img-fluid rounded-circle d-block mx-auto {% if view_user.id <= 1000 %}oldUser{% endif %}"
                                 height="73" width="73">
                             {% endif %}
                         </a>
@@ -142,7 +142,11 @@ friends.{% endblock description %}
                         } else {
 
                             for (result of results) {
-                                // !DOESN'T USE [DJANGO URL
+                                let isOld = ''
+                                if (result.pk <= 1000 ){
+                                    isOld = 'oldUser'
+                                }
+                                // ABSOLUTE URL
                                 output += `
                         <li class="list-group-item">
                 <div class="row w-100">
@@ -150,10 +154,10 @@ friends.{% endblock description %}
                         <a href="/people/${result.pk }">
                             {% if result.fields.who_see_avatar == 'everyone' %}
                             <img src="${ result.fields.avatar.url }" alt="${ result.fields.username }"
-                                class="img-fluid rounded-circle d-block mx-auto {% if user.id <= 1000 %}oldUser{% endif %}" height="73" width="73">
+                                class="img-fluid rounded-circle d-block mx-auto ${isOld}" height="73" width="73">
                                 {% else %}
                                 <img src="/media/profile_images/DefaultUserImage.jpg" alt="${ result.fields.username }"
-                                    class="img-fluid rounded-circle d-block mx-auto {% if user.id <= 1000 %}oldUser{% endif %}" height="73" width="73">
+                                    class="img-fluid rounded-circle d-block mx-auto ${isOld}" height="73" width="73">
                             {% endif %}
                         </a>
                     </div>
@@ -248,20 +252,24 @@ friends.{% endblock description %}
                             for (user of users) {
                                 let userAvatar
                                 let userPhoneNum = ''
+                                let isOld = ''
+                                if (user.pk <= 1000){
+                                    isOld = 'oldUser'
+                                }
                                 if (user.fields.who_see_avatar == 'everyone') {
                                     userAvatar =
                                         `<img src="/media/${user.fields.avatar}" alt="{{ view_user.username }}"
-                                class="img-fluid rounded-circle d-block mx-auto {% if user.id <= 1000 %}oldUser{% endif %}" height="73" width="73">`
+                                class="img-fluid rounded-circle d-block mx-auto ${isOld}" height="73" width="73">`
                                 } else if (user.fields.who_see_avatar == 'friends' &&
                                     "{{user}}" in user
                                     .fields.friends) {
                                     userAvatar =
                                         `<img src="/media/${user.fields.avatar}" alt="${user.fields.username}"
-                                class="img-fluid rounded-circle d-block mx-auto {% if user.id <= 1000 %}oldUser{% endif %}" height="73" width="73">`
+                                class="img-fluid rounded-circle d-block mx-auto ${isOld}" height="73" width="73">`
                                 } else {
                                     userAvatar =
                                         `<img src="/media/profile_images/DefaultUserImage.jpg" alt="${user.fields.username}"
-                                    class="img-fluid rounded-circle d-block mx-auto {% if user.id <= 1000 %}oldUser{% endif %}" height="73" width="73">`
+                                    class="img-fluid rounded-circle d-block mx-auto ${isOld}" height="73" width="73">`
                                 }
                                 if (user.fields.phone) {
                                     userPhoneNum = `<span class="fa fa-fw fa-phone fa-fw text-muted" data-toggle="tooltip" title="Phone Number"
