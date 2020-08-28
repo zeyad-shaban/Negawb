@@ -54,6 +54,7 @@ def home(request):
     else:
         followed_posts = None
         homepage_posts = Post.objects.all().order_by('-post_date')
+        followed = []
     return render(request, 'categories/index.html', {'categories': categories, 'followed_posts': followed_posts, 'homepage_posts': homepage_posts, 'followed': followed})
     # todo delete friends_posts
 
