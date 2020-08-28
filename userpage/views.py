@@ -119,8 +119,11 @@ def acceptrequest(request):
     friend_request = get_object_or_404(FriendRequest, pk=pk)
     from_user = request.user
     to_user = friend_request.from_user
+
     from_user.friends.add(to_user)
+    from_user.followers.add(to_user)
     to_user.friends.add(from_user)
+    to_user.followers.add(from_user)
     friend_request.delete()
     if friend_request.from_user.your_invites:
         notification = Notification(notification_type='your_invites', sender=request.user,
