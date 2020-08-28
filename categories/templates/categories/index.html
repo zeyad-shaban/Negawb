@@ -245,6 +245,11 @@ only, giving users the power to hide unwanted topics{% endblock description %}
 <!-- FOLLOWED POSTS -->
 <div id="followedPosts" class="homepageItem">
     <!-- Followed users -->
+    
+    {% if followed.count <= 0 %}
+        <h1>You are not following anyone</h1>
+    {% endif %}
+        
     <ul class="list-unstyled col-lg-1 col-md-2 mr-1 float-left">
         {% for followed in followed %}
         <li class="media">
