@@ -93,8 +93,6 @@ only, giving users the power to hide unwanted topics{% endblock description %}
         {% endif %}
         <span>{{post.user.username}}</span>
     </a>
-    <a href="{% url 'people:people' post.user.id %}">
-    </a>
     <div class="mb-3">
         <div class="card-body">
             {% if post.description %}

@@ -212,6 +212,10 @@ document.addEventListener('DOMContentLoaded', function () {
                                     let user = response.user
                                     let output = ''
                                     let userAvatar = ''
+                                    let isOld = ''
+                                    if (user.id <= 1000) {
+                                        isOld = 'oldUser'
+                                    }
                                     if (user.who_see_avatar == 'everyone') {
                                         userAvatar = user.avatar
                                     } else if (user.who_see_avatar == 'friends' && $('#categoryContainer').attr('data-currUser') in JSON.parse(user.friends)) {
@@ -221,60 +225,39 @@ document.addEventListener('DOMContentLoaded', function () {
                                     } else {
                                         userAvatar = `/media/profile_images/DefaultUserImage.jpg`
                                     }
+                                    output = `
+                                    <a href="/people/${user.id}">
+        <img src="${userAvatar}" alt="${user.username }" width="64" height="64"
+            class="mr-3 float-left rounded-circle ${isOld}" loading="lazy">
+            <span>${user.username}</span>
+    </a>
+    <div class="mb-3">
+        <div class="card-body">
+                                    `
+                                    if (post.fields.description) {
+                                        output += `
+                                        <blockquote class="blockquote mb-0">
+                <p class="text-break">${post.fields.description}</p>
+            </blockquote>
+                                    `
+                                    }
+                                    output += `<small class="form-text text-muted">Published at ${ post.fields.post_date }</small>`
                                     if (post.fields.image) {
-                                        output = `
-                                        <a href="/people/${user.id}">
-                                        <img src="${userAvatar}" alt="${ user.username }" width="64" height="64" class="mr-3 float-left">
-                                            <span>${user.username}</span>
-                                        </a>
-                                        <div class="mb-3">
-                                            <div class="card-body">
-                                                <p class="card-text">${post.fields.description}</p>
-                                                <img src="/media/${ post.fields.image }" alt="${ user.username }" height="250" width="40%">
-                                                <p class="card-text"><small class="form-text text-muted">Published at ${ post.fields.post_date}</small>
-                                                </p>
-                                            </div>
-                                        </div>
-                                    `
-                                    } else if (post.fields.post_file) {
-                                        output = `
-<a href="/people/${user.id}/">
-    <img src="${ userAvatar }" alt="${ user.username }" width="64" height="64" class="mr-3 float-left">
-    <span>${user.username}</span>
-</a>
-<div class="mb-3">
-    <div class="card-body">
-        <p class="card-text">${ post.fields.description }</p>
-        <video width="100%" controls class="col-md-10 col-lg-8" preload="none">
-            <source src="/media/${ post.fields.post_file }" type="video/mp4">
-            <source src="/media/${ post.fields.post_file }" type="video/ogg">
-            Your browser does not support the video tag.
-        </video>
-        <p class="card-text"><small class="form-text text-muted">Published at ${ post.fields.post_date}</small>
-        </p>
-    </div>
-</div>
-                                    `
-                                    } else if (post.fields.description && !post.fields.post_file && !post.fields.image) {
-                                        output = `
-<div class="card">
-    <div class="card-header">
-        <a href="/people/${user.id}/">
-            <img src="${ user.avatar }" alt="${ user.username }" width="64" height="64"
-                class="mr-3 float-left">
-            ${ user.username }
-        </a>
-    </div>
-    <div class="card-body">
-        <blockquote class="blockquote mb-0">
-            <p class="text-break">${ post.fields.description }</p>
-            <small class="form-text text-muted">Published at ${ post.fields.post_date }</small>
-        </blockquote>
-    </div>
-</div>
+                                        console.log(post.fields.image)
+                                        output += `<img src="/media/${ post.fields.image }" alt="${ user.username }" height="250" width="40%">                                    `
+                                    }
+                                    if (post.fields.post_file) {
+                                        output += `
+                                        <video width="100%" controls class="col-md-10 col-lg-8" preload="none">
+                <source src="${ post.fields.post_file }" type="video/mp4">
+                <source src="/media/${ post.fields.post_file }" type="video/ogg">
+                Your browser does not support the video tag.
+            </video>
                                     `
                                     }
                                     output += `
+                                    </div>
+                                </div>
                                 <span class="row justify-content-center">
     <span><a href="/comments/${post.pk}" style="text-decoration: none; color:black;"><i
                 class="far fa-comment-dots" style="font-size:36px;"></i></a></span>
