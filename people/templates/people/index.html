@@ -13,16 +13,20 @@
 <a href="{% url 'people:people' view_user.id %}">
     {% if view_user.who_see_avatar == 'everyone' %}
     <img src="{{view_user.avatar.url}}" alt="User Image"
-        class="img-fluid float-left mr-4 rounded-circle {% if view_user.id <= 1000 %}oldUser{% endif %}" width="170" height="170">
+        class="img-fluid float-left mr-4 rounded-circle {% if view_user.id <= 1000 %}oldUser{% endif %}" width="170"
+        height="170">
     {% elif view_user.who_see_avatar == 'friends' and user in view_user.friends.all %}
     <img src="{{view_user.avatar.url}}" alt="User Image"
-        class="img-fluid float-left mr-4 rounded-circle {% if view_user.id <= 1000 %}oldUser{% endif %}" width="170" height="170">
+        class="img-fluid float-left mr-4 rounded-circle {% if view_user.id <= 1000 %}oldUser{% endif %}" width="170"
+        height="170">
     {% elif view_user == user %}
     <img src="{{view_user.avatar.url}}" alt="User Image"
-        class="img-fluid float-left mr-4 rounded-circle {% if view_user.id <= 1000 %}oldUser{% endif %}" width="170" height="170">
+        class="img-fluid float-left mr-4 rounded-circle {% if view_user.id <= 1000 %}oldUser{% endif %}" width="170"
+        height="170">
     {% else %}
     <img src="/media/profile_images/DefaultUserImage.jpg" alt="User Image"
-        class="img-fluid float-left mr-4 rounded-circle {% if view_user.id <= 1000 %}oldUser{% endif %}" width="170" height="170">
+        class="img-fluid float-left mr-4 rounded-circle {% if view_user.id <= 1000 %}oldUser{% endif %}" width="170"
+        height="170">
     {% endif %}
 </a>
 <div class="">
@@ -87,7 +91,6 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         window.addEventListener('load', function () {
-
             // Add Friend
             $('#addFriendRequest').click(function () {
                 $.ajax({
@@ -111,33 +114,34 @@
                     }
                 })
             })
-        })
-    })
-    // Follow User
-    $('#followUser').click(function () {
-        $.ajax({
-            url: "{% url 'people:follow' view_user.id %}",
-            dataType: 'json',
-            success: function (data) {
-                let followers = "{{view_user.followers.count}}"
-                if (data.action == 'follow') {
-                    followers++
-                    $('#followUser').val(followers + ' Unfollow')
-                } else if (data.action == 'unfollow') {
-                    followers--
-                    $('#followUser').val(followers + ' Follow')
-                }
-                $('#message_area').html('')
-                if (data.message.tags === 'error') {
-                    $('#message_area').append(`
+            // Follow User
+            $('#followUser').click(function () {
+                console.log('Follwing or unfollowing')
+                $.ajax({
+                    url: "{% url 'people:follow' view_user.id %}",
+                    dataType: 'json',
+                    success: function (data) {
+                        let followers = "{{view_user.followers.count}}"
+                        if (data.action == 'follow') {
+                            followers++
+                            $('#followUser').val(followers + ' Unfollow')
+                        } else if (data.action == 'unfollow') {
+                            followers--
+                            $('#followUser').val(followers + ' Follow')
+                        }
+                        $('#message_area').html('')
+                        if (data.message.tags === 'error') {
+                            $('#message_area').append(`
                             <div class="alert alert-danger fixed-top">${data.message.text}</div>
                             `)
-                } else {
-                    $('#message_area').append(`
+                        } else {
+                            $('#message_area').append(`
         <div class="alert alert-${data.message.tags} fixed-top">${data.message.text}</div>
                                 `)
-                }
-            }
+                        }
+                    }
+                })
+            })
         })
     })
 </script>
