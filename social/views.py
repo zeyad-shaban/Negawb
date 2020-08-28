@@ -223,7 +223,7 @@ def create_invite(request,):
         # !ABSOLUTE PATH
         if reciever.allow_invites:
             notification = Notification(notification_type='invites', sender=request.user,
-                                        url='/userpage/friendrequest/', content=f'{request.user.username} wants you to join {group.title}')
+                                        url='/chat/', content=f'{request.user.username} wants you to join {group.title}')
             notification.save()
             notification.receiver.add(reciever)
             for receiver in notification.receiver.all():
