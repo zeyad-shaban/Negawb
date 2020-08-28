@@ -19,25 +19,10 @@ def home(request):
         return redirect('chat')
     categories = Category.objects.all()
 
-    followed_users = []
     if request.user.is_authenticated:
-        friends = User.objects.filter(friends=request.user)
-        followed_users = User.objects.filter(followers=request.user)
-        followed = User.objects.filter(
-            Q(followers=request.user), ~Q(friends=request.user))
-        friends_posts_list = Post.objects.filter(
-            Q(user__in=friends), ~Q(user=request.user)).order_by('-post_date')
+        followed = User.objects.filter(Q(followers=request.user))
         followed_posts_list = Post.objects.filter(
             user__in=followed).order_by('-post_date')
-        friends_paginator = Paginator(friends_posts_list, 5)
-        page = request.GET.get('page')
-        try:
-            friends_posts = friends_paginator.page('page')
-        except PageNotAnInteger:
-            friends_posts = friends_paginator.page(1)
-        except EmptyPage:
-            friends_posts = friends_paginator.page(
-                friends_paginator.num_pages)
         # followed paginator
         followed_page = request.GET.get('followed_page')
         followed_paginator = Paginator(followed_posts_list, 5)
@@ -49,8 +34,8 @@ def home(request):
             followed_posts = []
         if followed_page:
             return JsonResponse({'followed_posts': serialize('json', followed_posts)})
-        page = request.GET.get('followed_page')
         # Homepage Posts Paginator
+        page = request.GET.get('page')
         if request.user.homepage_posts:
             homepage_posts_list = request.user.homepage_posts.post_set.all().order_by('-post_date')
         else:
@@ -67,10 +52,10 @@ def home(request):
         if page:
             return JsonResponse({'homepage_posts': serialize('json', homepage_posts)})
     else:
-        friends_posts = None
         followed_posts = None
         homepage_posts = Post.objects.all().order_by('-post_date')
-    return render(request, 'categories/index.html', {'categories': categories, 'friends_posts': friends_posts, 'followed_posts': followed_posts, 'homepage_posts': homepage_posts, 'followed_users': followed_users})
+    return render(request, 'categories/index.html', {'categories': categories, 'followed_posts': followed_posts, 'homepage_posts': homepage_posts, 'followed': followed})
+    # todo delete friends_posts
 
 
 def view_category(request, pk):

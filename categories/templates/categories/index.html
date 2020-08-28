@@ -11,8 +11,7 @@ only, giving users the power to hide unwanted topics{% endblock description %}
     <li class="list-group-item homepageView">Topics</li>
 
     {% if not user.hide_posts_in_homepage and user.is_authenticated %}
-    <li class="list-group-item homepageView" id="toggleFriendsPosts">Friends Posts</li>
-    <li class="list-group-item homepageView" style="overflow: hidden">Followed Posts</li>
+    <li class="list-group-item homepageView">Followed</li>
     {% endif %}
 </ul>
 <!-- categories -->
@@ -81,16 +80,16 @@ only, giving users the power to hide unwanted topics{% endblock description %}
     <a href="{% url 'people:people' post.user.id %}">
         {% if post.user.who_see_avatar == 'everyone' %}
         <img src="{{post.user.avatar.url}}" alt="{{ post.user.username }}" width="64" height="64"
-            class="mr-3 float-left {% if post.user.id <= 1000 %}oldUser{% endif %}" loading="lazy">
+            class="mr-3 float-left rounded-circle {% if post.user.id <= 1000 %}oldUser{% endif %}" loading="lazy">
         {% elif post.user.who_see_avatar == 'friends' and user in post.user.friends.all %}
         <img src="{{post.user.avatar.url}}" alt="{{ post.user.username }}" width="64" height="64"
-            class="mr-3 float-left {% if post.user.id <= 1000 %}oldUser{% endif %}" loading="lazy">
+            class="mr-3 float-left rounded-circle {% if post.user.id <= 1000 %}oldUser{% endif %}" loading="lazy">
         {% elif post.user == user %}
         <img src="{{post.user.avatar.url}}" alt="{{ post.user.username }}" width="64" height="64"
-            class="mr-3 float-left {% if post.user.id <= 1000 %}oldUser{% endif %}" loading="lazy">
+            class="mr-3 float-left rounded-circle {% if post.user.id <= 1000 %}oldUser{% endif %}" loading="lazy">
         {% else %}
         <img src="/media/profile_images/DefaultUserImage.jpg" alt="{{ post.user.username }}" width="64" height="64"
-            class="mr-3 float-left {% if post.user.id <= 1000 %}oldUser{% endif %}" loading="lazy">
+            class="mr-3 float-left rounded-circle {% if post.user.id <= 1000 %}oldUser{% endif %}" loading="lazy">
         {% endif %}
         <span>{{post.user.username}}</span>
     </a>
@@ -244,413 +243,219 @@ only, giving users the power to hide unwanted topics{% endblock description %}
     {% endfor %}
 </div>
 
-<div class="m-4">
-    {% if not user.hide_posts_in_homepage %}
-    <!-- FRIENDS POSTS -->
-    <div id="friendsPosts" class="homepageItem">
-
-        {% for post in friends_posts %}
-        <a href="{% url 'people:people' post.user.id %}">
-            {% if post.user.who_see_avatar == 'everyone' %}
-            <img src="{{post.user.avatar.url}}" alt="{{ post.user.username }}" width="64" height="64"
-                class="mr-3 float-left {% if post.user.id <= 1000 %}oldUser{% endif %}" loading="lazy">
-            {% elif post.user.who_see_avatar == 'friends' and user in post.user.friends.all %}
-            <img src="{{post.user.avatar.url}}" alt="{{ post.user.username }}" width="64" height="64"
-                class="mr-3 float-left {% if post.user.id <= 1000 %}oldUser{% endif %}" loading="lazy">
-            {% elif post.user == user %}
-            <img src="{{post.user.avatar.url}}" alt="{{ post.user.username }}" width="64" height="64"
-                class="mr-3 float-left {% if post.user.id <= 1000 %}oldUser{% endif %}" loading="lazy">
-            {% else %}
-            <img src="/media/profile_images/DefaultUserImage.jpg" alt="{{ post.user.username }}" width="64" height="64"
-                class="mr-3 float-left {% if post.user.id <= 1000 %}oldUser{% endif %}" loading="lazy">
-            {% endif %}
-            <span>{{post.user.username}}</span>
-        </a>
-        <a href="{% url 'people:people' post.user.id %}">
-        </a>
-        <div class="mb-3">
-            <div class="card-body">
-                {% if post.description %}
-                <blockquote class="blockquote mb-0">
-                    <p class="text-break">{{post.description|truncatechars:450}} {% if post.description|length > 450%}<a
-                            href="{% url 'comments:view_post' post.id %}">Read
-                            More</a>{% endif %}</p>
-                </blockquote>
-                {% endif %}
-                <small class="form-text text-muted">Published at {{ post.post_date|date:'d M Y' }}</small>
-
-                {% if post.image %}
-                <img src="{{ post.image.url }}" alt="{{ post.user.username }}" height="250" width="40%">
-                {% elif post.post_file %}
-                <video width="100%" controls class="col-md-10 col-lg-8" preload="none">
-                    <source src="{{ post.post_file.url }}" type="video/mp4">
-                    <source src="{{ post.post_file.url }}" type="video/ogg">
-                    Your browser does not support the video tag.
-                </video>
-                {% endif %}
-            </div>
-        </div>
-        <span class="row justify-content-center">
-            <span><a href="{% url 'comments:view_post' post.id %}" style="text-decoration: none; color:black;"><i
-                        class="far fa-comment-dots" style="font-size:36px;"></i></a></span>
-            <!-- Like -->
-            <form method="GET" id="likeFriendForm{{post.id}}" class="form-inline">
-                <button type="submit" name="submit" value="like" title="Like" class="btn btn-link">
-                    <i class="fa fa-thumbs-o-up" aria-hidden="true" style="font-size:36px"
-                        id="likeFriendButton{{post.id}}"></i>
-                </button>
-            </form>
-            <span class="m-3" id="id_friendLikes{{post.id}}">
-                {% if user in post.likes.all %}
-                <p style="color:#065FD4;"><b>{{post.likes.count}}</b></p>
-                {% else %}
-                <p style="color:black;">{{post.likes.count}}</p>
-                {% endif %}
-            </span>
-
-            <script>
-                document.addEventListener('DOMContentLoaded', function () {
-                    window.addEventListener('load', function () {
-
-                        $('#likeFriendForm{{post.id}}').click((event) => {
-                            event.preventDefault()
-                        })
-                        $('#likeFriendButton{{post.id}}').click(function (event) {
-                            $.ajax({
-                                url: "{% url 'comments:post_like_dislike' post.id %}",
-                                data: {
-                                    'submit': 'like',
-                                },
-                                method: 'get',
-                                dataType: 'json',
-                                success: function (data) {
-                                    let likes = "{{post.likes.count}}";
-                                    let dislikes = "{{ post.dislikes.count }}"
-                                    if (data.action == 'undislike_and_like') {
-                                        dislikes -= 1
-                                        likes++
-                                        $('#id_friendDislikes{{post.id}}').html(
-                                            '<p style="color:black;">' +
-                                            dislikes + '</p>')
-                                        $('#id_friendLikes{{post.id}}').html(
-                                            '<p style="color:#065FD4;"><b>' +
-                                            likes + '</b></p>')
-                                    } else if (data.action == 'unlike') {
-                                        likes -= 1
-                                        $('#id_friendLikes{{post.id}}').html(
-                                            '<p style="color:#black;"' +
-                                            likes +
-                                            '</p>')
-                                    } else {
-                                        likes++
-                                        $('#id_friendLikes{{post.id}}').html(
-                                            '<p style="color:#065FD4;"><b>' +
-                                            likes + '</b></p>')
-                                    }
-                                }
-                            })
-                        })
-
-                    })
-                })
-            </script>
-
-            <!-- Dislike -->
-            <form action="{% url 'comments:post_like_dislike' post.id %}" method="post" class="form-inline"
-                id="friendDislikeForm{{post.id}}">
-                {% csrf_token %}
-                <button type="submit" id="friendDislikeButton{{post.id}}" name="submit" value="dislike" title="Dislike"
-                    class="btn">
-                    <i class="fa fa-thumbs-o-down" aria-hidden="true" style="font-size:36px"></i>
-                </button>
-            </form>
-            <span class="m-3" id="id_friendDislikes{{post.id}}">
-                {% if user in post.dislikes.all %}
-                <p style="color:#065FD4;"><b>{{post.dislikes.count}}</b></p>
-                {% else %}
-                <p style="color:black;">{{post.dislikes.count}}</p>
-                {% endif %}
-            </span>
-
-            <script>
-                document.addEventListener('DOMContentLoaded', function () {
-                    window.addEventListener('load', function () {
-
-                        $('#friendDislikeForm{{post.id}}').click((event) => {
-                            event.preventDefault()
-                        })
-                        $('#friendDislikeButton{{post.id}}').click(function (event) {
-                            $.ajax({
-                                url: "{% url 'comments:post_like_dislike' post.id %}",
-                                data: {
-                                    'submit': 'dislike',
-                                },
-                                dataType: 'json',
-                                success: function (data) {
-                                    let likes = "{{post.likes.count}}";
-                                    let dislikes = "{{ post.dislikes.count }}"
-                                    if (data.action == 'unlike_and_dislike') {
-                                        dislikes++
-                                        likes -= 1
-                                        $('#id_friendDislikes{{post.id}}').html(
-                                            '<p style="color:#065FD4;"><b>' +
-                                            dislikes + '</b></p>')
-                                        $('#id_friendLikes{{post.id}}').html(
-                                            '<p style="color:black;">' +
-                                            likes + '</p>')
-                                    } else if (data.action == 'undislike') {
-                                        dislikes -= 1
-                                        $('#id_friendDislikes{{post.id}}').html(
-                                            '<p style="color:#black;"' +
-                                            dislikes +
-                                            '</p>')
-                                    } else {
-                                        dislikes++
-                                        $('#id_friendDislikes{{post.id}}').html(
-                                            '<p style="color:#065FD4;"><b>' +
-                                            dislikes + '</b></p>')
-                                    }
-                                }
-                            })
-                        })
-
-                    })
-                })
-            </script>
-
-        </span>
-    </div>
-    {% endfor %}
-    <!-- FRIENDS PAGINATOR -->
-    <nav aria-label="..." id="friendsPaginator">
-        <ul class="pagination">
-            {% if friends_posts.has_previous%}
-            <li class="page-item">
-                <a href="?page={{ friends_posts.previous_page_number }}" class="page-link">&laquo</a>
-            </li>
-            {% endif %}
-            {% for page in friends_posts.paginator.page_range %}
-            {% if friends_posts.number == page %}
-            <li class="page-item active">
-                <a href="?page={{ page }}" class="page-link">{{ page }}</a>
-            </li>
-            {% else %}
-            <li class="page-item">
-                <a href="?page={{ page }}" class="page-link">{{ page }}</a>
-            </li>
-            {% endif %}
-            {% endfor %}
-            {% if friends_posts.has_next %}
-            <li class="page-item">
-                <a class="page-link" href="?page={{ friends_posts.next_page_number }}">&raquo</a>
-            </li>
-            {% endif %}
-        </ul>
-    </nav>
-</div>
-
-
-
-
+{% if not user.hide_posts_in_homepage %}
 <!-- FOLLOWED POSTS -->
 <div id="followedPosts" class="homepageItem">
-    {% for followed in followed_users %}
-    <a class="text-center showFollowed" data-pk="{{ followed.id }}">
-        {% if followed.who_see_avatar == 'everyone' %}
-        <img src="{{followed.avatar.url}}" class="{% if post.user.id <= 1000 %}oldUser{% endif %}" alt="User Image"
-            width="64" height="64">
-        {% elif followed.who_see_avatar == 'friends' and user in followed.friends.all %}
-        <img src="{{followed.avatar.url}}" class="{% if post.user.id <= 1000 %}oldUser{% endif %}" alt="User Image"
-            width="64" height="64">
-        {% elif followed == user %}
-        <img src="{{followed.avatar.url}}" class="{% if post.user.id <= 1000 %}oldUser{% endif %}" alt="User Image"
-            width="64" height="64">
-        {% else %}
-        <img src="/media/profile_images/DefaultUserImage.jpg" class="{% if post.user.id <= 1000 %}oldUser{% endif %}"
-            alt="User Image" width="64" height="64">
-        {% endif %}
-    </a>
-    <p>{{followed.username}}</p>
-    {% endfor %}
-
     <span id="followedPostsContainer">
-        {% for post in followed_posts %}
-        <a href="{% url 'people:people' post.user.id %}">
-            {% if post.user.who_see_avatar == 'everyone' %}
-            <img src="{{post.user.avatar.url}}" alt="{{ post.user.username }}" width="64" height="64"
-                class="mr-3 float-left {% if post.user.id <= 1000 %}oldUser{% endif %}" loading="lazy">
-            {% elif post.user.who_see_avatar == 'friends' and user in post.user.friends.all %}
-            <img src="{{post.user.avatar.url}}" alt="{{ post.user.username }}" width="64" height="64"
-                class="mr-3 float-left {% if post.user.id <= 1000 %}oldUser{% endif %}" loading="lazy">
-            {% elif post.user == user %}
-            <img src="{{post.user.avatar.url}}" alt="{{ post.user.username }}" width="64" height="64"
-                class="mr-3 float-left {% if post.user.id <= 1000 %}oldUser{% endif %}" loading="lazy">
-            {% else %}
-            <img src="/media/profile_images/DefaultUserImage.jpg" alt="{{ post.user.username }}" width="64" height="64"
-                class="mr-3 float-left {% if post.user.id <= 1000 %}oldUser{% endif %}" loading="lazy">
-            {% endif %}
-            <span>{{post.user.username}}</span>
-        </a>
-        <a href="{% url 'people:people' post.user.id %}">
-        </a>
-        <div class="mb-3">
-            <div class="card-body">
-                {% if post.description %}
-                <blockquote class="blockquote mb-0">
-                    <p class="text-break">{{post.description|truncatechars:450}} {% if post.description|length > 450%}<a
-                            href="{% url 'comments:view_post' post.id %}">Read
-                            More</a>{% endif %}</p>
-                </blockquote>
+        <!-- Followed users -->
+        <ul class="list-unstyled col-lg-2 col-md-2 mr-1 float-left">
+            {% for followed in followed %}
+            <li class="media">
+                <a href="{% url 'people:people' followed.id %}" class="btn">
+                    {% if followed.who_see_avatar == 'everyone' %}
+                    <img src="{{followed.avatar.url}}" alt="User Image" width="64" height="64"
+                        class="mr-3 rounded-circle {% if followed.id <= 1000 %}oldUser{% endif %}">
+                    {% elif followed.who_see_avatar == 'friends' and user in followed.friends.all %}
+                    <img src="{{followed.avatar.url}}" alt="User Image" width="64" height="64"
+                        class="mr-3 rounded-circle {% if followed.id <= 1000 %}oldUser{% endif %}">
+                    {% elif followed == user %}
+                    <img src="{{followed.avatar.url}}" alt="User Image" width="64" height="64"
+                        class="mr-3 rounded-circle {% if followed.id <= 1000 %}oldUser{% endif %}">
+                    {% else %}
+                    <img src="/media/profile_images/DefaultUserImage.WebP" alt="User Image" width="64" height="64"
+                        class="mr-3 rounded-circle {% if followed.id <= 1000 %}oldUser{% endif %}">
+                    {% endif %}
+                    <div class="media-body">
+                        <h5 class="mt-0 mb-1 float-right">{{ followed.username }}</h5>
+                    </div>
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+        <!-- Posts -->
+        <div class="col-lg-9 col-md-9 float-right">
+            {% for post in followed_posts %}
+            <a href="{% url 'people:people' post.user.id %}">
+                {% if post.user.who_see_avatar == 'everyone' %}
+                <img src="{{post.user.avatar.url}}" alt="{{ post.user.username }}" width="64" height="64"
+                    class="mr-3 rounded-circle float-left {% if post.user.id <= 1000 %}oldUser{% endif %}"
+                    loading="lazy">
+                {% elif post.user.who_see_avatar == 'friends' and user in post.user.friends.all %}
+                <img src="{{post.user.avatar.url}}" alt="{{ post.user.username }}" width="64" height="64"
+                    class="mr-3 rounded-circle float-left {% if post.user.id <= 1000 %}oldUser{% endif %}"
+                    loading="lazy">
+                {% elif post.user == user %}
+                <img src="{{post.user.avatar.url}}" alt="{{ post.user.username }}" width="64" height="64"
+                    class="mr-3 rounded-circle float-left {% if post.user.id <= 1000 %}oldUser{% endif %}"
+                    loading="lazy">
+                {% else %}
+                <img src="/media/profile_images/DefaultUserImage.jpg" alt="{{ post.user.username }}" width="64"
+                    height="64" class="mr-3 rounded-circle float-left {% if post.user.id <= 1000 %}oldUser{% endif %}"
+                    loading="lazy">
                 {% endif %}
-                <small class="form-text text-muted">Published at {{ post.post_date|date:'d M Y' }}</small>
+                <span>{{post.user.username}}</span>
+            </a>
+            <a href="{% url 'people:people' post.user.id %}">
+            </a>
+            <div class="mb-3">
+                <div class="card-body">
+                    {% if post.description %}
+                    <blockquote class="blockquote mb-0">
+                        <p class="text-break">{{post.description|truncatechars:450}}
+                            {% if post.description|length > 450%}<a href="{% url 'comments:view_post' post.id %}">Read
+                                More</a>{% endif %}</p>
+                    </blockquote>
+                    {% endif %}
+                    <small class="form-text text-muted">Published at {{ post.post_date|date:'d M Y' }}</small>
 
-                {% if post.image %}
-                <img src="{{ post.image.url }}" alt="{{ post.user.username }}" height="250" width="40%">
-                {% elif post.post_file %}
-                <video width="100%" controls class="col-md-10 col-lg-8" preload="none">
-                    <source src="{{ post.post_file.url }}" type="video/mp4">
-                    <source src="{{ post.post_file.url }}" type="video/ogg">
-                    Your browser does not support the video tag.
-                </video>
-                {% endif %}
+                    {% if post.image %}
+                    <img src="{{ post.image.url }}" alt="{{ post.user.username }}" height="250" width="40%">
+                    {% elif post.post_file %}
+                    <video width="100%" controls class="col-md-10 col-lg-8" preload="none">
+                        <source src="{{ post.post_file.url }}" type="video/mp4">
+                        <source src="{{ post.post_file.url }}" type="video/ogg">
+                        Your browser does not support the video tag.
+                    </video>
+                    {% endif %}
+                </div>
             </div>
-        </div>
-        <span class="row justify-content-center">
-            <span><a href="{% url 'comments:view_post' post.id %}" style="text-decoration: none; color:black;"><i
-                        class="far fa-comment-dots" style="font-size:36px;"></i></a></span>
-            <!-- Like -->
-            <form method="GET" id="likeFollowedForm{{post.id}}" class="form-inline">
-                <button type="submit" name="submit" value="like" UserAdmin.list_display +=('new_field',) # don't forget
-                    the commas UserAdmin.list_filter +=('new_field',) UserAdmin.fieldsets +=('new_field',)="Like"
-                    class="btn btn-link">
-                    <i class="fa fa-thumbs-o-up" aria-hidden="true" style="font-size:36px"
-                        id="likeFollowedButton{{post.id}}"></i>
-                </button>
-            </form>
-            <span class="m-3" id="id_followedLikes{{post.id}}">
-                {% if user in post.likes.all %}
-                <p style="color:#065FD4;"><b>{{post.likes.count}}</b></p>
-                {% else %}
-                <p style="color:black;">{{post.likes.count}}</p>
-                {% endif %}
-            </span>
+            <span class="row justify-content-center">
+                <span><a href="{% url 'comments:view_post' post.id %}" style="text-decoration: none; color:black;"><i
+                            class="far fa-comment-dots" style="font-size:36px;"></i></a></span>
+                <!-- Like -->
+                <form method="GET" id="likeFollowedForm{{post.id}}" class="form-inline">
+                    <button type="submit" name="submit" value="like" UserAdmin.list_display +=('new_field',) # don't
+                        forget the commas UserAdmin.list_filter +=('new_field',) UserAdmin.fieldsets
+                        +=('new_field',)="Like" class="btn btn-link">
+                        <i class="fa fa-thumbs-o-up" aria-hidden="true" style="font-size:36px"
+                            id="likeFollowedButton{{post.id}}"></i>
+                    </button>
+                </form>
+                <span class="m-3" id="id_followedLikes{{post.id}}">
+                    {% if user in post.likes.all %}
+                    <p style="color:#065FD4;"><b>{{post.likes.count}}</b></p>
+                    {% else %}
+                    <p style="color:black;">{{post.likes.count}}</p>
+                    {% endif %}
+                </span>
 
-            <script>
-                document.addEventListener('DOMContentLoaded', function () {
-                    window.addEventListener('load', function () {
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        window.addEventListener('load', function () {
 
-                        $('#likeFollowedForm{{post.id}}').click((event) => {
-                            event.preventDefault()
-                        })
-                        $('#likeFollowedButton{{post.id}}').click(function (event) {
-                            $.ajax({
-                                url: "{% url 'comments:post_like_dislike' post.id %}",
-                                data: {
-                                    'submit': 'like',
-                                },
-                                method: 'get',
-                                dataType: 'json',
-                                success: function (data) {
-                                    let likes = "{{post.likes.count}}";
-                                    let dislikes = "{{ post.dislikes.count }}"
-                                    if (data.action == 'undislike_and_like') {
-                                        dislikes -= 1
-                                        likes++
-                                        $('#id_followedDislikes{{post.id}}')
-                                            .html(
-                                                '<p style="color:black;">' +
-                                                dislikes + '</p>')
-                                        $('#id_followedLikes{{post.id}}').html(
-                                            '<p style="color:#065FD4;"><b>' +
-                                            likes + '</b></p>')
-                                    } else if (data.action == 'unlike') {
-                                        likes -= 1
-                                        $('#id_followedLikes{{post.id}}').html(
-                                            '<p style="color:#black;"' +
-                                            likes +
-                                            '</p>')
-                                    } else {
-                                        likes++
-                                        $('#id_followedLikes{{post.id}}').html(
-                                            '<p style="color:#065FD4;"><b>' +
-                                            likes + '</b></p>')
-                                    }
-                                }
+                            $('#likeFollowedForm{{post.id}}').click((event) => {
+                                event.preventDefault()
                             })
-                        })
-
-                    })
-                })
-            </script>
-
-            <!-- Dislike -->
-            <form action="{% url 'comments:post_like_dislike' post.id %}" method="post" class="form-inline"
-                id="followedDislikeForm{{post.id}}">
-                {% csrf_token %}
-                <button type="submit" id="followedDislikeButton{{post.id}}" name="submit" value="dislike"
-                    title="Dislike" class="btn">
-                    <i class="fa fa-thumbs-o-down" aria-hidden="true" style="font-size:36px"></i>
-                </button>
-            </form>
-            <span class="m-3" id="id_followedDislikes{{post.id}}">
-                {% if user in post.dislikes.all %}
-                <p style="color:#065FD4;"><b>{{post.dislikes.count}}</b></p>
-                {% else %}
-                <p style="color:black;">{{post.dislikes.count}}</p>
-                {% endif %}
-            </span>
-
-            <script>
-                document.addEventListener('DOMContentLoaded', function () {
-                    window.addEventListener('load', function () {
-
-                        $('#followedDislikeForm{{post.id}}').click((event) => {
-                            event.preventDefault()
-                        })
-                        $('#followedDislikeButton{{post.id}}').click(function (event) {
-                            $.ajax({
-                                url: "{% url 'comments:post_like_dislike' post.id %}",
-                                data: {
-                                    'submit': 'dislike',
-                                },
-                                dataType: 'json',
-                                success: function (data) {
-                                    let likes = "{{post.likes.count}}";
-                                    let dislikes = "{{ post.dislikes.count }}"
-                                    if (data.action == 'unlike_and_dislike') {
-                                        dislikes++
-                                        likes -= 1
-                                        $('#id_followedDislikes{{post.id}}')
-                                            .html(
+                            $('#likeFollowedButton{{post.id}}').click(function (event) {
+                                $.ajax({
+                                    url: "{% url 'comments:post_like_dislike' post.id %}",
+                                    data: {
+                                        'submit': 'like',
+                                    },
+                                    method: 'get',
+                                    dataType: 'json',
+                                    success: function (data) {
+                                        let likes = "{{post.likes.count}}";
+                                        let dislikes = "{{ post.dislikes.count }}"
+                                        if (data.action == 'undislike_and_like') {
+                                            dislikes -= 1
+                                            likes++
+                                            $('#id_followedDislikes{{post.id}}')
+                                                .html(
+                                                    '<p style="color:black;">' +
+                                                    dislikes + '</p>')
+                                            $('#id_followedLikes{{post.id}}').html(
                                                 '<p style="color:#065FD4;"><b>' +
-                                                dislikes + '</b></p>')
-                                        $('#id_followedLikes{{post.id}}').html(
-                                            '<p style="color:black;">' +
-                                            likes + '</p>')
-                                    } else if (data.action == 'undislike') {
-                                        dislikes -= 1
-                                        $('#id_followedDislikes{{post.id}}')
-                                            .html(
+                                                likes + '</b></p>')
+                                        } else if (data.action == 'unlike') {
+                                            likes -= 1
+                                            $('#id_followedLikes{{post.id}}').html(
                                                 '<p style="color:#black;"' +
-                                                dislikes +
+                                                likes +
                                                 '</p>')
-                                    } else {
-                                        dislikes++
-                                        $('#id_followedDislikes{{post.id}}')
-                                            .html(
+                                        } else {
+                                            likes++
+                                            $('#id_followedLikes{{post.id}}').html(
                                                 '<p style="color:#065FD4;"><b>' +
-                                                dislikes + '</b></p>')
+                                                likes + '</b></p>')
+                                        }
                                     }
-                                }
+                                })
                             })
+
                         })
-
                     })
-                })
-            </script>
+                </script>
 
-        </span>
-        {% endfor %}
+                <!-- Dislike -->
+                <form action="{% url 'comments:post_like_dislike' post.id %}" method="post" class="form-inline"
+                    id="followedDislikeForm{{post.id}}">
+                    {% csrf_token %}
+                    <button type="submit" id="followedDislikeButton{{post.id}}" name="submit" value="dislike"
+                        title="Dislike" class="btn">
+                        <i class="fa fa-thumbs-o-down" aria-hidden="true" style="font-size:36px"></i>
+                    </button>
+                </form>
+                <span class="m-3" id="id_followedDislikes{{post.id}}">
+                    {% if user in post.dislikes.all %}
+                    <p style="color:#065FD4;"><b>{{post.dislikes.count}}</b></p>
+                    {% else %}
+                    <p style="color:black;">{{post.dislikes.count}}</p>
+                    {% endif %}
+                </span>
+
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        window.addEventListener('load', function () {
+
+                            $('#followedDislikeForm{{post.id}}').click((event) => {
+                                event.preventDefault()
+                            })
+                            $('#followedDislikeButton{{post.id}}').click(function (event) {
+                                $.ajax({
+                                    url: "{% url 'comments:post_like_dislike' post.id %}",
+                                    data: {
+                                        'submit': 'dislike',
+                                    },
+                                    dataType: 'json',
+                                    success: function (data) {
+                                        let likes = "{{post.likes.count}}";
+                                        let dislikes = "{{ post.dislikes.count }}"
+                                        if (data.action == 'unlike_and_dislike') {
+                                            dislikes++
+                                            likes -= 1
+                                            $('#id_followedDislikes{{post.id}}')
+                                                .html(
+                                                    '<p style="color:#065FD4;"><b>' +
+                                                    dislikes + '</b></p>')
+                                            $('#id_followedLikes{{post.id}}').html(
+                                                '<p style="color:black;">' +
+                                                likes + '</p>')
+                                        } else if (data.action == 'undislike') {
+                                            dislikes -= 1
+                                            $('#id_followedDislikes{{post.id}}')
+                                                .html(
+                                                    '<p style="color:#black;"' +
+                                                    dislikes +
+                                                    '</p>')
+                                        } else {
+                                            dislikes++
+                                            $('#id_followedDislikes{{post.id}}')
+                                                .html(
+                                                    '<p style="color:#065FD4;"><b>' +
+                                                    dislikes + '</b></p>')
+                                        }
+                                    }
+                                })
+                            })
+
+                        })
+                    })
+                </script>
+
+            </span>
+            {% endfor %}
+        </div>
     </span>
 </div>
 </div>
