@@ -209,7 +209,6 @@ document.addEventListener('DOMContentLoaded', function () {
                                 dataType: 'json',
                                 async: false,
                                 success: function (response) {
-                                    console.log('Paginating followed posts...')
                                     let user = response.user
                                     let output = ''
                                     let userAvatar = ''

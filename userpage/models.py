@@ -42,7 +42,7 @@ class User(AbstractUser):
     blocked_categories = models.ManyToManyField(
         Category, related_name='blocked_categories', blank=True)
     chat_only_mode = models.BooleanField(default=False)
-    hide_posts_in_homepage = models.BooleanField(default=False)
+    hide_followed_posts = models.BooleanField(default=False)
     fixed_navbar = models.BooleanField(default=True)
     homepage_posts = models.ForeignKey(Category, on_delete= models.CASCADE ,null=True, blank=True)
     # * notifications
