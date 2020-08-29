@@ -125,7 +125,7 @@ only, giving users the power to hide unwanted topics{% endblock description %}
                 <i class="fa fa-thumbs-o-up" aria-hidden="true" style="font-size:36px"></i>
             </button>
         </form>
-        <span class="m-3" id="followed_likes{{post.id}}">
+        <span class="m-3" id="id_likes{{post.id}}">
             {% if user in post.likes.all %}
             <p style="color:#065FD4;">{{post.likes.count}}</p>
             {% else %}
@@ -234,7 +234,7 @@ only, giving users the power to hide unwanted topics{% endblock description %}
                     <i class="fa fa-thumbs-o-up" aria-hidden="true" style="font-size:36px"></i>
                 </button>
             </form>
-            <span class="m-3" id="id_likes{{post.id}}">
+            <span class="m-3" id="followed_likes{{post.id}}">
                 {% if user in post.likes.all %}
                 <p style="color:#065FD4;">{{post.likes.count}}</p>
                 {% else %}
