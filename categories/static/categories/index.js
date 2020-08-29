@@ -217,50 +217,6 @@ document.addEventListener('DOMContentLoaded', function () {
         </span>
                                 `
 
-                                    function like() {
-                                        console.log('The like function was called')
-                                        $(`.likeForm`).click((event) => {
-                                            event.preventDefault()
-                                            console.log('Prevent default on form')
-                                        })
-                                        $(`#likeButton${post.pk}`).click(function (event) {
-                                            $.ajax({
-                                                url: $('#categoryContainer').attr('data-url'),
-                                                data: {
-                                                    'submit': 'like',
-                                                    'pk': post.pk
-                                                },
-                                                method: 'get',
-                                                dataType: 'json',
-                                                success: function (data) {
-                                                    let likes = post.fields.likes.length;
-                                                    let dislikes = post.fields.dislikes.length
-                                                    if (data.action == 'undislike_and_like') {
-                                                        dislikes -= 1
-                                                        likes++
-                                                        $(`#id_dislikes${post.pk}`).html('<p style="color:black;">' +
-                                                            dislikes + '</p>')
-                                                        $(`#id_likes${post.pk}`).html('<p style="color:#065FD4;"><b>' +
-                                                            likes + '</b></p>')
-                                                    } else if (data.action == 'unlike') {
-                                                        likes -= 1
-                                                        $(`#id_likes${post.pk}`).html('<p style="color:#black;"' +
-                                                            likes +
-                                                            '</p>')
-                                                    } else {
-                                                        likes++
-                                                        $(`#id_likes${post.pk}`).html('<p style="color:#065FD4;"><b>' +
-                                                            likes + '</b></p>')
-                                                    }
-                                                }
-                                            })
-                                        })
-                                    }
-                                    var g = document.createElement('script')
-                                    var s = document.getElementsByTagName('script')[0]
-                                    g.text = like();
-                                    s.parentNode.insertBefore(g, s)
-                                    $('#followedPostsContainer').append(output)
                                 }
                             })
                         }
