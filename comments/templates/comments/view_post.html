@@ -31,6 +31,16 @@
     {% endif %}
     <span>{{post.user.username}}</span>
 </a>
+<div class="dropdown">
+    <button class="btn mr-2 float-right" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+        aria-haspopup="true" aria-expanded="false" style="font-size: 36px;"><i class="fas fa-ellipsis-h"></i></button>
+    <div class="dropdown-menu mr-3" aria-labelledby="dropdownMenuButton">
+        <!-- <a class="dropdown-item" href="#" id="editPost"><i class="far fa-edit"></i> Edit</a> -->
+        <a class="dropdown-item" href="{% url 'comments:delete_post' post.id %}" id="deletePost"><i
+                class="fas fa-trash-alt"></i> Delete</a>
+
+    </div>
+</div>
 <a href="{% url 'people:people' post.user.id %}">
 </a>
 <div class="mb-3">
@@ -331,8 +341,9 @@
                                             dataType: 'json',
                                             async: false,
                                             success: function (
-                                            userResponse) {
-                                                let user = userResponse.user
+                                                userResponse) {
+                                                let user = userResponse
+                                                    .user
                                                 $('#replyList{{comment.id}}')
                                                     .prepend(`
                                                     <li class="media media-replied">

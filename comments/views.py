@@ -50,6 +50,18 @@ def view_post(request, pk):
             return JsonResponse({'comment': model_to_dict(comment)})
 
 
+def delete_post(request, pk):
+    print('deleting post...')
+    post = get_object_or_404(Post, pk=pk)
+    post.delete()
+    return redirect('home')
+
+
+def edit_post(request):
+    pass
+
+
+
 @login_required
 def post_like_dislike(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
