@@ -37,9 +37,7 @@
     <div class="card-body">
         {% if post.description %}
         <blockquote class="blockquote mb-0">
-            <p class="text-break">{{post.description|truncatechars:450}} {% if post.description|length > 450%}<a
-                    href="{% url 'comments:view_post' post.id %}">Read
-                    More</a>{% endif %}</p>
+            <p class="text-break">{{post.description}}</p>
         </blockquote>
         {% endif %}
         <small class="form-text text-muted">Published at {{ post.post_date|date:'d M Y' }}</small>
