@@ -179,8 +179,6 @@ def send_message(request):
 def create_chat_group(request):
     if request.method == 'POST':
         form = ChatGroupForm(data=request.POST, files=request.FILES)
-        print(request.POST)
-        print(request.FILES)
         new_chat_group = form.save(commit=False)
         new_chat_group.author = request.user
         new_chat_group.save()

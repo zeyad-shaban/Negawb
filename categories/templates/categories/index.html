@@ -133,9 +133,7 @@ only, giving users the power to hide unwanted topics{% endblock description %}
             {% endif %}
         </span>
         <!-- Dislike -->
-        <form action="{% url 'comments:post_like_dislike' post.id %}" method="post" class="form-inline"
-            id="dislikeForm{{post.id}}">
-            {% csrf_token %}
+        <form action="{% url 'comments:post_like_dislike' post.id %}" method="GET" class="form-inline dislikeForm" data-pk="{{ post.id }}">
             <button type="submit" id="dislikeButton{{post.id}}" name="submit" value="dislike" title="Dislike"
                 class="btn">
                 <i class="fa fa-thumbs-o-down" aria-hidden="true" style="font-size:36px"></i>
@@ -148,52 +146,6 @@ only, giving users the power to hide unwanted topics{% endblock description %}
             <p style="color:black;">{{post.dislikes.count}}</p>
             {% endif %}
         </span>
-        <!-- add like script -->
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                window.addEventListener('load', function () {
-
-                    $('#dislikeForm{{post.id}}').click((event) => {
-                        event.preventDefault()
-                    })
-                    $('#dislikeButton{{post.id}}').click(function (event) {
-                        $.ajax({
-                            url: "{% url 'comments:post_like_dislike' post.id %}",
-                            data: {
-                                'submit': 'dislike',
-                            },
-                            dataType: 'json',
-                            success: function (data) {
-                                let likes = "{{post.likes.count}}";
-                                let dislikes = "{{ post.dislikes.count }}"
-                                if (data.action == 'unlike_and_dislike') {
-                                    dislikes++
-                                    likes -= 1
-                                    $('#id_dislikes{{post.id}}').html(
-                                        '<p style="color:#065FD4;"><b>' +
-                                        dislikes + '</b></p>')
-                                    $('#id_likes{{post.id}}').html(
-                                        '<p style="color:black;">' +
-                                        likes + '</p>')
-                                } else if (data.action == 'undislike') {
-                                    dislikes -= 1
-                                    $('#id_dislikes{{post.id}}').html(
-                                        '<p style="color:#black;"' +
-                                        dislikes +
-                                        '</p>')
-                                } else {
-                                    dislikes++
-                                    $('#id_dislikes{{post.id}}').html(
-                                        '<p style="color:#065FD4;"><b>' +
-                                        dislikes + '</b></p>')
-                                }
-                            }
-                        })
-                    })
-
-                })
-            })
-        </script>
     </span>
     {% endfor %}
 </div>

@@ -40,7 +40,6 @@ def home(request):
             homepage_posts_list = request.user.homepage_posts.post_set.all().order_by('-post_date')
         else:
             homepage_posts_list = Post.objects.all().order_by('-post_date')
-            print(homepage_posts_list.count())
         homepage_posts_paginator = Paginator(homepage_posts_list, 5)
         page = request.GET.get('homepage_posts_page')
         try:
