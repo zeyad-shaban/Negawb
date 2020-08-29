@@ -19,7 +19,7 @@ def people(request, pk):
     friends = User.objects.filter(friends=view_user)
     user = get_object_or_404(User, pk=pk)
     post_list = Post.objects.filter(user=user).order_by('-post_date')
-    paginator = Paginator(post_list, 7)
+    paginator = Paginator(post_list, 5)
     page = request.GET.get('page')
     try:
         posts = paginator.page(page)

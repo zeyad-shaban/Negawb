@@ -37,16 +37,16 @@
     {% endif %}
     <p><b>Friends</b>: {{ view_user.friends.count }}</p>
     <p><b>Followers</b>: {{view_user.followers.count}}</p>
-    <p id="viewPosts" class="btn btn-primary"><b>Posts</b>: {{view_user.post_set.count}}</p>
+    <p id="viewPostsPosts">Posts: {{view_user.post_set.count}}</p>
 </div>
 
 <div class="fb-profile-block-thumb cover-container">
     {% if user in view_user.followers.all %}
     <input id="followUser" type="submit" name='submit' value="{{view_user.followers.count}} Unfollow"
-        class="btn btn-primary" title="UnFollow">
+        class="btn btn-primary">
     {% else %}
     <input id="followUser" type="submit" name='submit' value="{{view_user.followers.count}} Follow"
-        class="btn btn-primary" title="Follow">
+        class="btn btn-primary">
     {% endif %}
     {% if user.allow_friend_request %}
     {% if user in view_user.friends.all %}
@@ -324,6 +324,7 @@
 
 
     <!-- PAGINATOR -->
+    {% if view_user.post_set.count > 0 %}
     <nav aria-label="...">
         <ul class="pagination">
             {% if posts.has_previous %}
@@ -351,4 +352,8 @@
             {% endif %}
         </ul>
     </nav>
+    {% else %}
+    <h1>This users has 0 Posts</h1>
+    {% endif %}
+    
     {% endblock content %}
