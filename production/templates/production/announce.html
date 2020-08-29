@@ -3,11 +3,11 @@
 {% block title %}{{ announcement.title }} | Dfreemedia{% endblock title %}
 
 
-{% block description %}{{announcement.content}}{% endblock description %}
+{% block description %}{{announcement.content|striptags}}{% endblock description %}
 
 
 
 {% block content %}
 <h4>{{ announcement.title }}</h4>
-<p class="text-break">{{ announcement.content }}</p>
+<p class="text-break">{{ announcement.content|safe }}</p>
 {% endblock content %}
