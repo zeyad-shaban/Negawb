@@ -248,12 +248,19 @@ document.addEventListener('DOMContentLoaded', function () {
                         likes++
                         $(`#id_dislikes${thisElement.attr('data-pk')}`).html(`<p style="color:black;">${dislikes}</p>`)
                         $(`#id_likes${thisElement.attr('data-pk')}`).html(`<p style="color:#065FD4;">${likes}</p>`)
+                        // Followed
+                        $(`#followed_dislikes${thisElement.attr('data-pk')}`).html(`<p style="color:black;">${dislikes}</p>`)
+                        $(`#followed_likes${thisElement.attr('data-pk')}`).html(`<p style="color:#065FD4;">${likes}</p>`)
                     } else if (response.action == 'unlike') {
                         likes -= 1
                         $(`#id_likes${thisElement.attr('data-pk')}`).html(`<p style="color:black;">${likes}</p>`)
+                        // Followed
+                        $(`#followed_likes${thisElement.attr('data-pk')}`).html(`<p style="color:black;">${likes}</p>`)
                     } else { //Like only
                         likes++
                         $(`#id_likes${thisElement.attr('data-pk')}`).html(`<p style="color:#065FD4;">${likes}</p>`)
+                        // Followed
+                        $(`#followed_likes${thisElement.attr('data-pk')}`).html(`<p style="color:#065FD4;">${likes}</p>`)
                     }
                 }
             })

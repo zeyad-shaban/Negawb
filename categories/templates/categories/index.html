@@ -125,7 +125,7 @@ only, giving users the power to hide unwanted topics{% endblock description %}
                 <i class="fa fa-thumbs-o-up" aria-hidden="true" style="font-size:36px"></i>
             </button>
         </form>
-        <span class="m-3" id="id_likes{{post.id}}">
+        <span class="m-3" id="followed_likes{{post.id}}">
             {% if user in post.likes.all %}
             <p style="color:#065FD4;">{{post.likes.count}}</p>
             {% else %}
@@ -173,7 +173,7 @@ only, giving users the power to hide unwanted topics{% endblock description %}
                 <img src="{{followed.avatar.url}}" alt="User Image" width="64" height="64"
                     class="mr-3 rounded-circle {% if followed.id <= 1000 %}oldUser{% endif %}">
                 {% else %}
-                <img src="/media/profile_images/DefaultUserImage.WebP" alt="User Image" width="64" height="64"
+                <img src="/media/profile_images/DefaultUserImage.jpg" alt="User Image" width="64" height="64"
                     class="mr-3 rounded-circle {% if followed.id <= 1000 %}oldUser{% endif %}">
                 {% endif %}
                 <div class="media-body">
@@ -248,7 +248,7 @@ only, giving users the power to hide unwanted topics{% endblock description %}
                     <i class="fa fa-thumbs-o-down" aria-hidden="true" style="font-size:36px"></i>
                 </button>
             </form>
-            <span class="m-3" id="id_dislikes{{post.id}}">
+            <span class="m-3" id="followed_dislikes{{post.id}}">
                 {% if user in post.dislikes.all %}
                 <p style="color:#065FD4;">{{post.dislikes.count}}</p>
                 {% else %}
