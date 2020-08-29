@@ -10,7 +10,7 @@ only, giving users the power to hide unwanted topics{% endblock description %}
     <li class="list-group-item active homepageView">Posts</li>
     <li class="list-group-item homepageView">Topics</li>
 
-    {% if not user.hide_followed_posts and user.is_authenticated %}
+    {% if not user.hide_followed_posts %}
     <li class="list-group-item homepageView">Followed</li>
     {% endif %}
 </ul>
@@ -245,11 +245,11 @@ only, giving users the power to hide unwanted topics{% endblock description %}
 <!-- FOLLOWED POSTS -->
 <div id="followedPosts" class="homepageItem">
     <!-- Followed users -->
-    
-    {% if followed.count <= 0 %}
-        <h1>You are not following anyone</h1>
-    {% endif %}
-        
+
+    {% if followed.count <= 0 or not user.is_authenticated %}
+    <h1>You are not following anyone</h1>
+    {% else %}
+
     <ul class="list-unstyled col-lg-1 col-md-2 mr-1 float-left">
         {% for followed in followed %}
         <li class="media">
@@ -452,6 +452,7 @@ only, giving users the power to hide unwanted topics{% endblock description %}
         </span>
         {% endfor %}
     </div>
+    {% endif %}
 </div>
 {% else %}
 <small class="from-text text-muted">Your Distraction Free settings doesn't allow posts to show in home page</small>
