@@ -51,9 +51,9 @@ def view_post(request, pk):
 
 
 def delete_post(request, pk):
-    print('deleting post...')
     post = get_object_or_404(Post, pk=pk)
-    post.delete()
+    if request.user == post.user:
+        post.delete()
     return redirect('home')
 
 
