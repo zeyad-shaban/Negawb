@@ -20,7 +20,7 @@
     <li class="list-group-item userMenuItem active">Home</li>
     <li class="list-group-item userMenuItem">Friends {{user.friends.count}}</li>
     <li class="list-group-item userMenuItem">Requests {{total_requests}}</li>
-    <li class="list-group-item userMenuItem">My Requests</li>
+    <li class="list-group-item userMenuItem">My Invites {{ total_user_requests_count }}</li>
 </ul>
 <div id="mainContainer">
     <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#privacy" data-whatever="privacy"><i
@@ -377,8 +377,6 @@
                             })
                         }
                     });
-                } else if ($(this).html().includes('Followers')) {
-                    $('#mainContainer').html("Followers")
                 } else if ($(this).html().includes('Requests')) {
                     $('#mainContainer').html(`
                 <small class="from-text text-muted float-right mr-3"><a href="{% url 'people:all_people' %}">Find Friend</a></small>
@@ -563,8 +561,78 @@
                     var s = document.getElementsByTagName('script')[0]
                     g.text(RequestHandler())
                     s.parentNode.insertBefore(g, s)
-                } else if ($(this).html().includes('My Requests')) {
-                    $('#mainContainer').html("Myyyy Requests")
+                } else if ($(this).html().includes('My Invites')) {
+                    $('#mainContainer').html(`
+<h1>My friend invites {{user_requests.count}}</h1>
+{% for request in user_requests %}
+<br>
+<div class="media" id="{{user_request.id}}Friend">
+    {% if request.to_user.who_see_avatar == 'everyone' %}
+    <img src="{{ request.to_user.avatar.url }}" class="mr-3 rounded-circle {% if request.to_user.id <= 1000 %}oldUser{% endif %}" alt="{{ request.to_user.username }}" width="64"
+        height="64">
+    {% else %}
+    <img src="/media/profile_images/DefaultUserImage.jpg" class="mr-3" alt="{{ request.to_user.username }}" width="64"
+        height="64">
+    {% endif %}
+
+    <div class="media-body">
+        <h5 class="mt-0">You sent a friend requests to <a href="{% url 'people:people' request.to_user.id %}">{{ request.to_user }}</a><small class="form-text text-muted">
+                {{request.date|date:"j b o"}}</small></small></h5>
+
+    </div>
+    <a class="btn btn-danger takeDownFriendRequest" style="color: white;" data-url="{% url 'social:take_down_friend_request' request.id %}">Take Down</a>
+    </div>
+{% endfor %}
+<hr>
+<h1>My Group invites {{user_group_requests.count}}</h1>
+<br>
+{% for request in user_group_requests %}
+<div class="media" id="{{request.id}}Group">
+    {% if request.reciever.who_see_avatar == 'everyone' %}
+    <img src="{{ request.reciever.avatar.url }}" class="mr-3 rounded-circle {% if request.reciever.id <= 1000 %}oldUser{% endif %}" alt="{{ request.reciever.username }}"
+        width="64" height="64">
+    {% elif request.reciever.who_see_avatar == 'friends' and request.reciever in user_friends %}
+    <img src="{{ request.reciever.avatar.url }}" class="mr-3 rounded-circle {% if user.id <= 1000 %}oldUser{% endif %}" alt="{{ request.reciever.username }}"
+        width="64" height="64">
+    {% else %}
+    <img src="/media/profile_images/DefaultUserImage.jpg" class="mr-3" alt="{{ request.reciever.username }}"
+        width="64" height="64">
+    {% endif %}
+
+    <div class="media-body">
+        <h5 class="mt-0">You invited {{request.reciever}} to join {{request.group.titlle}}<small
+                class="form-text text-muted">
+                {{request.sent_date|date:"j b o"}}</small></small></h5>
+
+    </div>
+    <a class="btn btn-danger float-left denyGroup" href="{% url 'social:deny_group' %}" data-pk="{{ request.id }}">Take Down</a>
+</div>
+{% endfor %}
+                    `)
+                    function takeDownFriend() {
+                        $('.takeDownFriendRequest').click(function(e){
+                            e.preventDefault();
+                            let thisElement = $(this);
+                            $.ajax({
+                                url: thisElement.attr('data-url'),
+                                data: {},
+                                method: 'get',
+                                dataType: 'json',
+                                success: function(response){
+                                    // console.log('Success')
+                                    thisElement.parent().fadeOut();
+                                }
+                            })
+                        })
+                    }
+
+                    function takeDownGroup() {
+
+                    }
+                    var g = document.createElement('script')
+                    var s = document.getElementsByTagName('script')[0]
+                    g.text(takeDownFriend())
+                    s.parentNode.insertBefore(g, s)
                 }
             });
         });

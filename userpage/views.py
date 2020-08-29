@@ -26,6 +26,9 @@ def home(request):
     requests = FriendRequest.objects.filter(to_user=request.user)
     group_requests = GroupRequest.objects.filter(reciever=request.user)
     total_requests_count = len(requests) + len(group_requests)
+    user_requests = FriendRequest.objects.filter(from_user=request.user).order_by('-date')
+    user_group_requests = GroupRequest.objects.filter(request_sender=request.user).order_by('-sent_date')
+    total_user_requests_count = len(user_requests) + len(user_group_requests)
     
     user_posts_list = request.user.post_set.all()
     page = request.GET.get('page')
@@ -37,7 +40,7 @@ def home(request):
     except EmptyPage:
         user_posts = paginator.page(paginator.num_pages)
     if request.method == 'GET':
-        return render(request, 'userpage/index.html', {'user': user, 'form': form, 'privacy_form': privacy_form, 'distraction_free_form': distraction_free_form, 'requests': requests, 'group_requests': group_requests, 'total_requests': total_requests_count, 'user_posts': user_posts})
+        return render(request, 'userpage/index.html', {'user': user, 'form': form, 'privacy_form': privacy_form, 'distraction_free_form': distraction_free_form, 'requests': requests, 'group_requests': group_requests, 'total_requests': total_requests_count, 'user_posts': user_posts, 'user_requests': user_requests, 'user_group_requests':user_group_requests, 'total_user_requests_count':total_user_requests_count })
     elif request.POST.get('submit') == 'Update':
         try:
             # if request.POST.get('email'):

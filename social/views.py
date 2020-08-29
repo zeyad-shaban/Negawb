@@ -12,6 +12,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from .forms import ChatGroupForm
 from .models import ChatBox, Message, ChatGroup, GroupRequest, GroupMessage, Notification
+from people.models import FriendRequest
 from webpush import send_user_notification
 User = get_user_model()
 
@@ -352,4 +353,9 @@ def leave_group(request):
     message = GroupMessage(
             group=group, message_sender=request.user, message=f'{request.user} left the group')
     message.save()
+    return JsonResponse({})
+
+def take_down_friend_request(request, pk):
+    friend_request = get_object_or_404(FriendRequest, pk=pk)
+    friend_request.delete()
     return JsonResponse({})
