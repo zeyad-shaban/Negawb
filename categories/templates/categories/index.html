@@ -133,9 +133,9 @@ only, giving users the power to hide unwanted topics{% endblock description %}
             {% endif %}
         </span>
         <!-- Dislike -->
-        <form action="{% url 'comments:post_like_dislike' post.id %}" method="GET" class="form-inline dislikeForm" data-pk="{{ post.id }}">
-            <button type="submit" name="submit" value="dislike" title="Dislike"
-                class="btn">
+        <form action="{% url 'comments:post_like_dislike' post.id %}" method="GET" class="form-inline dislikeForm"
+            data-pk="{{ post.id }}">
+            <button type="submit" name="submit" value="dislike" title="Dislike" class="btn">
                 <i class="fa fa-thumbs-o-down" aria-hidden="true" style="font-size:36px"></i>
             </button>
         </form>
@@ -202,8 +202,6 @@ only, giving users the power to hide unwanted topics{% endblock description %}
             {% endif %}
             <span>{{post.user.username}}</span>
         </a>
-        <a href="{% url 'people:people' post.user.id %}">
-        </a>
         <div class="mb-3">
             <div class="card-body">
                 {% if post.description %}
@@ -230,134 +228,33 @@ only, giving users the power to hide unwanted topics{% endblock description %}
             <span><a href="{% url 'comments:view_post' post.id %}" style="text-decoration: none; color:black;"><i
                         class="far fa-comment-dots" style="font-size:36px;"></i></a></span>
             <!-- Like -->
-            <form method="GET" id="likeFollowedForm{{post.id}}" class="form-inline">
-                <button type="submit" name="submit" value="like" class="btn btn-link">
-                    <i class="fa fa-thumbs-o-up" aria-hidden="true" style="font-size:36px"
-                        id="likeFollowedButton{{post.id}}"></i>
+            <form method="GET" class="form-inline likeForm" action="{% url 'comments:post_like_dislike' post.id %}"
+                data-pk="{{post.id}}">
+                <button type="submit" name="submit" value="like" title="Like" class="btn btn-link">
+                    <i class="fa fa-thumbs-o-up" aria-hidden="true" style="font-size:36px"></i>
                 </button>
             </form>
-            <span class="m-3" id="id_followedLikes{{post.id}}">
+            <span class="m-3" id="id_likes{{post.id}}">
                 {% if user in post.likes.all %}
-                <p style="color:#065FD4;"><b>{{post.likes.count}}</b></p>
+                <p style="color:#065FD4;">{{post.likes.count}}</p>
                 {% else %}
                 <p style="color:black;">{{post.likes.count}}</p>
                 {% endif %}
             </span>
-
-            <script>
-                document.addEventListener('DOMContentLoaded', function () {
-                    window.addEventListener('load', function () {
-
-                        $('#likeFollowedForm{{post.id}}').click((event) => {
-                            event.preventDefault()
-                        })
-                        $('#likeFollowedButton{{post.id}}').click(function (event) {
-                            $.ajax({
-                                url: "{% url 'comments:post_like_dislike' post.id %}",
-                                data: {
-                                    'submit': 'like',
-                                },
-                                method: 'get',
-                                dataType: 'json',
-                                success: function (data) {
-                                    let likes = "{{post.likes.count}}";
-                                    let dislikes = "{{ post.dislikes.count }}"
-                                    if (data.action == 'undislike_and_like') {
-                                        dislikes -= 1
-                                        likes++
-                                        $('#id_followedDislikes{{post.id}}')
-                                            .html(
-                                                '<p style="color:black;">' +
-                                                dislikes + '</p>')
-                                        $('#id_followedLikes{{post.id}}').html(
-                                            '<p style="color:#065FD4;"><b>' +
-                                            likes + '</b></p>')
-                                    } else if (data.action == 'unlike') {
-                                        likes -= 1
-                                        $('#id_followedLikes{{post.id}}').html(
-                                            '<p style="color:#black;"' +
-                                            likes +
-                                            '</p>')
-                                    } else {
-                                        likes++
-                                        $('#id_followedLikes{{post.id}}').html(
-                                            '<p style="color:#065FD4;"><b>' +
-                                            likes + '</b></p>')
-                                    }
-                                }
-                            })
-                        })
-
-                    })
-                })
-            </script>
-
             <!-- Dislike -->
-            <form action="{% url 'comments:post_like_dislike' post.id %}" method="post" class="form-inline"
-                id="followedDislikeForm{{post.id}}">
-                {% csrf_token %}
-                <button type="submit" id="followedDislikeButton{{post.id}}" name="submit" value="dislike"
-                    title="Dislike" class="btn">
+            <form action="{% url 'comments:post_like_dislike' post.id %}" method="GET" class="form-inline dislikeForm"
+                data-pk="{{ post.id }}">
+                <button type="submit" name="submit" value="dislike" title="Dislike" class="btn">
                     <i class="fa fa-thumbs-o-down" aria-hidden="true" style="font-size:36px"></i>
                 </button>
             </form>
-            <span class="m-3" id="id_followedDislikes{{post.id}}">
+            <span class="m-3" id="id_dislikes{{post.id}}">
                 {% if user in post.dislikes.all %}
-                <p style="color:#065FD4;"><b>{{post.dislikes.count}}</b></p>
+                <p style="color:#065FD4;">{{post.dislikes.count}}</p>
                 {% else %}
                 <p style="color:black;">{{post.dislikes.count}}</p>
                 {% endif %}
             </span>
-
-            <script>
-                document.addEventListener('DOMContentLoaded', function () {
-                    window.addEventListener('load', function () {
-
-                        $('#followedDislikeForm{{post.id}}').click((event) => {
-                            event.preventDefault()
-                        })
-                        $('#followedDislikeButton{{post.id}}').click(function (event) {
-                            $.ajax({
-                                url: "{% url 'comments:post_like_dislike' post.id %}",
-                                data: {
-                                    'submit': 'dislike',
-                                },
-                                dataType: 'json',
-                                success: function (data) {
-                                    let likes = "{{post.likes.count}}";
-                                    let dislikes = "{{ post.dislikes.count }}"
-                                    if (data.action == 'unlike_and_dislike') {
-                                        dislikes++
-                                        likes -= 1
-                                        $('#id_followedDislikes{{post.id}}')
-                                            .html(
-                                                '<p style="color:#065FD4;"><b>' +
-                                                dislikes + '</b></p>')
-                                        $('#id_followedLikes{{post.id}}').html(
-                                            '<p style="color:black;">' +
-                                            likes + '</p>')
-                                    } else if (data.action == 'undislike') {
-                                        dislikes -= 1
-                                        $('#id_followedDislikes{{post.id}}')
-                                            .html(
-                                                '<p style="color:#black;"' +
-                                                dislikes +
-                                                '</p>')
-                                    } else {
-                                        dislikes++
-                                        $('#id_followedDislikes{{post.id}}')
-                                            .html(
-                                                '<p style="color:#065FD4;"><b>' +
-                                                dislikes + '</b></p>')
-                                    }
-                                }
-                            })
-                        })
-
-                    })
-                })
-            </script>
-
         </span>
         {% endfor %}
     </div>
