@@ -26,8 +26,18 @@ def home(request):
     requests = FriendRequest.objects.filter(to_user=request.user)
     group_requests = GroupRequest.objects.filter(reciever=request.user)
     total_requests_count = len(requests) + len(group_requests)
+    
+    user_posts_list = request.user.post_set.all()
+    page = request.GET.get('page')
+    paginator = Paginator(user_posts_list, 5)
+    try:
+        user_posts = paginator.page(page)
+    except PageNotAnInteger:
+        user_posts = paginator.page(1)
+    except EmptyPage:
+        user_posts = paginator.page(paginator.num_pages)
     if request.method == 'GET':
-        return render(request, 'userpage/index.html', {'user': user, 'form': form, 'privacy_form': privacy_form, 'distraction_free_form': distraction_free_form, 'requests': requests, 'group_requests':group_requests, 'total_requests': total_requests_count})
+        return render(request, 'userpage/index.html', {'user': user, 'form': form, 'privacy_form': privacy_form, 'distraction_free_form': distraction_free_form, 'requests': requests, 'group_requests': group_requests, 'total_requests': total_requests_count, 'user_posts': user_posts})
     elif request.POST.get('submit') == 'Update':
         try:
             # if request.POST.get('email'):
@@ -145,7 +155,8 @@ def unfriend(request):
     user.friends.remove(friend)
     friend.friends.remove(user)
     if request.user.your_invites:
-        notification = Notification(notification_type = 'your_invite', sender = request.user, url=f"/people/{request.user.id}", content=f'{request.user} Unfriended You' )
+        notification = Notification(notification_type='your_invite', sender=request.user,
+                                    url=f"/people/{request.user.id}", content=f'{request.user} Unfriended You')
         notification.save()
         notification.receiver.add(friend)
     return JsonResponse({})
@@ -164,7 +175,7 @@ def get_user_by_id(request):
         user_avatar = '/media/profile_images/DefaultUserImage.jpg'
     json_user = {
         'id': user.id,
-        'username':user.username,
+        'username': user.username,
         'who_see_avatar': user.who_see_avatar,
         'avatar': user_avatar,
         'friends': serialize('json', user.friends.all()),
