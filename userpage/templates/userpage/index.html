@@ -20,7 +20,7 @@
     <li class="list-group-item userMenuItem active">Home</li>
     <li class="list-group-item userMenuItem">Friends {{user.friends.count}}</li>
     <li class="list-group-item userMenuItem">Requests {{total_requests}}</li>
-    <li class="list-group-item userMenuItem">My Invites {{ total_user_requests_count }}</li>
+    <li class="list-group-item userMenuItem">My Invites {{ total_user_invites_count }}</li>
 </ul>
 <div id="mainContainer">
     <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#privacy" data-whatever="privacy"><i
@@ -563,8 +563,8 @@
                     s.parentNode.insertBefore(g, s)
                 } else if ($(this).html().includes('My Invites')) {
                     $('#mainContainer').html(`
-<h1>My friend invites {{user_requests.count}}</h1>
-{% for request in user_requests %}
+<h1>My friend invites {{user_invites.count}}</h1>
+{% for request in user_invites %}
 <br>
 <div class="media" id="{{user_request.id}}Friend">
     {% if request.to_user.who_see_avatar == 'everyone' %}
@@ -584,9 +584,9 @@
     </div>
 {% endfor %}
 <hr>
-<h1>My Group invites {{user_group_requests.count}}</h1>
+<h1>My Group invites {{user_group_invites.count}}</h1>
 <br>
-{% for request in user_group_requests %}
+{% for request in user_group_invites %}
 <div class="media" id="{{request.id}}Group">
     {% if request.reciever.who_see_avatar == 'everyone' %}
     <img src="{{ request.reciever.avatar.url }}" class="mr-3 rounded-circle {% if request.reciever.id <= 1000 %}oldUser{% endif %}" alt="{{ request.reciever.username }}"
