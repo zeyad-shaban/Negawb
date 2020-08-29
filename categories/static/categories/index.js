@@ -97,23 +97,22 @@ document.addEventListener('DOMContentLoaded', function () {
     <span><a href="/comments/${post.pk}" style="text-decoration: none; color:black;"><i
                 class="far fa-comment-dots" style="font-size:36px;"></i></a></span>
     <!-- Like -->
-    <form method="GET" class="likeForm" class="form-inline" data-pk="${post.pk}">
+    <form action="/comments/post_like_dislike/${post.pk}/" method="GET" class="form-inline likeForm" data-pk="${post.pk}">
         <button type="submit" name="submit" value="like" title="Like" class="btn btn-link">
-            <i class="fa fa-thumbs-o-up" aria-hidden="true" style="font-size:36px" id="likeButton${post.pk}"></i>
+            <i class="fa fa-thumbs-o-up" aria-hidden="true" style="font-size:36px"></i>
         </button>
     </form>
     <span class="m-3" id="id_likes${post.pk}">
         <p style="color:black;">${post.fields.likes.length}</p>
         </span>
         <!-- Dislike -->
-        <form action="/comments/${post.pk}" method="post" class="form-inline"
-        id="dislikeForm${post.pk}">
-        <button type="submit" id="dislikeButton${post.pk}" name="submit" value="dislike" title="Dislike" class="btn">
+        <form action="/comments/post_like_dislike/${post.pk}/" method="GET" class="form-inline dislikeForm" data-pk="${post.pk}">
+        <button type="submit" name="submit" value="dislike" title="Dislike" class="btn">
             <i class="fa fa-thumbs-o-down" aria-hidden="true" style="font-size:36px"></i>
         </button>
     </form>
     <span class="m-3" id="id_dislikes${post.pk}">
-        <p style="color:#065FD4;"><b>${post.fields.dislikes.length}</b></p>
+        <p style="color:black;">${post.fields.dislikes.length}</p>
         </span>
                                 `
                                     $('#postsContainer').append(output)
@@ -209,7 +208,7 @@ document.addEventListener('DOMContentLoaded', function () {
         <!-- Dislike -->
         <form action="/comments/${post.pk}" method="post" class="form-inline"
         id="dislikeForm${post.pk}">
-        <button type="submit" id="dislikeButton${post.pk}" name="submit" value="dislike" title="Dislike" class="btn">
+        <button type="submit" name="submit" value="dislike" title="Dislike" class="btn">
             <i class="fa fa-thumbs-o-down" aria-hidden="true" style="font-size:36px"></i>
         </button>
     </form>

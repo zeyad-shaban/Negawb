@@ -134,7 +134,7 @@ only, giving users the power to hide unwanted topics{% endblock description %}
         </span>
         <!-- Dislike -->
         <form action="{% url 'comments:post_like_dislike' post.id %}" method="GET" class="form-inline dislikeForm" data-pk="{{ post.id }}">
-            <button type="submit" id="dislikeButton{{post.id}}" name="submit" value="dislike" title="Dislike"
+            <button type="submit" name="submit" value="dislike" title="Dislike"
                 class="btn">
                 <i class="fa fa-thumbs-o-down" aria-hidden="true" style="font-size:36px"></i>
             </button>
