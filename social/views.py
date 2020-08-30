@@ -20,6 +20,9 @@ User = get_user_model()
 
 @login_required
 def chat_friend(request):
+    print('chat_friend...')
+    print('pk', request.GET.get('pk'))
+    print('action', request.GET.get('action'))
     pk = request.GET.get('pk')
     action = request.GET.get('action')
     if action == 'friend':

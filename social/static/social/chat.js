@@ -179,6 +179,73 @@ document.addEventListener('DOMContentLoaded', function () {
         //         }
         //     }
         // });
+        // Load chat
+        function loadMessages(action, pk) {
+            $.ajax({
+                url: $('#chatMessages').attr('data-url'),
+                data: {
+                    'pk': pk,
+                    'action': action,
+                },
+                dataType: 'json',
+                success: function (response) {
+                    console.log('Success')
+                    let friend_image
+                    let isOld
+                    if (response.friend.id <= 1000) {
+                        isOld = 'oldUser'
+                    }
+                    if (response.friend.who_see_avatar == 'everyone' ||
+                        response.friend.who_see_avatar == 'friends') {
+                        friend_image = response.friend.avatar
+                    } else {
+                        friend_image =
+                            '/media/profile_images/DefaultUserImage.jpg'
+                    }
+                    $('#friendProfile').html(
+                        // ! Absolute URL
+                        `<a href="/people/${response.friend.id}/">
+                                            <img src="${friend_image}" width="40" height="40" class="${isOld}"/>
+                                            </a>
+                                            <p id="currChat" data-pk="${response.friend.id}" data-action="friend">${response.friend.username}</p>`
+                    )
+                    $('#chatMessages').html('')
+                    let chat_messages = JSON.parse(response
+                        .chat_messages)
+                    for (message of chat_messages) {
+                        let messageStyle = "null"
+                        if (message.fields.is_important) {
+                            messageStyle =
+                                'style="background: #d10c0c; color: white"'
+                        }
+                        if (message.fields.message_sender == response
+                            .friend.id) {
+                            $('#chatMessages').append(`<li class="replies">
+                                    <img src="${friend_image}" alt="" width="22" height="22" class="${isOld}"/>
+                                    <p ${messageStyle}>${message.fields.message}</p>
+                                </li>`)
+                        } else {
+                            $('#chatMessages').append(`
+                                            <li class="sent">
+                        <img src="" alt="" width="22" height="22" class="{% if user.id <= 1000 %}oldUser{% endif %}"/>
+                        <p id="messageContent" data-currMessagesCount="${chat_messages.length}" ${messageStyle}>${message.fields.message}</p>
+                    </li>
+                                            `)
+                        }
+                    }
+                }
+            })
+        }
+        $('.chatFriendButton').click(function (e) {
+            let thisElement = $(this)
+            let pk = thisElement.attr('data-pk')
+            if ($('#currChat').attr('data-pk') == pk) {
+                return false
+            } else {
+                loadMessages('friend', pk)
+            }
+        })
+
         // load more messages
         let page = 1;
         $('#loadMore').click(function (e) {
