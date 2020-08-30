@@ -179,5 +179,49 @@ document.addEventListener('DOMContentLoaded', function () {
         //         }
         //     }
         // });
+        // load more messages
+        let page = 1;
+        $('#loadMore').click(function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: $('#chatMessages').attr('data-url'),
+                data: {
+                    'pk': $('#currChat').attr('data-pk'),
+                    'action': 'friend',
+                    'page': page
+                },
+                method: 'get',
+                dataType: 'json',
+                async: false,
+                success: function (response) {
+                    page++
+                    let chat_messages = JSON.parse(response.chat_messages)
+                    chat_messages.reverse()
+                    if (chat_messages.length > 0) {
+                        for (message of chat_messages) {
+                            let messageStyle = ""
+                            if (message.fields.is_important) {
+                                messageStyle =
+                                    'style="background: #d10c0c; color: white"'
+                            }
+                            if (message.fields.message_sender == response
+                                .friend.id) {
+                                $('#chatMessages').prepend(`<li class="replies">
+                <img src="${friend_image}" alt="" width="22" height="22" class="${isOld}"/>
+                <p ${messageStyle}>${message.fields.message}</p>
+            </li>`)
+                            } else {
+                                $('#chatMessages').prepend(`
+                        <li class="sent">
+    <img src="{{user.avatar.url}}" alt="" width="22" height="22" class="{% if user.id <= 1000 %}oldUser{% endif %}"/>
+    <p id="messageContent" data-currMessagesCount="${chat_messages.length}" ${messageStyle}>${message.fields.message}</p>
+</li>
+                        `)
+                            }
+                        }
+                    }
+                }
+            })
+        })
     });
 });

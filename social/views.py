@@ -1,4 +1,5 @@
 from django.core.serializers import serialize
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.utils.timezone import now
 import datetime
 from django.forms.models import model_to_dict
@@ -31,8 +32,20 @@ def chat_friend(request):
         if not chat_box:
             chat_box = ChatBox(user_1=request.user, user_2=friend)
             chat_box.save()
-        chat_messages = Message.objects.filter(
+        chat_messages_list = Message.objects.filter(
             chat_box=chat_box).order_by('sent_date')
+        paginator = Paginator(chat_messages_list, 4) # todo make 8 
+        if not request.GET.get('page'):
+            page = 0
+        else:
+            page = int(request.GET.get('page'))
+        page = paginator.num_pages - page
+        try:
+            chat_messages = paginator.page(page)
+        except EmptyPage:
+            chat_messages = []
+        except PageNotAnInteger:
+            chat_messages = paginator.page(1)
         json_friend = {
             'id': friend.id,
             'username': friend.username,

@@ -54,7 +54,7 @@ highlighting messages as important, perfect for managing work and school groups{
                         </div>
                     </div>
                 </li>
-                <!-- LOAD GROUP MESSAGES -->
+                <!-- LOAD GROUP MESSAGES    -->
                 <script>
                     document.addEventListener('DOMContentLoaded', function () {
                         window.addEventListener('load', function () {
@@ -401,7 +401,7 @@ highlighting messages as important, perfect for managing work and school groups{
                         </div>
                     </div>
                 </li>
-                <!-- LOAD FRIEND CHAT -->
+                <!-- Load friend chat -->
                 <script>
                     document.addEventListener('DOMContentLoaded', function () {
                         window.addEventListener('load', function () {
@@ -434,7 +434,7 @@ highlighting messages as important, perfect for managing work and school groups{
                                             </a>
                                             <p id="currChat" data-pk="${response.friend.id}" data-action="friend">${response.friend.username}</p>`
                                         )
-                                        let outputMessages = ''
+                                        $('#chatMessages').html('')
                                         let chat_messages = JSON.parse(response
                                             .chat_messages)
                                         for (message of chat_messages) {
@@ -445,24 +445,29 @@ highlighting messages as important, perfect for managing work and school groups{
                                             }
                                             if (message.fields.message_sender == response
                                                 .friend.id) {
-                                                outputMessages += `<li class="replies">
+                                                $('#chatMessages').append(`<li class="replies">
                                     <img src="${friend_image}" alt="" width="22" height="22" class="${isOld}"/>
                                     <p ${messageStyle}>${message.fields.message}</p>
-                                </li>`
+                                </li>`)
                                             } else {
-                                                outputMessages += `
+                                                $('#chatMessages').append(`
                                             <li class="sent">
                         <img src="{{user.avatar.url}}" alt="" width="22" height="22" class="{% if user.id <= 1000 %}oldUser{% endif %}"/>
                         <p id="messageContent" data-currMessagesCount="${chat_messages.length}" ${messageStyle}>${message.fields.message}</p>
                     </li>
-                                            `
+                                            `)
                                             }
                                         }
-                                        $('#chatMessages').html(outputMessages)
                                     }
                                 })
                             }
-                            $('#chatFriendButton{{friend.id}}').click(loadMessages)
+                            $('#chatFriendButton{{friend.id}}').click(function(e){
+                                if ($('#currChat').attr('data-pk') == "{{friend.id}}"){
+                                    return false
+                                } else{
+                                    loadMessages()
+                                }
+                            })
                         })
                     })
                 </script>
@@ -710,8 +715,8 @@ highlighting messages as important, perfect for managing work and school groups{
             <p id="currChat" data-pk="" data-action="">DFreeMedia</p>
         </div>
         <div class="messages" id="chatMessagesContainer">
-            <ul id="chatMessages">
-
+            <button class="btn btn-success" id="loadMore">Load More</button>
+            <ul id="chatMessages" data-url="{% url 'social:chat_friend' %}">
                 {% if not user.is_authenticated %}
                 <li class="replies">
                     <p><button type="button" class="btn btn-warning d-inline" data-toggle="modal"
