@@ -14,10 +14,10 @@ class Post(models.Model):
     category = models.ForeignKey(
         Category, on_delete=models.CASCADE, null=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    # Voting
     likes = models.ManyToManyField(User, related_name='post_like', blank=True)
     dislikes = models.ManyToManyField(
         User, related_name='post_dislike', blank=True)
+    views = models.ManyToManyField(User, related_name='post_views', blank=True)
     # AUTO
     post_date = models.DateTimeField(auto_now_add=True)
 

@@ -19,6 +19,8 @@ def view_post(request, pk):
     comments = Comment.objects.filter(
         post=post).order_by('-comment_date')[:150]
     if request.method == 'GET' and not request.GET.get('action') == 'addComment':
+        if request.user.is_authenticated:
+            post.views.add(request.user)
         return render(request, 'comments/view_post.html', {'post': post, 'comments': comments, })
     elif request.GET.get('action') == 'addComment':
         if request.GET.get('description') == '' or request.GET.get('description') == None:
