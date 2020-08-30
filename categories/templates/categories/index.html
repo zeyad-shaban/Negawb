@@ -210,7 +210,7 @@ only, giving users the power to hide unwanted topics{% endblock description %}
                             More</a>{% endif %}</p>
                 </blockquote>
                 {% endif %}
-                <small class="form-text text-muted">Published at {{ post.post_date|date:'d M Y' }}</small>
+                <small class="form-text text-muted">{{post.views.count}} ♦︎ {{ post.post_date|date:'d M Y' }}</small>
 
                 {% if post.image %}
                 <img src="{{ post.image.url }}" alt="{{ post.user.username }}" height="250" width="40%">
