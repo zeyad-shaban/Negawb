@@ -45,7 +45,7 @@ def chat_friend(request):
         except EmptyPage:
             chat_messages = []
         except PageNotAnInteger:
-            chat_messages = paginator.page(1)
+            chat_messages = paginator.page(paginator.num_pages)
         json_friend = {
             'id': friend.id,
             'username': friend.username,

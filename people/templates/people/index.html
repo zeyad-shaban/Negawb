@@ -116,7 +116,6 @@
             })
             // Follow User
             $('#followUser').click(function () {
-                console.log('Follwing or unfollowing')
                 $.ajax({
                     url: "{% url 'people:follow' view_user.id %}",
                     dataType: 'json',

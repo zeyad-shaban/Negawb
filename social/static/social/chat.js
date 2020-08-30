@@ -207,7 +207,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             if (message.fields.message_sender == response
                                 .friend.id) {
                                 $('#chatMessages').prepend(`<li class="replies">
-                <img src="${friend_image}" alt="" width="22" height="22" class="${isOld}"/>
+                <img src="" alt="" width="22" height="22" class=""/>
                 <p ${messageStyle}>${message.fields.message}</p>
             </li>`)
                             } else {
