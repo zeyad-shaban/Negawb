@@ -9,8 +9,6 @@ import datetime
 from django.utils.timezone import now
 
 
-
-
 def note(request):
     if request.GET.get('action') == 'create':
         form = NoteForm(request.GET)
@@ -28,7 +26,7 @@ def note(request):
         #     return JsonResponse({'done': True})
         pass
     else:
-        return render(request, 'production/note.html', {'form':NoteForm})
+        return render(request, 'production/note.html', {'form': NoteForm})
 
 
 def feedback(request):
@@ -36,20 +34,13 @@ def feedback(request):
         feedbacks = Feedback.objects.all().order_by('-created_date')
         return render(request, 'production/feedback.html', {'form': FeedbackForm, 'feedbacks': feedbacks})
     else:
-        feedbacks_in_last_day = request.user.feedback_set.filter(
-            created_date__gt=now() - datetime.timedelta(days=1))
-        if feedbacks_in_last_day.count() >= 2:
-            messages.error(
-                request, 'You can make only 2 feedbacks each day, please wait till tommorow')
-            return redirect('home')
-        else:
-            form = FeedbackForm(request.POST)
-            feedback = form.save(commit=False)
-            feedback.user = request.user
-            feedback.save()
-            messages.success(
-                request, 'Thank you for your feedback, we promise we will read it as soon as possible')
-            return redirect('feedback')
+        form = FeedbackForm(request.POST)
+        feedback = form.save(commit=False)
+        feedback.user = request.user
+        feedback.save()
+        messages.success(
+            request, 'Thank you for your feedback, we we will read it as soon as possible')
+        return redirect('feedback')
 
 
 class ViewFeedback(generic.DetailView):
