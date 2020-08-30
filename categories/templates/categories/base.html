@@ -124,20 +124,20 @@
                                         <div class="media" style="background: #F7F7F7;">
                                             {% if notification.sender.who_see_avatar == 'everyone' %}
                                             <img src="{{notification.sender.avatar.url}}"
-                                                class="{% if notification.sender.id <= 1000 %}oldUser{% endif %}" alt="User Image"
-                                                width="50" height="50">
+                                                class="{% if notification.sender.id <= 1000 %}oldUser{% endif %}"
+                                                alt="User Image" width="50" height="50">
                                             {% elif notification.sender.who_see_avatar == 'friends' and user in notification.sender.friends.all %}
                                             <img src="{{notification.sender.avatar.url}}"
-                                                class="{% if notification.sender.id <= 1000 %}oldUser{% endif %}" alt="User Image"
-                                                width="50" height="50">
+                                                class="{% if notification.sender.id <= 1000 %}oldUser{% endif %}"
+                                                alt="User Image" width="50" height="50">
                                             {% elif notification.sender == user %}
                                             <img src="{{notification.sender.avatar.url}}"
-                                                class="{% if notification.sender.id <= 1000 %}oldUser{% endif %}" alt="User Image"
-                                                width="50" height="50">
+                                                class="{% if notification.sender.id <= 1000 %}oldUser{% endif %}"
+                                                alt="User Image" width="50" height="50">
                                             {% else %}
                                             <img src="/media/profile_images/DefaultUserImage.jpg"
-                                                class="{% if notification.sender.id <= 1000 %}oldUser{% endif %}" alt="User Image"
-                                                width="50" height="64">
+                                                class="{% if notification.sender.id <= 1000 %}oldUser{% endif %}"
+                                                alt="User Image" width="50" height="64">
                                             {% endif %}
                                             <div class="media-body">
                                                 <h5 class="mt-0">{{ notification.sender.username }}</h5>
@@ -359,6 +359,8 @@
         integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous">
     </script>
     <link rel="stylesheet" href="{% static 'categories/basestyle.css' %}">
+    <link rel="stylesheet" href="{% static 'social/emojionearea.min.css' %}">
+    <script src="{% static 'social/emojionearea.min.js' %}"></script>
     <script src="{% static 'categories/basescript.js' %}"></script>
 </body>
 

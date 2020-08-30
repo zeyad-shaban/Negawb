@@ -1,7 +1,6 @@
 {% extends 'categories/base.html' %}
 {% load static %}
 {% block content %}
-<link rel="stylesheet" href="{% static 'social/emojionearea.min.css' %}">
 <div class="text-center mb-2 mr-5 ml-5 rounded" style="background: #1DA1F2">
     <h1 style="color: white;">{{category.title}}</h1>
 </div>
@@ -225,6 +224,4 @@
         {% endif %}
     </ul>
 </nav>
-<script src="{% static 'social/emojionearea.min.js' %}"></script>
-
 {% endblock content %}

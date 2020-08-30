@@ -51,7 +51,6 @@ only, giving users the power to hide unwanted topics{% endblock description %}
     {% else %}
     {% if user.homepage_posts %}
     <h1 class="text-center">{{ user.homepage_posts.title }}</h1>
-    <link rel="stylesheet" href="{% static 'social/emojionearea.min.css' %}">
     <form method="POST" class="mb-4" enctype="multipart/form-data"
         action="{% url 'comments:create_post' user.homepage_posts.id %}">
         {% csrf_token %}

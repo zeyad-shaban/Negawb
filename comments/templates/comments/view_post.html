@@ -12,7 +12,6 @@
 {% block content %}
 <!-- <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css"> -->
 <link rel="stylesheet" href="{% static 'comments/view_post.css' %}">
-<link rel="stylesheet" href="{% static 'social/emojionearea.min.css' %}">
 <script src="{% static 'comments/view_post.js' %}"></script>
 
 <a href="{% url 'people:people' post.user.id %}">
@@ -438,5 +437,4 @@
 {% else %}
 <small class="form-text text-muted">Your Distraction Free settings doesn't allow comments to show up</small>
 {% endif %}
-<script src="{% static 'social/emojionearea.min.js' %}"></script>
 {% endblock content %}

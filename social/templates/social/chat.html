@@ -10,7 +10,6 @@ highlighting messages as important, perfect for managing work and school groups{
 
 
 {% block content %}
-<link rel="stylesheet" href="{% static 'social/emojionearea.min.css' %}">
 <link rel="stylesheet" href="{% static 'social/chat.css' %}">
 <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css'>
 {% block chat_frame %}
@@ -747,13 +746,6 @@ highlighting messages as important, perfect for managing work and school groups{
                     <span class="float-left" id="sendMessageContainer">
                         <input type="text" placeholder="Write your message..." id="inputMessage" style="display:none"
                             required />
-                        <script>
-                            document.addEventListener('DOMContentLoaded', function () {
-                                window.addEventListener('load', function () {
-                                    $('#inputMessage').emojioneArea()
-                                })
-                            })
-                        </script>
                     </span>
                     <div class="input-group-append" id="messageExtraInputs">
                         <!-- <i class="fa fa-paperclip attachment" aria-hidden="true"></i> -->
@@ -770,5 +762,4 @@ highlighting messages as important, perfect for managing work and school groups{
     </div>
 </div>
 <script src="{% static 'social/chat.js' %}"></script>
-<script src="{% static 'social/emojionearea.min.js' %}"></script>
 {% endblock content %}
