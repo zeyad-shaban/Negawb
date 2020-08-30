@@ -164,13 +164,16 @@ highlighting messages as important, perfect for managing work and school groups{
                                                 <a href="{% url 'people:people' friend.id %}">
                                                     {% if friend.who_see_avatar == 'everyone' %}
                                                     <img src="{{friend.avatar.url}}" alt="User Image" width="64"
-                                                        height="64" class="{% if friend.id <= 1000 %}oldUser{% endif %}">
+                                                        height="64"
+                                                        class="{% if friend.id <= 1000 %}oldUser{% endif %}">
                                                     {% elif friend.who_see_avatar == 'friends' and user in friend.friends.all %}
                                                     <img src="{{friend.avatar.url}}" alt="User Image" width="64"
-                                                        height="64" class="{% if friend.id <= 1000 %}oldUser{% endif %}">
+                                                        height="64"
+                                                        class="{% if friend.id <= 1000 %}oldUser{% endif %}">
                                                     {% elif friend == user %}
                                                     <img src="{{friend.avatar.url}}" alt="User Image" width="64"
-                                                        height="64" class="{% if friend.id <= 1000 %}oldUser{% endif %}">
+                                                        height="64"
+                                                        class="{% if friend.id <= 1000 %}oldUser{% endif %}">
                                                     {% else %}
                                                     <img src="/media/profile_images/DefaultUserImage.jpg"
                                                         alt="User Image" width="64" height="64"
@@ -414,7 +417,7 @@ highlighting messages as important, perfect for managing work and school groups{
                                     success: function (response) {
                                         let friend_image
                                         let isOld
-                                        if (response.friend.id <= 1000){
+                                        if (response.friend.id <= 1000) {
                                             isOld = 'oldUser'
                                         }
                                         if (response.friend.who_see_avatar == 'everyone' ||
@@ -489,7 +492,7 @@ highlighting messages as important, perfect for managing work and school groups{
                                             let chat
                                             let chat_url
                                             let isOld = ''
-                                            if (response.friend.id <= 1000){
+                                            if (response.friend.id <= 1000) {
                                                 isOld = 'oldUser'
                                             }
                                             if (action == 'friend') {
@@ -744,8 +747,7 @@ highlighting messages as important, perfect for managing work and school groups{
             <div class="wrap">
                 <form action="" method="get" id="sendMessageForm" class="form-inline" style="width: 100%">
                     <span class="float-left" id="sendMessageContainer">
-                        <input type="text" placeholder="Write your message..." id="inputMessage" style="display:none"
-                            required />
+                        <input type="text" placeholder="Write your message..." id="inputMessage" required />
                     </span>
                     <div class="input-group-append" id="messageExtraInputs">
                         <!-- <i class="fa fa-paperclip attachment" aria-hidden="true"></i> -->

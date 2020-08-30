@@ -169,6 +169,15 @@ document.addEventListener('DOMContentLoaded', function () {
         $(window).resize(function (event) {
             windowResizing()
         })
-        $('#inputMessage').emojioneArea()
+        // $('#inputMessage').emojioneArea({
+        //     events: {
+        //         keyup: function (editor, event) {
+        //             var code = (event.keyCode ? event.keyCode : event.which);
+        //             if (code == 13) { //Enter keycode
+        //                 $('#sendMessageForm').submit()
+        //             }
+        //         }
+        //     }
+        // });
     });
 });
