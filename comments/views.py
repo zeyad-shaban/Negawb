@@ -128,9 +128,9 @@ def create_post(request, pk):
     category = get_object_or_404(Category, pk=pk)
     posts_in_last_day = request.user.post_set.filter(Q(
         post_date__gt=now() - datetime.timedelta(days=1)))
-    if posts_in_last_day.count() >= 3:
+    if posts_in_last_day.count() >= 5:
         messages.error(
-            request, f'you have exceeded your 3 posts a day limit')
+            request, f'you have exceeded your 5 posts a day limit')
         return redirect('categories:view_category', pk=pk)
     elif request.POST.get('description') == '' and request.FILES.get('image') == None and request.FILES.get('post_file') == None:
         messages.error(request, 'Please spicify at leat one field')

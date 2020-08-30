@@ -38,9 +38,9 @@ def feedback(request):
     else:
         feedbacks_in_last_day = request.user.feedback_set.filter(
             created_date__gt=now() - datetime.timedelta(days=1))
-        if feedbacks_in_last_day.count() >= 1:
+        if feedbacks_in_last_day.count() >= 2:
             messages.error(
-                request, 'You can make only 1 feedback each day, please wait till tommorow')
+                request, 'You can make only 2 feedbacks each day, please wait till tommorow')
             return redirect('home')
         else:
             form = FeedbackForm(request.POST)

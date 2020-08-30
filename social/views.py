@@ -34,7 +34,7 @@ def chat_friend(request):
             chat_box.save()
         chat_messages_list = Message.objects.filter(
             chat_box=chat_box).order_by('sent_date')
-        paginator = Paginator(chat_messages_list, 4) # todo make 8 
+        paginator = Paginator(chat_messages_list, 7)
         if not request.GET.get('page'):
             page = 0
         else:
