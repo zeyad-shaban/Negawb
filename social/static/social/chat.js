@@ -296,5 +296,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 paginateMessages();
             }
         })
+        
     });
 });
