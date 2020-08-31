@@ -602,7 +602,7 @@
     <div class="media-body">
         <h5 class="mt-0">You invited {{request.reciever}} to join {{request.group.titlle}}<small
                 class="form-text text-muted">
-                {{request.sent_date|date:"j b o"}}</small></small></h5>
+                {{request.date|date:"j b o"}}</small></small></h5>
 
     </div>
     <a class="btn btn-danger float-left denyGroup" href="{% url 'social:deny_group' %}" data-pk="{{ request.id }}">Take Down</a>

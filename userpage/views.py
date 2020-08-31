@@ -28,7 +28,7 @@ def home(request):
     total_requests_count = len(requests) + len(group_requests)
     # Invites
     user_invites = FriendRequest.objects.filter(from_user=request.user).order_by('-date')
-    user_group_invites = GroupRequest.objects.filter(request_sender=request.user).order_by('-sent_date')
+    user_group_invites = GroupRequest.objects.filter(request_sender=request.user).order_by('-date')
     total_user_invites_count = len(user_invites) + len(user_group_invites)
     
     user_posts_list = request.user.post_set.all()

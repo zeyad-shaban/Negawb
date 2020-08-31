@@ -10,7 +10,7 @@ highlighting messages as important, perfect for managing work and school groups{
 
 
 {% block content %}
-<link rel="stylesheet" href="{% static 'social/chat.css' %}">
+<link rel="stylesheet" href="{% static 'social/homechat.css' %}">
 <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css'>
 {% block chat_frame %}
 <div id="frame">
@@ -60,7 +60,7 @@ highlighting messages as important, perfect for managing work and school groups{
                         window.addEventListener('load', function () {
                             $('#chatGroupButton{{group.id}}').click(function loadMessages(e) {
                                 $.ajax({
-                                    url: "{% url 'social:chat_friend' %}",
+                                    url: "{% url 'social:chat_friend' 1 %}",
                                     data: {
                                         'pk': "{{group.id}}",
                                         'action': 'group',
@@ -376,135 +376,34 @@ highlighting messages as important, perfect for managing work and school groups{
 
                 {% for friend in friends %}
                 <li class="contact">
-                    <div class="wrap chatFriendButton" data-pk="{{friend.id}}">
-                        <span class="contact-status online"></span>
-                        {% if friend.who_see_avatar == 'everyone' %}
-                        <img src="{{friend.avatar.url}}" alt="User Image"
-                            class="img-fluid rounded-circle d-block mx-auto {% if friend.id <= 1000 %}oldUser{% endif %}"
-                            height="50" width="50" style="max-height: 50px;">
-                        {% elif friend.who_see_avatar == 'friends' and user in friend.friends.all %}
-                        <img src="{{friend.avatar.url}}" alt="User Image"
-                            class="img-fluid rounded-circle d-block mx-auto {% if friend.id <= 1000 %}oldUser{% endif %}"
-                            height="50" width="50" style="max-height: 50px;">
-                        {% elif friend == user %}
-                        <img src="{{friend.avatar.url}}" alt="User Image"
-                            class="img-fluid rounded-circle d-block mx-auto {% if friend.id <= 1000 %}oldUser{% endif %}"
-                            height="50" width="50" style="max-height: 50px;">
-                        {% else %}
-                        <img src="/media/profile_images/DefaultUserImage.jpg" alt="User Image"
-                            class="img-fluid rounded-circle d-block mx-auto {% if friend.id <= 1000 %}oldUser{% endif %}"
-                            height="50" width="50" style="max-height: 50px;">
-                        {% endif %}
-                        <div class="meta">
-                            <p class="name">{{ friend.username }}</p>
-                            <p class="preview"></p>
+                    <a href="{% url 'social:chat_friend' friend.id %}">
+                        <div class="wrap chatFriendButton" data-pk="{{friend.id}}">
+                            <span class="contact-status online"></span>
+                            {% if friend.who_see_avatar == 'everyone' %}
+                            <img src="{{friend.avatar.url}}" alt="User Image"
+                                class="img-fluid rounded-circle d-block mx-auto {% if friend.id <= 1000 %}oldUser{% endif %}"
+                                height="50" width="50" style="max-height: 50px;">
+                            {% elif friend.who_see_avatar == 'friends' and user in friend.friends.all %}
+                            <img src="{{friend.avatar.url}}" alt="User Image"
+                                class="img-fluid rounded-circle d-block mx-auto {% if friend.id <= 1000 %}oldUser{% endif %}"
+                                height="50" width="50" style="max-height: 50px;">
+                            {% elif friend == user %}
+                            <img src="{{friend.avatar.url}}" alt="User Image"
+                                class="img-fluid rounded-circle d-block mx-auto {% if friend.id <= 1000 %}oldUser{% endif %}"
+                                height="50" width="50" style="max-height: 50px;">
+                            {% else %}
+                            <img src="/media/profile_images/DefaultUserImage.jpg" alt="User Image"
+                                class="img-fluid rounded-circle d-block mx-auto {% if friend.id <= 1000 %}oldUser{% endif %}"
+                                height="50" width="50" style="max-height: 50px;">
+                            {% endif %}
+                            <div class="meta">
+                                <p class="name">{{ friend.username }}</p>
+                                <p class="preview"></p>
+                            </div>
                         </div>
-                    </div>
+                    </a>
                 </li>
                 {% endfor %}
-                <!-- LOAD NEW MESSAGES -->
-                <script>
-                    document.addEventListener('DOMContentLoaded', function () {
-                        window.addEventListener('load', function () {
-                            setInterval(function loadMessages(e) {
-                                let pk = $('#currChat').attr('data-pk')
-                                let action = $('#currChat').attr('data-action')
-                                let currMessagesCount = $('#messageContent').attr(
-                                    'data-currMessagesCount')
-                                $.ajax({
-                                    url: "{% url 'social:chat_friend' %}",
-                                    data: {
-                                        'pk': pk,
-                                        'action': action,
-                                    },
-                                    dataType: 'json',
-                                    success: function (response) {
-                                        let chat_messages = JSON.parse(response
-                                            .chat_messages)
-                                        if (chat_messages.length >
-                                            currMessagesCount) {
-                                            let senderAvatar
-                                            let chat
-                                            let chat_url
-                                            let isOld = ''
-                                            if (response.friend.id <= 1000) {
-                                                isOld = 'oldUser'
-                                            }
-                                            if (action == 'friend') {
-                                                chat = response.friend
-                                                chat_url = "/people/$" + chat.id +
-                                                    "/"
-                                                chat_label = chat.username
-                                                if (chat.who_see_avatar ==
-                                                    'everyone' ||
-                                                    chat.who_see_avatar == 'friends'
-                                                ) {
-                                                    senderAvatar = chat.avatar
-                                                } else {
-                                                    senderAvatar =
-                                                        '/media/profile_images/DefaultUserImage.jpg'
-                                                }
-                                            } else if (action == 'group') {
-                                                chat = response.group
-                                                chat_url =
-                                                    `" data-toggle="modal" data-target="#addMembers`
-                                                chat_label = chat.title
-                                                senderAvatar = chat['image']
-                                            }
-                                            $('#friendProfile').html(
-                                                // ! STATIC URL todo
-                                                `<a href="${chat_url}">
-                                                <img src="${senderAvatar}" id="groupImage" data-img="${senderAvatar}" width="40" height="40" class="${isOld}"/>
-                                                </a>
-                                                <p id="currChat" data-pk="${pk}" data-action="${action}">${chat_label}</p>`
-                                            )
-                                            let outputMessages = ''
-                                            for (message of chat_messages) {
-                                                let user
-                                                $.ajax({
-                                                    type: "get",
-                                                    url: "{% url 'userpage:get_user_by_id' %}",
-                                                    data: {
-                                                        'pk': message.fields
-                                                            .message_sender
-                                                    },
-                                                    dataType: "json",
-                                                    async: false,
-                                                    success: function (
-                                                        response) {
-                                                        user = response
-                                                            .user
-                                                    }
-                                                });
-                                                let messageStyle = ''
-                                                if (message.fields.is_important) {
-                                                    messageStyle =
-                                                        'style="background: #d10c0c; color: white;"'
-                                                }
-                                                if (user.id != "{{user.id}}") {
-                                                    outputMessages += `
-                                            <p class="float-right" style="font-size:1.25em">${user.username}</p>
-                                                <li class="replies">
-                                    <img src="${senderAvatar}" alt="" width="22" height="22"/>
-                                    <p ${messageStyle}>${message.fields.message}</p>
-                                </li>`
-                                                } else {
-                                                    outputMessages += `
-                                            <li class="sent">
-                        <img src="{{user.avatar.url}}" alt="" width="22" height="22" class="{% if user.id <= 1000 %}oldUser{% endif %}"/>
-                        <p id="messageContent" data-currMessagesCount="${chat_messages.length}" ${messageStyle}>${message.fields.message}</p>
-                    </li>
-                                            `
-                                                }
-                                            }
-                                            $('#chatMessages').html(outputMessages)
-                                        }
-                                    }
-                                })
-                            }, 3000);
-                        })
-                    })
-                </script>
                 <!-- SEND MESSAGE -->
                 <script>
                     document.addEventListener('DOMContentLoaded', function () {
@@ -645,7 +544,7 @@ highlighting messages as important, perfect for managing work and school groups{
             <p id="currChat" data-pk="" data-action="">DFreeMedia</p>
         </div>
         <div class="messages" id="chatMessagesContainer">
-            <ul id="chatMessages" data-url="{% url 'social:chat_friend' %}">
+            <ul id="chatMessages" data-url="">
                 {% if not user.is_authenticated %}
                 <li class="replies">
                     <p><button type="button" class="btn btn-warning d-inline" data-toggle="modal"
@@ -697,5 +596,5 @@ highlighting messages as important, perfect for managing work and school groups{
         </div>
     </div>
 </div>
-<script src="{% static 'social/chat.js' %}"></script>
+<script src="{% static 'social/homechat.js' %}"></script>
 {% endblock content %}

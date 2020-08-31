@@ -20,7 +20,7 @@ class Message(models.Model):
         ChatBox, related_name='chat_box', null=True, on_delete=models.CASCADE)
     message_sender = models.ForeignKey(
         User, related_name='message_sender', null=True, on_delete=models.CASCADE)
-    sent_date = models.DateTimeField(auto_now_add=True)
+    date = models.DateTimeField(auto_now_add=True)
     message = models.TextField()
     is_important = models.BooleanField(default=False)
 
@@ -60,7 +60,7 @@ class GroupRequest(models.Model):
         User, related_name='request_sender', on_delete=models.CASCADE)
     reciever = models.ForeignKey(User, on_delete=models.CASCADE)
     group = models.ForeignKey(ChatGroup, on_delete=models.CASCADE)
-    sent_date = models.DateTimeField(auto_now_add=True)
+    date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f'[GROUP] {self.group.title} | {self.request_sender} To {self.reciever}'
@@ -71,7 +71,7 @@ class GroupMessage(models.Model):
         ChatGroup, related_name='chat_group', null=True, on_delete=models.CASCADE)
     message_sender = models.ForeignKey(
         User, related_name='group_message_sender', null=True, on_delete=models.CASCADE)
-    sent_date = models.DateTimeField(auto_now_add=True)
+    date = models.DateTimeField(auto_now_add=True)
     message = models.TextField()
     is_important = models.BooleanField(default=False)
 

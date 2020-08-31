@@ -9,7 +9,7 @@ class ChatGroupAdmin(admin.ModelAdmin):
 
 @admin.register(GroupRequest)
 class GroupRequestAdmin(admin.ModelAdmin):
-    readonly_fields = ('sent_date',)
+    readonly_fields = ('date',)
 
 
 @admin.register(ChatBox)
@@ -20,12 +20,12 @@ class ChatBoxAdmin(admin.ModelAdmin):
 
 @admin.register(Message)
 class MessageAdmin(admin.ModelAdmin):
-    readonly_fields = ('sent_date',)
+    readonly_fields = ('date',)
 
 
 @admin.register(GroupMessage)
 class GroupMessageAdmin(admin.ModelAdmin):
-    readonly_fields = ('sent_date',)
+    readonly_fields = ('date',)
 
 
 @admin.register(Notification)
