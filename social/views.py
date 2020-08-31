@@ -23,18 +23,18 @@ def chat_friend(request, pk):
     friend = get_object_or_404(User, pk=pk)
     # Chat Box
     chat_box = ChatBox.objects.filter(
-            user_1=request.user, user_2=friend).first()
+        user_1=request.user, user_2=friend).first()
     if not chat_box:
         chat_box = ChatBox.objects.filter(
             user_1=friend, user_2=request.user).first()
     if not chat_box:
         chat_box = ChatBox(user_1=request.user, user_2=friend)
         chat_box.save()
-    
+
     # Todo paginator
-    chat_messages = Message.objects.filter(chat_box = chat_box).order_by('date')
+    chat_messages = Message.objects.filter(chat_box=chat_box).order_by('date')
     if request.method == 'GET' and not request.GET.get('action'):
-        return render(request, 'social/chat_friend.html', {'friend': friend, 'chat_messages': chat_messages,})
+        return render(request, 'social/chat_friend.html', {'friend': friend, 'chat_messages': chat_messages, })
     else:
         pass
     #     paginator = Paginator(chat_messages_list, 7)
@@ -78,69 +78,70 @@ def send_message(request, pk):
     if not request.GET.get('action'):
         action = 'friend'
     if action == 'friend':
-        friend = get_object_or_404(User,pk=pk)
-        chat_box = ChatBox.objects.filter(user_1 = request.user, user_2 = friend).first()
+        friend = get_object_or_404(User, pk=pk)
+        chat_box = ChatBox.objects.filter(
+            user_1=request.user, user_2=friend).first()
         if not chat_box:
-            chat_box = ChatBox.objects.filter(user_1 = friend, user_2 = request.user).first()
-        message = Message(chat_box=chat_box, message_sender=request.user, message=request.GET.get('message'))
-        
-        return JsonResponse({})
-    #     chat_box = ChatBox.objects.filter(
-    #         user_1=request.user, user_2=friend).first()
-    #     if not chat_box:
-    #         chat_box = ChatBox.objects.filter(
-    #             user_1=friend, user_2=request.user).first()
-    #     message = Message(
-    #         chat_box=chat_box, message_sender=request.user, message=request.GET.get('message'))
-    #     if request.GET.get('is_important') == "True":
-    #         important_messages_in_last_day = Message.objects.filter(date__gt=now(
-    #         ) - datetime.timedelta(days=1), is_important=True, chat_box=chat_box, message_sender=request.user)
-    #         if important_messages_in_last_day.count() >= 3:
-    #             message = {
-    #                 'text': 'You can only send 3 important messages each day for each chat',
-    #                 'tags': 'error'
-    #             }
-    #             return JsonResponse({'message': message})
-    #         else:
-    #             if friend.allow_important_friend_messages:
-    #                 notification = Notification.objects.create(
-    #                     notification_type='important_friend_message', sender=request.user, url='/chat/', content=message.message[:100])
-    #                 notification.save()
-    #                 notification.receiver.add(friend)
-    #                 for receiver in notification.receiver.all():
-    #                     if notification.sender.who_see_avatar == 'everyone':
-    #                         sender_avatar = notification.sender.avatar.url
-    #                     elif notification.sender.who_see_avatar == 'friends' and receiver in receiver.friends.all():
-    #                         sender_avatar = notification.sender.avatar.url
-    #                     else:
-    #                         sender_avatar = '/media/profile_images/DefaultUserImage.jpg'
-    #                     payload = {"head": f"An Important message from {notification.sender.username}",
-    #                     "body": notification.content,
-    #                     "url": notification.url,
-    #                     "icon": sender_avatar,
-    #                     }
-    #                     send_user_notification(user = receiver, payload = payload,ttl = 1000)
-    #             message.is_important = request.GET.get('is_important', False)
-    #     else:
-    #         if friend.allow_normal_friend_message:
-    #             # !ABSOLUTE PATH
-    #             notification = Notification.objects.create(
-    #                 notification_type='normal_friend_message', sender=request.user, url='/chat/', content=message.message[:100])
-    #             notification.save()
-    #             notification.receiver.add(friend)
-    #             for receiver in notification.receiver.all():
-    #                 if notification.sender.who_see_avatar == 'everyone':
-    #                     sender_avatar = notification.sender.avatar.url
-    #                 elif notification.sender.who_see_avatar == 'friends' and receiver in receiver.friends.all():
-    #                     sender_avatar = notification.sender.avatar.url
-    #                 else:
-    #                     sender_avatar = '/media/profile_images/DefaultUserImage.jpg'
-    #                 payload = {"head": f"Message from {notification.sender}",
-    #                 "body": notification.content,
-    #                 "url": notification.url,
-    #                 "icon": sender_avatar,
-    #                 }
-    #                 send_user_notification(user = receiver, payload = payload,ttl = 1000)
+            chat_box = ChatBox.objects.filter(
+                user_1=friend, user_2=request.user).first()
+        message = Message(chat_box=chat_box, message_sender=request.user,
+                          message=request.GET.get('message'))
+        if request.GET.get('is_important') == "True":
+            important_messages_in_last_day = Message.objects.filter(date__gt=now(
+                ) - datetime.timedelta(days=1), is_important=True, chat_box=chat_box, message_sender=request.user)
+            if important_messages_in_last_day.count() >= 3:
+                message = {
+                    'text': 'You can only send 3 important messages each day for each chat',
+                    'tags': 'error'
+                }
+            else:
+                message.is_important = True
+                # Notification importnat message
+                if message.is_important:
+                    if friend.allow_important_friend_messages:
+                        notification = Notification.objects.create(
+                            notification_type='important_friend_message', sender=request.user, url='/chat/', content=message.message[:100])
+                        notification.save()
+                        notification.receiver.add(friend)
+                        for receiver in notification.receiver.all():
+                            if notification.sender.who_see_avatar == 'everyone':
+                                sender_avatar = notification.sender.avatar.url
+                            elif notification.sender.who_see_avatar == 'friends' and receiver in receiver.friends.all():
+                                sender_avatar = notification.sender.avatar.url
+                            else:
+                                sender_avatar = '/media/profile_images/DefaultUserImage.jpg'
+                            payload = {"head": f"An Important message from {notification.sender.username}",
+                                    "body": notification.content,
+                                    "url": notification.url,
+                                    "icon": sender_avatar,
+                                    }
+                            send_user_notification(
+                                user=receiver, payload=payload, ttl=1000)
+                    message.is_important = request.GET.get('is_important', False)
+                # Normal friend notification
+                else:
+                    if friend.allow_normal_friend_message:
+                        # !ABSOLUTE PATH
+                        notification = Notification.objects.create(
+                            notification_type='normal_friend_message', sender=request.user, url='/chat/', content=message.message[:100])
+                        notification.save()
+                        notification.receiver.add(friend)
+                        for receiver in notification.receiver.all():
+                            if notification.sender.who_see_avatar == 'everyone':
+                                sender_avatar = notification.sender.avatar.url
+                            elif notification.sender.who_see_avatar == 'friends' and receiver in receiver.friends.all():
+                                sender_avatar = notification.sender.avatar.url
+                            else:
+                                sender_avatar = '/media/profile_images/DefaultUserImage.jpg'
+                            payload = {"head": f"Message from {notification.sender}",
+                            "body": notification.content,
+                            "url": notification.url,
+                            "icon": sender_avatar,
+                            }
+                            send_user_notification(user = receiver, payload = payload,ttl = 1000)
+            # End normal friend notification
+    message.save()
+    return JsonResponse({})
     # elif action == 'group':
     #     group = ChatGroup.objects.get(id=pk)
     #     message = GroupMessage(
@@ -250,11 +251,12 @@ def create_invite(request,):
                 else:
                     sender_avatar = '/media/profile_images/DefaultUserImage.jpg'
                 payload = {"head": f"{notification.sender.username} wants you to join {group.title}",
-                "body": notification.content,
-                "url": notification.url,
-                "icon": sender_avatar,
-                }
-                send_user_notification(user = receiver, payload = payload,ttl = 1000)
+                           "body": notification.content,
+                           "url": notification.url,
+                           "icon": sender_avatar,
+                           }
+                send_user_notification(
+                    user=receiver, payload=payload, ttl=1000)
         message = {
             'text': f'Successfully invited {reciever}',
             'tags': 'success',
@@ -341,7 +343,7 @@ def group_members(request):
             'id': group.id,
             'image': group.image.url,
             'author_username': group.author.username,
-            'admins':serialize('json', group.group_admins.all())
+            'admins': serialize('json', group.group_admins.all())
         }
         return JsonResponse({'members': serialize('json', members), 'group': json_group})
     elif request.GET.get('action') == 'removeMember':
@@ -368,9 +370,10 @@ def leave_group(request):
     group = get_object_or_404(ChatGroup, pk=pk)
     group.members.remove(request.user)
     message = GroupMessage(
-            group=group, message_sender=request.user, message=f'{request.user} left the group')
+        group=group, message_sender=request.user, message=f'{request.user} left the group')
     message.save()
     return JsonResponse({})
+
 
 def take_down_friend_request(request, pk):
     friend_request = get_object_or_404(FriendRequest, pk=pk)

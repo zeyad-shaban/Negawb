@@ -34,13 +34,6 @@ highlighting messages as important, perfect for managing work and school groups{
         </div>
         <div id="contacts">
             <ul>
-                <audio id="notificationSound">
-                    <source src="{% static 'social/notificationsound.wav' %}" type="audio/wav">
-                    <source src="{% static 'social/notificationsound.wav' %}" type="audio/mp3">
-                    <source src="{% static 'social/notificationsound.wav' %}" type="audio/ogg">
-                    <source src="{% static 'social/notificationsound.wav' %}" type="audio/mpeg">
-                    Your browser does not support the audio element.
-                </audio>
                 {% for group in groups %}
                 <li class="contact" id="chatGroupButton{{group.id}}">
                     <div class="wrap">
@@ -437,9 +430,7 @@ highlighting messages as important, perfect for managing work and school groups{
                                         scrollTop: $(document)
                                             .height()
                                     }, "fast");
-                                    document.getElementById(
-                                            'notificationSound')
-                                        .play()
+                                    document.getElementById('notificationSound').play()
                                     var element = document.getElementById(
                                         'chatMessages');
                                     element.scrollTop = element

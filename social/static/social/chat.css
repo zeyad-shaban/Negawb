@@ -382,13 +382,23 @@ input.textarea {
     left: 7px;
     width: 34px;
     height: 34px;
-    background-image: url(https://i.imgur.com/5WUpcPZ.png);
+    background-image: url('https://cdn.pixabay.com/photo/2015/07/09/22/26/warning-838655_960_720.png');
     background-repeat: no-repeat;
     background-size: cover;
     z-index: 100;
     cursor: pointer;
 }
 
-.emojis:active {
-    opacity: 0.9;
+#send {
+    position: fixed;
+    display: block;
+    bottom: 8px;
+    left: 90vw;
+    width: 34px;
+    height: 34px;
+    background: #000000;
+    background-repeat: no-repeat;
+    background-size: cover;
+    z-index: 100;
+    cursor: pointer;
 }
