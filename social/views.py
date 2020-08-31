@@ -35,8 +35,10 @@ def chat_friend(request, pk):
     chat_messages = Message.objects.filter(chat_box=chat_box).order_by('date')
     if request.method == 'GET' and not request.GET.get('action'):
         return render(request, 'social/chat_friend.html', {'friend': friend, 'chat_messages': chat_messages, })
-    else:
-        pass
+    elif request.GET.get('action') == 'load_new_messages':
+        last_message_id = request.GET.get('last_message_id')
+        print('loading new messages')
+        return JsonResponse({})
     #     paginator = Paginator(chat_messages_list, 7)
     #     if not request.GET.get('page'):
     #         page = 0

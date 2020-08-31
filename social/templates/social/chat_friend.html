@@ -37,7 +37,7 @@
         </audio>
 
         {% for message in chat_messages %}
-        <li class="{% if message.message_sender == friend %}other {% else %}self{% endif %}">
+        <li class="{% if message.message_sender == friend %}other {% else %}self{% endif %} message" data-pk="{{message.id}}">
             <div class="avatar">
                 {% if message.message_sender.who_see_avatar == 'everyone' %}
                 <img src="{{message.message_sender.avatar.url}}" alt="User Image" width="64" height="64">
@@ -71,6 +71,8 @@
                 // Send
                 $('#send').click(function (e) {
                     e.preventDefault();
+                    let messages = document.getElementsByClassName('message')
+                    let newLastMessageId = parseInt(messages[messages.length-1].getAttribute('data-pk')) + 1
                     let messageInput = $('#messageInput').val()
                     let is_important = "False"
                     if ($('#is_important').is(':checked')) {
@@ -78,7 +80,7 @@
                     }
                     if (!messageInput == '') {
                         $('.chat').append(`
-                        <li class="self">
+                        <li class="self message" data-pk="${newLastMessageId}">
                     <div class="avatar">
                         <img src="{{ user.avatar.url }}" alt="User Image" width="64" height="64">
                     </div>
@@ -104,6 +106,24 @@
                         })
                     }
                 })
+                // Load new messages
+                // Todo use webSockets
+                setInterval(() => {
+                    let messages = document.getElementsByClassName('message')
+                    let lastMessageId = messages[messages.length-1].getAttribute('data-pk')
+                    $.ajax({
+                        url: "{% url 'social:chat_friend' friend.id %}",
+                        data: {
+                            'action': 'load_new_messages',
+                            'last_message_id': lastMessageId,
+                        },
+                        method: 'get',
+                        dataType: 'json',
+                        success: function (response) {
+                            console.log('success')
+                        }
+                    })
+                }, 3300);
             })
         })
     </script>
