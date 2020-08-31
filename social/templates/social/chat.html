@@ -438,7 +438,7 @@ highlighting messages as important, perfect for managing work and school groups{
                                         element.clientHeight;
                                     $('.emojionearea-editor').html('')
                                     $.ajax({
-                                        url: "{% url 'social:send_message' %}",
+                                        url: "{% url 'social:send_message' 1 %}",
                                         data: {
                                             "pk": pk,
                                             "action": action,

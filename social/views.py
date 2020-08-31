@@ -36,9 +36,10 @@ def chat_friend(request, pk):
     if request.method == 'GET' and not request.GET.get('action'):
         return render(request, 'social/chat_friend.html', {'friend': friend, 'chat_messages': chat_messages, })
     elif request.GET.get('action') == 'load_new_messages':
-        last_message_id = request.GET.get('last_message_id')
-        print('loading new messages')
-        return JsonResponse({})
+        last_message_id = int(request.GET.get('last_message_id'))
+        chat_messages = Message.objects.filter(chat_box=chat_box, id__gt=last_message_id).order_by('date')
+        return JsonResponse({'chat_messages': serialize('json', chat_messages)})
+
     #     paginator = Paginator(chat_messages_list, 7)
     #     if not request.GET.get('page'):
     #         page = 0
@@ -90,7 +91,7 @@ def send_message(request, pk):
                           message=request.GET.get('message'))
         if request.GET.get('is_important') == "True":
             important_messages_in_last_day = Message.objects.filter(date__gt=now(
-                ) - datetime.timedelta(days=1), is_important=True, chat_box=chat_box, message_sender=request.user)
+            ) - datetime.timedelta(days=1), is_important=True, chat_box=chat_box, message_sender=request.user)
             if important_messages_in_last_day.count() >= 3:
                 message = {
                     'text': 'You can only send 3 important messages each day for each chat',
@@ -113,13 +114,14 @@ def send_message(request, pk):
                             else:
                                 sender_avatar = '/media/profile_images/DefaultUserImage.jpg'
                             payload = {"head": f"An Important message from {notification.sender.username}",
-                                    "body": notification.content,
-                                    "url": notification.url,
-                                    "icon": sender_avatar,
-                                    }
+                                       "body": notification.content,
+                                       "url": notification.url,
+                                       "icon": sender_avatar,
+                                       }
                             send_user_notification(
                                 user=receiver, payload=payload, ttl=1000)
-                    message.is_important = request.GET.get('is_important', False)
+                    message.is_important = request.GET.get(
+                        'is_important', False)
                 # Normal friend notification
                 else:
                     if friend.allow_normal_friend_message:
@@ -136,11 +138,12 @@ def send_message(request, pk):
                             else:
                                 sender_avatar = '/media/profile_images/DefaultUserImage.jpg'
                             payload = {"head": f"Message from {notification.sender}",
-                            "body": notification.content,
-                            "url": notification.url,
-                            "icon": sender_avatar,
-                            }
-                            send_user_notification(user = receiver, payload = payload,ttl = 1000)
+                                       "body": notification.content,
+                                       "url": notification.url,
+                                       "icon": sender_avatar,
+                                       }
+                            send_user_notification(
+                                user=receiver, payload=payload, ttl=1000)
             # End normal friend notification
     message.save()
     return JsonResponse({})
