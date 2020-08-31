@@ -645,7 +645,6 @@ highlighting messages as important, perfect for managing work and school groups{
             <p id="currChat" data-pk="" data-action="">DFreeMedia</p>
         </div>
         <div class="messages" id="chatMessagesContainer">
-            <button class="btn btn-success" id="loadMore">Load More</button>
             <ul id="chatMessages" data-url="{% url 'social:chat_friend' %}">
                 {% if not user.is_authenticated %}
                 <li class="replies">

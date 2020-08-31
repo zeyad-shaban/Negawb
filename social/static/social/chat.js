@@ -233,6 +233,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                             `)
                         }
                     }
+                    paginateMessages();
                 }
             })
         }
@@ -248,8 +249,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // load more messages
         let page = 1;
-        $('#loadMore').click(function (e) {
-            e.preventDefault();
+        function paginateMessages(){
             $.ajax({
                 url: $('#chatMessages').attr('data-url'),
                 data: {
@@ -289,6 +289,12 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                 }
             })
+        }
+        let messagesContainer = document.getElementById('chatMessagesContainer')
+        $('#chatMessagesContainer').scroll(function(e){
+            if (messagesContainer.scrollTop == 0){
+                paginateMessages();
+            }
         })
     });
 });
