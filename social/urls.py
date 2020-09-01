@@ -14,8 +14,8 @@ urlpatterns = [
     path('send_friend_message/<int:pk>/', views.send_friend_message, name='send_friend_message'),
     path('send_group_message/<int:pk>/', views.send_group_message, name='send_group_message'),
     path('loadnotifications/', views.load_notifications, name='load_notifications'),
-    path('delete/group/', views.delete_group, name='delete_group'),
+    path('delete_group/<int:pk>', views.delete_group, name='delete_group'),
     path('group/members/', views.group_members, name='group_members'),
-    path('group/leave/', views.leave_group, name='leave_group'),
+    path('group_leave/<int:pk>', views.leave_group, name='leave_group'),
     path('take_down_friend_request/<int:pk>/', views.take_down_friend_request, name='take_down_friend_request'),
 ]

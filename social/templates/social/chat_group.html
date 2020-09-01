@@ -76,8 +76,8 @@
                     <h5 class="modal-title" id="groupMenuLabel">
                         <ul class="list-group list-group-horizontal">
                             <li class="list-group-item active btn groupOption">Members</li>
-                            <li class="list-group-item btn groupOption">Settings</li>
                             <li class="list-group-item btn groupOption">Add</li>
+                            <li class="list-group-item btn groupOption">Settings</li>
                         </ul>
                     </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -111,7 +111,7 @@
                                     <p class="float-right"><i class="fas fa-crown"
                                             style="font-size: 36px; color: green"></i> Owner
                                     </p>
-                                    {% elif member in group.group_admin.all %}
+                                    {% elif member in group.group_admins.all %}
                                     <p class="float-right"><i class="fas fa-tools" style="font-size: 36px"></i> Admin
                                     </p>
                                     {% endif %}
@@ -129,6 +129,7 @@
                         <h4>Friends</h4>
                         <ul class="list-unstyled">
                             {% for friend in user.friends.all %}
+                            {% if not friend in group.members.all %}
                             <li class="media">
                                 <a href="{% url 'people:people' friend.id %}" target="_blank">
                                     {% if friend.who_see_avatar == 'everyone' %}
@@ -163,8 +164,21 @@
                                     <p>{{friend.bio}}</p>
                                 </div>
                             </li>
+                            {% endif %}
                             {% endfor %}
                         </ul>
+                    </div>
+                    <div id="groupSettings" class="groupItem">
+
+                        <hr>
+                        <h4><i class="fas fa-exclamation-triangle"></i> Danger area</h4>
+                        <br>
+                        {% if user == group.author %}
+                        <a class="btn btn-outline-danger float-left" href="{% url 'social:delete_group' group.id %}" onclick="return confirm('{{ group.title }} has {{ group.members.count }} member. are you sure you want to delete it?')"><i
+                                class="fas fa-trash-alt"></i> Delete Group</a>
+                        {% endif %}
+                        <a href="{% url 'social:leave_group' group.id %}" class="btn btn-outline-secondary ml-4" onclick="return confirm('Leave {{ group.tite }}?')"><i
+                                class="fas fa-sign-out-alt"></i> Leave Group</a>
                     </div>
                 </div>
             </div>
@@ -212,8 +226,10 @@
                                                 dataType: 'json',
                                                 async: false,
                                                 success: function (response) {
-                                                    senderAvatar = response.user.avatar
-                                                    senderUserName = response.user.username
+                                                    senderAvatar = response.user
+                                                        .avatar
+                                                    senderUserName = response
+                                                        .user.username
                                                 }
                                             })
                                         }
@@ -244,6 +260,7 @@
                 $('#back').click(() => window.history.back())
                 // Group menu
                 $('#groupAddMember').hide()
+                $('#groupSettings').hide()
                 $('.name,.last').click(function (e) {
                     e.preventDefault();
                     $("#groupMenu").modal('show');
@@ -258,6 +275,8 @@
                             $('#groupMembers').show()
                         } else if ($(this).html() == 'Add') {
                             $('#groupAddMember').show()
+                        } else if ($(this).html() == 'Settings') {
+                            $('#groupSettings').show()
                         }
                     }
                 })

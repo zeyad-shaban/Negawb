@@ -335,15 +335,14 @@ def load_notifications(request):
 
 
 @login_required
-def delete_group(request):
-    pk = request.GET.get('pk')
+def delete_group(request, pk):
     group = get_object_or_404(ChatGroup, pk=pk)
     if request.user == group.author:
         group.delete()
         return JsonResponse({})
     else:
         messages.error(request, 'Only the group owner can delete the group')
-        return JsonResponse({})
+        return redirect('social:chat_group', pk=pk)
 
 
 def group_members(request):
@@ -381,14 +380,13 @@ def group_members(request):
         group.group_admins.remove(member)
 
 
-def leave_group(request):
-    pk = request.GET.get('pk')
+def leave_group(request, pk):
     group = get_object_or_404(ChatGroup, pk=pk)
     group.members.remove(request.user)
     message = GroupMessage(
         group=group, message_sender=request.user, message=f'{request.user} left the group')
     message.save()
-    return JsonResponse({})
+    return redirect('chat')
 
 
 def take_down_friend_request(request, pk):
