@@ -130,7 +130,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }, 4000);
             }
         }, 4000);
-        $('textarea,input[type=text]').emojioneArea({
+        $('.addEmoji').emojioneArea({
             pickerPosition: "bottom",
         })
     });

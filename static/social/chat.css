@@ -402,3 +402,7 @@ input.textarea {
     z-index: 100;
     cursor: pointer;
 }
+
+.navbar {
+    display: none !important;
+}
