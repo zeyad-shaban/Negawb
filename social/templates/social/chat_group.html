@@ -1,5 +1,5 @@
 {% load static %}
-
+{% load crispy_forms_tags %}
 <head>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
         integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous" />
@@ -170,9 +170,18 @@
                     </div>
                     <div id="groupSettings" class="groupItem">
                         <h4><i class="fas fa-edit"></i> Edit</h4>
-                        <form action="{% url 'social:edit_group' group.id %}" method="POST">
+                        
+                        {% if user == group.author or user in group.group_admins.all %}
+                        <form action="{% url 'social:edit_group' group.id %}" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {{ form|crispy }}
                             <button type="submit" class="btn btn-success">Save</button>
                         </form>
+                        {% else %}
+                        <div class="alert-info">
+                            <h5>Only group admins can edit</h5>
+                        </div>
+                        {% endif %}
                         
                         <hr>
                         <h4><i class="fas fa-exclamation-triangle"></i> Danger area</h4>

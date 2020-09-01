@@ -159,8 +159,10 @@ def chat_group(request, pk):
     except PageNotAnInteger:
         chat_messages = paginator.page(paginator.num_pages)
 
+    # form
+    form = ChatGroupForm(instance=group)
     if request.method == 'GET' and not request.GET.get('action') and not request.GET.get('page'):
-        return render(request, 'social/chat_group.html', {'group': group, 'chat_messages': chat_messages, })
+        return render(request, 'social/chat_group.html', {'group': group, 'chat_messages': chat_messages, 'form': form,})
 
     # Paginate messages
     elif request.GET.get('page'):
@@ -172,6 +174,15 @@ def chat_group(request, pk):
         chat_messages = GroupMessage.objects.filter(
             group=group, id__gt=last_message_id).order_by('date')
         return JsonResponse({'chat_messages': serialize('json', chat_messages)})
+
+def edit_group(request, pk):
+    group = get_object_or_404(ChatGroup, pk=pk)
+    form = ChatGroupForm(instance=group, data=request.POST ,files=request.FILES)
+    if request.user == group.author or request.user in group.group_admins.all():
+        form.save()
+    else:
+        messages.error(request, 'Only group admins can edit')
+    return redirect('social:chat_group', pk=pk)
 
 
 def send_group_message(request, pk):
@@ -222,9 +233,6 @@ def create_chat_group(request):
         new_chat_group.members.add(request.user)
         new_chat_group.group_admins.add(request.user)
         return redirect('chat')
-
-def edit_group(request, pk):
-    group = get_object_or_404(ChatGroup, pk=pk)
 
 
 def send_group_invite(request, user_pk, group_pk):
