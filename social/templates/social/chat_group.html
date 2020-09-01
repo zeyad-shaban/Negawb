@@ -173,6 +173,73 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             window.addEventListener('load', function () {
+                // Paginate messages
+                let page = 1
+                // Top scroll
+                function topScroll() {
+                    if (window.top == window.self) {
+                        $.ajax({
+                            url: "{% url 'social:chat_group' group.id %}",
+                            data: {
+                                "page": page,
+                            },
+                            method: 'get',
+                            dataType: 'json',
+                            success: function (response) {
+                                let sender = "self"
+                                let senderAvatar = "{{ user.avatar.url }}"
+                                let senderUserName = "{{ user.username }}"
+                                chat_messages = JSON.parse(response.chat_messages).reverse()
+                                if (chat_messages.length > 0) {
+                                    page++
+                                    for (message of chat_messages) {
+                                        let dateToString = d =>
+                                            `${d.getFullYear()}-${('00' + (d.getMonth() + 1)).slice(-2)}-${('00' + d.getDate()).slice(-2)}`
+                                        let messageDate = new Date(Date.parse(message.fields
+                                            .date))
+                                        let date = dateToString(messageDate)
+                                        // Other member
+                                        if (message.fields.message_sender !=
+                                            "{{ user.id }}") {
+                                            sender = "other"
+                                            $.ajax({
+                                                url: "{% url 'userpage:get_user_by_id' %}",
+                                                data: {
+                                                    'pk': message.fields
+                                                        .message_sender,
+                                                },
+                                                method: 'get',
+                                                dataType: 'json',
+                                                async: false,
+                                                success: function (response) {
+                                                    senderAvatar = response.user.avatar
+                                                    senderUserName = response.user.username
+                                                }
+                                            })
+                                        }
+                                        // End other member
+                                        $('.chat').prepend(`
+                                    <li class="${sender} message" data-pk="${message.pk}">
+                    <div class="avatar">
+                        <img src="${senderAvatar}" alt="User Image" width="64" height="64">
+                    </div>
+                    <div class="msg">
+                        <p class="alert-secondary">${senderUserName}</p>
+                        <p>${message.fields.message}</p>
+                        <time>${date}</time>
+                    </div>
+                </li>
+                                    `)
+                                    }
+                                }
+                            }
+                        })
+                    }
+                }
+                topScroll();
+                window.addEventListener('scroll', () => topScroll())
+                // End paginate messages
+
                 // Return back
                 $('#back').click(() => window.history.back())
                 // Group menu
@@ -198,15 +265,14 @@
 
                 // Send invite
                 $('.inviteFriend').click(function (e) {
-                    $(this).parent().fadeOut()
+                    $(this).parent().parent().fadeOut()
                     e.preventDefault();
                     $.ajax({
                         url: $(this).attr('data-url'),
                         data: {},
                         method: 'get',
                         dataType: 'json',
-                        success: function (response) {
-                        }
+                        success: function (response) {}
                     })
                 })
                 // End send invite

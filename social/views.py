@@ -143,9 +143,28 @@ def send_friend_message(request, pk):
 
 def chat_group(request, pk):
     group = get_object_or_404(ChatGroup, pk=pk)
-    chat_messages = GroupMessage.objects.filter(group=group)
+    chat_messages_list = GroupMessage.objects.filter(group=group)
+    # chat messages Paginator
+    paginator = Paginator(chat_messages_list, 11)
+    if request.GET.get('page'):
+        page = int(request.GET.get('page'))
+    else:
+        page = 0
+    page = paginator.num_pages - page
+
+    try:
+        chat_messages = paginator.page(page)
+    except EmptyPage:
+        chat_messages = []
+    except PageNotAnInteger:
+        chat_messages = paginator.page(paginator.num_pages)
+
     if request.method == 'GET' and not request.GET.get('action') and not request.GET.get('page'):
         return render(request, 'social/chat_group.html', {'group': group, 'chat_messages': chat_messages, })
+
+    # Paginate messages
+    elif request.GET.get('page'):
+        return JsonResponse({'chat_messages': serialize('json', chat_messages)})
 
     # Load new messaages
     elif request.GET.get('action') == 'load_new_messages':
@@ -172,7 +191,7 @@ def send_group_message(request, pk):
             message.is_important = True
             # Important group message notification
             receivers = [member for member in group.members.filter(
-                    Q(allow_important_group_message=True), ~Q(id=request.user.id))]
+                Q(allow_important_group_message=True), ~Q(id=request.user.id))]
             # !ABSOLUTE PATH
             notification = Notification(notification_type='important_group_message',
                                         sender=request.user, url='/chat/', content=message.message[:100])
@@ -182,33 +201,15 @@ def send_group_message(request, pk):
                     notification.receiver.add(receiver)
                 for receiver in notification.receiver.all():
                     payload = {"head": f"Important message from {group.title} Group, {notification.sender}",
-                    "body": notification.content,
-                    "url": notification.url,
-                    "icon": group.image.url,
-                    }
-                    send_user_notification(user = receiver, payload = payload,ttl = 1000)
+                               "body": notification.content,
+                               "url": notification.url,
+                               "icon": group.image.url,
+                               }
+                    send_user_notification(
+                        user=receiver, payload=payload, ttl=1000)
 
     message.save()
     return JsonResponse({})
-    #     else:
-    #         receivers = [member for member in group.members.filter(
-    #             Q(allow_normal_group_message=True), ~Q(id=request.user.id))]
-    #         # !ABSOLUTE PATH
-    #         notification = Notification(notification_type='normal_group_message',
-    #                                     sender=request.user, url='/chat/', content=message.message[:100])
-    #         if receivers:
-    #             notification.save()
-    #             for receiver in receivers:
-    #                 notification.receiver.add(receiver)
-    #             for receiver in notification.receiver.all():
-    #                     payload = {"head": f"{notification.sender} send a message in {group.title} group",
-    #                     "body": notification.content,
-    #                     "url": notification.url,
-    #                     "icon": group.image.url,
-    #                     }
-    #                     send_user_notification(user = receiver, payload = payload,ttl= 1000)
-    # message.save()
-    # return JsonResponse({})
 
 
 @login_required
