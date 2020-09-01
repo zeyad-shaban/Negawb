@@ -59,13 +59,12 @@
         {% endfor %}
 
     </ol>
-    <form action="{% url 'social:send_message' group.id %}" method="get" id="sendForm">
+    <form action="{% url 'social:send_group_message' group.id %}" method="get" id="sendForm">
         <input class="textarea" id="messageInput" type="text" name="message" placeholder="Type here!" />
         <div class="emojis">
             <input type="checkbox" name="is_important" id="is_important">
         </div>
-        <div id="send" data-url="{% url 'social:send_message' group.id %}"><i class="far fa-paper-plane"
-                style="font-size:30px; color:white;"></i></div>
+        <div id="send"><i class="far fa-paper-plane" style="font-size:30px; color:white;"></i></div>
 
     </form>
     <!-- Group menu -->
@@ -168,17 +167,15 @@
                         </ul>
                     </div>
                 </div>
-                <!-- <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                </div> -->
             </div>
         </div>
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             window.addEventListener('load', function () {
-                // Group menue
+                // Return back
+                $('#back').click(() => window.history.back())
+                // Group menu
                 $('#groupAddMember').hide()
                 $('.name,.last').click(function (e) {
                     e.preventDefault();
@@ -198,9 +195,10 @@
                     }
                 })
                 // End group menu
+
                 // Send invite
                 $('.inviteFriend').click(function (e) {
-                    console.log($(this).attr('data-url'))
+                    $(this).parent().fadeOut()
                     e.preventDefault();
                     $.ajax({
                         url: $(this).attr('data-url'),
@@ -209,9 +207,50 @@
                         dataType: 'json',
                         success: function (response) {
                             console.log('Success')
-                            $(this).hide()
                         }
                     })
+                })
+                // End send invite
+
+                // Send message
+                $('#send').click(function (e) {
+                    $('#sendForm').submit();
+                })
+                $('#sendForm').submit(function (e) {
+                    e.preventDefault();
+                    let messageInput = $('#messageInput').val()
+                    if (!messageInput == '') {
+                        let isImportant = "False"
+                        if ($('#is_important').is(':checked')) {
+                            isImportant = "True"
+                        }
+                        $('.chat').append(`
+                        <li class="self message" data-pk="">
+                    <div class="avatar">
+                        <img src="{{ user.avatar.url }}" alt="User Image" width="64" height="64">
+                    </div>
+                    <div class="msg">
+                        <p>${messageInput}</p>
+                        <time>Now</time>
+                    </div>
+                </li>
+                        `)
+                        $('#messageInput').val('')
+                        document.getElementById('notificationSound').play()
+                        window.scrollTo(0, document.body.scrollHeight);
+                        $.ajax({
+                            url: $('#sendForm').attr('action'),
+                            data: {
+                                'message': messageInput,
+                                'is_important': isImportant,
+                            },
+                            method: 'get',
+                            dataType: 'json',
+                            success: function (response) {
+
+                            }
+                        })
+                    }
                 })
             });
         });

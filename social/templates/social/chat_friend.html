@@ -59,12 +59,12 @@
         {% endfor %}
 
     </ol>
-    <form action="{% url 'social:send_message' friend.id %}" method="get" id="sendForm">
+    <form action="{% url 'social:send_friend_message' friend.id %}" method="get" id="sendForm">
         <input class="textarea" id="messageInput" type="text" name="message" placeholder="Type here!" />
         <div class="emojis">
             <input type="checkbox" name="is_important" id="is_important">
         </div>
-        <div id="send" data-url="{% url 'social:send_message' friend.id %}"><i class="far fa-paper-plane"
+        <div id="send"><i class="far fa-paper-plane"
                 style="font-size:30px; color:white;"></i></div>
     </form>
     <script>
@@ -124,7 +124,11 @@
                 topScroll();
                 window.addEventListener('scroll', () => topScroll())
                 // Send
-                $('#send').click(function (e) {
+                $('#send').click(function(e){
+                    e.preventDefault();
+                    $('#sendForm').submit();
+                })
+                $('#sendForm').submit(function (e) {
                     e.preventDefault();
                     let newLastMessageId = ''
                     try {
@@ -156,9 +160,8 @@
                         document.getElementById('notificationSound').play()
                         window.scrollTo(0, document.body.scrollHeight);
                         $.ajax({
-                            url: $('#send').attr('data-url'),
+                            url: $('#sendForm').attr('action'),
                             data: {
-                                'action': 'friend',
                                 'message': messageInput,
                                 'is_important': is_important,
                             },
