@@ -34,7 +34,7 @@ def chat_friend(request, pk):
     chat_messages_list = Message.objects.filter(
         chat_box=chat_box).order_by('date')
     # chat messages Paginator
-    paginator = Paginator(chat_messages_list, 4)
+    paginator = Paginator(chat_messages_list, 11)
     if request.GET.get('page'):
         page = int(request.GET.get('page'))
     else:
