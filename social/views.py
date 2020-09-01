@@ -34,7 +34,7 @@ def chat(request):
         new_chat_group.save()
         new_chat_group.members.add(request.user)
         new_chat_group.group_admins.add(request.user)
-        return redirect('social:chat_group' ,pk=new_chat_group.id)
+        return redirect('social:chat_group', pk=new_chat_group.id)
 
 
 @login_required
@@ -170,7 +170,7 @@ def chat_group(request, pk):
     # form
     form = ChatGroupForm(instance=group)
     if request.method == 'GET' and not request.GET.get('action') and not request.GET.get('page'):
-        return render(request, 'social/chat_group.html', {'group': group, 'chat_messages': chat_messages, 'form': form,})
+        return render(request, 'social/chat_group.html', {'group': group, 'chat_messages': chat_messages, 'form': form, })
 
     # Paginate messages
     elif request.GET.get('page'):
@@ -183,9 +183,11 @@ def chat_group(request, pk):
             group=group, id__gt=last_message_id).order_by('date')
         return JsonResponse({'chat_messages': serialize('json', chat_messages)})
 
+
 def edit_group(request, pk):
     group = get_object_or_404(ChatGroup, pk=pk)
-    form = ChatGroupForm(instance=group, data=request.POST ,files=request.FILES)
+    form = ChatGroupForm(
+        instance=group, data=request.POST, files=request.FILES)
     if request.user == group.author or request.user in group.group_admins.all():
         form.save()
     else:
@@ -358,6 +360,18 @@ def leave_group(request, pk):
     message = GroupMessage(
         group=group, message_sender=request.user, message=f'{request.user} left the group')
     message.save()
+    if group.members.all().count() <= 0:
+        group.delete()
+    else:
+        if request.user == group.author:
+            try:
+                group.author = group.group_admins.all()[1]
+                group.save()
+            except:
+                group.author = group.members.all().first()
+                group.save()
+        if request.user in group.group_admins.all():
+            group.group_admins.remove(request.user)
     return redirect('chat')
 
 
