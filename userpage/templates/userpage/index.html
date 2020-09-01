@@ -342,7 +342,8 @@
                         {% endif %}
                         <span class="small text-truncate">{{ friend.bio }}</span>
 
-                        <button type="button" class="btn btn-danger float-right unfriend" data-username="{{friend.username}}" data-pk="{{friend.id}}">UnFriend</button>
+                        <button type="button" class="btn btn-danger btn-sm float-right unfriend" data-username="{{friend.username}}" data-pk="{{friend.id}}">UnFriend</button>
+                        <a class="btn btn-primary float-right mr-4" href="{% url 'social:chat_friend' friend.id %}">Chat</a>
                     </div>
                 </div>
             </li>
