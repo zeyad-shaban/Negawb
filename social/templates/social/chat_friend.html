@@ -71,7 +71,7 @@
         document.addEventListener('DOMContentLoaded', function () {
             window.addEventListener('load', function () {
                 window.scrollTo(0, document.body.scrollHeight)
-                // Return
+                // Go back
                 $('#back').click(function (e) {
                     e.preventDefault();
                     window.history.back();
@@ -91,17 +91,20 @@
                                 let sender = "self"
                                 let senderAvatar = "{{ user.avatar.url }}"
                                 chat_messages = JSON.parse(response.chat_messages).reverse()
-                                for (message of chat_messages) {
-                                    let dateToString = d =>
-                                        `${d.getFullYear()}-${('00' + (d.getMonth() + 1)).slice(-2)}-${('00' + d.getDate()).slice(-2)}`
-                                    let messageDate = new Date(Date.parse(message.fields.date))
-                                    let date = dateToString(messageDate)
-                                    if (message.fields.message_sender ==
-                                        "{{ friend.id }}") {
-                                        sender = "other"
-                                        senderAvatar = $('#friendAvatar').attr('src')
-                                    }
-                                    $('.chat').prepend(`
+                                if (chat_messages.length > 0) {
+                                    page++
+                                    for (message of chat_messages) {
+                                        let dateToString = d =>
+                                            `${d.getFullYear()}-${('00' + (d.getMonth() + 1)).slice(-2)}-${('00' + d.getDate()).slice(-2)}`
+                                        let messageDate = new Date(Date.parse(message.fields
+                                            .date))
+                                        let date = dateToString(messageDate)
+                                        if (message.fields.message_sender ==
+                                            "{{ friend.id }}") {
+                                            sender = "other"
+                                            senderAvatar = $('#friendAvatar').attr('src')
+                                        }
+                                        $('.chat').prepend(`
                                     <li class="${sender} message" data-pk="${message.pk}">
                     <div class="avatar">
                         <img src="${senderAvatar}" alt="User Image" width="64" height="64">
@@ -112,13 +115,14 @@
                     </div>
                 </li>
                                     `)
+                                    }
                                 }
                             }
                         })
-                        // topScroll()
                     }
                 }
                 topScroll();
+                window.addEventListener('scroll', () => topScroll())
                 // Send
                 $('#send').click(function (e) {
                     e.preventDefault();
@@ -148,6 +152,7 @@
                     </div>
                 </li>
                         `)
+                        $('#messageInput').val('')
                         document.getElementById('notificationSound').play()
                         window.scrollTo(0, document.body.scrollHeight);
                         $.ajax({
@@ -159,9 +164,7 @@
                             },
                             method: 'get',
                             dataType: 'json',
-                            success: function (response) {
-                                $('#messageInput'.val(''))
-                            }
+                            success: function (response) {}
                         })
                     }
                 })
