@@ -69,6 +69,45 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             window.addEventListener('load', function () {
+                let page = 1
+                // Top scroll
+                function topScroll(){
+                    if (window.top == window.self){
+                        $.ajax({
+                            url: "{% url 'social:chat_friend' friend.id %}",
+                            data: {
+                                "page": page,
+                            },
+                            method: 'get',
+                            dataType: 'json',
+                            success: function (response) {
+                                let sender = "self"
+                                let senderAvatar = "{{ user.avatar.url }}"
+                                chat_messages = JSON.parse(response.chat_messages).reverse()
+                                for (message of chat_messages){
+                                    let date = new Date (message.fields.date)
+                                    if (message.fields.message_sender == "{{ friend.id }}"){
+                                        sender = "other"
+                                        senderAvatar = $('#friendAvatar').attr('src')
+                                    }
+                                    $('.chat').prepend(`
+                                    <li class="${sender} message" data-pk="${message.pk}">
+                    <div class="avatar">
+                        <img src="${senderAvatar}" alt="User Image" width="64" height="64">
+                    </div>
+                    <div class="msg">
+                        <p>${message.fields.message}</p>
+                        <time>${date}</time>
+                    </div>
+                </li>
+                                    `)
+                                }
+                            }
+                        })
+                        // topScroll()
+                    }
+                }
+                topScroll();
                 // Send
                 $('#send').click(function (e) {
                     e.preventDefault();
@@ -99,6 +138,7 @@
                 </li>
                         `)
                         document.getElementById('notificationSound').play()
+                        window.scrollTo(0, document.body.scrollHeight);
                         $.ajax({
                             url: $('#send').attr('data-url'),
                             data: {
@@ -108,7 +148,9 @@
                             },
                             method: 'get',
                             dataType: 'json',
-                            success: function (response) {}
+                            success: function (response) {
+                                $('#messageInput'.val(''))
+                            }
                         })
                     }
                 })
@@ -149,6 +191,7 @@
                     </div>
                 </li>
                         `)
+                                document.querySelector('#notificationSound').play();
                                 }
                             }
                         }

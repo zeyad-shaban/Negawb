@@ -20,8 +20,8 @@ User = get_user_model()
 
 @login_required
 def chat_friend(request, pk):
+    # Chat info
     friend = get_object_or_404(User, pk=pk)
-    # Chat Box
     chat_box = ChatBox.objects.filter(
         user_1=request.user, user_2=friend).first()
     if not chat_box:
@@ -31,13 +31,33 @@ def chat_friend(request, pk):
         chat_box = ChatBox(user_1=request.user, user_2=friend)
         chat_box.save()
 
-    # Todo paginator
-    chat_messages = Message.objects.filter(chat_box=chat_box).order_by('date')
-    if request.method == 'GET' and not request.GET.get('action'):
+    chat_messages_list = Message.objects.filter(
+        chat_box=chat_box).order_by('date')
+    # chat messages Paginator
+    paginator = Paginator(chat_messages_list, 4)
+    if request.GET.get('page'):
+        page = int(request.GET.get('page'))
+    else:
+        page = 0
+    page = paginator.num_pages - page
+
+    try:
+        chat_messages = paginator.page(page)
+    except EmptyPage:
+        chat_messages = []
+    except PageNotAnInteger:
+        chat_messages = paginator.page(paginator.num_pages)
+
+    if request.method == 'GET' and not request.GET.get('action') and not request.GET.get('page'):
         return render(request, 'social/chat_friend.html', {'friend': friend, 'chat_messages': chat_messages, })
+    # Paginate messages
+    elif request.GET.get('page'):
+        return JsonResponse({'chat_messages': serialize('json', chat_messages)})
+    # Load new messages
     elif request.GET.get('action') == 'load_new_messages':
         last_message_id = int(request.GET.get('last_message_id'))
-        chat_messages = Message.objects.filter(chat_box=chat_box, id__gt=last_message_id).order_by('date')
+        chat_messages = Message.objects.filter(
+            chat_box=chat_box, id__gt=last_message_id).order_by('date')
         return JsonResponse({'chat_messages': serialize('json', chat_messages)})
 
     #     paginator = Paginator(chat_messages_list, 7)
@@ -46,12 +66,6 @@ def chat_friend(request, pk):
     #     else:
     #         page = int(request.GET.get('page'))
     #     page = paginator.num_pages - page
-    #     try:
-    #         chat_messages = paginator.page(page)
-    #     except EmptyPage:
-    #         chat_messages = []
-    #     except PageNotAnInteger:
-    #         chat_messages = paginator.page(paginator.num_pages)
     #     return JsonResponse({'friend': json_friend, 'chat_messages': serialize('json', chat_messages)})
     # elif action == 'group':
     #     group = get_object_or_404(ChatGroup, pk=pk)
