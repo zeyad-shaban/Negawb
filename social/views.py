@@ -147,6 +147,13 @@ def chat_group(request, pk):
     if request.method == 'GET' and not request.GET.get('action') and not request.GET.get('page'):
         return render(request, 'social/chat_group.html', {'group': group, 'chat_messages': chat_messages, })
 
+    # Load new messaages
+    elif request.GET.get('action') == 'load_new_messages':
+        last_message_id = int(request.GET.get('last_message_id'))
+        chat_messages = GroupMessage.objects.filter(
+            group=group, id__gt=last_message_id).order_by('date')
+        return JsonResponse({'chat_messages': serialize('json', chat_messages)})
+
 
 def send_group_message(request, pk):
     group = get_object_or_404(ChatGroup, pk=pk)

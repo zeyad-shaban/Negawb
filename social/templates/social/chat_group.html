@@ -38,7 +38,7 @@
 
         {% for message in chat_messages %}
         <li class="{% if message.message_sender == user %}self{% else %}other{% endif %} message"
-            data-pk="{{message.id}}">
+            data-pk="{{ message.id }}">
             <div class="avatar">
                 {% if message.message_sender.who_see_avatar == 'everyone' %}
                 <img src="{{message.message_sender.avatar.url}}" alt="User Image" width="64" height="64">
@@ -206,7 +206,6 @@
                         method: 'get',
                         dataType: 'json',
                         success: function (response) {
-                            console.log('Success')
                         }
                     })
                 })
@@ -220,12 +219,25 @@
                     e.preventDefault();
                     let messageInput = $('#messageInput').val()
                     if (!messageInput == '') {
+                        // last message id
+                        let newLastMessageId = ''
+                        try {
+                            let messages = document.getElementsByClassName('message')
+                            newLastMessageId = parseInt(messages[messages.length - 1]
+                                .getAttribute(
+                                    'data-pk')) + 1
+                        } catch {
+                            newLastMessageId = 1
+                        }
+
+                        // end last message id
                         let isImportant = "False"
                         if ($('#is_important').is(':checked')) {
                             isImportant = "True"
                         }
+                        // Todo
                         $('.chat').append(`
-                        <li class="self message" data-pk="">
+                        <li class="self message" data-pk="${newLastMessageId}">
                     <div class="avatar">
                         <img src="{{ user.avatar.url }}" alt="User Image" width="64" height="64">
                     </div>
@@ -246,12 +258,56 @@
                             },
                             method: 'get',
                             dataType: 'json',
-                            success: function (response) {
-
-                            }
+                            success: function (response) {}
                         })
                     }
                 })
+                // End send message
+
+                // Load new messages
+                setInterval(() => {
+                    let lastMessageId = ''
+                    try {
+                        let messages = document.getElementsByClassName('message')
+                        lastMessageId = messages[messages.length - 1].getAttribute('data-pk')
+                    } catch (error) {
+                        lastMessageId = 0
+                    }
+                    $.ajax({
+                        url: "{% url 'social:chat_group' group.id %}",
+                        data: {
+                            'action': 'load_new_messages',
+                            'last_message_id': lastMessageId,
+                        },
+                        method: 'get',
+                        async: false,
+                        dataType: 'json',
+                        success: function (response) {
+                            chat_messages = JSON.parse(response.chat_messages)
+                            if (response.chat_messages.length > 0) {
+                                let newLastMessageId = ''
+                                for (message of chat_messages) {
+                                    newLastMessageId = message.pk
+                                    $('.chat').append(`
+                        <li class="other message" data-pk="${newLastMessageId}">
+                    <div class="avatar">
+                        <img src="${$('#friendAvatar').attr('src')}" alt="User Image" width="64" height="64">
+                    </div>
+                    <div class="msg">
+                        <p>${message.fields.message}</p>
+                        <time>Now</time>
+                    </div>
+                </li>
+                        `)
+                                    document.querySelector('#notificationSound')
+                                        .play();
+                                }
+                            }
+                        }
+                    })
+                }, 3300);
+                // End load new messages
+
             });
         });
     </script>
