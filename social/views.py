@@ -223,6 +223,9 @@ def create_chat_group(request):
         new_chat_group.group_admins.add(request.user)
         return redirect('chat')
 
+def edit_group(request, pk):
+    group = get_object_or_404(ChatGroup, pk=pk)
+
 
 def send_group_invite(request, user_pk, group_pk):
     request_sender = request.user
@@ -343,41 +346,6 @@ def delete_group(request, pk):
     else:
         messages.error(request, 'Only the group owner can delete the group')
         return redirect('social:chat_group', pk=pk)
-
-
-def group_members(request):
-    group_id = request.GET.get('group_id')
-    group = get_object_or_404(ChatGroup, pk=group_id)
-    member_id = request.GET.get('member_id')
-    if member_id:
-        member = get_object_or_404(User, pk=member_id)
-    if request.GET.get('action') == 'showMembers':
-        members = group.members.all().order_by('followers')
-        json_group = {
-            'title': group.title,
-            'id': group.id,
-            'image': group.image.url,
-            'author_username': group.author.username,
-            'admins': serialize('json', group.group_admins.all())
-        }
-        return JsonResponse({'members': serialize('json', members), 'group': json_group})
-    elif request.GET.get('action') == 'removeMember':
-        if request.user == member:
-            return JsonResponse({'message': 'You cannot remove yourself'})
-        elif (request.user in group.group_admins.all() and member not in group.group_admins.all() and not member == group.author) or (request.user == group.author):
-            group.members.remove(member)
-            if member.allow_invites:
-                notification = Notification(notification_type='invites', sender=request.user,
-                                            url=f'/people/{request.user.id}/', content=f'{request.user} removed you from {group.title}')
-                notification.save()
-                notification.receiver.add(member)
-            return JsonResponse({'message': 'removed'})
-        else:
-            return JsonResponse({'message': 'You cannot remove this member'})
-    elif request.GET.get('action') == 'makeAdmin':
-        group.group_admins.add(member)
-    elif request.GET.get('action') == 'removeAdmin':
-        group.group_admins.remove(member)
 
 
 def leave_group(request, pk):

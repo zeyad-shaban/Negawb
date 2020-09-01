@@ -21,7 +21,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 $('#groupMembersSettings').show();
                 $('#groupMembers').html('')
                 $.ajax({
-                    url: $('#groupMembersSettings').attr('data-url'), // social:group_members
                     data: {
                         'group_id': $('#currChat').attr('data-pk'),
                         'action': 'showMembers'
@@ -82,7 +81,6 @@ document.addEventListener('DOMContentLoaded', function () {
                                 if (confirmation) {
                                     let thisElement = $(this)
                                     $.ajax({
-                                        url: $('#groupMembersSettings').attr('data-url'), // social:group_members   
                                         data: {
                                             'group_id': $('#currChat').attr('data-pk'),
                                             'member_id': member_id,

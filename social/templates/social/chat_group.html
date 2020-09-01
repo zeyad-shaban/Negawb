@@ -169,7 +169,11 @@
                         </ul>
                     </div>
                     <div id="groupSettings" class="groupItem">
-
+                        <h4><i class="fas fa-edit"></i> Edit</h4>
+                        <form action="{% url 'social:edit_group' group.id %}" method="POST">
+                            <button type="submit" class="btn btn-success">Save</button>
+                        </form>
+                        
                         <hr>
                         <h4><i class="fas fa-exclamation-triangle"></i> Danger area</h4>
                         <br>
