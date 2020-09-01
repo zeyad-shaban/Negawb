@@ -5,8 +5,9 @@ app_name = 'social'
 
 urlpatterns = [
     path('chat_friend/<int:pk>/', views.chat_friend, name='chat_friend'),
+    path('chat_group/<int:pk>/', views.chat_group, name='chat_group'),
     path('createchatgroup/', views.create_chat_group, name='create_chat_group'),
-    path('createinvite/', views.create_invite, name='create_invite'),
+    path('send_group_invite/<int:user_pk>/<int:group_pk>', views.send_group_invite, name='send_group_invite'),
     path('joingroup/',
          views.join_group, name='join_group'),
     path('denygroup/', views.deny_group, name='deny_group'),

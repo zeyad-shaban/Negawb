@@ -60,22 +60,13 @@ def chat_friend(request, pk):
             chat_box=chat_box, id__gt=last_message_id).order_by('date')
         return JsonResponse({'chat_messages': serialize('json', chat_messages)})
 
-    #     paginator = Paginator(chat_messages_list, 7)
-    #     if not request.GET.get('page'):
-    #         page = 0
-    #     else:
-    #         page = int(request.GET.get('page'))
-    #     page = paginator.num_pages - page
-    #     return JsonResponse({'friend': json_friend, 'chat_messages': serialize('json', chat_messages)})
-    # elif action == 'group':
+def chat_group(request, pk):
+    group = get_object_or_404(ChatGroup, pk=pk)
+    chat_messages = GroupMessage.objects.filter(group=group)
+    if request.method == 'GET' and not request.GET.get('action') and not request.GET.get('page'):
+        return render(request, 'social/chat_group.html', {'group': group, 'chat_messages':chat_messages,})
     #     group = get_object_or_404(ChatGroup, pk=pk)
     #     chat_messages = GroupMessage.objects.filter(group=group)
-    #     json_group = {
-    #         'id': group.id,
-    #         'title': group.title,
-    #         'description': group.description,
-    #         'image': group.image.url,
-    #     }
     #     return JsonResponse({'chat_messages': serialize('json', chat_messages), 'group': json_group, })
 
 
@@ -225,15 +216,13 @@ def create_chat_group(request):
         return redirect('chat')
 
 
-def create_invite(request,):
-    user_pk = request.GET.get('user_pk')
-    group_pk = request.GET.get('group_pk')
+def send_group_invite(request, user_pk, group_pk):
     request_sender = request.user
     reciever = get_object_or_404(User, pk=user_pk)
     group = get_object_or_404(ChatGroup, pk=group_pk)
     if request_sender == reciever:
         message = {
-            'text': f'You can\'t invite yourself, go find some friends please 😭 ',
+            'text': f'You can\'t invite yourself',
             'tags': 'error',
         }
         return JsonResponse({'message': message})
