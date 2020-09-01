@@ -43,8 +43,7 @@ class ChatGroup(models.Model):
         User, related_name='group_memebers', blank=True)
 
     def __str__(self):
-        return f'[AUTHOR] {self.author} [TITLE] {self.title} [MEMBERS] {self.members.count()} '
-
+        return f'[AUTHOR] {self.author} [TITLE] {self.title} [MEMBERS] {self.members.count()}'
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         if self.image:

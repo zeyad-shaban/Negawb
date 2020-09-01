@@ -1,0 +1,104 @@
+{% extends 'categories/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+<h1 class="text-white">Contacts</h1>
+<div class="card-body contacts_body">
+    <ui class="contacts">
+
+        <li class="active">
+            {% for group in groups %}
+            <a href="{% url 'social:chat_group' group.id %}" style="text-decoration: none;" class="mb-7">
+                <div class="d-flex bd-highlight">
+                    <div class="img_cont">
+                        <img src="{{ group.image.url }}" class="rounded-circle user_img">
+                    </div>
+                    <div class="user_info">
+                        <span>{{ group.title }}</span>
+                        <p>{{ group.description }}</p>
+                    </div>
+                    <i class="fas fa-users float-right" style="font-size: 30px; color: white"></i>
+                </div>
+            </a>
+            {% endfor %}
+            {% for friend in friends %}
+            <a href="{% url 'social:chat_friend' friend.id %}" style="text-decoration: none;" class="mb-7">
+                <div class="d-flex bd-highlight">
+                    <div class="img_cont">
+                        {% if friend.who_see_avatar == 'everyone' %}
+                        <img src="{{friend.avatar.url}}" alt="User Image" width="64" height="64"
+                            class="rounded-circle user_img">
+                        {% elif friend.who_see_avatar == 'friends' and user in friend.friends.all %}
+                        <img src="{{friend.avatar.url}}" alt="User Image" width="64" height="64"
+                            class="rounded-circle user_img">
+                        {% elif friend == user %}
+                        <img src="{{friend.avatar.url}}" alt="User Image" width="64" height="64"
+                            class="rounded-circle user_img">
+                        {% else %}
+                        <img src="/media/profile_images/DefaultUserImage.WebP" alt="User Image" width="64" height="64"
+                            class="rounded-circle user_img">
+                        {% endif %}
+                    </div>
+                    <div class="user_info">
+                        <span>{{ friend.username }}</span>
+                        <p>{{ friend.bio }}</p>
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        </li>
+    </ui>
+</div>
+<!-- Create group -->
+<button type="button" class="btn btn-success float-right mr-3 rounded-circle" data-toggle="modal"
+    data-target="#createGroup" style="font-size: 40px"><i class="fas fa-plus"></i></button>
+
+<div class="modal fade" id="createGroup" tabindex="-1" role="dialog" aria-labelledby="createGroupLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createGroupLabel">Add Group</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="{% url 'chat' %}" method="POST" id="createGroupForm"
+                    enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="from-group">
+                        <label for="id_group_title" style="color:black;">Title</label>
+                        <input type="text" class="form-control" name="title" id="id_group_title" required
+                            maxlength="25">
+                    </div>
+                    <div class="from-group">
+                        <label for="id_group_description" style="color:black;">description</label>
+                        <input type="text" class="form-control" name="description" id="id_group_description"
+                            placeholder="optional">
+                    </div>
+                    <div class="form-group">
+                        <label for="id_group_image" style="color:black;">Group image</label>
+                        <small class="form-text text-muted">We will use the default image if nothing was
+                            provided</small>
+                        <input type="file" name="image" accept="image/*" id="id_image">
+                    </div>
+                    <div class="form-group">
+                        <label style="color: black;" for="id_is_public">Do you want it public?</label>
+                        <input type="checkbox" id="id_is_public" name="is_public" class="form-control" maxlength="200">
+                    </div>
+                    <!-- todo choose members -->
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-success" onclick="$('#createGroupForm').submit()">Add</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<link rel="stylesheet" href="{% static 'social/chathome.css' %}">
+<script src="{% static 'social/chathome.js' %}"></script>
+
+{% endblock content %}

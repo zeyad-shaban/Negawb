@@ -26,7 +26,15 @@ def chat(request):
         else:
             friends = []
             groups = []
-        return render(request, 'social/chat.html', {'friends': friends, 'groups': groups})
+        return render(request, 'social/chathome.html', {'friends': friends, 'groups': groups})
+    else:
+        form = ChatGroupForm(data=request.POST, files=request.FILES)
+        new_chat_group = form.save(commit=False)
+        new_chat_group.author = request.user
+        new_chat_group.save()
+        new_chat_group.members.add(request.user)
+        new_chat_group.group_admins.add(request.user)
+        return redirect('social:chat_group' ,pk=new_chat_group.id)
 
 
 @login_required
@@ -223,18 +231,6 @@ def send_group_message(request, pk):
     return JsonResponse({})
 
 
-@login_required
-def create_chat_group(request):
-    if request.method == 'POST':
-        form = ChatGroupForm(data=request.POST, files=request.FILES)
-        new_chat_group = form.save(commit=False)
-        new_chat_group.author = request.user
-        new_chat_group.save()
-        new_chat_group.members.add(request.user)
-        new_chat_group.group_admins.add(request.user)
-        return redirect('chat')
-
-
 def send_group_invite(request, user_pk, group_pk):
     request_sender = request.user
     reciever = get_object_or_404(User, pk=user_pk)
@@ -350,7 +346,7 @@ def delete_group(request, pk):
     group = get_object_or_404(ChatGroup, pk=pk)
     if request.user == group.author:
         group.delete()
-        return JsonResponse({})
+        return redirect('social:chat_group', pk=pk)
     else:
         messages.error(request, 'Only the group owner can delete the group')
         return redirect('social:chat_group', pk=pk)
