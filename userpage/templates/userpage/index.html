@@ -13,19 +13,19 @@
     data-target="#editProfile" data-whatever="editProfile"><i class="fas fa-edit"></i></button>
 <span class="ml-5">
     {% webpush_button with_class="btn btn-outline-info" %}
+    <small>To allow notifications</small>
 </span>
 <br>
-
 <ul class="list-group list-group-horizontal row justify-content-center mb-5 mt-5">
-    <li class="list-group-item userMenuItem active">Home</li>
-    <li class="list-group-item userMenuItem">Friends {{user.friends.count}}</li>
-    <li class="list-group-item userMenuItem">Requests {{total_requests}}</li>
-    <li class="list-group-item userMenuItem">My Invites {{ total_user_invites_count }}</li>
+    <li class="list-group-item userMenuItem btn active">Home</li>
+    <li class="list-group-item userMenuItem btn">Friends {{user.friends.count}}</li>
+    <li class="list-group-item userMenuItem btn">Requests {{total_requests}}</li>
+    <li class="list-group-item userMenuItem btn">My Invites {{ total_user_invites_count }}</li>
 </ul>
 <div id="mainContainer">
-    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#privacy" data-whatever="privacy"><i
+    <button type="button" class="btn btn-warning m-3 btn-lg rounded" data-toggle="modal" data-target="#privacy" data-whatever="privacy"><i
             class="fas fa-unlock"></i>Privacy</button>
-    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#distractionFree"
+    <button type="button" class="btn btn-success btn-lg rounded" data-toggle="modal" data-target="#distractionFree"
         data-whatever="distractionFree">Distraction Free</button>
     <hr>
     <!-- user posts -->
@@ -610,8 +610,9 @@
 </div>
 {% endfor %}
                     `)
+
                     function takeDownFriend() {
-                        $('.takeDownFriendRequest').click(function(e){
+                        $('.takeDownFriendRequest').click(function (e) {
                             e.preventDefault();
                             let thisElement = $(this);
                             $.ajax({
@@ -619,7 +620,7 @@
                                 data: {},
                                 method: 'get',
                                 dataType: 'json',
-                                success: function(response){
+                                success: function (response) {
                                     thisElement.parent().fadeOut();
                                 }
                             })

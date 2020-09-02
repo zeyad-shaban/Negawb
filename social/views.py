@@ -12,7 +12,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from .forms import ChatGroupForm
-from .models import ChatBox, Message, ChatGroup, GroupRequest, GroupMessage, Notification
+from .models import ChatBox, Message, ChatGroup, GroupRequest, GroupMessage, Notification, Area
 from people.models import FriendRequest
 from webpush import send_user_notification
 User = get_user_model()
@@ -29,12 +29,14 @@ def chat(request):
         return render(request, 'social/chathome.html', {'friends': friends, 'groups': groups})
     else:
         form = ChatGroupForm(data=request.POST, files=request.FILES)
-        new_chat_group = form.save(commit=False)
-        new_chat_group.author = request.user
-        new_chat_group.save()
-        new_chat_group.members.add(request.user)
-        new_chat_group.group_admins.add(request.user)
-        return redirect('social:chat_group', pk=new_chat_group.id)
+        group = form.save(commit=False)
+        group.author = request.user
+        group.save()
+        group.members.add(request.user)
+        group.group_admins.add(request.user)
+        area = Area(group=group, name='All')
+        area.save()
+        return redirect('social:chat_group', pk=group.id)
 
 
 @login_required
@@ -151,7 +153,13 @@ def send_friend_message(request, pk):
 
 def chat_group(request, pk):
     group = get_object_or_404(ChatGroup, pk=pk)
+
+    if not request.user in group.members.all():
+        messages.error(request, 'You are not in this group')
+        return redirect('chat')
+
     chat_messages_list = GroupMessage.objects.filter(group=group)
+    areas = Area.objects.filter(group=group)
     # chat messages Paginator
     paginator = Paginator(chat_messages_list, 11)
     if request.GET.get('page'):
@@ -170,7 +178,7 @@ def chat_group(request, pk):
     # form
     form = ChatGroupForm(instance=group)
     if request.method == 'GET' and not request.GET.get('action') and not request.GET.get('page'):
-        return render(request, 'social/chat_group.html', {'group': group, 'chat_messages': chat_messages, 'form': form, })
+        return render(request, 'social/chat_group.html', {'group': group, 'chat_messages': chat_messages, 'form': form, 'areas': areas})
 
     # Paginate messages
     elif request.GET.get('page'):
@@ -351,7 +359,7 @@ def delete_group(request, pk):
         return redirect('social:chat_group', pk=pk)
     else:
         messages.error(request, 'Only the group owner can delete the group')
-        return redirect('social:chat_group', pk=pk)
+        return redirect('social:chat')
 
 
 def leave_group(request, pk):
@@ -378,4 +386,19 @@ def leave_group(request, pk):
 def take_down_friend_request(request, pk):
     friend_request = get_object_or_404(FriendRequest, pk=pk)
     friend_request.delete()
+    return JsonResponse({})
+
+# Area
+def create_area(request, pk):
+    group = get_object_or_404(ChatGroup, pk=pk)
+    if request.user == group.author or request.user in group.group_admins.all():
+        area = Area(name=request.GET.get('name'), group=group, )
+        area.save()
+        return JsonResponse({})
+
+def delete_area(request, pk):
+    area = get_object_or_404(Area, pk=pk)
+    group = area.group
+    if request.user == group.author or request.user in group.group_admins.all():
+        area.delete()
     return JsonResponse({})

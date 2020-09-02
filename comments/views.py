@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import JsonResponse, Http404, HttpResponse
+from django.http import JsonResponse, HttpResponse
 from categories.models import Category
 from .models import Post, Comment, Reply
 from django.contrib.auth.decorators import login_required

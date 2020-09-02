@@ -3,245 +3,291 @@
 {% load crispy_forms_tags %}
 
 {% block title %}
-    
+
 {% endblock title %}
-    
+
 
 {% block description %}
-    
+
 {% endblock description %}
-    
 
 {% block content %}
-    <link rel="stylesheet" href="{% static 'social/chat.css' %}">
-    <div class="menu">
-        <div class="back" id="back"><i class="fa fa-chevron-left"></i>
-            <img src="{{ group.image.url }}" alt="User Image" width="64" height="64" id="friendAvatar">
-        </div>
-        <div class="name">{{ group.title }}</div>
-        <div class="last">{% if group.description %}{{ group.description }}{% endif %}</div>
+<style>
+    .list-group {
+        display: flex;
+        flex-wrap: wrap;
+        max-width: 100vw;
+        flex-direction: row
+    }
+</style>
+<link rel="stylesheet" href="{% static 'social/chat.css' %}">
+<div class="menu">
+    <div class="back" id="back"><i class="fa fa-chevron-left"></i>
+        <img src="{{ group.image.url }}" alt="User Image" width="64" height="64" id="friendAvatar">
     </div>
-    <ol class="chat">
-        <audio id="notificationSound">
-            <source src="{% static 'social/notificationsound.wav' %}" type="audio/wav">
-            <source src="{% static 'social/notificationsound.wav' %}" type="audio/mp3">
-            <source src="{% static 'social/notificationsound.wav' %}" type="audio/ogg">
-            <source src="{% static 'social/notificationsound.wav' %}" type="audio/mpeg">
-            Your browser does not support the audio element.
-        </audio>
+    <div class="name">{{ group.title }}</div>
+    <div class="last">{% if group.description %}{{ group.description }}{% endif %}</div>
+</div>
+<ol class="chat">
+    <audio id="notificationSound">
+        <source src="{% static 'social/notificationsound.wav' %}" type="audio/wav">
+        <source src="{% static 'social/notificationsound.wav' %}" type="audio/mp3">
+        <source src="{% static 'social/notificationsound.wav' %}" type="audio/ogg">
+        <source src="{% static 'social/notificationsound.wav' %}" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
 
-        {% for message in chat_messages %}
-        <li class="{% if message.message_sender == user %}self{% else %}other{% endif %} message"
-            data-pk="{{ message.id }}">
-            <div class="avatar">
-                {% if message.message_sender.who_see_avatar == 'everyone' %}
-                <img src="{{message.message_sender.avatar.url}}" alt="User Image" width="64" height="64">
-                {% elif message.message_sender.who_see_avatar == 'friends' and user in message.message_sender.friends.all %}
-                <img src="{{message.message_sender.avatar.url}}" alt="User Image" width="64" height="64">
-                {% elif message.message_sender == user %}
-                <img src="{{message.message_sender.avatar.url}}" alt="User Image" width="64" height="64">
-                {% else %}
-                <img src="/media/profile_images/DefaultUserImage.WebP" alt="User Image" width="64" height="64">
-                {% endif %}
-            </div>
-            <div class="msg">
-                <p class="alert-secondary">{{ message.message_sender.username }}</p>
-                <p>{{ message.message }}</p>
-                <time>{{ message.date|timesince }} ago</time>
-            </div>
-        </li>
+    <ul class="list-group list-group-horizontal">
+        {% for area in areas %}
+        <li class="list-group-item">{{ area.name }}</li>
         {% endfor %}
+    </ul>
 
-    </ol>
-    <form action="{% url 'social:send_group_message' group.id %}" method="get" id="sendForm">
-        <input class="textarea" id="messageInput" type="text" name="message" placeholder="Type here!" />
-        <div class="emojis">
-            <input type="checkbox" name="is_important" id="is_important">
+    {% for message in chat_messages %}
+    <li class="{% if message.message_sender == user %}self{% else %}other{% endif %} message"
+        data-pk="{{ message.id }}">
+        <div class="avatar">
+            {% if message.message_sender.who_see_avatar == 'everyone' %}
+            <img src="{{message.message_sender.avatar.url}}" alt="User Image" width="64" height="64">
+            {% elif message.message_sender.who_see_avatar == 'friends' and user in message.message_sender.friends.all %}
+            <img src="{{message.message_sender.avatar.url}}" alt="User Image" width="64" height="64">
+            {% elif message.message_sender == user %}
+            <img src="{{message.message_sender.avatar.url}}" alt="User Image" width="64" height="64">
+            {% else %}
+            <img src="/media/profile_images/DefaultUserImage.WebP" alt="User Image" width="64" height="64">
+            {% endif %}
         </div>
-        <div id="send"><i class="far fa-paper-plane" style="font-size:30px; color:white;"></i></div>
+        <div class="msg">
+            <p class="alert-secondary">{{ message.message_sender.username }}</p>
+            <p>{{ message.message }}</p>
+            <time>{{ message.date|timesince }} ago</time>
+        </div>
+    </li>
+    {% endfor %}
 
-    </form>
-    <!-- Group menu -->
-    <div class="modal fade" id="groupMenu" tabindex="-1" role="dialog" aria-labelledby="groupMenuLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="groupMenuLabel">
-                        <ul class="list-group list-group-horizontal">
-                            <li class="list-group-item active btn groupOption">Members</li>
-                            <li class="list-group-item btn groupOption">Add</li>
-                            <li class="list-group-item btn groupOption">Settings</li>
-                        </ul>
-                    </h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+</ol>
+<form action="{% url 'social:send_group_message' group.id %}" method="get" id="sendForm">
+    <input class="textarea" id="messageInput" type="text" name="message" placeholder="Type here!" />
+    <div class="emojis">
+        <input type="checkbox" name="is_important" id="is_important">
+    </div>
+    <div id="send"><i class="far fa-paper-plane" style="font-size:30px; color:white;"></i></div>
+
+</form>
+<!-- Group menu -->
+<div class="modal fade" id="groupMenu" tabindex="-1" role="dialog" aria-labelledby="groupMenuLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="groupMenuLabel">
+                    <ul class="list-group list-group-horizontal">
+                        <li class="list-group-item active btn groupOption">Members</li>
+                        <li class="list-group-item btn groupOption">Invite</li>
+                        <li class="list-group-item btn groupOption">Settings</li>
+                    </ul>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="groupMembers" class="groupItem">
+                    <h4>{{ group.members.all.count }} Member</h4>
+                    <ul class="list-unstyled">
+                        {% for member in group.members.all %}
+                        <li class="media">
+                            <a href="{% url 'people:people' member.id %}" target="_blank">
+                                {% if member.who_see_avatar == 'everyone' %}
+                                <img src="{{member.avatar.url}}" alt="User Image" width="64" height="64"
+                                    class="rounded-circle {% if member.id <= 1000 %}oldUser{% endif %}">
+                                {% elif member.who_see_avatar == 'friends' and user in member.friends.all %}
+                                <img src="{{member.avatar.url}}" alt="User Image" width="64" height="64"
+                                    class="rounded-circle {% if member.id <= 1000 %}oldUser{% endif %}">
+                                {% elif member == user %}
+                                <img src="{{member.avatar.url}}" alt="User Image" width="64" height="64"
+                                    class="rounded-circle {% if member.id <= 1000 %}oldUser{% endif %}">
+                                {% else %}
+                                <img src="/media/profile_images/DefaultUserImage.WebP" alt="User Image" width="64"
+                                    height="64" class="rounded-circle {% if member.id <= 1000 %}oldUser{% endif %}">
+                                {% endif %}
+                            </a>
+                            <img src="..." class="mr-3" alt="">
+                            <div class="media-body">
+                                {% if member == group.author %}
+                                <p class="float-right"><i class="fas fa-crown"
+                                        style="font-size: 36px; color: green"></i> Owner
+                                </p>
+                                {% elif member in group.group_admins.all %}
+                                <p class="float-right"><i class="fas fa-tools" style="font-size: 36px"></i> Admin
+                                </p>
+                                {% endif %}
+                                <h5 class="mt-0 mb-1">{{ member.username }}</h5>
+                                {% if member.phone %}<i class="fas fa-phone-alt"></i>{{ member.phone }}{% endif %}
+                                {% if member.email and member.show_email %}<i class="fas fa-envelope"></i>
+                                {{ member.email }}{% endif %}
+                                <p>{{member.bio}}</p>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
                 </div>
-                <div class="modal-body">
-                    <div id="groupMembers" class="groupItem">
-                        <h4>{{ group.members.all.count }} Member</h4>
-                        <ul class="list-unstyled">
-                            {% for member in group.members.all %}
-                            <li class="media">
-                                <a href="{% url 'people:people' member.id %}" target="_blank">
-                                    {% if member.who_see_avatar == 'everyone' %}
-                                    <img src="{{member.avatar.url}}" alt="User Image" width="64" height="64"
-                                        class="rounded-circle {% if member.id <= 1000 %}oldUser{% endif %}">
-                                    {% elif member.who_see_avatar == 'friends' and user in member.friends.all %}
-                                    <img src="{{member.avatar.url}}" alt="User Image" width="64" height="64"
-                                        class="rounded-circle {% if member.id <= 1000 %}oldUser{% endif %}">
-                                    {% elif member == user %}
-                                    <img src="{{member.avatar.url}}" alt="User Image" width="64" height="64"
-                                        class="rounded-circle {% if member.id <= 1000 %}oldUser{% endif %}">
-                                    {% else %}
-                                    <img src="/media/profile_images/DefaultUserImage.WebP" alt="User Image" width="64"
-                                        height="64" class="rounded-circle {% if member.id <= 1000 %}oldUser{% endif %}">
-                                    {% endif %}
-                                </a>
-                                <img src="..." class="mr-3" alt="">
-                                <div class="media-body">
-                                    {% if member == group.author %}
-                                    <p class="float-right"><i class="fas fa-crown"
-                                            style="font-size: 36px; color: green"></i> Owner
-                                    </p>
-                                    {% elif member in group.group_admins.all %}
-                                    <p class="float-right"><i class="fas fa-tools" style="font-size: 36px"></i> Admin
-                                    </p>
-                                    {% endif %}
-                                    <h5 class="mt-0 mb-1">{{ member.username }}</h5>
-                                    {% if member.phone %}<i class="fas fa-phone-alt"></i>{{ member.phone }}{% endif %}
-                                    {% if member.email and member.show_email %}<i class="fas fa-envelope"></i>
-                                    {{ member.email }}{% endif %}
-                                    <p>{{member.bio}}</p>
-                                </div>
-                            </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                    <div id="groupAddMember" class="groupItem">
-                        <h4>Friends</h4>
-                        <ul class="list-unstyled">
-                            {% for friend in user.friends.all %}
-                            {% if not friend in group.members.all %}
-                            <li class="media">
-                                <a href="{% url 'people:people' friend.id %}" target="_blank">
-                                    {% if friend.who_see_avatar == 'everyone' %}
-                                    <img src="{{friend.avatar.url}}" alt="User Image" width="64" height="64"
-                                        class="rounded-circle {% if friend.id <= 1000 %}oldUser{% endif %}">
-                                    {% elif friend.who_see_avatar == 'friends' and user in friend.friends.all %}
-                                    <img src="{{friend.avatar.url}}" alt="User Image" width="64" height="64"
-                                        class="rounded-circle {% if friend.id <= 1000 %}oldUser{% endif %}">
-                                    {% elif friend == user %}
-                                    <img src="{{friend.avatar.url}}" alt="User Image" width="64" height="64"
-                                        class="rounded-circle {% if friend.id <= 1000 %}oldUser{% endif %}">
-                                    {% else %}
-                                    <img src="/media/profile_images/DefaultUserImage.WebP" alt="User Image" width="64"
-                                        height="64" class="rounded-circle {% if friend.id <= 1000 %}oldUser{% endif %}">
-                                    {% endif %}
-                                </a>
-                                <img src="..." class="mr-3" alt="">
-                                <div class="media-body">
-                                    {% if friend.who_add_group == 'everyone' or friend.who_add_group == 'friends' %}
-                                    <p class="float-right inviteFriend btn"
-                                        data-url="{% url 'social:send_group_invite' friend.id group.id %}">
-                                        <i class="fas fa-user-plus" style="font-size: 36px; color: green;"></i> Add
-                                    </p>
-                                    {% else %}
-                                    <p class="float-right"><i class="fas fa-shield-alt"
-                                            style="font-size: 36px; color: red;"></i> You can't add</p>
-                                    {% endif %}
-                                    <h5 class="mt-0 mb-1">{{ friend.username }}</h5>
-                                    {% if friend.phone %}<i class="fas fa-phone-alt"></i>{{ friend.phone }}{% endif %}
-                                    {% if friend.email and friend.show_email %}<i class="fas fa-envelope"></i>
-                                    {{ friend.email }}{% endif %}
-                                    <p>{{friend.bio}}</p>
-                                </div>
-                            </li>
-                            {% endif %}
-                            {% endfor %}
-                        </ul>
-                    </div>
-                    <div id="groupSettings" class="groupItem">
-                        <h4><i class="fas fa-edit"></i> Edit</h4>
-                        
+                <div id="groupAddMember" class="groupItem">
+                    <h4>Friends</h4>
+                    <ul class="list-unstyled">
+                        {% for friend in user.friends.all %}
+                        {% if not friend in group.members.all %}
+                        <li class="media">
+                            <a href="{% url 'people:people' friend.id %}" target="_blank">
+                                {% if friend.who_see_avatar == 'everyone' %}
+                                <img src="{{friend.avatar.url}}" alt="User Image" width="64" height="64"
+                                    class="rounded-circle {% if friend.id <= 1000 %}oldUser{% endif %}">
+                                {% elif friend.who_see_avatar == 'friends' and user in friend.friends.all %}
+                                <img src="{{friend.avatar.url}}" alt="User Image" width="64" height="64"
+                                    class="rounded-circle {% if friend.id <= 1000 %}oldUser{% endif %}">
+                                {% elif friend == user %}
+                                <img src="{{friend.avatar.url}}" alt="User Image" width="64" height="64"
+                                    class="rounded-circle {% if friend.id <= 1000 %}oldUser{% endif %}">
+                                {% else %}
+                                <img src="/media/profile_images/DefaultUserImage.WebP" alt="User Image" width="64"
+                                    height="64" class="rounded-circle {% if friend.id <= 1000 %}oldUser{% endif %}">
+                                {% endif %}
+                            </a>
+                            <img src="..." class="mr-3" alt="">
+                            <div class="media-body">
+                                {% if friend.who_add_group == 'everyone' or friend.who_add_group == 'friends' %}
+                                <p class="float-right inviteFriend btn"
+                                    data-url="{% url 'social:send_group_invite' friend.id group.id %}">
+                                    <i class="fas fa-user-plus" style="font-size: 36px; color: green;"></i> Invite
+                                </p>
+                                {% else %}
+                                <p class="float-right"><i class="fas fa-shield-alt"
+                                        style="font-size: 36px; color: red;"></i> You can't add</p>
+                                {% endif %}
+                                <h5 class="mt-0 mb-1">{{ friend.username }}</h5>
+                                {% if friend.phone %}<i class="fas fa-phone-alt"></i>{{ friend.phone }}{% endif %}
+                                {% if friend.email and friend.show_email %}<i class="fas fa-envelope"></i>
+                                {{ friend.email }}{% endif %}
+                                <p>{{friend.bio}}</p>
+                            </div>
+                        </li>
+                        {% endif %}
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div id="groupSettings" class="groupItem">
+                    <div class="d-block">
+                        <h4 class="float-left">Areas</h4>
+
                         {% if user == group.author or user in group.group_admins.all %}
-                        <form action="{% url 'social:edit_group' group.id %}" method="POST" enctype="multipart/form-data">
-                            {% csrf_token %}
-                            {{ form|crispy }}
-                            <button type="submit" class="btn btn-success">Save</button>
+                        <form action="{% url 'social:create_area' group.id %}" method="GET" class="form-inline"
+                            id="createAreaForm">
+                            <button class="btn btn-success rounded-circle ml-5 float-left mr-2"><i class="fas fa-plus"
+                                    style="font-size:30px;" id="createArea"></i></button>
+                            <input type="text" name="name" id="id_name" class="form-group">
                         </form>
-                        {% else %}
-                        <div class="alert-info">
-                            <h5>Only group admins can edit</h5>
-                        </div>
                         {% endif %}
-                        
-                        <hr>
-                        <h4><i class="fas fa-exclamation-triangle"></i> Danger area</h4>
-                        <br>
-                        {% if user == group.author %}
-                        <a class="btn btn-outline-danger float-left" href="{% url 'social:delete_group' group.id %}" onclick="return confirm('{{ group.title }} has {{ group.members.count }} member. are you sure you want to delete it?')"><i
-                                class="fas fa-trash-alt"></i> Delete Group</a>
-                        {% endif %}
-                        <a href="{% url 'social:leave_group' group.id %}" class="btn btn-outline-secondary ml-4" onclick="return confirm('Leave {{ group.tite }}?')"><i
-                                class="fas fa-sign-out-alt"></i> Leave Group</a>
                     </div>
+
+                    <ul class="list-group">
+                        {% for area in areas %}
+                        {% if not area.name == 'All' %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            {{ area.name }}
+                            <span class="badge badge-primary badge-pill">
+                                {{ area.messages.count }}</span>
+                            {% if user == group.author or user in group.group_admins.all %}
+                            <a href="{% url 'social:delete_area' area.id %}"
+                                class="float-right d-inline deleteArea" onclick="return confirm('Delete {{ area.name }}?')"
+                                style="text-decoration:none; color: red; font-size:20px"><i
+                                    class="fas fa-trash-alt"></i></a>
+                            {% endif %}
+                        </li>
+
+                        {% endif %}
+                        {% endfor %}
+                    </ul>
+                    <hr>
+                    <h4><i class="fas fa-edit"></i> Edit</h4>
+
+                    {% if user == group.author or user in group.group_admins.all %}
+                    <form action="{% url 'social:edit_group' group.id %}" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        <button type="submit" class="btn btn-success">Save</button>
+                    </form>
+                    {% else %}
+                    <div class="alert-info">
+                        <h5>Only group admins can edit</h5>
+                    </div>
+                    {% endif %}
+
+                    <hr>
+                    <h4><i class="fas fa-exclamation-triangle"></i> Danger area</h4>
+                    <br>
+                    {% if user == group.author %}
+                    <a class="btn btn-outline-danger float-left" href="{% url 'social:delete_group' group.id %}"
+                        onclick="return confirm('{{ group.title }} has {{ group.members.count }} member. are you sure you want to delete it?')"><i
+                            class="fas fa-trash-alt"></i> Delete Group</a>
+                    {% endif %}
+                    <a href="{% url 'social:leave_group' group.id %}" class="btn btn-outline-secondary ml-4"
+                        onclick="return confirm('Leave {{ group.tite }}?')"><i class="fas fa-sign-out-alt"></i> Leave
+                        Group</a>
                 </div>
             </div>
         </div>
     </div>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            window.addEventListener('load', function () {
-                // Paginate messages
-                let page = 1
-                // Top scroll
-                function topScroll() {
-                    if (window.top == window.self) {
-                        $.ajax({
-                            url: "{% url 'social:chat_group' group.id %}",
-                            data: {
-                                "page": page,
-                            },
-                            method: 'get',
-                            dataType: 'json',
-                            success: function (response) {
-                                let sender = "self"
-                                let senderAvatar = "{{ user.avatar.url }}"
-                                let senderUserName = "{{ user.username }}"
-                                chat_messages = JSON.parse(response.chat_messages).reverse()
-                                if (chat_messages.length > 0) {
-                                    page++
-                                    for (message of chat_messages) {
-                                        let dateToString = d =>
-                                            `${d.getFullYear()}-${('00' + (d.getMonth() + 1)).slice(-2)}-${('00' + d.getDate()).slice(-2)}`
-                                        let messageDate = new Date(Date.parse(message.fields
-                                            .date))
-                                        let date = dateToString(messageDate)
-                                        // Other member
-                                        if (message.fields.message_sender !=
-                                            "{{ user.id }}") {
-                                            sender = "other"
-                                            $.ajax({
-                                                url: "{% url 'userpage:get_user_by_id' %}",
-                                                data: {
-                                                    'pk': message.fields
-                                                        .message_sender,
-                                                },
-                                                method: 'get',
-                                                dataType: 'json',
-                                                async: false,
-                                                success: function (response) {
-                                                    senderAvatar = response.user
-                                                        .avatar
-                                                    senderUserName = response
-                                                        .user.username
-                                                }
-                                            })
-                                        }
-                                        // End other member
-                                        $('.chat').prepend(`
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        window.addEventListener('load', function () {
+            // Paginate messages
+            let page = 1
+            // Top scroll
+            function topScroll() {
+                if (window.top == window.self) {
+                    $.ajax({
+                        url: "{% url 'social:chat_group' group.id %}",
+                        data: {
+                            "page": page,
+                        },
+                        method: 'get',
+                        dataType: 'json',
+                        success: function (response) {
+                            let sender = "self"
+                            let senderAvatar = "{{ user.avatar.url }}"
+                            let senderUserName = "{{ user.username }}"
+                            chat_messages = JSON.parse(response.chat_messages).reverse()
+                            if (chat_messages.length > 0) {
+                                page++
+                                for (message of chat_messages) {
+                                    let dateToString = d =>
+                                        `${d.getFullYear()}-${('00' + (d.getMonth() + 1)).slice(-2)}-${('00' + d.getDate()).slice(-2)}`
+                                    let messageDate = new Date(Date.parse(message.fields
+                                        .date))
+                                    let date = dateToString(messageDate)
+                                    // Other member
+                                    if (message.fields.message_sender !=
+                                        "{{ user.id }}") {
+                                        sender = "other"
+                                        $.ajax({
+                                            url: "{% url 'userpage:get_user_by_id' %}",
+                                            data: {
+                                                'pk': message.fields
+                                                    .message_sender,
+                                            },
+                                            method: 'get',
+                                            dataType: 'json',
+                                            async: false,
+                                            success: function (response) {
+                                                senderAvatar = response.user
+                                                    .avatar
+                                                senderUserName = response
+                                                    .user.username
+                                            }
+                                        })
+                                    }
+                                    // End other member
+                                    $('.chat').prepend(`
                                     <li class="${sender} message" data-pk="${message.pk}">
                     <div class="avatar">
                         <img src="${senderAvatar}" alt="User Image" width="64" height="64">
@@ -253,82 +299,82 @@
                     </div>
                 </li>
                                     `)
-                                    }
                                 }
                             }
-                        })
+                        }
+                    })
+                }
+            }
+            topScroll();
+            window.addEventListener('scroll', () => topScroll())
+            // End paginate messages
+
+            // Return back
+            $('#back').click(() => window.history.back())
+            // Group menu
+            $('#groupAddMember').hide()
+            $('#groupSettings').hide()
+            $('.name,.last').click(function (e) {
+                e.preventDefault();
+                $("#groupMenu").modal('show');
+            })
+            $('.groupOption').click(function (e) {
+                e.preventDefault();
+                if (!$(this).hasClass('active')) {
+                    $('.groupOption').removeClass('active')
+                    $(this).addClass('active')
+                    $('.groupItem').hide()
+                    if ($(this).html() == 'Members') {
+                        $('#groupMembers').show()
+                    } else if ($(this).html() == 'Invite') {
+                        $('#groupAddMember').show()
+                    } else if ($(this).html() == 'Settings') {
+                        $('#groupSettings').show()
                     }
                 }
-                topScroll();
-                window.addEventListener('scroll', () => topScroll())
-                // End paginate messages
+            })
+            // End group menu
 
-                // Return back
-                $('#back').click(() => window.history.back())
-                // Group menu
-                $('#groupAddMember').hide()
-                $('#groupSettings').hide()
-                $('.name,.last').click(function (e) {
-                    e.preventDefault();
-                    $("#groupMenu").modal('show');
+            // Send invite
+            $('.inviteFriend').click(function (e) {
+                $(this).parent().parent().fadeOut()
+                e.preventDefault();
+                $.ajax({
+                    url: $(this).attr('data-url'),
+                    data: {},
+                    method: 'get',
+                    dataType: 'json',
+                    success: function (response) {}
                 })
-                $('.groupOption').click(function (e) {
-                    e.preventDefault();
-                    if (!$(this).hasClass('active')) {
-                        $('.groupOption').removeClass('active')
-                        $(this).addClass('active')
-                        $('.groupItem').hide()
-                        if ($(this).html() == 'Members') {
-                            $('#groupMembers').show()
-                        } else if ($(this).html() == 'Add') {
-                            $('#groupAddMember').show()
-                        } else if ($(this).html() == 'Settings') {
-                            $('#groupSettings').show()
-                        }
+            })
+            // End send invite
+
+            // Send message
+            $('#send').click(function (e) {
+                $('#sendForm').submit();
+            })
+            $('#sendForm').submit(function (e) {
+                e.preventDefault();
+                let messageInput = $('#messageInput').val()
+                if (!messageInput == '') {
+                    // last message id
+                    let newLastMessageId = ''
+                    try {
+                        let messages = document.getElementsByClassName('message')
+                        newLastMessageId = parseInt(messages[messages.length - 1]
+                            .getAttribute(
+                                'data-pk')) + 1
+                    } catch {
+                        newLastMessageId = 1
                     }
-                })
-                // End group menu
 
-                // Send invite
-                $('.inviteFriend').click(function (e) {
-                    $(this).parent().parent().fadeOut()
-                    e.preventDefault();
-                    $.ajax({
-                        url: $(this).attr('data-url'),
-                        data: {},
-                        method: 'get',
-                        dataType: 'json',
-                        success: function (response) {}
-                    })
-                })
-                // End send invite
-
-                // Send message
-                $('#send').click(function (e) {
-                    $('#sendForm').submit();
-                })
-                $('#sendForm').submit(function (e) {
-                    e.preventDefault();
-                    let messageInput = $('#messageInput').val()
-                    if (!messageInput == '') {
-                        // last message id
-                        let newLastMessageId = ''
-                        try {
-                            let messages = document.getElementsByClassName('message')
-                            newLastMessageId = parseInt(messages[messages.length - 1]
-                                .getAttribute(
-                                    'data-pk')) + 1
-                        } catch {
-                            newLastMessageId = 1
-                        }
-
-                        // end last message id
-                        let isImportant = "False"
-                        if ($('#is_important').is(':checked')) {
-                            isImportant = "True"
-                        }
-                        // Todo
-                        $('.chat').append(`
+                    // end last message id
+                    let isImportant = "False"
+                    if ($('#is_important').is(':checked')) {
+                        isImportant = "True"
+                    }
+                    // Todo
+                    $('.chat').append(`
                         <li class="self message" data-pk="${newLastMessageId}">
                     <div class="avatar">
                         <img src="{{ user.avatar.url }}" alt="User Image" width="64" height="64">
@@ -339,48 +385,48 @@
                     </div>
                 </li>
                         `)
-                        $('#messageInput').val('')
-                        document.getElementById('notificationSound').play()
-                        window.scrollTo(0, document.body.scrollHeight);
-                        $.ajax({
-                            url: $('#sendForm').attr('action'),
-                            data: {
-                                'message': messageInput,
-                                'is_important': isImportant,
-                            },
-                            method: 'get',
-                            dataType: 'json',
-                            success: function (response) {}
-                        })
-                    }
-                })
-                // End send message
-
-                // Load new messages
-                setInterval(() => {
-                    let lastMessageId = ''
-                    try {
-                        let messages = document.getElementsByClassName('message')
-                        lastMessageId = messages[messages.length - 1].getAttribute('data-pk')
-                    } catch (error) {
-                        lastMessageId = 0
-                    }
+                    $('#messageInput').val('')
+                    document.getElementById('notificationSound').play()
+                    window.scrollTo(0, document.body.scrollHeight);
                     $.ajax({
-                        url: "{% url 'social:chat_group' group.id %}",
+                        url: $('#sendForm').attr('action'),
                         data: {
-                            'action': 'load_new_messages',
-                            'last_message_id': lastMessageId,
+                            'message': messageInput,
+                            'is_important': isImportant,
                         },
                         method: 'get',
-                        async: false,
                         dataType: 'json',
-                        success: function (response) {
-                            chat_messages = JSON.parse(response.chat_messages)
-                            if (response.chat_messages.length > 0) {
-                                let newLastMessageId = ''
-                                for (message of chat_messages) {
-                                    newLastMessageId = message.pk
-                                    $('.chat').append(`
+                        success: function (response) {}
+                    })
+                }
+            })
+            // End send message
+
+            // Load new messages
+            setInterval(() => {
+                let lastMessageId = ''
+                try {
+                    let messages = document.getElementsByClassName('message')
+                    lastMessageId = messages[messages.length - 1].getAttribute('data-pk')
+                } catch (error) {
+                    lastMessageId = 0
+                }
+                $.ajax({
+                    url: "{% url 'social:chat_group' group.id %}",
+                    data: {
+                        'action': 'load_new_messages',
+                        'last_message_id': lastMessageId,
+                    },
+                    method: 'get',
+                    async: false,
+                    dataType: 'json',
+                    success: function (response) {
+                        chat_messages = JSON.parse(response.chat_messages)
+                        if (response.chat_messages.length > 0) {
+                            let newLastMessageId = ''
+                            for (message of chat_messages) {
+                                newLastMessageId = message.pk
+                                $('.chat').append(`
                         <li class="other message" data-pk="${newLastMessageId}">
                     <div class="avatar">
                         <img src="${$('#friendAvatar').attr('src')}" alt="User Image" width="64" height="64">
@@ -391,17 +437,53 @@
                     </div>
                 </li>
                         `)
-                                    document.querySelector('#notificationSound')
-                                        .play();
-                                }
+                                document.querySelector('#notificationSound')
+                                    .play();
                             }
                         }
-                    })
-                }, 3300);
-                // End load new messages
+                    }
+                })
+            }, 3300);
+            // End load new messages
 
-            });
+            // Area
+            // Create area
+            $('#createAreaForm').submit(function (e) {
+                e.preventDefault();
+                areaName = $('#id_name').val()
+                $.ajax({
+                    url: $('#createAreaForm').attr('action'),
+                    data: {
+                        'name': $('#id_name').val(),
+                    },
+                    method: 'get',
+                    dataType: 'json',
+                    success: function (response) {
+                        // $('#').append(``) // todo
+                        $('#createAreaForm').parent().prepend(
+                            '<p class="alert-info">Please refresh the page to see changes</p>'
+                        )
+                    }
+                })
+            })
+            $('.deleteArea').click(function(e){
+                e.preventDefault();
+                $.ajax({
+                    url: $('.deleteArea').attr('href'),
+                    data: {
+
+                    },
+                    method: 'get', 
+                    dataType: 'json',
+                    success: function(response){
+                        $('#createAreaForm').parent().prepend(
+                            '<p class="alert-info">Please refresh the page to see changes</p>'
+                        )
+                    }
+                })
+            })
         });
-    </script>
+    });
+</script>
 {% endblock content %}
 </body>

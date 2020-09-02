@@ -28,6 +28,7 @@ class Message(models.Model):
         return f'{self.message_sender} to ({self.chat_box}) ⚠️{self.is_important}⚠️'
 
 
+
 class ChatGroup(models.Model):
     title = models.CharField(max_length=25)
     description = models.CharField(max_length=200, null=True, blank=True)
@@ -54,6 +55,7 @@ class ChatGroup(models.Model):
                 img.save(self.image.path, 'WebP')
 
 
+
 class GroupRequest(models.Model):
     request_sender = models.ForeignKey(
         User, related_name='request_sender', on_delete=models.CASCADE)
@@ -76,6 +78,15 @@ class GroupMessage(models.Model):
 
     def __str__(self):
         return f'message_sender: {self.message_sender}, chat_box: {self.group}'
+
+class Area(models.Model):
+    name = models.CharField(max_length=20)
+    mute = models.BooleanField(default=False)
+    group = models.ForeignKey(ChatGroup, on_delete = models.CASCADE)
+    messages = models.ManyToManyField(GroupMessage, related_name='message_area', blank=True)
+    
+    def __str__(self):
+        return f'{self.name}, {self.messages.count()}'
 
 
 class Notification(models.Model):
