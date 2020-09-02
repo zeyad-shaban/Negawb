@@ -404,3 +404,43 @@ def delete_area(request, pk):
     if request.user == group.author or request.user in group.group_admins.all():
         area.delete()
     return JsonResponse({})
+
+def load_area(request, group_pk, area_pk):
+    group = get_object_or_404(ChatGroup, pk=group_pk)
+    area = get_object_or_404(Area, pk=area_pk)
+    if not request.user in group.members.all():
+        messages.error(request, 'You are not in this group')
+        return redirect('chat')
+
+    chat_messages_list = GroupMessage.objects.filter(group=group, area=area)
+    areas = Area.objects.filter(group=group)
+    # chat messages Paginator
+    paginator = Paginator(chat_messages_list, 11)
+    if request.GET.get('page'):
+        page = int(request.GET.get('page'))
+    else:
+        page = 0
+    page = paginator.num_pages - page
+
+    try:
+        chat_messages = paginator.page(page)
+    except EmptyPage:
+        chat_messages = []
+    except PageNotAnInteger:
+        chat_messages = paginator.page(paginator.num_pages)
+
+    # form
+    form = ChatGroupForm(instance=group)
+    if request.method == 'GET' and not request.GET.get('action') and not request.GET.get('page'):
+        return render(request, 'social/load_area.html', {'group': group, 'chat_messages': chat_messages, 'form': form, 'areas': areas})
+
+    # Paginate messages
+    elif request.GET.get('page'):
+        return JsonResponse({'chat_messages': serialize('json', chat_messages)})
+
+    # Load new messaages
+    elif request.GET.get('action') == 'load_new_messages':
+        last_message_id = int(request.GET.get('last_message_id'))
+        chat_messages = GroupMessage.objects.filter(
+            group=group, id__gt=last_message_id, area=area).order_by('date')
+        return JsonResponse({'chat_messages': serialize('json', chat_messages)})
