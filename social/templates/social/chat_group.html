@@ -31,6 +31,7 @@ St
     </audio>
 
     <ul class="list-group list-group-horizontal">
+        <li class="list-group-item active">All</li>
         {% for area in areas %}
         <li class="list-group-item">{{ area.name }}</li>
         {% endfor %}
@@ -65,9 +66,10 @@ St
         <input type="checkbox" name="is_important" id="is_important">
     </div>
     <div id="send"><i class="far fa-paper-plane" style="font-size:30px; color:white;"></i></div>
-    <select id="id_area_name" name='name'>
+    <select id="id_area_name" name='id_area_name'>
+        <option value="None">All</option>
         {% for area in areas %}
-        <option value="{{ area.name }}">{{ area.name }}</option>
+        <option value="{{ area.id }}">{{ area.name }}</option>
         {% endfor %}
     </select>
 
@@ -181,24 +183,20 @@ St
                             id="createAreaForm">
                             <button class="btn btn-success rounded-circle ml-5 float-left mr-2"><i class="fas fa-plus"
                                     style="font-size:30px;" id="createArea"></i></button>
-                            <input type="text" name="name" id="id_name" class="form-group">
+                            <input type="text" name="name" id="id_name" class="form-group" required>
                         </form>
                         {% endif %}
                     </div>
 
                     <ul class="list-group">
                         {% for area in areas %}
-                        {% if not area.name == 'All' %}
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             {{ area.name }}
-                            <span class="badge badge-primary badge-pill">
-                                {{ area.messages.count }}</span>
                             {% if user == group.author or user in group.group_admins.all %}
                             <a href="{% url 'social:delete_area' area.id %}" class="float-right d-inline deleteArea"
                                 onclick="return confirm('Delete {{ area.name }}?')"
                                 style="text-decoration:none; color: red; font-size:20px"><i
                                     class="fas fa-trash-alt"></i></a>
-                            {% endif %}
                         </li>
 
                         {% endif %}
@@ -386,11 +384,13 @@ St
                     $('#messageInput').val('')
                     document.getElementById('notificationSound').play()
                     window.scrollTo(0, document.body.scrollHeight);
+                    console.log($('#id_area_name').val())
                     $.ajax({
                         url: $('#sendForm').attr('action'),
                         data: {
                             'message': messageInput,
                             'is_important': isImportant,
+                            'area': $('#id_area_name').val()
                         },
                         method: 'get',
                         dataType: 'json',

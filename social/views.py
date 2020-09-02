@@ -34,8 +34,6 @@ def chat(request):
         group.save()
         group.members.add(request.user)
         group.group_admins.add(request.user)
-        area = Area(group=group, name='All')
-        area.save()
         return redirect('social:chat_group', pk=group.id)
 
 
@@ -205,8 +203,12 @@ def edit_group(request, pk):
 
 def send_group_message(request, pk):
     group = get_object_or_404(ChatGroup, pk=pk)
+    try:
+        area = get_object_or_404(Area, pk=request.GET.get('area'))
+    except:
+        area = None
     message = GroupMessage(
-        group=group, message_sender=request.user, message=request.GET.get('message'))
+        group=group, message_sender=request.user, message=request.GET.get('message'), area=area)
     # Is important?
     if request.GET.get('is_important') == "True":
         important_messages_in_last_day = GroupMessage.objects.filter(date__gt=now(

@@ -67,6 +67,15 @@ class GroupRequest(models.Model):
         return f'[GROUP] {self.group.title} | {self.request_sender} To {self.reciever}'
 
 
+
+class Area(models.Model):
+    name = models.CharField(max_length=20)
+    mute = models.BooleanField(default=False)
+    group = models.ForeignKey(ChatGroup, on_delete = models.CASCADE)
+    
+    def __str__(self):
+        return self.name
+
 class GroupMessage(models.Model):
     group = models.ForeignKey(
         ChatGroup, related_name='chat_group', null=True, on_delete=models.CASCADE)
@@ -75,19 +84,10 @@ class GroupMessage(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     message = models.TextField()
     is_important = models.BooleanField(default=False)
+    area = models.ForeignKey(Area, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
-        return f'message_sender: {self.message_sender}, chat_box: {self.group}'
-
-class Area(models.Model):
-    name = models.CharField(max_length=20)
-    mute = models.BooleanField(default=False)
-    group = models.ForeignKey(ChatGroup, on_delete = models.CASCADE)
-    messages = models.ManyToManyField(GroupMessage, related_name='message_area', blank=True)
-    
-    def __str__(self):
-        return f'{self.name}, {self.messages.count()}'
-
+        return f'{self.message_sender}, {self.message} chat_box: {self.group}'
 
 class Notification(models.Model):
     notification_type_choices = [
