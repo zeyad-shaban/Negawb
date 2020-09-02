@@ -257,60 +257,6 @@ a {
     margin-right: 4px;
 }
 
-emoji {
-    display: inline-block;
-    height: 18px;
-    width: 18px;
-    background-size: cover;
-    background-repeat: no-repeat;
-    margin-top: -7px;
-    margin-right: 2px;
-    transform: translate3d(0px, 3px, 0px);
-}
-
-emoji.please {
-    background-image: url(https://imgur.com/ftowh0s.png);
-}
-
-emoji.lmao {
-    background-image: url(https://i.imgur.com/MllSy5N.png);
-}
-
-emoji.happy {
-    background-image: url(https://imgur.com/5WUpcPZ.png);
-}
-
-emoji.pizza {
-    background-image: url(https://imgur.com/voEvJld.png);
-}
-
-emoji.cryalot {
-    background-image: url(https://i.imgur.com/UUrRRo6.png);
-}
-
-emoji.books {
-    background-image: url(https://i.imgur.com/UjZLf1R.png);
-}
-
-emoji.moai {
-    background-image: url(https://imgur.com/uSpaYy8.png);
-}
-
-emoji.suffocated {
-    background-image: url(https://i.imgur.com/jfTyB5F.png);
-}
-
-emoji.scream {
-    background-image: url(https://i.imgur.com/tOLNJgg.png);
-}
-
-emoji.hearth_blue {
-    background-image: url(https://i.imgur.com/gR9juts.png);
-}
-
-emoji.funny {
-    background-image: url(https://i.imgur.com/qKia58V.png);
-}
 
 @-webikt-keyframes pulse {
     from {
@@ -401,6 +347,35 @@ input.textarea {
     background-size: cover;
     z-index: 100;
     cursor: pointer;
+}
+
+#id_area_name {
+    position: fixed;
+    display: block;
+    bottom: 8px;
+    left: 83vw;
+    width: 60px;
+    height: 34px;
+    z-index: 100;
+    cursor: pointer;
+}
+
+@media screen and (max-width:840px) {
+    #id_area_name {
+        left: 80vw
+    }
+}
+
+@media screen and (max-width:600px) {
+    #id_area_name {
+        left: 76vw
+    }
+}
+
+@media screen and (max-width:424px) {
+    #id_area_name {
+        left: 72vw
+    }
 }
 
 .navbar {

@@ -12,6 +12,7 @@
 {% endblock description %}
 
 {% block content %}
+St
 <link rel="stylesheet" href="{% static 'social/chat.css' %}">
 <div class="menu">
     <div class="back" id="back"><i class="fa fa-chevron-left"></i>
@@ -64,6 +65,11 @@
         <input type="checkbox" name="is_important" id="is_important">
     </div>
     <div id="send"><i class="far fa-paper-plane" style="font-size:30px; color:white;"></i></div>
+    <select id="id_area_name" name='name'>
+        {% for area in areas %}
+        <option value="{{ area.name }}">{{ area.name }}</option>
+        {% endfor %}
+    </select>
 
 </form>
 <!-- Group menu -->
@@ -188,8 +194,8 @@
                             <span class="badge badge-primary badge-pill">
                                 {{ area.messages.count }}</span>
                             {% if user == group.author or user in group.group_admins.all %}
-                            <a href="{% url 'social:delete_area' area.id %}"
-                                class="float-right d-inline deleteArea" onclick="return confirm('Delete {{ area.name }}?')"
+                            <a href="{% url 'social:delete_area' area.id %}" class="float-right d-inline deleteArea"
+                                onclick="return confirm('Delete {{ area.name }}?')"
                                 style="text-decoration:none; color: red; font-size:20px"><i
                                     class="fas fa-trash-alt"></i></a>
                             {% endif %}
@@ -458,16 +464,16 @@
                     }
                 })
             })
-            $('.deleteArea').click(function(e){
+            $('.deleteArea').click(function (e) {
                 e.preventDefault();
                 $.ajax({
                     url: $('.deleteArea').attr('href'),
                     data: {
 
                     },
-                    method: 'get', 
+                    method: 'get',
                     dataType: 'json',
-                    success: function(response){
+                    success: function (response) {
                         $('#createAreaForm').parent().prepend(
                             '<p class="alert-info">Please refresh the page to see changes</p>'
                         )
