@@ -8,8 +8,8 @@ Dfreemedia.{% endblock description %}
 
 {% block content %}
 <style>
-    body{
-        background: rgba(0, 0, 0, 0.7)!important;
+    body {
+        background: rgba(0, 0, 0, 0.7) !important;
     }
 
     #signupForm {
@@ -27,21 +27,11 @@ Dfreemedia.{% endblock description %}
 <div class="row justify-content-center mt-5">
     <div class="col-md-5 col-sm-6 col-8" id="signupForm">
         <div class="text-center">
-            <img src="{% static 'categories/favicon.jpg' %}" alt="Dfreemedia favicon" class="rounded-circle"
-                height="200">
             <h1>Join Dfreemedia</h1>
-            <h4>First 1000 users will enter a givaway for <b>10$</b> as well as profile frame <i
-                    class="fas fa-question-circle" id="giveawayInfo"></i></h4>
-            <script>
-                document.addEventListener('DOMContentLoaded', function () {
-                    window.addEventListener('load', function () {
-                        $('#giveawayInfo').click(() => alert(
-                            'We will choose 5 lucky users to win 10$, winners will be announced once we hit 1500 users'
-                            ))
-                    });
-                });
-            </script>
-            <p>Don't miss out this chance!</p>
+            <h4>And organize your chat for better life</h4>
+            <h4>Enable chat only mode for maximum productivity</h4>
+            <h4>Control posts and notifications you receive</h4>
+            <p>And much more!</p>
         </div>
         <form method="POST" action="{% url 'signupuser' %}">
             {% csrf_token %}
@@ -62,6 +52,11 @@ Dfreemedia.{% endblock description %}
             <div class="form-group">
                 <label for="password2">Confirm Password</label>
                 <input type="password" name="password2" class="form-control" id="password2" required>
+            </div>
+            <div class="form-group">
+                <label for="chat_only_mode">Chat only mode</label>
+                <input type="checkbox" name="chat_only_mode" class="form-control" id="chat_only_mode"
+                    data-toggle="toggle" data-onstyle="success">
             </div>
             <div class="form-group">
                 <label for="password2">Default posts type</label>

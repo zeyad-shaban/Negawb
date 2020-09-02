@@ -261,18 +261,10 @@
                 <div class="modal-body">
                     <div class="text-center">
                         <h1>Join Dfreemedia</h1>
-                        <h4>First 1000 users will enter a givaway for <b>10$</b> as well as profile frame <i
-                                class="fas fa-question-circle" id="moreInfoGivaway"></i></h4>
-                        <script>
-                            document.addEventListener('DOMContentLoaded', function () {
-                                window.addEventListener('load', function () {
-                                    $('#moreInfoGivaway').click(() => alert(
-                                        'We will choose 5 lucky users to win 10$, winners will be announced once we hit 1500 users'
-                                    ))
-                                });
-                            });
-                        </script>
-                        <p>Don't miss out this chance!</p>
+                        <h4>And organize your chat for better life</h4>
+                        <h4>Enable chat only mode for maximum productivity</h4>
+                        <h4>Control posts and notifications you receive</h4>
+                        <p>And much more!</p>
                     </div>
                     <form method="POST" action="{% url 'signupuser' %}">
                         {% csrf_token %}
@@ -293,6 +285,11 @@
                         <div class="form-group">
                             <label for="password2">Confirm Password</label>
                             <input type="password" name="password2" class="form-control" id="password2" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="chat_only_mode">Chat only mode</label>
+                            <input type="checkbox" name="chat_only_mode" class="form-control" id="chat_only_mode"
+                                data-toggle="toggle" data-onstyle="success">
                         </div>
                         <div class="form-group">
                             <label for="password2">Default posts type</label>
@@ -377,12 +374,20 @@
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
         integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <!-- Start bootstrap js -->
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
         integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
     </script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
         integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous">
     </script>
+    <!-- End bootstrap js -->
+    
+    <!-- Start bt4 toggle -->
+    <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css"
+        rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
+    <!-- End bt4 toggle -->
     <link rel="stylesheet" href="{% static 'categories/basestyle.css' %}">
     <link rel="stylesheet" href="{% static 'social/emojionearea.min.css' %}">
     <script src="{% static 'social/emojionearea.min.js' %}"></script>

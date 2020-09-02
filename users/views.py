@@ -27,12 +27,20 @@ def signupuser(request):
         if request.POST.get('password1') == request.POST.get('password2'):
             try:
                 if request.POST.get('homepage_posts'):
-                    homepage_posts_category = get_object_or_404(Category, pk=request.POST.get('homepage_posts'))
+                    homepage_posts_category = get_object_or_404(
+                        Category, pk=request.POST.get('homepage_posts'))
                 else:
                     homepage_posts_category = None
+
+                # Start chat only
+                if request.POST.get('chat_only_mode') == 'on':
+                    is_chat_only_mode = True
+                else:
+                    is_chat_only_mode = False
+                # End chat only
                 user = User.objects.create_user(
-                    request.POST.get('username'), password=request.POST.get('password1'), homepage_posts=homepage_posts_category)
-                if False:
+                    request.POST.get('username'), password=request.POST.get('password1'), homepage_posts=homepage_posts_category, chat_only_mode=is_chat_only_mode)
+                if False:  # Email address confirmation
                     pass
                     # user.is_active = False
                     # uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
@@ -52,7 +60,8 @@ def signupuser(request):
                     # email.send(fail_silently=False)
                 else:
                     user.save()
-                    messages.success(request, 'To allow notifications go <a href="/userpage/">here</a> and click subscribe to push messaging')
+                    messages.success(
+                        request, 'To allow notifications go <a href="/userpage/">here</a> and click subscribe to push messaging')
                     login(request, user)
                 if request.GET.get('next'):
                     return redirect(request.GET.get('next'))
