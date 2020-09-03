@@ -41,8 +41,8 @@
         Your browser does not support the audio element.
     </audio>
 
-<br>
-<br>
+    <br>
+    <br>
     {% for message in chat_messages %}
     <li class="{% if message.message_sender == user %}self{% else %}other{% endif %} message"
         data-pk="{{ message.id }}">
@@ -245,6 +245,49 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         window.addEventListener('load', function () {
+
+            // Return back
+            $('#back').click(() => window.history.back())
+            // Group menu
+            $('#groupAddMember').hide()
+            $('#groupSettings').hide()
+            $('.name,.last').click(function (e) {
+                e.preventDefault();
+                $("#groupMenu").modal('show');
+            })
+            $('.groupOption').click(function (e) {
+                e.preventDefault();
+                if (!$(this).hasClass('active')) {
+                    $('.groupOption').removeClass('active')
+                    $(this).addClass('active')
+                    $('.groupItem').hide()
+                    if ($(this).html() == 'Members') {
+                        $('#groupMembers').show()
+                    } else if ($(this).html() == 'Invite') {
+                        $('#groupAddMember').show()
+                    } else if ($(this).html() == 'Settings') {
+                        $('#groupSettings').show()
+                    }
+                }
+            })
+            // End group menu
+
+            // Send invite
+            $('.inviteFriend').click(function (e) {
+                $(this).parent().parent().fadeOut()
+                e.preventDefault();
+                $.ajax({
+                    url: $(this).attr('data-url'),
+                    data: {},
+                    method: 'get',
+                    dataType: 'json',
+                    success: function (response) {}
+                })
+            })
+            // End send invite
+            
+            
+            
             // Send message
             $('#send').click(function (e) {
                 e.preventDefault();
@@ -286,7 +329,6 @@
                     $('#messageInput').val('')
                     document.getElementById('notificationSound').play()
                     window.scrollTo(0, document.body.scrollHeight);
-                    console.log($('#id_area_name').val())
                     $.ajax({
                         url: $('#sendForm').attr('action'),
                         data: {
@@ -303,6 +345,64 @@
             // End send message
 
             // Load new messages
+            setInterval(() => {
+                let lastMessageId = ''
+                try {
+                    let messages = document.getElementsByClassName('message')
+                    lastMessageId = messages[messages.length - 1].getAttribute('data-pk')
+                } catch (error) {
+                    lastMessageId = 0
+                }
+                $.ajax({
+                    url: "{% url 'social:load_area' group.id curr_area.id %}",
+                    data: {
+                        'action': 'load_new_messages',
+                        'last_message_id': lastMessageId
+                    },
+                    method: 'get',
+                    dataType: 'json',
+                    success: function (response) {
+                        chat_messages = JSON.parse(response.chat_messages)
+                        if (response.chat_messages.length > 0) {
+                            let newLastMessageId = ''
+                            for (message of chat_messages) {
+                                let senderAvatar = ''
+                                let senderUsername = ''
+                                $.ajax({
+                                    url: "{% url 'userpage:get_user_by_id' %}",
+                                    data: {
+                                        'pk': message.fields.message_sender,
+                                    },
+                                    method: 'get',
+                                    dataType: 'json',
+                                    async: false,
+                                    success: function (response) {
+                                        senderAvatar = response.user
+                                            .avatar
+                                        senderUsername = response.user
+                                            .username
+                                    }
+                                })
+                                newLastMessageId = message.pk
+                                $('.chat').append(`
+                        <li class="other message" data-pk="${newLastMessageId}">
+                    <div class="avatar">
+                        <img src="${senderAvatar}" alt="User Image" width="64" height="64">
+                    </div>
+                    <div class="msg">
+                        <p class="alert-secondary">${senderUsername}</p>
+                        <p>${message.fields.message}</p>
+                        <time>Now</time>
+                    </div>
+                </li>
+                        `)
+                                document.querySelector('#notificationSound')
+                                    .play();
+                            }
+                        }
+                    }
+                })
+            }, 3500);
             // End load new messages
         });
     });

@@ -434,13 +434,14 @@ def load_area(request, group_pk, area_pk):
     if request.method == 'GET' and not request.GET.get('action') and not request.GET.get('page'):
         return render(request, 'social/load_area.html', {'group': group, 'chat_messages': chat_messages, 'form': form, 'areas': areas, 'curr_area':area,})
 
+    elif request.GET.get('action') == 'load_new_messages':
+        last_message_id = int(request.GET.get('last_message_id'))
+        chat_messages = GroupMessage.objects.filter(
+            group=group, id__gt=last_message_id, area=area).order_by('date')
+        return JsonResponse({'chat_messages': serialize('json', chat_messages)})
+
+
+
     # # Paginate messages
     # elif request.GET.get('page'):
-    #     return JsonResponse({'chat_messages': serialize('json', chat_messages)})
-
-    # # Load new messaages
-    # elif request.GET.get('action') == 'load_new_messages':
-    #     last_message_id = int(request.GET.get('last_message_id'))
-    #     chat_messages = GroupMessage.objects.filter(
-    #         group=group, id__gt=last_message_id, area=area).order_by('date')
     #     return JsonResponse({'chat_messages': serialize('json', chat_messages)})
