@@ -41,7 +41,8 @@
         Your browser does not support the audio element.
     </audio>
 
-
+<br>
+<br>
     {% for message in chat_messages %}
     <li class="{% if message.message_sender == user %}self{% else %}other{% endif %} message"
         data-pk="{{ message.id }}">

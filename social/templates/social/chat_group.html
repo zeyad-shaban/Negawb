@@ -37,7 +37,8 @@
         Your browser does not support the audio element.
     </audio>
 
-
+    <br>
+    <br>
     {% for message in chat_messages %}
     <li class="{% if message.message_sender == user %}self{% else %}other{% endif %} message"
         data-pk="{{ message.id }}">
@@ -260,7 +261,8 @@
                                 for (message of chat_messages) {
                                     let messageArea = "All"
                                     if (message.fields.area != null) {
-                                        messageArea = $('.areaItem').eq(message.fields.area).children().eq(0).html()
+                                        messageArea = $('.areaItem').eq(message.fields.area)
+                                            .children().eq(0).html()
                                     }
                                     let dateToString = d =>
                                         `${d.getFullYear()}-${('00' + (d.getMonth() + 1)).slice(-2)}-${('00' + d.getDate()).slice(-2)}`
@@ -429,11 +431,25 @@
                         if (response.chat_messages.length > 0) {
                             let newLastMessageId = ''
                             for (message of chat_messages) {
+                                let senderAvatar = ''
+                                $.ajax({
+                                    url: "{% url 'userpage:get_user_by_id' %}",
+                                    data:{
+                                        'pk':message.fields.message_sender,
+                                    },
+                                    method: 'get',
+                                    dataType: 'json',
+                                    async: false,
+                                    success: function (response) {
+                                        senderAvatar = response.user.avatar
+                                    }
+                                })
+                                console.log(senderAvatar)
                                 newLastMessageId = message.pk
                                 $('.chat').append(`
                         <li class="other message" data-pk="${newLastMessageId}">
                     <div class="avatar">
-                        <img src="${$('#friendAvatar').attr('src')}" alt="User Image" width="64" height="64">
+                        <img src="${senderAvatar}" alt="User Image" width="64" height="64">
                     </div>
                     <div class="msg">
                         <p>${message.fields.message}</p>

@@ -275,7 +275,7 @@ def send_group_invite(request, user_pk, group_pk):
         # !ABSOLUTE PATH
         if reciever.allow_invites:
             notification = Notification(notification_type='invites', sender=request.user,
-                                        url='/chat/', content=f'{request.user.username} wants you to join {group.title}')
+                                        url='/userpage/friendrequest/', content=f'{request.user.username} invited you to join {group.title}')
             notification.save()
             notification.receiver.add(reciever)
             for receiver in notification.receiver.all():
@@ -285,7 +285,7 @@ def send_group_invite(request, user_pk, group_pk):
                     sender_avatar = notification.sender.avatar.url
                 else:
                     sender_avatar = '/media/profile_images/DefaultUserImage.jpg'
-                payload = {"head": f"{notification.sender.username} wants you to join {group.title}",
+                payload = {"head": f"{notification.sender.username} invited you to join {group.title}",
                            "body": notification.content,
                            "url": notification.url,
                            "icon": sender_avatar,
@@ -307,7 +307,7 @@ def join_group(request):
     group_request.delete()
     if group_request.request_sender.your_invites:
         notification = Notification(notification_type='your_invites', sender=request.user,
-                                    url=f'/people/{request.user.id}/', content=f'{request.user} joined {group.title}')
+                                    url=f'/social/chat_group/{group.id}/', content=f'{request.user} joined {group.title}')
         notification.save()
         notification.receiver.add(group_request.request_sender)
     message = {
