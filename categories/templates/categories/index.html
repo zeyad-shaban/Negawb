@@ -43,38 +43,46 @@ only, giving users the power to hide unwanted topics{% endblock description %}
 
 <!-- Homepage posts -->
 <div class="homepageItem" id="postsContainer">
-    {% if not user.is_authenticated %}
-    <h1 class="text-center">Homepage posts</h1>
-    <p>Homepage posts are currently set for every topic of posts, you can change it from the Distraction Free menu if
-        you are logged in</p>
-    <p>Also you have to login to add posts</p>
-    {% else %}
-    {% if user.homepage_posts %}
-    <h1 class="text-center">{{ user.homepage_posts.title }}</h1>
-    <form method="POST" class="mb-4" enctype="multipart/form-data"
-        action="{% url 'comments:create_post' user.homepage_posts.id %}">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="id_post_description">Description</label>
-            <textarea type="text" name="description" id="id_post_description" class="form-control"></textarea>
-        </div>
-        <div class="form-group">
-            <p><label for="id_post_image">Optional Image</label>
-                <input type="file" name="image" accept="image/*" id="id_image"></p>
-        </div>
-        <div class="form-group">
-            <p><label for="id_post_image">Or Video</label>
-                <input type="file" name="post_file" accept="video/*" id="id_post_file"></p>
-        </div>
-        <small class="form-text text-muted">You don't have to specify image or video, but if you do then only one of
-            them</small>
+    {% if not user.is_authenticated or not user.homepage_posts %}
+    <div class="text-center container">
+            <h1 class="text-center">All topics</h1>
+            <small>You can change the default homepage posts from the Distraction Free menu in you <a
+                    href="{% url 'userpage:home' %}">profile</a></small>
+    </div>
+    {% endif %}
+    <form method="POST" class="mb-4" enctype="multipart/form-data" action="{% url 'comments:create_post' 1 %}">
+        <div class="ml-2">
+            {% csrf_token %}
+            <div class="form-group col-md-5">
+                <label for="id_post_description">Description</label>
+                <textarea type="text" name="description" id="id_post_description" class="form-control"></textarea>
+            </div>
+            <div class="form-group">
+                <p class="form-text text-muted"><label for="id_post_image">Image</label>
+                    <input type="file" name="image" accept="image/*" id="id_image"></p>
+            </div>
+            <div class="form-group">
+                <p class="form-text text-muted"><label for="id_post_image">Or Video</label>
+                    <input type="file" name="post_file" accept="video/*" id="id_post_file"></p>
+            </div>
+            <label for="id_category">Topic</label>
+            <select name="id_category" id="id_category">
+                <option value="test">All</option>
+                {% for acategory in all_categories %}
+                {% if user.homepage_posts and user.homepage_posts.id == acategory.id  %}
+                <option value="{{ acategory.id }}" selected="selected">{{ acategory.title }}</option>
+                {% else %}
+                <option value="{{ acategory.id }}">{{ acategory.title }}</option>
+                {% endif %}
+                {% endfor %}
+            </select>
 
-        <input type="submit" value="Add Post" class="btn btn-success" id="addPostButton">
+            <small class="form-text text-muted">You don't have to specify image or video, but if you do then only one of
+                them</small>
+                
+                <input type="submit" value="Post" class="btn btn-lg mt-2 btn-success" id="addPostButton">
+            </div>
     </form>
-    {% else %}
-    <h1 class="text-center">All topics</h1>
-    {% endif %}
-    {% endif %}
     {% for post in homepage_posts %}
     <a href="{% url 'people:people' post.user.id %}">
         {% if post.user.who_see_avatar == 'everyone' %}

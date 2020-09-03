@@ -126,21 +126,31 @@ def reply_like_dislike(request, reply_id):
         return redirect('comments:reply_like_dislike', reply_id)
 
 
+@login_required
 def create_post(request, pk):
-    category = get_object_or_404(Category, pk=pk)
-    posts_in_last_day = request.user.post_set.filter(Q(
-        post_date__gt=now() - datetime.timedelta(days=1)))
-    if posts_in_last_day.count() >= 5:
-        messages.error(
-            request, f'you have exceeded your 5 posts a day limit')
-        return redirect('categories:view_category', pk=pk)
-    elif request.POST.get('description') == '' and request.FILES.get('image') == None and request.FILES.get('post_file') == None:
+    try:
+        category = get_object_or_404(Category, pk=request.POST.get('id_category'))
+    except:
+        category = None
+    # posts_in_last_day = request.user.post_set.filter(Q(
+    #     post_date__gt=now() - datetime.timedelta(days=1)))
+    # if posts_in_last_day.count() >= 5:
+    #     messages.error(
+    #         request, f'you have exceeded your 5 posts a day limit')
+    #     return redirect('categories:view_category', pk=pk)
+    if request.POST.get('description') == '' and request.FILES.get('image') == None and request.FILES.get('post_file') == None:
         messages.error(request, 'Please spicify at leat one field')
-        return redirect('categories:view_category', pk=pk)
+        if category == None:
+            return redirect('home')
+        else:
+            return redirect('categories:view_category', pk=pk)
     elif request.FILES.get('image') != None and request.FILES.get('post_file') != None:
         messages.error(
             request, 'You can\'t have both image and video in the same field')
-        return redirect('categories:view_category', pk=pk)
+        if category == None:
+            return redirect('categories:view_category', pk=pk)
+        else:
+            return redirect('home')
     else:
         form = PostForm(data=request.POST, files=request.FILES)
         post = form.save(commit=False)
@@ -149,7 +159,7 @@ def create_post(request, pk):
         post.save()
         messages.success(
             request, 'Your post was uploaded, thanks for growing up our DFreeMedia community 💪🏻')
-        if request.POST.get('friendsOnlyPost') == 'Add Post':
+        if category == None:
             return redirect('home')
         else:
             return redirect('categories:view_category', pk=pk)

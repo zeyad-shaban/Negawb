@@ -5,41 +5,50 @@
     <h1 style="color: white;">{{category.title}}</h1>
 </div>
 <p class="text-center">{{ category.description }}</p>
-{% if user.is_authenticated %}
 <form method="POST" class="mb-4" enctype="multipart/form-data" action="{% url 'comments:create_post' category.id %}">
     {% csrf_token %}
-    <div class="form-group">
+    <div class="form-group col-md-5">
         <label for="id_post_description">Description</label>
         <textarea type="text" name="description" id="id_post_description" class="form-control"></textarea>
     </div>
     <div class="form-group">
-        <p><label for="id_post_image">Optional Image</label>
+        <p class="form-text text-muted"><label for="id_post_image">Image</label>
             <input type="file" name="image" accept="image/*" id="id_image"></p>
     </div>
     <div class="form-group">
-        <p><label for="id_post_image">Or Video</label>
+        <p class="form-text text-muted"><label for="id_post_image">Or Video</label>
             <input type="file" name="post_file" accept="video/*" id="id_post_file"></p>
     </div>
+    <label for="id_category">Topic</label>
+    <select name="id_category" id="id_category">
+        <option value="test">All</option>
+        {% for acategory in all_categories %}
+        {% if category and category.id == acategory.id  %}
+        <option value="{{ acategory.id }}" selected="selected">{{ acategory.title }}</option>
+        {% else %}
+        <option value="{{ acategory.id }}">{{ acategory.title }}</option>
+        {% endif %}
+        {% endfor %}
+    </select>
+
     <small class="form-text text-muted">You don't have to specify image or video, but if you do then only one of
         them</small>
-
-    <input type="submit" value="Add Post" class="btn btn-success" id="addPostButton">
+    <input type="submit" value="Post" class="btn btn-lg mt-2 ml-3 btn-success" id="addPostButton">
 </form>
-{% endif %}
 
 {% for post in posts %}
 <a href="{% url 'people:people' post.user.id %}">
     {% if post.user.who_see_avatar == 'everyone' %}
-    <img src="{{post.user.avatar.url}}" alt="{{ post.user.username }}" width="64" height="64"
+    <img src="{{post.user.avatar.url}}" alt="" width="64" height="64"
         class="mr-3 float-left {% if post.user.id <= 1000 %}oldUser{% endif %}" loading="lazy">
     {% elif post.user.who_see_avatar == 'friends' and user in post.user.friends.all %}
-    <img src="{{post.user.avatar.url}}" alt="{{ post.user.username }}" width="64" height="64"
+    <img src="{{post.user.avatar.url}}" alt="" width="64" height="64"
         class="mr-3 float-left {% if post.user.id <= 1000 %}oldUser{% endif %}" loading="lazy">
     {% elif post.user == user %}
-    <img src="{{post.user.avatar.url}}" alt="{{ post.user.username }}" width="64" height="64"
+    <img src="{{post.user.avatar.url}}" alt="" width="64" height="64"
         class="mr-3 float-left {% if post.user.id <= 1000 %}oldUser{% endif %}" loading="lazy">
     {% else %}
-    <img src="/media/profile_images/DefaultUserImage.jpg" alt="{{ post.user.username }}" width="64" height="64"
+    <img src="/media/profile_images/DefaultUserImage.jpg" alt="" width="64" height="64"
         class="mr-3 float-left {% if post.user.id <= 1000 %}oldUser{% endif %}" loading="lazy">
     {% endif %}
     <span>{{post.user.username}}</span>
@@ -55,7 +64,8 @@
                     More</a>{% endif %}</p>
         </blockquote>
         {% endif %}
-        <small class="form-text text-muted">{{post.views.count}} ♦︎ {{ post.post_date|date:'d M Y' }}</small>
+        <small class="form-text text-muted">{{post.views.count}} view{{ post.views.count|pluralize }} ♦︎
+            {{ post.post_date|date:'d M Y' }}</small>
 
         {% if post.image %}
         <img src="{{ post.image.url }}" alt="{{ post.user.username }}" height="250" width="40%">
