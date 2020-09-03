@@ -431,7 +431,8 @@
                         if (response.chat_messages.length > 0) {
                             let newLastMessageId = ''
                             for (message of chat_messages) {
-                                let senderAvatar = ''
+                            let senderAvatar = ''
+                            let senderUsername = ''
                                 $.ajax({
                                     url: "{% url 'userpage:get_user_by_id' %}",
                                     data:{
@@ -442,9 +443,9 @@
                                     async: false,
                                     success: function (response) {
                                         senderAvatar = response.user.avatar
+                                        senderUsername = response.user.username
                                     }
                                 })
-                                console.log(senderAvatar)
                                 newLastMessageId = message.pk
                                 $('.chat').append(`
                         <li class="other message" data-pk="${newLastMessageId}">
@@ -452,6 +453,7 @@
                         <img src="${senderAvatar}" alt="User Image" width="64" height="64">
                     </div>
                     <div class="msg">
+                        <p class="alert-secondary">${senderUsername}</p>
                         <p>${message.fields.message}</p>
                         <time>Now</time>
                     </div>
