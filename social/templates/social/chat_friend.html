@@ -52,7 +52,16 @@
             {% endif %}
         </div>
         <div class="msg">
+            {% if message.message %}
             <p>{{ message.message }}</p>
+            {% elif message.image %}
+            <img src="{{ message.image.url }}" draggable="false" style="max-width:450px; max-height:349px;"
+                loading="lazy">
+            {% elif message.file %}
+            <a href="{{ message.file.url }}" download>
+                <p><i class="fas fa-download" style="font-size:30px"></i> <span>{{ message.file.url }}</span></p>
+            </a>
+            {% endif %}
             <time>{{ message.date|timesince }} ago</time>
         </div>
     </li>

@@ -21,8 +21,10 @@ class Message(models.Model):
     message_sender = models.ForeignKey(
         User, related_name='message_sender', null=True, on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)
-    message = models.TextField()
+    message = models.TextField(blank=True, null=True)
     is_important = models.BooleanField(default=False)
+    file = models.FileField(upload_to='social_group_message_images', blank=True, null=True)
+    image = models.ImageField(upload_to='social/friend_message_images', blank=True, null=True)
 
     def __str__(self):
         return f'{self.message_sender} to ({self.chat_box}) ⚠️{self.is_important}⚠️'
