@@ -43,13 +43,15 @@ only, giving users the power to hide unwanted topics{% endblock description %}
 
 <!-- Homepage posts -->
 <div class="homepageItem" id="postsContainer">
-    {% if not user.is_authenticated or not user.homepage_posts %}
     <div class="text-center container">
-            <h1 class="text-center">All topics</h1>
-            <small>You can change the default homepage posts from the Distraction Free menu in you <a
-                    href="{% url 'userpage:home' %}">profile</a></small>
+        {% if not user.is_authenticated or not user.homepage_posts %}
+        <h1 class="text-center">All topics</h1>
+        <small>You can change the default homepage posts from the Distraction Free menu in you <a
+                href="{% url 'userpage:home' %}">profile</a></small>
+        {% else %}
+        <h1 class="text-center">{{ user.homepage_posts.title }}</h1>
+        {% endif %}
     </div>
-    {% endif %}
     <form method="POST" class="mb-4" enctype="multipart/form-data" action="{% url 'comments:create_post' 1 %}">
         <div class="ml-2">
             {% csrf_token %}
@@ -79,9 +81,9 @@ only, giving users the power to hide unwanted topics{% endblock description %}
 
             <small class="form-text text-muted">You don't have to specify image or video, but if you do then only one of
                 them</small>
-                
-                <input type="submit" value="Post" class="btn btn-lg mt-2 btn-success" id="addPostButton">
-            </div>
+
+            <input type="submit" value="Post" class="btn btn-lg mt-2 btn-success" id="addPostButton">
+        </div>
     </form>
     {% for post in homepage_posts %}
     <a href="{% url 'people:people' post.user.id %}">
