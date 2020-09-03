@@ -19,7 +19,7 @@
     <div class="last">{% if group.description %}{{ group.description }}{% endif %}</div>
 </div>
 <ul class="list-group list-group-horizontal fixed-top" style="margin-top: 50px">
-    <li class="list-group-item btn {% if not curr_area %}active{% endif %} areaItem">
+    <li class="list-group-item btn areaItem">
         <a href="{% url 'social:chat_group' group.id %}" class="btn">
             All
         </a>
@@ -75,7 +75,8 @@
     <select id="id_area_name" name='id_area_name'>
         <option value="None">All</option>
         {% for area in areas %}
-        <option value="{{ area.id }}">{{ area.name }}</option>
+        <option value="{{ area.id }}" {% if area.name == curr_area.name %}selected="selected" {% endif %}>
+            {{ area.name }}</option>
         {% endfor %}
     </select>
 
@@ -239,4 +240,66 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        window.addEventListener('load', function () {
+            $('#send').click(function (e) {
+                e.preventDefault();
+                $('#sendForm').submit();
+            })
+            $('#sendForm').submit(function (e) {
+                e.preventDefault();
+                let messageInput = $('#messageInput').val()
+                if (!messageInput == '') {
+                    // last message id
+                    let newLastMessageId = ''
+                    try {
+                        let messages = document.getElementsByClassName('message')
+                        newLastMessageId = parseInt(messages[messages.length - 1]
+                            .getAttribute(
+                                'data-pk')) + 1
+                    } catch {
+                        newLastMessageId = 1
+                    }
+
+                    // end last message id
+                    let isImportant = "False"
+                    if ($('#is_important').is(':checked')) {
+                        isImportant = "True"
+                    }
+                    // Todo
+                    $('.chat').append(`
+                        <li class="self message" data-pk="${newLastMessageId}">
+                    <div class="avatar">
+                        <img src="{{ user.avatar.url }}" alt="User Image" width="64" height="64">
+                    </div>
+                    <div class="msg">
+                        <p>{{ user.username }} - ${$('#id_area_name').children('option:selected').html()}</p>
+                        <p>${messageInput}</p>
+                        <time>Now</time>
+                    </div>
+                </li>
+                        `)
+                    $('#messageInput').val('')
+                    document.getElementById('notificationSound').play()
+                    window.scrollTo(0, document.body.scrollHeight);
+                    console.log($('#id_area_name').val())
+                    $.ajax({
+                        url: $('#sendForm').attr('action'),
+                        data: {
+                            'message': messageInput,
+                            'is_important': isImportant,
+                            'area': $('#id_area_name').val()
+                        },
+                        method: 'get',
+                        dataType: 'json',
+                        success: function (response) {}
+                    })
+                }
+            })
+        });
+    });
+</script>
+
 {% endblock content %}
