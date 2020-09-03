@@ -10,7 +10,6 @@
 {% endblock description %}
 
 {% block content %}
-St
 <link rel="stylesheet" href="{% static 'social/chat.css' %}">
 <div class="menu">
     <div class="back" id="back"><i class="fa fa-chevron-left"></i>
@@ -259,6 +258,10 @@ St
                             if (chat_messages.length > 0) {
                                 page++
                                 for (message of chat_messages) {
+                                    let messageArea = "All"
+                                    if (message.fields.area != null) {
+                                        messageArea = $('.areaItem').eq(message.fields.area).children().eq(0).html()
+                                    }
                                     let dateToString = d =>
                                         `${d.getFullYear()}-${('00' + (d.getMonth() + 1)).slice(-2)}-${('00' + d.getDate()).slice(-2)}`
                                     let messageDate = new Date(Date.parse(message.fields
@@ -292,7 +295,7 @@ St
                         <img src="${senderAvatar}" alt="User Image" width="64" height="64">
                     </div>
                     <div class="msg">
-                        <p class="alert-secondary">${senderUserName}</p>
+                        <p class="alert-secondary">${senderUserName} - ${messageArea}</p>
                         <p>${message.fields.message}</p>
                         <time>${date}</time>
                     </div>

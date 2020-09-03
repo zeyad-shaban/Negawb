@@ -10,7 +10,6 @@
 {% endblock description %}
 
 {% block content %}
-St
 <link rel="stylesheet" href="{% static 'social/chat.css' %}">
 <div class="menu">
     <div class="back" id="back"><i class="fa fa-chevron-left"></i>
@@ -20,9 +19,13 @@ St
     <div class="last">{% if group.description %}{{ group.description }}{% endif %}</div>
 </div>
 <ul class="list-group list-group-horizontal fixed-top" style="margin-top: 50px">
-    <li class="list-group-item btn active areaItem">All</li>
+    <li class="list-group-item btn {% if not curr_area %}active{% endif %} areaItem">
+        <a href="{% url 'social:chat_group' group.id %}" class="btn">
+            All
+        </a>
+    </li>
     {% for area in areas %}
-    <li class="list-group-item btn areaItem">
+    <li class="list-group-item btn areaItem {% if curr_area and curr_area.name == area.name %}active{% endif %}">
         <a class="btn" href="{% url 'social:load_area' group.id area.id %}">
             {{ area.name }}
         </a>
