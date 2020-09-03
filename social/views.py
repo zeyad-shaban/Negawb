@@ -335,7 +335,9 @@ def deny_group(request):
 
 def load_notifications(request):
     notification_type = request.GET.get('notification_type')
-    if notification_type == 'messages':
+    if not request.user.is_authenticated:
+        notifications = []
+    elif notification_type == 'messages':
         notifications = Notification.objects.filter(Q(receiver=request.user), Q(notification_type='important_friend_message') | Q(
             notification_type='important_group_message') | Q(notification_type='normal_friend_message') | Q(notification_type='normal_group_message')).order_by('-date')
     elif notification_type == 'society':

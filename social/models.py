@@ -86,7 +86,7 @@ class GroupMessage(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     message = models.TextField()
     is_important = models.BooleanField(default=False)
-    area = models.ForeignKey(Area, on_delete=models.CASCADE, null=True, blank=True)
+    area = models.ForeignKey(Area, on_delete=models.CASCADE, null=True, blank=True, default='')
 
     def __str__(self):
         return f'{self.message_sender}, {self.message} chat_box: {self.group}'
