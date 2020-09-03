@@ -244,6 +244,7 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         window.addEventListener('load', function () {
+            // Send message
             $('#send').click(function (e) {
                 e.preventDefault();
                 $('#sendForm').submit();
@@ -298,6 +299,10 @@
                     })
                 }
             })
+            // End send message
+
+            // Load new messages
+            // End load new messages
         });
     });
 </script>
