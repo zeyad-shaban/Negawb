@@ -180,15 +180,15 @@
                 <div id="groupSettings" class="groupItem">
                     <div class="d-block">
                         <h4 class="float-left">Areas</h4>
-
                         {% if user == group.author or user in group.group_admins.all %}
                         <form action="{% url 'social:create_area' group.id %}" method="GET" class="form-inline"
-                            id="createAreaForm">
-                            <button class="btn btn-success rounded-circle ml-5 float-left mr-2"><i class="fas fa-plus"
-                                    style="font-size:30px;" id="createArea"></i></button>
+                        id="createAreaForm">
+                        <button class="btn btn-success rounded-circle ml-5 float-left mr-2"><i class="fas fa-plus"
+                            style="font-size:30px;" id="createArea"></i></button>
                             <input type="text" name="name" id="id_name" class="form-group" required>
                         </form>
                         {% endif %}
+                        <small class="form-text text-muted">Areas makes messages stay clean and organized, each message should have an area, if it didn't it will be in "All"</small>
                     </div>
 
                     <ul class="list-group">
