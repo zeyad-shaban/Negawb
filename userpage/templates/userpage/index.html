@@ -6,14 +6,18 @@
 
 {% block description %}{{user.bio}}{% endblock description %}
 {% block content %}
-<img src="{{user.avatar.url}}" class="col-xl-2 col-lg-2 rounded-circle {% if user.id <= 1000 %}oldUser{% endif %}"
+<img src="{% if user.is_authenticated %}{{user.avatar.url}}{% else %}/media/profile_images/DefaultUserImage.jpg{% endif %}" class="col-xl-2 col-lg-2 rounded-circle {% if user.id <= 1000 %}oldUser{% endif %}"
     alt="" width="200" height="200" style="max-width:200px; max-height:200px;">
 <link rel="stylesheet" href="{% static 'userpage/index.css' %}">
 <button type="button" class="btn btn-outline-secondary float-right mr-5 mt-4" data-toggle="modal"
     data-target="#editProfile" data-whatever="editProfile"><i class="fas fa-edit"></i></button>
 <span class="ml-5">
+    {% if user.is_authenticated %}
     {% webpush_button with_class="btn btn-outline-info" %}
     <small>To allow notifications</small>
+    {% else %}
+    <span class="alert-danger">Please don't try to save any form since you are not logged in</span>
+    {% endif %}
 </span>
 <br>
 <ul class="list-group list-group-horizontal row justify-content-center mb-5 mt-5">
@@ -307,6 +311,9 @@
             <div class="card card-default" id="card_contacts">
     <div id="contacts" class="panel-collapse collapse show" aria-expanded="true">
         <ul class="list-group pull-down" id="contact-list">
+            {% if user.friends.count <= 0 or not user.is_authenticated %}
+            <h1>You have no friends</h1>
+            {% endif %}
             {% for friend in user.friends.all %}
             <li class="list-group-item">
                 <div class="row w-100">
@@ -382,7 +389,6 @@
                     $('#mainContainer').html(`
                 <small class="from-text text-muted float-right mr-3"><a href="{% url 'people:all_people' %}">Find Friend</a></small>
 <h1>Friends Requests</h1>
-<p>{{requests.count}} Friend Request{{requests.count|pluralize}}</p>
 <br>
 
 {% for request in requests %}
@@ -411,7 +417,6 @@
 {% endfor %}
 <hr>
 <h1>Group Requests</h1>
-<p>{{group_requests.count}} Group Request{{group_requests.count|pluralize}}</p>
 <br>
 {% for request in group_requests %}
 <div class="media" id="{{request.id}}Group">

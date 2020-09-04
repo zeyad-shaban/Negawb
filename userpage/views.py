@@ -19,18 +19,35 @@ User = user_model()
 
 def home(request):
     user = request.user
-    form = UserForm(instance=request.user)
-    privacy_form = UserPrivacyForm(instance=request.user)
-    distraction_free_form = DistractionFreeForm(instance=request.user)
-    requests = FriendRequest.objects.filter(to_user=request.user)
-    group_requests = GroupRequest.objects.filter(reciever=request.user)
-    total_requests_count = len(requests) + len(group_requests)
+    # Forms
+    form = UserForm()
+    privacy_form = UserPrivacyForm()
+    distraction_free_form = DistractionFreeForm()
+    if request.user.is_authenticated:
+        form = UserForm(instance=request.user)
+        privacy_form = UserPrivacyForm(instance=request.user)
+        distraction_free_form = DistractionFreeForm(instance=request.user)
+    # Requests
+    requests = []
+    group_requests = []
+    total_requests_count = []
+    if request.user.is_authenticated:
+        requests = FriendRequest.objects.filter(to_user=request.user)
+        group_requests = GroupRequest.objects.filter(reciever=request.user)
+        total_requests_count = len(requests) + len(group_requests)
     # Invites
-    user_invites = FriendRequest.objects.filter(from_user=request.user).order_by('-date')
-    user_group_invites = GroupRequest.objects.filter(request_sender=request.user).order_by('-date')
-    total_user_invites_count = len(user_invites) + len(user_group_invites)
-    
-    user_posts_list = request.user.post_set.all()
+    user_invites = []
+    user_group_invites = []
+    total_user_invites_count = []
+    if request.user.is_authenticated:
+        user_invites = FriendRequest.objects.filter(
+            from_user=request.user).order_by('-date')
+        user_group_invites = GroupRequest.objects.filter(
+            request_sender=request.user).order_by('-date')
+        total_user_invites_count = len(user_invites) + len(user_group_invites)
+    user_posts_list = []
+    if request.user.is_authenticated:
+        user_posts_list = request.user.post_set.all()
     page = request.GET.get('page')
     paginator = Paginator(user_posts_list, 5)
     try:
@@ -40,7 +57,7 @@ def home(request):
     except EmptyPage:
         user_posts = paginator.page(paginator.num_pages)
     if request.method == 'GET':
-        return render(request, 'userpage/index.html', {'user': user, 'form': form, 'privacy_form': privacy_form, 'distraction_free_form': distraction_free_form, 'requests': requests, 'group_requests': group_requests, 'total_requests': total_requests_count, 'user_posts': user_posts, 'user_invites': user_invites, 'user_group_invites':user_group_invites, 'total_user_invites_count':total_user_invites_count })
+        return render(request, 'userpage/index.html', {'user': user, 'form': form, 'privacy_form': privacy_form, 'distraction_free_form': distraction_free_form, 'requests': requests, 'group_requests': group_requests, 'total_requests': total_requests_count, 'user_posts': user_posts, 'user_invites': user_invites, 'user_group_invites': user_group_invites, 'total_user_invites_count': total_user_invites_count})
     elif request.POST.get('submit') == 'Update':
         try:
             # if request.POST.get('email'):
@@ -82,22 +99,6 @@ def posts(request):
     except EmptyPage:
         posts = paginator.page(paginator.num_pages)
     return render(request, 'userpage/posts.html', {'posts': posts})
-
-
-# @login_required
-# def friends(request):
-#     if request.method == 'GET':
-#         friends = User.objects.filter(friends=request.user)
-#         groups = ChatGroup.objects.filter(members=request.user)
-#         return render(request, 'userpage/friends.html', {'friends': friends, 'groups': groups})
-
-
-@login_required
-def friendsresult(request):
-    query = request.GET.get('q')
-    results = User.objects.filter(
-        Q(username__icontains=query), friends=request.user)
-    return JsonResponse({'results': serialize('json', results)})
 
 
 @login_required
