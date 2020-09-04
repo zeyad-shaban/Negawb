@@ -10,32 +10,96 @@ normal{% endblock description %}
 
 
 {% block content %}
+<section>
+
+    <div class="container-fluid">
+
+        <div class="row about-bg">
+            <div class="col-md-6">
+
+            </div>
+            <div class="col-md-6 col-sm-6 col-xs-12 about-bg-layer">
+
+
+                <div class="">
+                    <div class="about-content-box">
+                        <div class="about-heading">
+
+                            <h1>ABOUT US</h1>
+                            <h2>Dfreemedia</h2>
+                            <p>A social media platform made to be less distractive and more productive</p>
+                        </div>
+                        <div class="about-txt">
+                            <p>
+                                How are we unique?
+                                <br>
+                                <ul>
+                                    <li>Group chat are devided into areas to prevent distraction and keep the chat as
+                                        organized as possible</li>
+                                    <li>Posts are divided into topics, were you can choose which topic to be displayed
+                                        as your main homepage posts to get only relevant posts</li>
+                                    <li>Last put not least we provide users with the power to hide any unwanted thing
+                                        from a settings menu in the user profile called "Distraction Free"
+                                        <ul>
+                                            <li>This includes hiding Notifications, comments, posts,</li>
+                                            <li> Turning the app into chat only </li>
+                                            <li> And choosing your default topic for homepage posts</li>
+                                        </ul>
+                                    </li>
+
+                                </ul>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div style="float:right; color:#fff;">
+                        Author:: <a href="https://www.dfreemedia.com/people/1/">Zeyad Shaban</a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</section>
+
+
+
+
+
 <style>
-    body {
-        font-size: 2.25em;
-        background-color: #65bbf18c !important;
+    .about-bg {
+        background-image: url("");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+    }
+
+    .about-heading>p {
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+    .about-txt>p {
+        font-size: 18px;
+        text-align: center;
+
+    }
+
+    .about-content-box {
+        padding-top: 100px;
+        padding-bottom: 100px;
+        padding-left: 70px;
+        padding-right: 70px;
+        color: #fff;
+    }
+
+    .about-bg-layer {
+        background-color: rgba(62, 207, 182, 0.70);
+        height: 200%;
+        margin: 0px;
     }
 </style>
-<div class="text-center">
-    <video width="100%" controls class="col-md-10 col-lg-8">
-        <source src="{% static 'production/DFMPres.mp4' %}" type="video/mp4">
-        <source src="{% static 'production/DFMPres.mp4' %}" type="video/ogg">
-        Your browser does not support the video tag.
-    </video>
-    <h1>Is Social media is wasting your life?</h1>
-    <h1> Are you getting distracted and forgetting why you even opened the app?</h1>
-    <h1>Do you want an organized chat?</h1>
-    <h1>No worries that's why Dfreemedia is here</h1>
-    <br>
-    <br>
-    <br>
-    <h1>We divide group chat into areas, were each message should have its area to keep chat and effective</h1>
-    <br>
-    <br>
-    <h1>We divide posts according to their topic to help you stay focused and receive relevant topics
-        only, giving users the power to chose which topics to be displayed in their homepage from the Distraction Free menu</h1>
-    <h4>Distraction Free menu?</h4>
-    <h1>A very unique menu we provide to help users hide any unwanted thing to stay focused and receive relevant things only, this includes notifications, posts, comments, replies, topics, and turning the app into chat only app</h1>
-    </h4>
-</div>
+
 {% endblock content %}
