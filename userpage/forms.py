@@ -27,19 +27,17 @@ class DistractionFreeForm(ModelForm):
     class Meta:
         model = User
         fields = ('hide_comments','hide_followed_posts', 'homepage_posts', 'allow_important_friend_messages', 'allow_important_group_message', 'allow_normal_friend_message', 'allow_normal_group_message',
-                'allow_comment_message', 'allow_reply_message', 'allow_invites', 'your_invites', 'blocked_topics', 'chat_only_mode', 'fixed_navbar',)
+                'allow_comment_message', 'allow_reply_message', 'allow_invites', 'your_invites', 'chat_only_mode', 'fixed_navbar',)
         labels = {
             'allow_important_friend_messages': 'Friend\'s important message',
             'allow_important_group_message': 'Group important message',
             'allow_important_group_message': 'Group important message',
             'allow_normal_friend_message': 'Friend\'s normal message',
             'allow_normal_group_message': 'Group normal message',
-            'allow_comment_message': 'Post Comments',
-            'allow_reply_message': 'Comment replies',
-            'allow_invites': 'friend and group <b>Invites</b>',
+            'allow_comment_message': '<hr>Comments',
+            'allow_reply_message': 'Replies',
+            'allow_invites': '<hr>friend and group Invites',
             'your_invites':'Your own invites',
             'homepage_posts': 'Homepage posts <small class="form-text text-muted">Choose the ----- for all topics</small>',
-            'blocked_topics': 'Blocked topics <small class="form-text">hold ctrl/command for destokp users to block categories</small>',
-            'chat_only_mode': '<b>Chat only mode</b>',
-            'fixed_navbar': '<hr>Fixed navbar',
+            'chat_only_mode': '<b style="color:orange;">Chat only mode</b>',
         }

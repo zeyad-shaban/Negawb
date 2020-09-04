@@ -39,8 +39,6 @@ class User(AbstractUser):
 
     # DISTRACTION FREE!!!!!!!!!!!!!!!
     hide_comments = models.BooleanField(default=False)
-    blocked_topics = models.ManyToManyField(
-        Category, related_name='blocked_topics', blank=True)
     chat_only_mode = models.BooleanField(default=False)
     hide_followed_posts = models.BooleanField(default=False)
     fixed_navbar = models.BooleanField(default=True)

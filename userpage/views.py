@@ -17,7 +17,6 @@ from social.models import GroupRequest, ChatGroup, Notification
 User = user_model()
 
 
-@login_required
 def home(request):
     user = request.user
     form = UserForm(instance=request.user)
