@@ -1,14 +1,5 @@
-{% extends 'categories/base.html' %}
-{% block title %}Meet Famous people in Dfreemedia | Dfreemedia{% endblock title %}
+{% extends 'categories/postbase.html' %}
 
-{% block description %}Are you famous person with more than 50K followers? or want a great filter system to get famous people only! Try out this social media platform | Dfreemedia{% endblock description %}
+{% block title %}Posts about Sport | Dfreemedia {% endblock title %}
 
-{% block content %}
-<div class="text-center mb-2 mr-5 ml-5 rounded" style="background: #1DA1F2"><h1 style="color: white;">{{category.title}}</h1></div>
-{% if user.followers.count >= 50000 %}
-<h1>YOU AREA FAMOUSE!</h1>
-{% else %}
-<small class="form-text text-muted">You must have +50K followers to add posts, but you can comment, reply, and view.</small>
-{% endif %}
-
-{% endblock content %}
+{% block description %}Share your favourite team statics in Dfreemedia{% endblock description %}

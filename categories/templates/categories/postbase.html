@@ -65,7 +65,7 @@
         </blockquote>
         {% endif %}
         <small class="form-text text-muted">{{post.views.count}} view{{ post.views.count|pluralize }} ♦︎
-            {{ post.post_date|date:'d M Y' }}</small>
+            {{ post.post_date|timesince }} ago -{% if post.category %} {{ post.category.title }} {% else %} All {% endif %} Topic</small>
 
         {% if post.image %}
         <img src="{{ post.image.url }}" alt="{{ post.user.username }}" height="250" width="40%">

@@ -51,7 +51,7 @@
             <p class="text-break">{{post.description}}</p>
         </blockquote>
         {% endif %}
-        <small class="form-text text-muted">{{post.views.count}} Views ♦︎ {{ post.post_date|date:'d M Y' }}</small>
+        <small class="form-text text-muted">{{post.views.count}} Views ♦︎ {{ post.post_date|timesince }} ago -{% if post.category %} {{ post.category.title }} {% else %} All {% endif %} Topic</small>
 
         {% if post.image %}
         <img src="{{ post.image.url }}" alt="{{ post.user.username }}" height="w" width="40%">
