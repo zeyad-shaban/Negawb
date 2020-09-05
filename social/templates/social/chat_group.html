@@ -182,13 +182,14 @@
                         <h4 class="float-left">Areas</h4>
                         {% if user == group.author or user in group.group_admins.all %}
                         <form action="{% url 'social:create_area' group.id %}" method="GET" class="form-inline"
-                        id="createAreaForm">
-                        <button class="btn btn-success rounded-circle ml-5 float-left mr-2"><i class="fas fa-plus"
-                            style="font-size:30px;" id="createArea"></i></button>
+                            id="createAreaForm">
+                            <button class="btn btn-success rounded-circle ml-5 float-left mr-2"><i class="fas fa-plus"
+                                    style="font-size:30px;" id="createArea"></i></button>
                             <input type="text" name="name" id="id_name" class="form-group" required>
                         </form>
                         {% endif %}
-                        <small class="form-text text-muted">Areas makes messages stay clean and organized, each message should have an area, if it didn't it will be in "All"</small>
+                        <small class="form-text text-muted">Areas makes messages stay clean and organized, each message
+                            should have an area, if it didn't it will be in "All"</small>
                     </div>
 
                     <ul class="list-group">
@@ -431,25 +432,29 @@
                         if (response.chat_messages.length > 0) {
                             let newLastMessageId = ''
                             for (message of chat_messages) {
-                                let senderAvatar = ''
-                                let senderUsername = ''
-                                $.ajax({
-                                    url: "{% url 'userpage:get_user_by_id' %}",
-                                    data: {
-                                        'pk': message.fields.message_sender,
-                                    },
-                                    method: 'get',
-                                    dataType: 'json',
-                                    async: false,
-                                    success: function (response) {
-                                        senderAvatar = response.user
-                                            .avatar
-                                        senderUsername = response.user
-                                            .username
-                                    }
-                                })
-                                newLastMessageId = message.pk
-                                $('.chat').append(`
+                                if (message.fields.message_sender !=
+                                    "{{ user.id }}") {
+                                    let senderAvatar = ''
+                                    let senderUsername = ''
+                                    $.ajax({
+                                        url: "{% url 'userpage:get_user_by_id' %}",
+                                        data: {
+                                            'pk': message.fields
+                                                .message_sender,
+                                        },
+                                        method: 'get',
+                                        dataType: 'json',
+                                        async: false,
+                                        success: function (response) {
+                                            senderAvatar = response.user
+                                                .avatar
+                                            senderUsername = response
+                                                .user
+                                                .username
+                                        }
+                                    })
+                                    newLastMessageId = message.pk
+                                    $('.chat').append(`
                         <li class="other message" data-pk="${newLastMessageId}">
                     <div class="avatar">
                         <img src="${senderAvatar}" alt="User Image" width="64" height="64">
@@ -461,8 +466,9 @@
                     </div>
                 </li>
                         `)
-                                document.querySelector('#notificationSound')
-                                    .play();
+                                    document.querySelector('#notificationSound')
+                                        .play();
+                                }
                             }
                         }
                     }
