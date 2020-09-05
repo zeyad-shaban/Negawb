@@ -393,6 +393,8 @@ def take_down_friend_request(request, pk):
     return JsonResponse({})
 
 # Area
+
+
 def create_area(request, pk):
     group = get_object_or_404(ChatGroup, pk=pk)
     if request.user == group.author or request.user in group.group_admins.all():
@@ -400,12 +402,14 @@ def create_area(request, pk):
         area.save()
         return JsonResponse({})
 
+
 def delete_area(request, pk):
     area = get_object_or_404(Area, pk=pk)
     group = area.group
     if request.user == group.author or request.user in group.group_admins.all():
         area.delete()
     return JsonResponse({})
+
 
 def load_area(request, group_pk, area_pk):
     group = get_object_or_404(ChatGroup, pk=group_pk)
@@ -434,7 +438,7 @@ def load_area(request, group_pk, area_pk):
     # form
     form = ChatGroupForm(instance=group)
     if request.method == 'GET' and not request.GET.get('action') and not request.GET.get('page'):
-        return render(request, 'social/load_area.html', {'group': group, 'chat_messages': chat_messages, 'form': form, 'areas': areas, 'curr_area':area,})
+        return render(request, 'social/load_area.html', {'group': group, 'chat_messages': chat_messages, 'form': form, 'areas': areas, 'curr_area': area, })
 
     elif request.GET.get('action') == 'load_new_messages':
         last_message_id = int(request.GET.get('last_message_id'))
@@ -442,8 +446,36 @@ def load_area(request, group_pk, area_pk):
             group=group, id__gt=last_message_id, area=area).order_by('date')
         return JsonResponse({'chat_messages': serialize('json', chat_messages)})
 
-
-
     # # Paginate messages
     # elif request.GET.get('page'):
     #     return JsonResponse({'chat_messages': serialize('json', chat_messages)})
+
+
+def search_users(request):
+    q = request.GET.get('q')
+    # Todo add phone
+    results = User.objects.filter(
+        (Q(username__icontains=q) | Q(email__icontains=q)), ~Q(id=request.user.id))
+    serialized_results = []
+    for result in results:
+        if result.who_see_avatar == 'everyone' or result == request.user:
+            result_avatar = result.avatar.url
+        elif result.who_see_avatar == 'friends' and request.user in result.friends.all():
+            result_avatar = result.avatar.url
+        else:
+            result_avatar = '/media/profile_images/DefaultUserImage.jpg'
+        invite = True
+        if result.who_add_group == 'none' or (result.who_add_group == 'friends' and not request.user in result.friends.all()):
+            invite = False
+        serialized_results.append({
+            'id': result.id,
+            'username': result.username,
+            'bio': result.bio,
+            'avatar': result_avatar,
+            'email': result.email,
+            # 'phone': result.phone,
+            'is_allowed_group_invite': invite,
+        })
+
+        print(serialized_results)
+    return JsonResponse({'results': serialized_results})

@@ -22,4 +22,6 @@ urlpatterns = [
     path('create_area/<int:pk>/', views.create_area, name='create_area'),
     path('delete_area/<int:pk>/', views.delete_area, name='delete_area'),
     path('load_area/<int:group_pk>/<int:area_pk>/', views.load_area, name='load_area'),
+    # users
+    path('search_users/', views.search_users, name='search_users')
 ]
