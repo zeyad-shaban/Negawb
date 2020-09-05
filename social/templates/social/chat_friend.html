@@ -180,7 +180,6 @@
                 }
             })
             // Load new messages
-            // Todo use webSockets
             setInterval(() => {
                 let lastMessageId = ''
                 try {
@@ -204,8 +203,10 @@
                         if (response.chat_messages.length > 0) {
                             let newLastMessageId = ''
                             for (message of chat_messages) {
-                                newLastMessageId = message.pk
-                                $('.chat').append(`
+                                if (chat_message.fields.message_sender !=
+                                    "{{ user.id }}") {
+                                    newLastMessageId = message.pk
+                                    $('.chat').append(`
                         <li class="other message" data-pk="${newLastMessageId}">
                     <div class="avatar">
                         <img src="${$('#friendAvatar').attr('src')}" alt="User Image" width="64" height="64">
@@ -216,8 +217,9 @@
                     </div>
                 </li>
                         `)
-                                document.querySelector('#notificationSound')
-                                    .play();
+                                    document.querySelector('#notificationSound')
+                                        .play();
+                                }
                             }
                         }
                     }

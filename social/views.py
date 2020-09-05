@@ -360,10 +360,10 @@ def delete_group(request, pk):
     group = get_object_or_404(ChatGroup, pk=pk)
     if request.user == group.author:
         group.delete()
-        return redirect('social:chat')
+        return redirect('chat')
     else:
         messages.error(request, 'Only the group owner can delete the group')
-        return redirect('social:chat')
+        return redirect('social:chat_group', pk=pk)
 
 
 def leave_group(request, pk):
