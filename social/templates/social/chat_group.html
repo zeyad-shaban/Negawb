@@ -158,10 +158,10 @@
 
                             <div class="media-body">
                                 {% if friend.who_add_group == 'everyone' or friend.who_add_group == 'friends' %}
-                                <p class="float-right inviteFriend btn"
-                                    data-url="{% url 'social:send_group_invite' friend.id group.id %}">
+                                <a class="float-right inviteFriend btn"
+                                    href="{% url 'social:send_group_invite' friend.id group.id %}">
                                     <i class="fas fa-user-plus" style="font-size: 36px; color: green;"></i> Invite
-                                </p>
+                                </a>
                                 {% else %}
                                 <p class="float-right"><i class="fas fa-shield-alt"
                                         style="font-size: 36px; color: red;"></i> You can't add</p>
@@ -353,7 +353,7 @@
                 $(this).parent().parent().fadeOut()
                 e.preventDefault();
                 $.ajax({
-                    url: $(this).attr('data-url'),
+                    url: $(this).attr('href'),
                     data: {},
                     method: 'get',
                     dataType: 'json',
@@ -541,10 +541,10 @@
                         $('.inviteUserResults').html('')
 
                         for (result of response.results) {
-                            let invite = `<p class="float-right inviteFriend btn"
-                                    data-url="/send_group_invite/${result.id}/{{ group.id }}/">
+                            let invite = `<a class="float-right inviteFriend btn"
+                                    href="/social/send_group_invite/${result.id}/{{ group.id }}/">
                                     <i class="fas fa-user-plus" style="font-size: 36px; color: green;"></i> Invite
-                                </p>`
+                                </a>`
                             if (!result.is_allowed_group_invite) {
                                 console.log('You cant invite')
                                 invite = `<p class="float-right"><i class="fas fa-shield-alt"
@@ -576,6 +576,24 @@
                         </li>
                             `)
                         }
+
+                        function invite() {
+                            $('.inviteFriend').click(function (e) {
+                                $(this).parent().parent().fadeOut()
+                                e.preventDefault();
+                                $.ajax({
+                                    url: $(this).attr('href'),
+                                    data: {},
+                                    method: 'get',
+                                    dataType: 'json',
+                                    success: function (response) {}
+                                })
+                            })
+                        }
+                        var g = document.createElement('script')
+                        var s = document.getElementsByTagName('script')[0]
+                        s.text = invite()
+                        s.parentNode.insertBefore(g, s)
                     }
                 })
 
