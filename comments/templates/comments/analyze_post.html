@@ -1,15 +1,154 @@
 {% extends 'categories/base.html' %}
 
 {% block title %}
-    Analyze {{post.description|truncatechars:60}}
+Analyze {{post.description|truncatechars:60}}
 {% endblock title %}
 
 
 {% block description %}
-    {{post.description |truncatechars:180}}
+{{post.description |truncatechars:180}}
 {% endblock description %}
 
 
 {% block content %}
-    Analyzing...
+<ul class="list-group list-group-horizontal">
+    <li class="list-group-item analyzeItem btn">Dashboard</li>
+    <li class="list-group-item analyzeItem btn">Views</li>
+    <li class="list-group-item analyzeItem btn">Likes</li>
+</ul>
+<div id="views" class="analyzeView">
+    <h4>Views {{ post.views.count }}</h4>
+    {% for user in post.views.all %}
+    <li class="list-group-item col-md-6">
+        <div class="row w-100">
+            <div class="col-12 col-sm-6 col-md-3 px-0">
+                <a href="{% url 'people:people' user.id %}">
+                    {% if user.who_see_avatar == 'everyone' %}
+                    <img src="{{ user.avatar.url }}" alt="{{ user.username }}"
+                        class="img-fluid rounded-circle d-block mx-auto {% if user.id <= 1000 %}oldUser{% endif %}"
+                        height="73" width="73">
+                    {% elif user.who_see_avatar == 'friends' and user in user.friends.all %}
+                    <img src="{{ user.avatar.url }}" alt="{{ user.username }}"
+                        class="img-fluid rounded-circle d-block mx-auto {% if user.id <= 1000 %}oldUser{% endif %}"
+                        height="73" width="73">
+                    {% else %}
+                    <img src="/media/profile_images/DefaultUserImage.jpg" alt="{{ user.username }}"
+                        class="img-fluid rounded-circle d-block mx-auto {% if user.id <= 1000 %}oldUser{% endif %}"
+                        height="73" width="73">
+                    {% endif %}
+                </a>
+            </div>
+
+            <div class="col-12 col-sm-6 col-md-9 text-center text-sm-left">
+                <a href="{% url 'people:people' user.id %}">
+                    <label class="name lead">{{ user.username }}</label>
+                </a>
+                <br>
+
+                {% if user.phone %}
+                <span class="fa fa-fw fa-phone fa-fw text-muted" data-toggle="tooltip" title="Phone Number"
+                    data-original-title="{{ user.phone }}"></span>
+                <span class="text-muted small">{{ user.phone }}</span>
+                <br>
+                {% endif %}
+                {% if user.email and user.show_email == True %}
+                <span class="fa fa-fw fa-envelope fa-fw text-muted" data-toggle="tooltip" title="Email"
+                    data-original-title="{{ user.email }}"></span>
+                <span class="text-muted small text-truncate">{{ user.email }}</span>
+                <br>
+                {% endif %}
+                <span class="small text-truncate">{{ user.bio }}</span>
+                {% if user == user or user in user_friends %}
+                {%  else %}
+                <form action="{% url 'people:addfriend' %}" method="GET" id="idAddFriendForm">
+                    <input type="button" value="Add Friend" onclick="$(this).fadeOut()" name="addfriend,"
+                        class="btn btn-success float-right" id='idAddFriendButton{{ user.id }}'>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+    </li>
+    {% endfor %}
+</div>
+<div id="likes_dislikes" class="analyzeView">
+    <h4>Likes {{ post.likes.count }}</h4>
+    {% for user in post.likes.all %}
+    <li class="list-group-item col-md-6">
+        <div class="row w-100">
+            <div class="col-12 col-sm-6 col-md-3 px-0">
+                <a href="{% url 'people:people' user.id %}">
+                    {% if user.who_see_avatar == 'everyone' %}
+                    <img src="{{ user.avatar.url }}" alt="{{ user.username }}"
+                        class="img-fluid rounded-circle d-block mx-auto {% if user.id <= 1000 %}oldUser{% endif %}"
+                        height="73" width="73">
+                    {% elif user.who_see_avatar == 'friends' and user in user.friends.all %}
+                    <img src="{{ user.avatar.url }}" alt="{{ user.username }}"
+                        class="img-fluid rounded-circle d-block mx-auto {% if user.id <= 1000 %}oldUser{% endif %}"
+                        height="73" width="73">
+                    {% else %}
+                    <img src="/media/profile_images/DefaultUserImage.jpg" alt="{{ user.username }}"
+                        class="img-fluid rounded-circle d-block mx-auto {% if user.id <= 1000 %}oldUser{% endif %}"
+                        height="73" width="73">
+                    {% endif %}
+                </a>
+            </div>
+
+            <div class="col-12 col-sm-6 col-md-9 text-center text-sm-left">
+                <a href="{% url 'people:people' user.id %}">
+                    <label class="name lead">{{ user.username }}</label>
+                </a>
+                <br>
+
+                {% if user.phone %}
+                <span class="fa fa-fw fa-phone fa-fw text-muted" data-toggle="tooltip" title="Phone Number"
+                    data-original-title="{{ user.phone }}"></span>
+                <span class="text-muted small">{{ user.phone }}</span>
+                <br>
+                {% endif %}
+                {% if user.email and user.show_email == True %}
+                <span class="fa fa-fw fa-envelope fa-fw text-muted" data-toggle="tooltip" title="Email"
+                    data-original-title="{{ user.email }}"></span>
+                <span class="text-muted small text-truncate">{{ user.email }}</span>
+                <br>
+                {% endif %}
+                <span class="small text-truncate">{{ user.bio }}</span>
+                {% if user == user or user in user_friends %}
+                {%  else %}
+                <form action="{% url 'people:addfriend' %}" method="GET" id="idAddFriendForm">
+                    <input type="button" value="Add Friend" onclick="$(this).fadeOut()" name="addfriend,"
+                        class="btn btn-success float-right" id='idAddFriendButton{{ user.id }}'>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+    </li>
+    {% endfor %}
+</div>
+<div id="dashboard" class="analyzeView">
+    <h4>Dashboard</h4>
+    <h4>Under Developing... if you want it to be done early leave us a feedback</h4>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        window.addEventListener('load', function () {
+            $('.analyzeItem').click(function (e) {
+                e.preventDefault();
+                if (!$(this).hasClass('active')) {
+                    $('.analyzeView').hide()
+                    $('.analyzeItem').removeClass('active')
+                    $(this).addClass('active')
+                    if ($(this).html() == 'Views') {
+                        $('#views').show()
+                    } else if ($(this).html() == 'Likes') {
+                        $('#likes_dislikes').show()
+                    } else if ($(this).html() == 'Dashboard') {
+                        $('#dashboard').show()
+                    }
+                }
+            })
+            $('.analyzeItem').eq(1).click()
+        });
+    });
+</script>
 {% endblock content %}
