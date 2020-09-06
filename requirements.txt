@@ -18,6 +18,7 @@ django-channels==0.7.0
 django-cleanup==5.0.0
 django-crispy-forms==1.9.2
 django-webpush==0.3.3
+django-sendsms==0.4
 hiredis==1.1.0
 http-ece==1.1.0
 hyperlink==20.0.1

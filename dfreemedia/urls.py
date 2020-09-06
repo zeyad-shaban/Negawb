@@ -73,6 +73,8 @@ urlpatterns = [
     path('set_email_and_phone', users_views.set_email_and_phone, name="set_email_and_phone"),
     path('send_email_code', users_views.send_email_code, name="send_email_code"),
     path('confirm_email', users_views.confirm_email, name="confirm_email"),
+    path('send_phone_code', users_views.send_phone_code, name="send_phone_code"),
+    path('confirm_phone', users_views.confirm_phone, name="confirm_phone"),
     # Web-Push
     path('webpush/', include('webpush.urls')),
 ]

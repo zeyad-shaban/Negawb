@@ -10,6 +10,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from random import randint
 from django.contrib.auth import get_user_model as user_model
+from sendsms.api import send_sms
 User = user_model()
 
 
@@ -115,6 +116,28 @@ def confirm_email(request):
     if user_code == request.user.email_code:
         request.user.email = request.GET.get('email')
         request.user.email_code = None
+        request.user.save()
+        return JsonResponse({'status': 'success'})
+    else:
+        return JsonResponse({'status': 'fail'})
+
+# Confirm phone number
+@login_required
+def send_phone_code(request):
+    request.user.phone_code = None
+    phone = request.GET.get('phone')
+    confirmation_code = randint(100000, 999999)
+    send_sms(body=f'Dfreemedia confirmation code:  {confirmation_code}', from_phone='+201068368804', to=[phone])
+    request.user.phone_code = confirmation_code
+    request.user.save()
+    return JsonResponse({})
+
+@login_required
+def confirm_phone(request):
+    user_code = int(request.GET.get('code'))
+    if user_code == request.user.phone_code:
+        request.user.phone = request.GET.get('phone')
+        request.user.phone_code = None
         request.user.save()
         return JsonResponse({'status': 'success'})
     else:

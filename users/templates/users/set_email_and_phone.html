@@ -19,23 +19,25 @@ you{% endblock description %}
     <small class="form-text text-muted">Current: {% if not user.email %}None{% endif %}{{ user.email }}</small>
     <div id="loadingEmail"></div>
     <br>
-    <h4>Enter the email six digit code here</h4>
+    <h4>Enter the six digit code here</h4>
     <br>
-    <input type="text" name="code" id="id_emailCode" class="form-control" style="max-width: 150px; display: inline" maxlength="6">
+    <input type="text" name="code" id="id_emailCode" class="form-control" style="max-width: 150px; display: inline"
+        maxlength="6">
     <button class="btn btn-success" id="submitEmailCode">Confirm</button>
     <hr>
     <br class="mb-3">
 
     <span>Phone number: <input type="text" name="phone" id="id_phone" class="form-control col-md-6 d-inline ml-2"
-            placeholder="" style="max-width:250px"></span>
+            placeholder="+41791234567" style="max-width:250px"></span>
     <button class="btn btn-success" id="submitPhone">Submit</button>
     <br>
     <small class="form-text text-muted">Current: {% if not user.phone %}None{% endif %}{{ user.phone }}</small>
     <div id="loadingPhone"></div>
     <br>
-    <h4>Enter the Sms six digit code here</h4>
+    <h4>Enter the six digit code here</h4>
     <br>
-    <input type="text" name="phoneCode" id="id_phoneCode" class="form-control" style="max-width: 150px; display: inline" maxlength="6">
+    <input type="text" name="phoneCode" id="id_phoneCode" class="form-control" style="max-width: 150px; display: inline"
+        maxlength="6">
     <button class="btn btn-success" id="submitPhoneCode">Confirm</button>
 </div>
 <br>
@@ -63,15 +65,16 @@ you{% endblock description %}
                         method: 'get',
                         dataType: 'json',
                         success: function (response) {
+                            $('#submitEmail').html('Send again')
                             $('#loadingEmail').html(
                                 '<i class="far fa-check-circle" style="color: green; font-size: 40px"></i>'
-                                )
+                            )
                         }
                     })
                 } else {
                     $('#loadingEmail').html(
                         '<p class="alert alert-danger" style="max-width: 400px">Please enter a valid email address</p>'
-                        )
+                    )
                 }
             })
             $('#submitEmailCode').click(function (e) {
@@ -87,7 +90,46 @@ you{% endblock description %}
                     success: function (response) {
                         console.log('Success vertifing')
                         if (response.status == 'success') {
-                            alert('Your email was confirmed')
+                            alert('Your email was vertified')
+                        } else {
+                            alert('Wrong code')
+                        }
+                    }
+                })
+            })
+            $('#submitPhone').click(function (e) {
+                e.preventDefault();
+                $('#loadingPhone').html(`<div class="spinner-border" role="status">
+  <span class="sr-only">Loading...</span>
+</div>`)
+                $.ajax({
+                    url: "{% url 'send_phone_code' %}",
+                    data: {
+                        'phone': $('#id_phone').val(),
+                    },
+                    method: 'get',
+                    dataType: 'json',
+                    success: function (response) {
+                        $('#submitPhone').html('Send again')
+                        $('#loadingPhone').html(
+                            '<i class="far fa-check-circle" style="color: green; font-size: 40px"></i>'
+                        )
+                    }
+                })
+            })
+            $('#submitPhoneCode').click(function (e) {
+                e.preventDefault();
+                $.ajax({
+                    url: "{% url 'confirm_phone' %}",
+                    data: {
+                        'code': $('#id_phoneCode').val(),
+                        'phone': $('#id_phone').val(),
+                    },
+                    method: 'get',
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.status == 'success') {
+                            alert('Your phone number was vertified')
                         } else {
                             alert('Wrong code')
                         }
