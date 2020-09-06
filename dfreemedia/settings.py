@@ -25,7 +25,8 @@ SECRET_KEY = 'ksdfjksdfiu4j3r5!#@%J231kj4;J"kfsjiosjdfuijsadfijdsaifcjsduvhugf#@
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['zeyadshaban.pythonanywhere.com', 'www.dfreemedia.com', 'dfreemedia.com']
+ALLOWED_HOSTS = ['zeyadshaban.pythonanywhere.com',
+                 'www.dfreemedia.com', 'dfreemedia.com']
 
 
 # Application definition
@@ -114,7 +115,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 WEBPUSH_SETTINGS = {
     "VAPID_PUBLIC_KEY": "BORA8XeeE6Z5PJcobvvmRxdyjB6wxo0OS7Z4F1W-zZCV7964cLAqIVuYBprLfojqbqa4qCF-hx7IXBjiwNOmtFQ",
-    "VAPID_PRIVATE_KEY":"v6hZnC0IbnxC2UhpNZ4u51RUE_NuIBFlQKrHbnRR9Uc",
+    "VAPID_PRIVATE_KEY": "v6hZnC0IbnxC2UhpNZ4u51RUE_NuIBFlQKrHbnRR9Uc",
     "VAPID_ADMIN_EMAIL": "zeyadshapan2004@gmail.com"
 }
 
@@ -149,8 +150,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = os.environ.get('EMAIL_USER')
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASS')
+EMAIL_HOST_USER = 'dfreemedia@gmail.com'
+EMAIL_HOST_PASSWORD = '<D44200444FreeMedia>'
 
 
 try:

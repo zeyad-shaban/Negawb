@@ -11,6 +11,7 @@ you{% endblock description %}
 {% block content %}
 <div class="m-2">
     <h1 class="row justify-content-center mb-4">Set up email and phone number</h1>
+    <br>
     <span>Email: <input type="email" name="email" id="id_email" class="form-control col-md-6 d-inline ml-2"
             placeholder="example@gmail.com" style="max-width:250px"></span>
     <button class="btn btn-success" id="submitEmail">Submit</button>
@@ -22,6 +23,17 @@ you{% endblock description %}
     <br>
     <input type="number" name="code" id="id_emailCode" class="form-control" style="max-width: 150px; display: inline">
     <button class="btn btn-success" id="submitEmailCode">Confirm</button>
+    <hr>
+    <br class="mb-3">
+
+    <span>Phone number: <input type="number" name="phone" id="id_phone" class="form-control col-md-6 d-inline ml-2"
+            placeholder="+19999999" style="max-width:250px"></span>
+    <button class="btn btn-success" id="submitPhone">Submit</button>
+    <br>
+    <small class="form-text text-muted">Current: {% if not user.phone %}None{% endif %}{{ user.phone }}</small>
+    <div id="loadingPhone"></div>
+    <br>
+    <h4>Enter the Sms six digit code here</h4>
 </div>
 
 
@@ -46,11 +58,15 @@ you{% endblock description %}
                         method: 'get',
                         dataType: 'json',
                         success: function (response) {
-                            $('#loadingEmail').html('<i class="far fa-check-circle" style="color: green; font-size: 40px"></i>')
+                            $('#loadingEmail').html(
+                                '<i class="far fa-check-circle" style="color: green; font-size: 40px"></i>'
+                                )
                         }
                     })
                 } else {
-                    $('#loadingEmail').html('<p class="alert alert-danger" style="max-width: 400px">Please enter a valid email address</p>')
+                    $('#loadingEmail').html(
+                        '<p class="alert alert-danger" style="max-width: 400px">Please enter a valid email address</p>'
+                        )
                 }
             })
             $('#submitEmailCode').click(function (e) {

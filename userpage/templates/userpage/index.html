@@ -10,16 +10,18 @@
     #allowNotification {
         font-size: 36px;
     }
+
     @media screen and (max-width: 624px) {
-    #allowNotification {
-        font-size: 11px;
+        #allowNotification {
+            font-size: 11px;
+        }
     }
-    }
+
     @media screen and (max-width: 586px) {
-    #allowNotification {
-        font-size: 36px;
+        #allowNotification {
+            font-size: 36px;
+        }
     }
-}
 </style>
 <img src="{% if user.is_authenticated %}{{user.avatar.url}}{% else %}/media/profile_images/DefaultUserImage.jpg{% endif %}"
     class="col-xl-2 col-lg-2 rounded-circle {% if user.id <= 1000 %}oldUser{% endif %}" alt="" width="200" height="200"
@@ -184,10 +186,13 @@
                         <input type="text" class="form-control" name="last_name" id="id_last_name" maxlength=30
                             value="{{ user.last_name }}">
                     </div>
-                    <!-- <div class="form-group">
+                    <div class="form-group">
                         <label for="id_email">Email</label>
                         <input type="text" class="form-control" name="email" id="id_email" value="{{ user.email }}">
-                    </div> -->
+                        <a href="{% url 'set_email_and_phone' %}">
+                            <span<i class="far fa-edit"></i>Change</span>
+                        </a>
+                    </div>
                     <div class="form-group">
                         <label for="id_bio">Bio</label>
                         <input type="text" class="form-control" name="bio" id="id_bio" value="{{ user.bio }}">
@@ -195,8 +200,6 @@
                     <div class="form-group">
                         <p><label for="id_avatar">Avatar:</label>
                             <input type="file" name="avatar" accept="image/*" id="id_avatar"></p>
-                        <!-- <label for="id_avatar_clear">Clear Avatar</label>
-                        <input type="checkbox" name="avatar-clear" id="id_avatar_clear"> -->
                     </div>
                     <!-- <div class="from-group">
                         <a href="{% url 'password_reset' %}" target="_blank">Reset Password</a>
