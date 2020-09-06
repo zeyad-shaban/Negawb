@@ -61,4 +61,4 @@ class User(AbstractUser):
             if img.width > 160 or img.height > 160:
                 output_size = (160, 160)
                 img.thumbnail(output_size)
-                img.save(self.avatar.path, 'WebP')
+                img.save(self.avatar.path)

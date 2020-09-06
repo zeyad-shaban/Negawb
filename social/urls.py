@@ -11,6 +11,7 @@ urlpatterns = [
     # Chat Group
     path('chat_group/<int:pk>/', views.chat_group, name='chat_group'),
     path('send_group_message/<int:pk>/', views.send_group_message, name='send_group_message'),
+    path('send_group_file_message/<int:pk>/', views.send_group_file_message, name='send_group_file_message'),
     path('send_group_invite/<int:user_pk>/<int:group_pk>/', views.send_group_invite, name='send_group_invite'),
     path('edit_group/<int:pk>/', views.edit_group, name="edit_group"),
     path('joingroup/',

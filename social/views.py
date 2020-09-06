@@ -33,6 +33,8 @@ def chat(request):
         group.group_admins.add(request.user)
         return redirect('social:chat_group', pk=group.id)
 
+# Friend
+
 
 @login_required
 def chat_friend(request, pk):
@@ -145,6 +147,7 @@ def send_friend_message(request, pk):
     message.save()
     return JsonResponse({})
 
+
 def send_friend_file_message(request, pk):
     friend = get_object_or_404(User, pk=pk)
     friend = get_object_or_404(User, pk=pk)
@@ -158,6 +161,10 @@ def send_friend_file_message(request, pk):
                       file=request.FILES.get('file'), image=request.FILES.get('image'))
     message.save()
     return redirect('social:chat_friend', pk=pk)
+# End friend
+
+# Groups
+
 
 def chat_group(request, pk):
     group = get_object_or_404(ChatGroup, pk=pk)
@@ -251,6 +258,18 @@ def send_group_message(request, pk):
 
     message.save()
     return JsonResponse({})
+
+
+def send_group_file_message(request, pk):
+    group = get_object_or_404(ChatGroup, pk=pk)
+    try:
+        area = get_object_or_404(Area, pk=request.GET.get('area'))
+    except:
+        area = None
+    message = GroupMessage(
+        group=group, message_sender=request.user, file=request.FILES.get('file'), image=request.FILES.get('image') , area=area)
+    message.save()
+    return redirect('social:chat_group', pk=pk)
 
 
 def send_group_invite(request, user_pk, group_pk):

@@ -22,13 +22,23 @@ class Message(models.Model):
         User, related_name='message_sender', null=True, on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)
     message = models.TextField(blank=True, null=True)
+    file = models.FileField(
+        upload_to='social_group_message_images', blank=True, null=True)
+    image = models.ImageField(
+        upload_to='social/friend_message_images', blank=True, null=True)
     is_important = models.BooleanField(default=False)
-    file = models.FileField(upload_to='social_group_message_images', blank=True, null=True)
-    image = models.ImageField(upload_to='social/friend_message_images', blank=True, null=True)
 
     def __str__(self):
         return f'{self.message_sender} to ({self.chat_box}) ⚠️{self.is_important}⚠️'
 
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if self.image:
+            img = Image.open(self.image.path)
+            if img.width > 140 or img.height > 140:
+                output_size = (140, 140)
+                img.thumbnail(output_size)
+                img.save(self.image.path)
 
 
 class ChatGroup(models.Model):
@@ -47,6 +57,7 @@ class ChatGroup(models.Model):
 
     def __str__(self):
         return f'[AUTHOR] {self.author} [TITLE] {self.title} [MEMBERS] {self.members.count()}'
+
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         if self.image:
@@ -54,8 +65,7 @@ class ChatGroup(models.Model):
             if img.width > 140 or img.height > 140:
                 output_size = (140, 140)
                 img.thumbnail(output_size)
-                img.save(self.image.path, 'WebP')
-
+                img.save(self.image.path)
 
 
 class GroupRequest(models.Model):
@@ -69,14 +79,14 @@ class GroupRequest(models.Model):
         return f'[GROUP] {self.group.title} | {self.request_sender} To {self.reciever}'
 
 
-
 class Area(models.Model):
     name = models.CharField(max_length=20)
     mute = models.BooleanField(default=False)
-    group = models.ForeignKey(ChatGroup, on_delete = models.CASCADE)
+    group = models.ForeignKey(ChatGroup, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
+
 
 class GroupMessage(models.Model):
     group = models.ForeignKey(
@@ -84,12 +94,28 @@ class GroupMessage(models.Model):
     message_sender = models.ForeignKey(
         User, related_name='group_message_sender', null=True, on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)
-    message = models.TextField()
+    message = models.TextField(null=True, blank=True)
+    file = models.FileField(
+        upload_to='social/group_files', null=True, blank=True)
+    image = models.ImageField(
+        upload_to='social/group_images', null=True, blank=True)
     is_important = models.BooleanField(default=False)
-    area = models.ForeignKey(Area, on_delete=models.CASCADE, null=True, blank=True, default='')
+    area = models.ForeignKey(
+        Area, on_delete=models.CASCADE, null=True, blank=True, default='')
 
     def __str__(self):
         return f'{self.message_sender}, {self.message} chat_box: {self.group}'
+
+    # IMAGE RESIZING
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if self.image:
+            img = Image.open(self.image.path)
+            if img.width > 450 or img.height > 349:
+                output_size = (450, 349)
+                img.thumbnail(output_size)
+                img.save(self.image.path)
+
 
 class Notification(models.Model):
     notification_type_choices = [

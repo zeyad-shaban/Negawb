@@ -54,7 +54,7 @@
             {% elif message.message_sender == user %}
             <img src="{{message.message_sender.avatar.url}}" alt="User Image" width="64" height="64">
             {% else %}
-            <img src="/media/profile_images/DefaultUserImage.WebP" alt="User Image" width="64" height="64">
+            <img src="/media/profile_images/DefaultUserImage.jpg" alt="User Image" width="64" height="64">
             {% endif %}
         </div>
         <div class="msg">
@@ -115,7 +115,7 @@
                                 <img src="{{member.avatar.url}}" alt="User Image" width="64" height="64"
                                     class="rounded-circle {% if member.id <= 1000 %}oldUser{% endif %}">
                                 {% else %}
-                                <img src="/media/profile_images/DefaultUserImage.WebP" alt="User Image" width="64"
+                                <img src="/media/profile_images/DefaultUserImage.jpg" alt="User Image" width="64"
                                     height="64" class="rounded-circle {% if member.id <= 1000 %}oldUser{% endif %}">
                                 {% endif %}
                             </a>
@@ -156,7 +156,7 @@
                                 <img src="{{friend.avatar.url}}" alt="User Image" width="64" height="64"
                                     class="rounded-circle {% if friend.id <= 1000 %}oldUser{% endif %}">
                                 {% else %}
-                                <img src="/media/profile_images/DefaultUserImage.WebP" alt="User Image" width="64"
+                                <img src="/media/profile_images/DefaultUserImage.jpg" alt="User Image" width="64"
                                     height="64" class="rounded-circle {% if friend.id <= 1000 %}oldUser{% endif %}">
                                 {% endif %}
                             </a>

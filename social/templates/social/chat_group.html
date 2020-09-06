@@ -17,6 +17,8 @@
     </div>
     <div class="name">{{ group.title }}</div>
     <div class="last">{% if group.description %}{{ group.description }}{% endif %}</div>
+    <button class="btn float-right mr-3" data-toggle="modal" data-target="#sendFile"><i class="fas fa-paperclip"
+            style="color: white; font-size:36px;"></i></button>
 </div>
 <ul class="list-group list-group-horizontal fixed-top" style="margin-top: 50px">
     <li class="list-group-item btn active areaItem">All</li>
@@ -50,13 +52,22 @@
             {% elif message.message_sender == user %}
             <img src="{{message.message_sender.avatar.url}}" alt="User Image" width="64" height="64">
             {% else %}
-            <img src="/media/profile_images/DefaultUserImage.WebP" alt="User Image" width="64" height="64">
+            <img src="/media/profile_images/DefaultUserImage.jpg" alt="User Image" width="64" height="64">
             {% endif %}
         </div>
         <div class="msg">
             <p class="alert-secondary">{{ message.message_sender.username }} -
                 {% if not message.area.name %}All{% else %}{{ message.area.name }}{% endif %}</p>
+            {% if message.message %}
             <p>{{ message.message }}</p>
+            {% elif message.image %}
+            <img src="{{ message.image.url }}" draggable="false" style="max-width:450px; max-height:349px;"
+                loading="lazy">
+            {% elif message.file %}
+            <a href="{{ message.file.url }}" download>
+                <p><i class="fas fa-download" style="font-size:30px"></i> <span>{{ message.file.url }}</span></p>
+            </a>
+            {% endif %}
             <time>{{ message.date|timesince }} ago</time>
         </div>
     </li>
@@ -110,7 +121,7 @@
                                 <img src="{{member.avatar.url}}" alt="User Image" width="64" height="64"
                                     class="rounded-circle {% if member.id <= 1000 %}oldUser{% endif %}">
                                 {% else %}
-                                <img src="/media/profile_images/DefaultUserImage.WebP" alt="User Image" width="64"
+                                <img src="/media/profile_images/DefaultUserImage.jpg" alt="User Image" width="64"
                                     height="64" class="rounded-circle {% if member.id <= 1000 %}oldUser{% endif %}">
                                 {% endif %}
                             </a>
@@ -151,7 +162,7 @@
                                 <img src="{{friend.avatar.url}}" alt="User Image" width="64" height="64"
                                     class="rounded-circle {% if friend.id <= 1000 %}oldUser{% endif %}">
                                 {% else %}
-                                <img src="/media/profile_images/DefaultUserImage.WebP" alt="User Image" width="64"
+                                <img src="/media/profile_images/DefaultUserImage.jpg" alt="User Image" width="64"
                                     height="64" class="rounded-circle {% if friend.id <= 1000 %}oldUser{% endif %}">
                                 {% endif %}
                             </a>
@@ -245,6 +256,45 @@
         </div>
     </div>
 </div>
+
+
+<!-- Send file modal -->
+<div class="modal fade" id="sendFile" tabindex="-1" aria-labelledby="sendFileLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="sendFileLabel">Send File</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <!-- Send file -->
+                    <form action="{% url 'social:send_group_file_message' group.id %}" method="post"
+                        enctype="multipart/form-data" id="sendFileForm">
+                        {% csrf_token %}
+                        <input type="file" name="file" id="uploadFile" class="from-file" accept="*">
+
+                        <input type="file" name="image" id="uploadImage" class="from-file" accept="image/*">
+                    </form>
+                    <span class="mr-3 btn d-inline" id="displayUploadFile">
+                        <i class="far fa-file" style="font-size:24px"></i> Document
+                    </span>
+
+                    <!-- Send image -->
+                    <span class="btn" id="displayUploadImage">
+                        <i class="far fa-image" style="font-size:24px"></i> Image
+                    </span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         window.addEventListener('load', function () {
@@ -362,6 +412,26 @@
             })
             // End send invite
 
+            // Send file
+            $('#uploadFile').css('display', 'none')
+            $('#uploadFile').change(function (e) {
+                $('#sendFileForm').submit()
+            })
+            $('#displayUploadFile').click(function (e) {
+                e.preventDefault();
+                $('#uploadFile').click()
+            })
+            // End send file
+            // Send image
+            $('#uploadImage').css('display', 'none')
+            $('#uploadImage').change(function (e) {
+                $('#sendFileForm').submit()
+            })
+            $('#displayUploadImage').click(function (e) {
+                $('#uploadImage').click()
+            })
+            // end sendimage
+
             // Send message
             $('#send').click(function (e) {
                 $('#sendForm').submit();
@@ -401,7 +471,6 @@
                     $('#messageInput').val('')
                     document.getElementById('notificationSound').play()
                     window.scrollTo(0, document.body.scrollHeight);
-                    console.log($('#id_area_name').val())
                     $.ajax({
                         url: $('#sendForm').attr('action'),
                         data: {
@@ -461,6 +530,19 @@
                                                 .username
                                         }
                                     })
+                                    let messageContent = ''
+                                    if (message.fields.message) {
+                                        messageContent =
+                                            `<p>${message.fields.message }</p>`
+                                    } else if (message.fields.image) {
+                                        messageContent =
+                                            `<img src="/media/${message.fields.image}" draggable="false" style="max-width:450px; max-height:349px;" loading="lazy">`
+                                    } else if (message.fields.file) {
+                                        messageContent = `<a href="/media/${message.fields.file}" download>
+                     <p><i class="fas fa-download" style="font-size:30px"></i> <span>${message.fields.file}</span></p>
+                 </a>`
+                                    }
+
                                     newLastMessageId = message.pk
                                     $('.chat').append(`
                         <li class="other message" data-pk="${newLastMessageId}">
@@ -469,7 +551,7 @@
                     </div>
                     <div class="msg">
                         <p class="alert-secondary">${senderUsername}</p>
-                        <p>${message.fields.message}</p>
+                        ${messageContent}
                         <time>Now</time>
                     </div>
                 </li>
@@ -546,7 +628,6 @@
                                     <i class="fas fa-user-plus" style="font-size: 36px; color: green;"></i> Invite
                                 </a>`
                             if (!result.is_allowed_group_invite) {
-                                console.log('You cant invite')
                                 invite = `<p class="float-right"><i class="fas fa-shield-alt"
                                         style="font-size: 36px; color: red;"></i> You can't add</p>`
                             }

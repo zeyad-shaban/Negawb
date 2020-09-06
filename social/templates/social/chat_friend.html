@@ -20,7 +20,7 @@
         {% elif friend == user %}
         <img src="{{friend.avatar.url}}" alt="User Image" width="64" height="64" id="friendAvatar">
         {% else %}
-        <img src="/media/profile_images/DefaultUserImage.WebP" alt="User Image" width="64" height="64"
+        <img src="/media/profile_images/DefaultUserImage.jpg" alt="User Image" width="64" height="64"
             id="friendAvatar">
         {% endif %}
     </div>
@@ -49,7 +49,7 @@
             {% elif message.message_sender == user %}
             <img src="{{message.message_sender.avatar.url}}" alt="User Image" width="64" height="64">
             {% else %}
-            <img src="/media/profile_images/DefaultUserImage.WebP" alt="User Image" width="64" height="64">
+            <img src="/media/profile_images/DefaultUserImage.jpg" alt="User Image" width="64" height="64">
             {% endif %}
         </div>
         <div class="msg">
@@ -82,7 +82,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="sendFileLabel">Modal title</h5>
+                <h5 class="modal-title" id="sendFileLabel">Send file</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -268,7 +268,6 @@
                                         messageContnet =
                                             `<p>${message.fields.message }</p>`
                                     } else if (message.fields.image) {
-                                        console.log(message.fields.image)
                                         messageContnet =
                                             `<img src="/media/${message.fields.image}" draggable="false" style="max-width:450px; max-height:349px;" loading="lazy">`
                                     } else if (message.fields.file) {
