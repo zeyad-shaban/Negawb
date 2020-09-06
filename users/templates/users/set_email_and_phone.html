@@ -21,21 +21,26 @@ you{% endblock description %}
     <br>
     <h4>Enter the email six digit code here</h4>
     <br>
-    <input type="number" name="code" id="id_emailCode" class="form-control" style="max-width: 150px; display: inline">
+    <input type="text" name="code" id="id_emailCode" class="form-control" style="max-width: 150px; display: inline" maxlength="6">
     <button class="btn btn-success" id="submitEmailCode">Confirm</button>
     <hr>
     <br class="mb-3">
 
-    <span>Phone number: <input type="number" name="phone" id="id_phone" class="form-control col-md-6 d-inline ml-2"
-            placeholder="+19999999" style="max-width:250px"></span>
+    <span>Phone number: <input type="text" name="phone" id="id_phone" class="form-control col-md-6 d-inline ml-2"
+            placeholder="" style="max-width:250px"></span>
     <button class="btn btn-success" id="submitPhone">Submit</button>
     <br>
     <small class="form-text text-muted">Current: {% if not user.phone %}None{% endif %}{{ user.phone }}</small>
     <div id="loadingPhone"></div>
     <br>
     <h4>Enter the Sms six digit code here</h4>
+    <br>
+    <input type="text" name="phoneCode" id="id_phoneCode" class="form-control" style="max-width: 150px; display: inline" maxlength="6">
+    <button class="btn btn-success" id="submitPhoneCode">Confirm</button>
 </div>
-
+<br>
+<br>
+<a href="{% url 'userpage:home' %}" class="btn btn-secondary"><i class="fas fa-sign-out-alt"></i> Exit</a>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {

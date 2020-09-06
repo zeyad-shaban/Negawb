@@ -10,7 +10,7 @@ class UserForm(ModelForm):
         """Meta definition for Userform."""
 
         model = User
-        fields = ('username', 'email', 'first_name',
+        fields = ('username', 'first_name',
                   'last_name', 'bio', 'avatar')
 
 
