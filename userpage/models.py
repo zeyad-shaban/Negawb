@@ -10,7 +10,7 @@ class User(AbstractUser):
         max_length=400, default='I love this website!', blank=True, null=True,)
     avatar = models.ImageField(
         upload_to='profile_images', default='profile_images/DefaultUserImage.jpg',)
-    phone = models.IntegerField(null=True, blank=True)
+    phone = models.CharField(max_length=11, null=True, blank=True, unique=True)
     email_code = models.IntegerField(null=True, blank=True)
     phone_code = models.IntegerField(null=True, blank=True)
     # PRIVACY
