@@ -56,7 +56,7 @@ urlpatterns = [
     path('people/', include('people.urls'), name='people'),
     path('social/', include('social.urls'), name='social'),
     path('production/', include('production.urls'), name='production'),
-    # CREATING USER
+    # AUTH
     path('signup/', users_views.signupuser, name='signupuser'),
     path('logout/', users_views.logoutuser, name='logoutuser'),
     path('login/', users_views.loginuser, name='loginuser'),
@@ -70,6 +70,9 @@ urlpatterns = [
         template_name='users/password_reset_confirm.html'), name='password_reset_confirm'),
     path('password-reset-complete/', auth_views.PasswordResetCompleteView.as_view(
         template_name='users/password_reset_complete.html'), name='password_reset_complete'),
+    path('set_email_and_phone', users_views.set_email_and_phone, name="set_email_and_phone"),
+    path('send_email_code', users_views.send_email_code, name="send_email_code"),
+    path('confirm_email', users_views.confirm_email, name="confirm_email"),
     # Web-Push
     path('webpush/', include('webpush.urls')),
 ]

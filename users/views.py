@@ -1,17 +1,14 @@
-# from .utils import account_activation_token
-from django.urls import reverse
-from django.core.mail import EmailMessage
 from django.views import generic
-from django.template.loader import render_to_string
-# from django.utils.encoding import force_bytes, force_text, DjangoUnicodeDecodeError
-# from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.contrib.sites.shortcuts import get_current_site
+from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login, logout, authenticate
 from django.db import IntegrityError
 from django.contrib import messages
 from categories.models import Category
+from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail
+from random import randint
 from django.contrib.auth import get_user_model as user_model
 User = user_model()
 
@@ -31,7 +28,6 @@ def signupuser(request):
                         Category, pk=request.POST.get('homepage_posts'))
                 else:
                     homepage_posts_category = None
-
                 # Start chat only
                 if request.POST.get('chat_only_mode') == 'on':
                     is_chat_only_mode = True
@@ -40,33 +36,9 @@ def signupuser(request):
                 # End chat only
                 user = User.objects.create_user(
                     request.POST.get('username'), password=request.POST.get('password1'), homepage_posts=homepage_posts_category, chat_only_mode=is_chat_only_mode)
-                if False:  # Email address confirmation
-                    pass
-                    # user.is_active = False
-                    # uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
-                    # domain = get_current_site(request).domain
-                    # link = reverse('activate', kwargs={
-                    #     'uidb64': uidb64, 'token': account_activation_token.make_token(user)})
-                    # #! CHANGE TO HTTPS WHEN DEVELOPMENT
-                    # # TODO TO HTTPS WHEN DEVELOPMENT
-                    # activate_url = f'http://{domain}{link}'
-                    # email_body = f'{user.username} You are one step away from activating your account, just click this link to vertify your account \n {activate_url} \n Thanks for joining DFreeMedia Community'
-                    # email = EmailMessage(
-                    #     subject='Activate Your DFreeMedia Account',
-                    #     body=email_body,
-                    #     from_email='dfreemedia@gmail.com',
-                    #     to=(request.POST.get('email'),),
-                    # )
-                    # email.send(fail_silently=False)
-                else:
-                    user.save()
-                    messages.success(
-                        request, 'To allow notifications go <a href="/userpage/">here</a> and click subscribe to push messaging')
-                    login(request, user)
-                if request.GET.get('next'):
-                    return redirect(request.GET.get('next'))
-                else:
-                    return redirect('home')
+                user.save()
+                login(request, user)
+                return redirect('set_email_and_phone')
             except IntegrityError:
                 messages.error(
                     request, 'Username is already taken, please choose another one')
@@ -111,3 +83,39 @@ def loginuser(request):
                 return redirect(request.GET.get('next'))
             else:
                 return redirect('home')
+
+
+# Confirmation
+@login_required
+def set_email_and_phone(request):
+    return render(request, 'users/set_email_and_phone.html')
+
+
+# Confirm email
+@login_required
+def send_email_code(request):
+    request.user.email_code = None
+    email = request.GET.get('email')
+    confirmation_code = randint(100000, 999999)
+    send_mail(
+        'Dfreemedia email confirmation',
+        f'This is your email address confirmation code \n {confirmation_code}',
+        'dfreemedia@gmail.com',
+        [email],
+        fail_silently=False,
+    )
+    request.user.email_code = confirmation_code
+    request.user.save()
+    return JsonResponse({})
+
+
+@login_required
+def confirm_email(request):
+    user_code = int(request.GET.get('code'))
+    if user_code == request.user.email_code:
+        request.user.email = request.GET.get('email')
+        return JsonResponse({'status': 'success'})
+        request.user.email_code = None
+        request.user.save()
+    else:
+        return JsonResponse({'status': 'fail'})

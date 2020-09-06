@@ -12,6 +12,8 @@ class User(AbstractUser):
         upload_to='profile_images', default='profile_images/DefaultUserImage.jpg',)
     # PRIVACY
     show_email = models.BooleanField(default=False)
+    email_code = models.IntegerField(null=True, blank=True)
+    phone_code = models.IntegerField(null=True, blank=True)
     who_see_avatar_choices = [
         ('none', 'No One'),
         ('friends', 'Friends only'),
@@ -36,13 +38,13 @@ class User(AbstractUser):
     is_confirmed = models.BooleanField(default=False)
     allow_friend_request = models.BooleanField(default=True)
 
-
     # DISTRACTION FREE!!!!!!!!!!!!!!!
     hide_comments = models.BooleanField(default=False)
     chat_only_mode = models.BooleanField(default=False)
     hide_followed_posts = models.BooleanField(default=False)
     fixed_navbar = models.BooleanField(default=True)
-    homepage_posts = models.ForeignKey(Category, on_delete= models.CASCADE ,null=True, blank=True)
+    homepage_posts = models.ForeignKey(
+        Category, on_delete=models.CASCADE, null=True, blank=True)
     # * notifications
     allow_important_friend_messages = models.BooleanField(default=True)
     allow_important_group_message = models.BooleanField(default=True)

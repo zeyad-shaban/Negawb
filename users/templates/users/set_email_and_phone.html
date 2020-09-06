@@ -1,0 +1,69 @@
+{% extends 'categories/base.html' %}
+
+{% block title %}
+Set up Email and phone number
+{% endblock title %}
+
+
+{% block description %}Set up email and phone number in Dfreemedia for others to easily find
+you{% endblock description %}
+
+{% block content %}
+<h1>Set up email and phone number</h1>
+<span>Email: <input type="email" name="email" id="id_email" class="form-control col-md-6 d-inline ml-2"
+        placeholder="example@gmail.com" style="width:333px"></span>
+<button class="btn btn-success" id="submitEmail">Submit</button>
+<p>Enter the six digit code here</p>
+<input type="number" name="code" id="id_emailCode" class="form-control" style="max-width: 150px; display: inline"
+    maxlength="6" required>
+<button class="btn btn-success" id="submitEmailCode">Confirm</button>
+
+<small class="form-text text-muted">Current: {% if not user.email %}None{% endif %}{{ user.email }}</small>
+
+<a href="{% url 'home' %}" class="btn btn-secondary">No thanks</a>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        window.addEventListener('load', function () {
+            $('#submitEmail').click(function (e) {
+                function isEmail(email) {
+                    var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+                    return regex.test($('#id_email').val());
+                }
+                if (isEmail()) {
+                    $('.form-text.text-muted').html('Loading...')
+                    e.preventDefault();
+                    $.ajax({
+                        url: "{% url 'send_email_code' %}",
+                        data: {
+                            'email': $('#id_email').val()
+                        },
+                        method: 'get',
+                        dataType: 'json',
+                        success: function (response) {}
+                    })
+                } else {}
+            })
+            $('#submitEmailCode').click(function (e) {
+                e.preventDefault();
+                $.ajax({
+                    url: "{% url 'confirm_email' %}",
+                    data: {
+                        'code': $('#id_emailCode').val(),
+                        'email': $('#id_email').val(),
+                    },
+                    method: 'get',
+                    dataType: 'json',
+                    success: function (response) {
+                        console.log('Success vertifing')
+                        if (response.status == 'success') {
+                            alert('Your email was confirmed')
+                        } else {
+                            alert('Wrong code')
+                        }
+                    }
+                })
+            })
+        });
+    });
+</script>
+{% endblock content %}
