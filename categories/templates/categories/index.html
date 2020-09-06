@@ -106,7 +106,7 @@ only, giving users the power to hide unwanted topics{% endblock description %}
         <div class="card-body">
             {% if post.description %}
             <blockquote class="blockquote mb-0">
-                <p class="text-break">{{post.description|truncatechars:450}} {% if post.description|length > 450%}<a
+                <p class="text-break" style="white-space: pre-wrap">{{post.description|truncatechars:450}} {% if post.description|length > 450%}<a
                         href="{% url 'comments:view_post' post.id %}">Read
                         More</a>{% endif %}</p>
             </blockquote>
@@ -198,16 +198,16 @@ only, giving users the power to hide unwanted topics{% endblock description %}
         <a href="{% url 'people:people' post.user.id %}">
             {% if post.user.who_see_avatar == 'everyone' %}
             <img src="{{post.user.avatar.url}}" alt="{{ post.user.username }}" width="64" height="64"
-                class="mr-3 rounded-circle float-left {% if post.user.id <= 1000 %}oldUser{% endif %}" loading="lazy">
+                class="mr-3 rounded-circle float-left" loading="lazy">
             {% elif post.user.who_see_avatar == 'friends' and user in post.user.friends.all %}
             <img src="{{post.user.avatar.url}}" alt="{{ post.user.username }}" width="64" height="64"
-                class="mr-3 rounded-circle float-left {% if post.user.id <= 1000 %}oldUser{% endif %}" loading="lazy">
+                class="mr-3 rounded-circle float-left" loading="lazy">
             {% elif post.user == user %}
             <img src="{{post.user.avatar.url}}" alt="{{ post.user.username }}" width="64" height="64"
-                class="mr-3 rounded-circle float-left {% if post.user.id <= 1000 %}oldUser{% endif %}" loading="lazy">
+                class="mr-3 rounded-circle float-left" loading="lazy">
             {% else %}
             <img src="/media/profile_images/DefaultUserImage.jpg" alt="{{ post.user.username }}" width="64" height="64"
-                class="mr-3 rounded-circle float-left {% if post.user.id <= 1000 %}oldUser{% endif %}" loading="lazy">
+                class="mr-3 rounded-circle float-left" loading="lazy">
             {% endif %}
             <span>{{post.user.username}}</span>
         </a>
@@ -215,7 +215,7 @@ only, giving users the power to hide unwanted topics{% endblock description %}
             <div class="card-body">
                 {% if post.description %}
                 <blockquote class="blockquote mb-0">
-                    <p class="text-break">{{post.description|truncatechars:450}}
+                    <p class="text-break" style="white-space: pre-wrap;">{{post.description|truncatechars:450}}
                         {% if post.description|length > 450%}<a href="{% url 'comments:view_post' post.id %}">Read
                             More</a>{% endif %}</p>
                 </blockquote>
