@@ -13,6 +13,8 @@ from webpush import send_user_notification
 from django.utils.timezone import now
 import datetime
 
+# Post
+
 
 def view_post(request, pk):
     post = get_object_or_404(Post, pk=pk)
@@ -44,11 +46,12 @@ def view_post(request, pk):
                         else:
                             sender_avatar = '/media/profile_images/DefaultUserImage.jpg'
                         payload = {"head": f"new comment on your post{post.description}",
-                        "body": notification.content,
-                        "url": notification.url,
-                        "icon": sender_avatar,
-                        }
-                        send_user_notification(user = receiver, payload = payload,ttl = 1000)
+                                   "body": notification.content,
+                                   "url": notification.url,
+                                   "icon": sender_avatar,
+                                   }
+                        send_user_notification(
+                            user=receiver, payload=payload, ttl=1000)
             return JsonResponse({'comment': model_to_dict(comment)})
 
 
@@ -57,11 +60,6 @@ def delete_post(request, pk):
     if request.user == post.user:
         post.delete()
     return redirect('home')
-
-
-def edit_post(request):
-    pass
-
 
 
 @login_required
@@ -94,42 +92,10 @@ def post_like_dislike(request, post_id):
 
 
 @login_required
-def reply_like_dislike(request, reply_id):
-    reply = get_object_or_404(Comment, pk=reply_id)
-    # Dislike
-    if request.POST.get('submit') == 'dislike':
-        if request.user in reply.likes.all():
-            reply.likes.remove(request.user)
-            reply.dislikes.add(request.user)
-            messages.success(request, 'Disliked')
-            return redirect('comments:reply_like_dislike', reply_id)
-        elif request.user in reply.dislikes.all():
-            reply.dislikes.remove(request.user)
-            messages.success(request, 'Removed Disliked')
-            return redirect('comments:reply_like_dislike', reply_id)
-        else:
-            reply.dislikes.add(request.user)
-            messages.success(request, 'Disliked')
-            return redirect('comments:reply_like_dislike', reply_id)
-    # Like
-    else:
-        if request.user in reply.dislikes.all():
-            reply.dislikes.remove(request.user)
-            reply.likes.add(request.user)
-            messages.success(request, 'liked')
-        elif request.user in reply.likes.all():
-            reply.likes.remove(request.user)
-            messages.success(request, 'removed like')
-        else:
-            reply.likes.add(request.user)
-            messages.success(request, 'liked')
-        return redirect('comments:reply_like_dislike', reply_id)
-
-
-@login_required
 def create_post(request, pk):
     try:
-        category = get_object_or_404(Category, pk=request.POST.get('id_category'))
+        category = get_object_or_404(
+            Category, pk=request.POST.get('id_category'))
     except:
         category = None
     # posts_in_last_day = request.user.post_set.filter(Q(
@@ -165,6 +131,15 @@ def create_post(request, pk):
             return redirect('categories:view_category', pk=pk)
 
 
+def analyze_post(request, pk):
+    print('Analyzing post...')
+    post = get_object_or_404(Post, pk=pk)
+    if request.method == 'GET':
+        return render(request, 'comments/analyze_post.html', {'post': post})
+
+
+# End post
+# Reply
 def create_reply(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
     reply = Reply(description=request.GET.get('description'),
@@ -184,9 +159,42 @@ def create_reply(request, pk):
             else:
                 sender_avatar = '/media/profile_images/DefaultUserImage.jpg'
             payload = {"head": f"{notification.sender.username} Replied to your comment",
-            "body": notification.content,
-            "url": notification.url,
-            "icon": sender_avatar,
-            }
-            send_user_notification(user = receiver, payload = payload,ttl = 1000)
+                       "body": notification.content,
+                       "url": notification.url,
+                       "icon": sender_avatar,
+                       }
+            send_user_notification(user=receiver, payload=payload, ttl=1000)
     return JsonResponse({'reply': model_to_dict(reply)})
+
+
+@login_required
+def reply_like_dislike(request, reply_id):
+    reply = get_object_or_404(Comment, pk=reply_id)
+    # Dislike
+    if request.POST.get('submit') == 'dislike':
+        if request.user in reply.likes.all():
+            reply.likes.remove(request.user)
+            reply.dislikes.add(request.user)
+            messages.success(request, 'Disliked')
+            return redirect('comments:reply_like_dislike', reply_id)
+        elif request.user in reply.dislikes.all():
+            reply.dislikes.remove(request.user)
+            messages.success(request, 'Removed Disliked')
+            return redirect('comments:reply_like_dislike', reply_id)
+        else:
+            reply.dislikes.add(request.user)
+            messages.success(request, 'Disliked')
+            return redirect('comments:reply_like_dislike', reply_id)
+    # Like
+    else:
+        if request.user in reply.dislikes.all():
+            reply.dislikes.remove(request.user)
+            reply.likes.add(request.user)
+            messages.success(request, 'liked')
+        elif request.user in reply.likes.all():
+            reply.likes.remove(request.user)
+            messages.success(request, 'removed like')
+        else:
+            reply.likes.add(request.user)
+            messages.success(request, 'liked')
+        return redirect('comments:reply_like_dislike', reply_id)

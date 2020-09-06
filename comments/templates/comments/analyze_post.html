@@ -1,0 +1,15 @@
+{% extends 'categories/base.html' %}
+
+{% block title %}
+    Analyze {{post.description|truncatechars:60}}
+{% endblock title %}
+
+
+{% block description %}
+    {{post.description |truncatechars:180}}
+{% endblock description %}
+
+
+{% block content %}
+    Analyzing...
+{% endblock content %}
