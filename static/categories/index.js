@@ -22,6 +22,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
         function bottomScroll() {
+            // homepage posts
             if ($(window).scrollTop() + $(window).height() == $(document).height() && $('.homepageView.active').html() == 'Posts') {
                 $.ajax({
                     url: '',
@@ -48,10 +49,6 @@ document.addEventListener('DOMContentLoaded', function () {
                                     let user = response.user
                                     let output = ''
                                     let userAvatar = ''
-                                    let isOld = ''
-                                    if (user.id <= 1000) {
-                                        isOld = 'oldUser'
-                                    }
                                     if (user.who_see_avatar == 'everyone') {
                                         userAvatar = user.avatar
                                     } else if (user.who_see_avatar == 'friends' && $('#categoryContainer').attr('data-currUser') in JSON.parse(user.friends)) {
@@ -64,16 +61,20 @@ document.addEventListener('DOMContentLoaded', function () {
                                     output = `
                                     <a href="/people/${user.id}">
         <img src="${userAvatar}" alt="${user.username }" width="64" height="64"
-            class="mr-3 float-left rounded-circle ${isOld}" loading="lazy">
+            class="mr-3 float-left rounded-circle" loading="lazy">
             <span>${user.username}</span>
     </a>
     <div class="mb-3">
         <div class="card-body">
                                     `
                                     if (post.fields.description) {
+                                        let readMore = ''
+                                        if (post.fields.description.length > 450) {
+                                            readMore = `<a href="/comments/${post.pk}/">Read More</a>`
+                                        }
                                         output += `
                                         <blockquote class="blockquote mb-0">
-                <p class="text-break">${post.fields.description}</p>
+                <p class="text-break" style="white-space: pre-wrap;">${post.fields.description.substring(0,450)} ${readMore}</p>
             </blockquote>
                                     `
                                     }
@@ -94,7 +95,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                     </div>
                                 </div>
                                 <span class="row justify-content-center">
-    <span><a href="/comments/${post.pk}" style="text-decoration: none; color:black;"><i
+    <span><a href="/comments/${post.pk}/" style="text-decoration: none; color:black;"><i
                 class="far fa-comment-dots" style="font-size:36px;"></i></a></span>
     <!-- Like -->
     <form action="/comments/post_like_dislike/${post.pk}/" method="GET" class="form-inline likeForm" data-pk="${post.pk}">
@@ -148,10 +149,6 @@ document.addEventListener('DOMContentLoaded', function () {
                                     let user = response.user
                                     let output = ''
                                     let userAvatar = ''
-                                    let isOld = ''
-                                    if (user.id <= 1000) {
-                                        isOld = 'oldUser'
-                                    }
                                     if (user.who_see_avatar == 'everyone') {
                                         userAvatar = user.avatar
                                     } else if (user.who_see_avatar == 'friends' && $('#categoryContainer').attr('data-currUser') in JSON.parse(user.friends)) {
@@ -164,16 +161,20 @@ document.addEventListener('DOMContentLoaded', function () {
                                     output = `
                                     <a href="/people/${user.id}">
         <img src="${userAvatar}" alt="${user.username }" width="64" height="64"
-            class="mr-3 float-left rounded-circle ${isOld}" loading="lazy">
+            class="mr-3 float-left rounded-circle" loading="lazy">
             <span>${user.username}</span>
     </a>
     <div class="mb-3">
         <div class="card-body">
                                     `
                                     if (post.fields.description) {
+                                        let readMore = ''
+                                        if (post.fields.description.length > 450) {
+                                            readMore = `<a href="/comments/${post.pk}/">Read More</a>`
+                                        }
                                         output += `
                                         <blockquote class="blockquote mb-0">
-                <p class="text-break">${post.fields.description}</p>
+                <p class="text-break" style="white-space: pre-wrap;">${post.fields.description.substring(0, 450)} ${readMore}</p>
             </blockquote>
                                     `
                                     }
@@ -216,6 +217,7 @@ document.addEventListener('DOMContentLoaded', function () {
         <p style="color:#065FD4;"><b>${post.fields.dislikes.length}</b></p>
         </span>
                                 `
+                                    $('#followedPostsContainer').append(output)
 
                                 }
                             })
