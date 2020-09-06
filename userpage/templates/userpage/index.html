@@ -6,15 +6,31 @@
 
 {% block description %}{{user.bio}}{% endblock description %}
 {% block content %}
-<img src="{% if user.is_authenticated %}{{user.avatar.url}}{% else %}/media/profile_images/DefaultUserImage.jpg{% endif %}" class="col-xl-2 col-lg-2 rounded-circle {% if user.id <= 1000 %}oldUser{% endif %}"
-    alt="" width="200" height="200" style="max-width:200px; max-height:200px;">
+<style>
+    #allowNotification {
+        font-size: 36px;
+    }
+    @media screen and (max-width: 624px) {
+    #allowNotification {
+        font-size: 11px;
+    }
+    }
+    @media screen and (max-width: 586px) {
+    #allowNotification {
+        font-size: 36px;
+    }
+}
+</style>
+<img src="{% if user.is_authenticated %}{{user.avatar.url}}{% else %}/media/profile_images/DefaultUserImage.jpg{% endif %}"
+    class="col-xl-2 col-lg-2 rounded-circle {% if user.id <= 1000 %}oldUser{% endif %}" alt="" width="200" height="200"
+    style="max-width:200px; max-height:200px;">
 <link rel="stylesheet" href="{% static 'userpage/index.css' %}">
 <button type="button" class="btn btn-outline-secondary float-right mr-5 mt-4" data-toggle="modal"
     data-target="#editProfile" data-whatever="editProfile"><i class="fas fa-edit"></i></button>
 <span class="ml-5">
     {% if user.is_authenticated %}
     {% webpush_button with_class="btn btn-outline-info" %}
-    <small>To allow notifications</small>
+    <span><i class="fas fa-bell" id="allowNotification"></i></span>
     {% else %}
     <span class="alert-danger">Please don't try to save any form since you are not logged in</span>
     {% endif %}
@@ -27,8 +43,8 @@
     <li class="list-group-item userMenuItem btn">My Invites {{ total_user_invites_count }}</li>
 </ul>
 <div id="mainContainer">
-    <button type="button" class="btn btn-warning m-3 btn-lg rounded" data-toggle="modal" data-target="#privacy" data-whatever="privacy"><i
-            class="fas fa-unlock"></i>Privacy</button>
+    <button type="button" class="btn btn-warning m-3 btn-lg rounded" data-toggle="modal" data-target="#privacy"
+        data-whatever="privacy"><i class="fas fa-unlock"></i>Privacy</button>
     <button type="button" class="btn btn-success btn-lg rounded" data-toggle="modal" data-target="#distractionFree"
         data-whatever="distractionFree">Distraction Free</button>
     <hr>

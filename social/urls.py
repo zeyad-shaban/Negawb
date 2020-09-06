@@ -4,18 +4,22 @@ from . import views
 app_name = 'social'
 
 urlpatterns = [
+    # Chat Friend
     path('chat_friend/<int:pk>/', views.chat_friend, name='chat_friend'),
+    path('send_friend_message/<int:pk>/', views.send_friend_message, name='send_friend_message'),
+    path('send_friend_file_message/<int:pk>/', views.send_friend_file_message, name="send_friend_file_message"),
+    # Chat Group
     path('chat_group/<int:pk>/', views.chat_group, name='chat_group'),
+    path('send_group_message/<int:pk>/', views.send_group_message, name='send_group_message'),
     path('send_group_invite/<int:user_pk>/<int:group_pk>/', views.send_group_invite, name='send_group_invite'),
     path('edit_group/<int:pk>/', views.edit_group, name="edit_group"),
     path('joingroup/',
          views.join_group, name='join_group'),
-    path('denygroup/', views.deny_group, name='deny_group'),
-    path('send_friend_message/<int:pk>/', views.send_friend_message, name='send_friend_message'),
-    path('send_group_message/<int:pk>/', views.send_group_message, name='send_group_message'),
-    path('loadnotifications/', views.load_notifications, name='load_notifications'),
     path('delete_group/<int:pk>/', views.delete_group, name='delete_group'),
     path('leave_group/<int:pk>/', views.leave_group, name='leave_group'),
+    path('denygroup/', views.deny_group, name='deny_group'),
+    # Society
+    path('loadnotifications/', views.load_notifications, name='load_notifications'),
     path('take_down_friend_request/<int:pk>/', views.take_down_friend_request, name='take_down_friend_request'),
 
     # Area
@@ -23,5 +27,5 @@ urlpatterns = [
     path('delete_area/<int:pk>/', views.delete_area, name='delete_area'),
     path('load_area/<int:group_pk>/<int:area_pk>/', views.load_area, name='load_area'),
     # users
-    path('search_users/', views.search_users, name='search_users')
+    path('search_users/', views.search_users, name='search_users'),
 ]

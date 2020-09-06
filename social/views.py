@@ -2,15 +2,12 @@ from django.core.serializers import serialize
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.utils.timezone import now
 import datetime
-from django.forms.models import model_to_dict
-from django.http import JsonResponse, Http404, HttpResponseRedirect
-from django.views import generic
+from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Q
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
-from django.db.models import Q
 from .forms import ChatGroupForm
 from .models import ChatBox, Message, ChatGroup, GroupRequest, GroupMessage, Notification, Area
 from people.models import FriendRequest
@@ -148,6 +145,19 @@ def send_friend_message(request, pk):
     message.save()
     return JsonResponse({})
 
+def send_friend_file_message(request, pk):
+    friend = get_object_or_404(User, pk=pk)
+    friend = get_object_or_404(User, pk=pk)
+    chat_box = ChatBox.objects.filter(
+        user_1=request.user, user_2=friend).first()
+    if not chat_box:
+        chat_box = ChatBox.objects.filter(
+            user_1=friend, user_2=request.user).first()
+
+    message = Message(chat_box=chat_box, message_sender=request.user,
+                      file=request.FILES.get('file'), image=request.FILES.get('image'))
+    message.save()
+    return redirect('social:chat_friend', pk=pk)
 
 def chat_group(request, pk):
     group = get_object_or_404(ChatGroup, pk=pk)
