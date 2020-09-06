@@ -25,6 +25,10 @@ from django.contrib.auth import views as auth_views
 from django.contrib.sitemaps.views import sitemap
 from categories import sitemaps
 
+handler404 = production_views.handler404
+handler500 = production_views.handler500
+
+
 sitemaps = {
     'static': sitemaps.StaticViewSitemap,
     'post': sitemaps.PostSitemap,
@@ -70,7 +74,8 @@ urlpatterns = [
         template_name='users/password_reset_confirm.html'), name='password_reset_confirm'),
     path('password-reset-complete/', auth_views.PasswordResetCompleteView.as_view(
         template_name='users/password_reset_complete.html'), name='password_reset_complete'),
-    path('set_email_and_phone', users_views.set_email_and_phone, name="set_email_and_phone"),
+    path('set_email_and_phone', users_views.set_email_and_phone,
+         name="set_email_and_phone"),
     path('send_email_code', users_views.send_email_code, name="send_email_code"),
     path('confirm_email', users_views.confirm_email, name="confirm_email"),
     path('send_phone_code', users_views.send_phone_code, name="send_phone_code"),

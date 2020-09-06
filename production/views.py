@@ -43,6 +43,13 @@ def feedback(request):
         return redirect('feedback')
 
 
+def handler404(request, *args, **kwargs):
+    return render(request, 'production/404.html')
+def handler500(request, *args, **kwargs):
+    return render(request, 'production/500.html')
+
+
+
 class ViewFeedback(generic.DetailView):
     model = Feedback
     template_name = 'production/ViewFeedback.html'
