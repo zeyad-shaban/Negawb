@@ -114,8 +114,8 @@ def confirm_email(request):
     user_code = int(request.GET.get('code'))
     if user_code == request.user.email_code:
         request.user.email = request.GET.get('email')
-        return JsonResponse({'status': 'success'})
         request.user.email_code = None
         request.user.save()
+        return JsonResponse({'status': 'success'})
     else:
         return JsonResponse({'status': 'fail'})
