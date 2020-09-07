@@ -10,7 +10,6 @@ from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from random import randint
 from django.contrib.auth import get_user_model as user_model
-from sendsms.api import send_sms
 User = user_model()
 
 
@@ -127,7 +126,9 @@ def send_phone_code(request):
     request.user.phone_code = None
     phone = request.GET.get('phone')
     confirmation_code = randint(100000, 999999)
-    send_sms(body=f'Dfreemedia confirmation code:  {confirmation_code}', from_phone='+201068368804', to=[phone])
+
+    # Send to suer
+    
     request.user.phone_code = confirmation_code
     request.user.save()
     return JsonResponse({})

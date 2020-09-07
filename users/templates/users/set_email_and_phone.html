@@ -31,7 +31,7 @@ you{% endblock description %}
             placeholder="+41791234567" style="max-width:250px"></span>
     <button class="btn btn-success" id="submitPhone">Submit</button>
     <br>
-    <small class="form-text text-muted">Current: {% if not user.phone %}None{% endif %}{{ user.phone }}</small>
+    <small class="form-text text-muted">Current: {% if not user.phone %}None{% else %}{{ user.phone }}{% endif %}</small>
     <div id="loadingPhone"></div>
     <br>
     <h4>Enter the six digit code here</h4>

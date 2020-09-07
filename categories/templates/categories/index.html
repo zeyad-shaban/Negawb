@@ -61,9 +61,10 @@ only, giving users the power to hide unwanted topics{% endblock description %}
             </div>
             <div class="form-group">
                 <p class="float-left" onclick="document.querySelector('#image').click()">
-                    <label for="id_image" class="mr-3" style="font-size:24px"><i class="far fa-image"></i> Image</label>
+                    <label for="id_image" class="mr-3 btn" style="font-size:24px"><i class="far fa-image"></i>
+                        Image</label>
                     <input type="file" name="image" accept="image/*" id="image" style='display:none;'></p>
-                <p><label for="id_post_file" style="font-size:24px"
+                <p><label for="id_post_file" style="font-size:24px" class="btn"
                         onclick="document.querySelector('#post_file').click()"><i class="fas fa-video"></i>
                         Video</label>
                     <input type="file" name="post_file" accept="video/*" id="post_file" style="display: none;"></p>

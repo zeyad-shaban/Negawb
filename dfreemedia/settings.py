@@ -49,7 +49,7 @@ INSTALLED_APPS = [
     'comments',
     'social',
     'production',
-    'django_cleanup'
+    'django_cleanup',
 ]
 
 MIDDLEWARE = [
@@ -154,7 +154,6 @@ EMAIL_HOST_USER = 'dfreemedia@gmail.com'
 EMAIL_HOST_PASSWORD = '<D44200444FreeMedia>'
 
 # Sms
-SENDSMS_BACKEND = 'sendsms.backends.console.SmsBackend'
 
 try:
     from .local_settings import *
