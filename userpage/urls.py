@@ -7,7 +7,6 @@ app_name = 'userpage'
 
 urlpatterns = [
     path('', views.home, name='home'),
-    path('posts/', views.posts, name='posts'),
     path('friendrequest/', views.friendrequest, name='friendrequest'),
     path('denyrequest/',
          views.denyrequest, name='denyrequest'),

@@ -88,20 +88,6 @@ def home(request):
 
 
 @login_required
-def posts(request):
-    post_list = Post.objects.filter(user=request.user).order_by('-post_date')
-    paginator = Paginator(post_list, 7)
-    page = request.GET.get('page')
-    try:
-        posts = paginator.page(page)
-    except PageNotAnInteger:
-        posts = paginator.page(1)
-    except EmptyPage:
-        posts = paginator.page(paginator.num_pages)
-    return render(request, 'userpage/posts.html', {'posts': posts})
-
-
-@login_required
 def friendrequest(request):
     requests = FriendRequest.objects.filter(to_user=request.user)
     group_requests = GroupRequest.objects.filter(reciever=request.user)
