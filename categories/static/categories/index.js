@@ -248,21 +248,21 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (response.action == 'undislike_and_like') {
                         dislikes -= 1
                         likes++
-                        $(`#id_dislikes${thisElement.attr('data-pk')}`).html(`<p style="color:black;">${dislikes}</p>`)
-                        $(`#id_likes${thisElement.attr('data-pk')}`).html(`<p style="color:#065FD4;">${likes}</p>`)
+                        $(`#id_dislikes${thisElement.attr('data-pk')}`).html(`<p style="color:black;display: inline">${dislikes}</p>`)
+                        $(`#id_likes${thisElement.attr('data-pk')}`).html(`<p style="color:#065FD4; display: inline">${likes}</p>`)
                         // Followed
-                        $(`#followed_dislikes${thisElement.attr('data-pk')}`).html(`<p style="color:black;">${dislikes}</p>`)
-                        $(`#followed_likes${thisElement.attr('data-pk')}`).html(`<p style="color:#065FD4;">${likes}</p>`)
+                        $(`#followed_dislikes${thisElement.attr('data-pk')}`).html(`<p style="color:black;display: inline">${dislikes}</p>`)
+                        $(`#followed_likes${thisElement.attr('data-pk')}`).html(`<p style="color:#065FD4;display: inline">${likes}</p>`)
                     } else if (response.action == 'unlike') {
                         likes -= 1
-                        $(`#id_likes${thisElement.attr('data-pk')}`).html(`<p style="color:black;">${likes}</p>`)
+                        $(`#id_likes${thisElement.attr('data-pk')}`).html(`<p style="color:black;display: inline">${likes}</p>`)
                         // Followed
-                        $(`#followed_likes${thisElement.attr('data-pk')}`).html(`<p style="color:black;">${likes}</p>`)
+                        $(`#followed_likes${thisElement.attr('data-pk')}`).html(`<p style="color:black;display: inline">${likes}</p>`)
                     } else { //Like only
                         likes++
-                        $(`#id_likes${thisElement.attr('data-pk')}`).html(`<p style="color:#065FD4;">${likes}</p>`)
+                        $(`#id_likes${thisElement.attr('data-pk')}`).html(`<p style="color:#065FD4;display: inline">${likes}</p>`)
                         // Followed
-                        $(`#followed_likes${thisElement.attr('data-pk')}`).html(`<p style="color:#065FD4;">${likes}</p>`)
+                        $(`#followed_likes${thisElement.attr('data-pk')}`).html(`<p style="color:#065FD4;display: inline">${likes}</p>`)
                     }
                 }
             })
@@ -285,21 +285,21 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (response.action == 'unlike_and_dislike') {
                         dislikes++
                         likes -= 1
-                        $(`#id_dislikes${thisElement.attr('data-pk')}`).html(`<p style="color:#065FD4;">${dislikes}</p>`)
-                        $(`#id_likes${thisElement.attr('data-pk')}`).html(`<p style="color:black;">${likes}</p>`)
+                        $(`#id_dislikes${thisElement.attr('data-pk')}`).html(`<p style="color:#065FD4;display: inline">${dislikes}</p>`)
+                        $(`#id_likes${thisElement.attr('data-pk')}`).html(`<p style="color:black;display: inline">${likes}</p>`)
                         // Followed
-                        $(`#followed_dislikes${thisElement.attr('data-pk')}`).html(`<p style="color:#065FD4;">${dislikes}</p>`)
-                        $(`#followed_likes${thisElement.attr('data-pk')}`).html(`<p style="color:black;">${likes}</p>`)
+                        $(`#followed_dislikes${thisElement.attr('data-pk')}`).html(`<p style="color:#065FD4;display: inline">${dislikes}</p>`)
+                        $(`#followed_likes${thisElement.attr('data-pk')}`).html(`<p style="color:black;display: inline">${likes}</p>`)
                     } else if (response.action === 'undislike') {
                         dislikes -= 1
-                        $(`#id_dislikes${thisElement.attr('data-pk')}`).html(`<p style="color:black;">${dislikes}</p>`)
+                        $(`#id_dislikes${thisElement.attr('data-pk')}`).html(`<p style="color:black;display: inline">${dislikes}</p>`)
                         // Followed
-                        $(`#followed_dislikes${thisElement.attr('data-pk')}`).html(`<p style="color:black;">${dislikes}</p>`)
+                        $(`#followed_dislikes${thisElement.attr('data-pk')}`).html(`<p style="color:black;display: inline">${dislikes}</p>`)
                     } else {
                         dislikes++
-                        $(`#id_dislikes${thisElement.attr('data-pk')}`).html(`<p style="color:#065FD4;">${dislikes}</p>`)
+                        $(`#id_dislikes${thisElement.attr('data-pk')}`).html(`<p style="color:#065FD4;display: inline">${dislikes}</p>`)
                         // Followed
-                        $(`#followed_dislikes${thisElement.attr('data-pk')}`).html(`<p style="color:#065FD4;">${dislikes}</p>`)
+                        $(`#followed_dislikes${thisElement.attr('data-pk')}`).html(`<p style="color:#065FD4;display: inline">${dislikes}</p>`)
                     }
                 }
             })

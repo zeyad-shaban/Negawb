@@ -70,7 +70,3 @@ nav li a:hover {
     background: rgba(0, 0, 0, 0.6);
     background-size: cover;
 }
-
-.oldUser {
-    border: 5px groove gold;
-}

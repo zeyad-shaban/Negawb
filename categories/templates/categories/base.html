@@ -158,7 +158,7 @@
                     <a href="#" class="" data-toggle="dropdown" role="button" aria-haspopup="true"
                         aria-expanded="false"><i class="fas fa-sort-down"
                             style="color: white; font-size: 36px;"></i><span class="caret"></span></a>
-                    <ul class="dropdown-menu float-right mr-100 mt-5">
+                    <ul class="dropdown-menu float-right mr-100 mt-5" style="text-align: center;">
                         <li>
                             <a class="btn" href="{% url 'about' %}">About</a>
                         </li>
@@ -175,8 +175,12 @@
                         </li>
                         {% endif %}
                         <!-- AddToAny BEGIN -->
-                        <a class="a2a_dd btn" href="https://www.addtoany.com/share"><i class="fas fa-share-alt mr-2"
-                                style="font-size: 24px; color: #35A0FE"></i><span>Share</span></a>
+                        <a class="a2a_dd btn" href="https://www.addtoany.com/share"><i class="fas fa-share-alt"
+                                style="font-size: 20px; color: #35A0FE"></i> Share</a>
+                        <script>
+                            var a2a_config = a2a_config || {};
+                            a2a_config.onclick = 1;
+                        </script>
                         <script async src="https://static.addtoany.com/menu/page.js"></script>
                         <!-- AddToAny END -->
                         <li>
