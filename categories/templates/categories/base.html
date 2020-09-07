@@ -216,7 +216,8 @@
         {% endif %}
     </span>
     {% if not user.is_authenticated %}
-    <div class="float-right col-lg-4 col-md-3 col-sm-5 col-6 mt-5" id="floatAuthForm">
+    <div class="float-right col-lg-4 col-md-3 col-sm-5 col-6 mt-5" id="floatAuthForm"
+        style="position: relative; display: block">
         <div class="text-center">
             <img src="{% static 'categories/favicon.jpg' %}" alt="Dfreemedia favicon" id="signupDfreemediaImage"
                 class="rounded-circle" height="100">
@@ -271,7 +272,7 @@
                             <input type="checkbox" name="chat_only_mode" class="form-control" id="chat_only_mode">
                         </div>
                         <div class="form-group">
-                            <label for="password2">Default posts type</label>
+                            <label for="password2">Default homepage posts</label>
                             <select name="homepage_posts" id="id_homepage_posts">
                                 <option value="" selected="">All</option>
                                 {% for category in all_categories %}
@@ -280,7 +281,7 @@
                                 {% endfor %}
                             </select>
                             <br>
-                            <small class="form-text-text-muted">Will be displayed as your default homepage
+                            <small class="form-text-text-muted">Will be displayed in your homepage
                                 posts</small>
                         </div>
                         <small class="form-text text-muted mb-2"> <input type="checkbox" name="" id="" class="mr-2"
