@@ -60,13 +60,15 @@ only, giving users the power to hide unwanted topics{% endblock description %}
                 <textarea type="text" name="description" id="id_post_description" class="form-control"></textarea>
             </div>
             <div class="form-group">
-                <p class="form-text text-muted"><label for="id_post_image">Image</label>
-                    <input type="file" name="image" accept="image/*" id="id_image"></p>
+                <p class="float-left" onclick="document.querySelector('#image').click()">
+                    <label for="id_image" class="mr-3" style="font-size:24px"><i class="far fa-image"></i> Image</label>
+                    <input type="file" name="image" accept="image/*" id="image" style='display:none;'></p>
+                <p><label for="id_post_file" style="font-size:24px"
+                        onclick="document.querySelector('#post_file').click()"><i class="fas fa-video"></i>
+                        Video</label>
+                    <input type="file" name="post_file" accept="video/*" id="post_file" style="display: none;"></p>
             </div>
-            <div class="form-group">
-                <p class="form-text text-muted"><label for="id_post_image">Or Video</label>
-                    <input type="file" name="post_file" accept="video/*" id="id_post_file"></p>
-            </div>
+            <br>
             <label for="id_category">Topic</label>
             <select name="id_category" id="id_category">
                 <option value="test">All</option>
@@ -79,12 +81,11 @@ only, giving users the power to hide unwanted topics{% endblock description %}
                 {% endfor %}
             </select>
 
-            <small class="form-text text-muted">You don't have to specify image or video, but if you do then only one of
-                them</small>
-
             <input type="submit" value="Post" class="btn btn-lg mt-2 btn-success" id="addPostButton">
         </div>
     </form>
+    <div id="uploadedImage"></div>
+    <br>
     {% for post in homepage_posts %}
     <a href="{% url 'people:people' post.user.id %}">
         {% if post.user.who_see_avatar == 'everyone' %}
@@ -106,12 +107,13 @@ only, giving users the power to hide unwanted topics{% endblock description %}
         <div class="card-body">
             {% if post.description %}
             <blockquote class="blockquote mb-0">
-                <p class="text-break" style="white-space: pre-wrap">{{post.description|truncatechars:450}} {% if post.description|length > 450%}<a
-                        href="{% url 'comments:view_post' post.id %}">Read
+                <p class="text-break" style="white-space: pre-wrap">{{post.description|truncatechars:450}}
+                    {% if post.description|length > 450%}<a href="{% url 'comments:view_post' post.id %}">Read
                         More</a>{% endif %}</p>
             </blockquote>
             {% endif %}
-            <small class="form-text text-muted">{{post.views.count}} Views ♦︎ {{ post.post_date|timesince }} ago -{% if post.category %} {{ post.category.title }} {% else %} All {% endif %} Topic</small>
+            <small class="form-text text-muted">{{post.views.count}} Views ♦︎ {{ post.post_date|timesince }} ago
+                -{% if post.category %} {{ post.category.title }} {% else %} All {% endif %} Topic</small>
 
             {% if post.image %}
             <img src="{{ post.image.url }}" alt="{{ post.user.username }}" height="250" width="40%">
@@ -220,7 +222,8 @@ only, giving users the power to hide unwanted topics{% endblock description %}
                             More</a>{% endif %}</p>
                 </blockquote>
                 {% endif %}
-                <small class="form-text text-muted">{{post.views.count}} ♦︎ {{ post.post_date|timesince }} ago -{% if post.category %} {{ post.category.title }} {% else %} All {% endif %} Topic</small>
+                <small class="form-text text-muted">{{post.views.count}} ♦︎ {{ post.post_date|timesince }} ago
+                    -{% if post.category %} {{ post.category.title }} {% else %} All {% endif %} Topic</small>
 
                 {% if post.image %}
                 <img src="{{ post.image.url }}" alt="{{ post.user.username }}" height="250" width="40%">
