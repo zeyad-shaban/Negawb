@@ -198,21 +198,17 @@ only, giving users the power to hide unwanted topics{% endblock description %}
                         <a href="{% url 'comments:view_post' post.id %}" class="card-link"><i
                                 class="fab fa-rocketchat"></i>
                             Comments</a>
-
                         <!-- AddToAny BEGIN -->
                         <a href="https://www.addtoany.com/share#url=https%3A%2F%2Fwww.dfreemedia.com{% url 'comments:view_post' post.id %}&amp;title={{ post.description|truncatechars:45 }}"
-                            target="_blank">Share</a>
+                            target="_blank" class="card-link"><i class="fa fa-mail-forward"></i>  Share</a>
                         <!-- AddToAny END -->
-                        <a href="#" class="card-link"><i class="fa fa-mail-forward"></i> Share</a>
                     </div>
                 </div>
                 <!-- Post /////-->
+                {% endfor %}
             </div>
         </div>
-        {% endfor %}
     </div>
-</div>
-</div>
 </div>
 
 {% if not user.hide_followed_posts %}
