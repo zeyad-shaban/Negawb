@@ -30,12 +30,32 @@
 </head>
 
 <body>
+    <style>
+        #stickyChatBtn {
+            display: none;
+        }
+        @media (max-width: 575px) {
+            #mainChatBtn {
+                display: none;
+            }
+
+            #stickyChatBtn {
+                display: block;
+            }
+        }
+    </style>
     <nav
         class="navbar navbar-expand-xl navbar-expand-lg navbar-expand-md navbar-expand-sm navbar-dark bg-dark {% if user.fixed_navbar or not user.is_authenticated %}sticky-top{% endif %}">
         <a class="navbar-brand" href="{% url 'home' %}">
             <img src="{% static 'categories/favicon.jpg' %}" width="35" height="30" alt="Website Logo" loading="lazy"
                 title="Dfreemedia">
         </a>
+        <li class="nav-item" id="stickyChatBtn">
+            <a href="{% url 'chat' %}" title="Chat">
+                <i class="fas fa-comment-alt mr-1"
+                    style="font-size:24px; color: rgb(255, 255, 255)"></i><span>Chat</span>
+            </a>
+        </li>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -61,7 +81,7 @@
                             Friends</span>
                     </a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" id="mainChatBtn">
                     <a href="{% url 'chat' %}" title="Chat">
                         <i class="fas fa-comment-alt mr-1"
                             style="font-size:24px; color: rgb(255, 255, 255)"></i><span>Chat</span>

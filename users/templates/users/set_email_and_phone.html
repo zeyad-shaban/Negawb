@@ -9,11 +9,11 @@ Set up Email and phone number
 you{% endblock description %}
 
 {% block content %}
+<div class="alert alert-warning">Without an email address you won't be able to reset your password</div>
 <div class="m-2">
     <h1 class="row justify-content-center mb-4">Set up email and phone number</h1>
     <br>
     {% if not user.email %}
-    <div class="alert alert-danger">an Without email address you won't be able to reset your password</div>
     <br>
     {% endif %}
     <span>Email: <input type="email" name="email" id="id_email" class="form-control col-md-6 d-inline ml-2"
