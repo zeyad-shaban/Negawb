@@ -12,11 +12,17 @@ you{% endblock description %}
 <div class="m-2">
     <h1 class="row justify-content-center mb-4">Set up email and phone number</h1>
     <br>
+    {% if not user.email %}
+    <div class="alert alert-danger">an Without email address you won't be able to reset your password</div>
+    <br>
+    {% endif %}
     <span>Email: <input type="email" name="email" id="id_email" class="form-control col-md-6 d-inline ml-2"
             placeholder="example@gmail.com" style="max-width:250px"></span>
     <button class="btn btn-success" id="submitEmail">Submit</button>
     <br>
-    <small class="form-text text-muted">Current: {% if not user.email %}None{% endif %}{{ user.email }}</small>
+    {% if user.email %}
+    <small class="form-text text-muted">Current: {{ user.email }}</small>
+    {% endif %}
     <div id="loadingEmail"></div>
     <br>
     <h4>Enter the six digit code here</h4>
@@ -24,7 +30,7 @@ you{% endblock description %}
     <input type="text" name="code" id="id_emailCode" class="form-control" style="max-width: 150px; display: inline"
         maxlength="6">
     <button class="btn btn-success" id="submitEmailCode">Confirm</button>
-    <hr>
+    <!-- <hr>
     <br class="mb-3">
 *Beta*
     <span>Phone number: <input type="text" name="phone" id="id_phone" class="form-control col-md-6 d-inline ml-2"
@@ -39,7 +45,7 @@ you{% endblock description %}
     <input type="text" name="phoneCode" id="id_phoneCode" class="form-control" style="max-width: 150px; display: inline"
         maxlength="6">
     <button class="btn btn-success" id="submitPhoneCode">Confirm</button>
-</div>
+</div> -->
 <br>
 <br>
 <a href="{% url 'userpage:home' %}" class="btn btn-secondary"><i class="fas fa-sign-out-alt"></i> Exit</a>
