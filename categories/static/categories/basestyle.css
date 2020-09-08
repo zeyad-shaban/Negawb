@@ -88,14 +88,3 @@ nav li a:hover {
         display: block;
     }
 }
-
-#floatAuthForm {
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    height: 150px;
-    background-color: rgba(0, 0, 0, 0.473);
-    color: white;
-    text-align: center;
-}
