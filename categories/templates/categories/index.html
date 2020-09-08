@@ -24,13 +24,10 @@ only, giving users the power to hide unwanted topics{% endblock description %}
 </ul>
 <!-- Homepage posts -->
 <div class="homepageItem" id="postsContainer">
-    <div class="text-center container">
-        {% if not user.is_authenticated %}
-        <h1 class="text-center">All topics</h1>
-        <small>You can change the default homepage posts from the Distraction Free menu in your <a
-                href="{% url 'userpage:home' %}">profile</a></small>
-        {% endif %}
-    </div>
+    {% if not user.is_authenticated %}
+    <small>You can change the default hashtag from the Distraction Free menu in your <a
+    href="{% url 'userpage:home' %}">profile</a></small>
+                {% endif %}
     <div class="container-fluid gedf-wrapper">
         <div class="row">
             <div class="col-md-3">
