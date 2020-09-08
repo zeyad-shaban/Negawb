@@ -5,6 +5,16 @@
 {% block description %}We divide posts according to their topic to help you stay focused and receive relevant topics
 only, giving users the power to hide unwanted topics{% endblock description %}
 
+
+
+{% block searchbar %}
+<form action="{% url 'comments:search_by_hashtags' %}" method="GET" class="form-inline">
+    <input type="text" name="q" class="form-control">
+    <button type="submit" class="btn btn-success">Search</button>
+</form>
+{% endblock searchbar %}
+
+
 {% block content %}
 <ul class="list-group list-group-horizontal">
     <li class="list-group-item active homepageView">Posts</li>

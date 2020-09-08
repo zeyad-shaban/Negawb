@@ -11,9 +11,26 @@ from social.models import Notification
 from django.urls import resolve
 from webpush import send_user_notification
 from django.utils.timezone import now
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import datetime
+import re
 
 # Post
+
+def search_by_hashtags(request):
+    q = request.GET.get('q')
+    query = Post.objects.filter(hashtags__icontains=q).order_by('-post_date')
+    paginator = Paginator(query, 5)
+    page = request.GET.get('page')
+    if not page:
+        page = 1
+    try:
+        posts = paginator.page(page)
+    except EmptyPage:
+        posts = []
+    except PageNotAnInteger:
+        posts = paginator.page(1)
+    return render(request, 'comments/search_by_hashtags.html', {'posts': posts})
 
 
 def view_post(request, pk):
@@ -102,12 +119,6 @@ def create_post(request, pk):
             Category, pk=request.POST.get('id_category'))
     except:
         category = None
-    # posts_in_last_day = request.user.post_set.filter(Q(
-    #     post_date__gt=now() - datetime.timedelta(days=1)))
-    # if posts_in_last_day.count() >= 5:
-    #     messages.error(
-    #         request, f'you have exceeded your 5 posts a day limit')
-    #     return redirect('categories:view_category', pk=pk)
     if request.POST.get('description') == '' and request.FILES.get('image') == None and request.FILES.get('post_file') == None:
         messages.error(request, 'Please spicify at leat one field')
         if category == None:
@@ -126,6 +137,11 @@ def create_post(request, pk):
         post = form.save(commit=False)
         post.user = request.user
         post.category = category
+        if post.description and '#' in post.description:
+            output = ''
+            for word in re.findall(r'#\w+', post.description):
+                output += word + ' '
+            post.hashtags = output
         post.save()
         messages.success(
             request, 'Your post was uploaded, thanks for growing up our DFreeMedia community 💪🏻')
