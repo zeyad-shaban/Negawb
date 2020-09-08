@@ -36,7 +36,11 @@ def home(request):
         # Homepage Posts Paginator
         page = request.GET.get('page')
         if request.user.homepage_hashtags:
-            homepage_hashtags_list = request.user.homepage_hashtags.post_set.all().order_by('-post_date')
+            homepage_hashtags_list = []
+            for post in Post.objects.all():
+                for word in request.user.homepage_hashtags.split(' '):
+                    if post.hashtags and word in post.hashtags:
+                        homepage_hashtags_list.append(post)
         else:
             homepage_hashtags_list = Post.objects.all().order_by('-post_date')
         homepage_hashtags_paginator = Paginator(homepage_hashtags_list, 5)

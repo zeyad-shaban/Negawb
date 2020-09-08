@@ -38,6 +38,6 @@ class DistractionFreeForm(ModelForm):
             'allow_reply_message': 'Replies',
             'allow_invites': '<hr>friend and group Invites',
             'your_invites':'Your own invites',
-            'homepage_hashtags': 'Homepage posts <small class="form-text text-muted">User # before each word, leave blank to disable filtering</small>',
+            'homepage_hashtags': 'Homepage posts <small class="form-text text-muted">Use # before each word, leave blank to disable filtering</small>',
             'chat_only_mode': '<b style="color:orange;">Chat only mode</b>',
         }
