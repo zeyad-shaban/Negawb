@@ -66,6 +66,7 @@ def delete_post(request, pk):
 def post_like_dislike(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
     # Like
+    print(request.GET.get('submit'))
     if request.GET.get('submit') == 'like':
         if request.user in post.dislikes.all():
             post.dislikes.remove(request.user)
@@ -89,6 +90,9 @@ def post_like_dislike(request, post_id):
         else:
             post.dislikes.add(request.user)
             return JsonResponse({'action': 'dislike_only'})
+    else:
+        messages.error(request, 'Something went wrong')
+        return redirect('home')
 
 
 @login_required
