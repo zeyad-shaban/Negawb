@@ -131,7 +131,7 @@
                                     <!-- Control members -->
                                     {% if not member == user and not member == group.author and user in group.group_admins.all %}
                                     {% if not member in group.group_admins.all %}
-                                    <a href="#"><i class="fas fa-arrow-up" style="font-size: 24px; color: green"></i>
+                                    <a href="{% url 'social:hire_member' group.id member.id %}" class="btn hireMember"><i class="fas fa-arrow-up" style="font-size: 24px; color: green"></i>
                                         Make admin</a>
                                     <a href="{% url 'social:kick_member' group.id member.id %}"
                                         onclick="return confirm('Kick {{ member.username }}?')"
@@ -710,6 +710,19 @@
                     dataType: 'json',
                     success: function (response) {
                         thisElement.parent().parent().parent().fadeOut()
+                    }
+                })
+            })
+            $('.hireMember').click(function(e){
+                e.preventDefault();
+                let thisElement = $(this)
+                $.ajax({
+                    url: thisElement.attr('href'),
+                    data: {},
+                    method: 'get',
+                    dataType: 'json',
+                    success: function (response) {
+                        alert('success')
                     }
                 })
             })
