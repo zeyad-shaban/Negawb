@@ -375,6 +375,12 @@ def hire_member(request, group_pk, member_pk):
     if (request.user == group.author or request.user in group.group_admins.all()) and (member not in group.group_admins.all()):
         group.group_admins.add(member)
         return JsonResponse({})
+def lower_member(request, group_pk, member_pk):
+    member = get_object_or_404(User, pk=member_pk)
+    group = get_object_or_404(ChatGroup, pk=group_pk)
+    if request.user == group.author and not member == request.user:
+        group.group_admins.remove(member)
+        return JsonResponse({})
 
 # End groups
 

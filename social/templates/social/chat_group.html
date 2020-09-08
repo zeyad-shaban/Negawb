@@ -139,8 +139,10 @@
                                             style="font-size: 24px; color: red"></i> kick</a>
                                     <!-- member admin -->
                                     {% else %}
-                                    <span><i class="fas fa-arrow-down"
-                                            style="font-size: 24px; color: rgb(128, 128, 128)"></i> Lower</span>
+                                    {% if user == group.author %}
+                                    <a href="{% url 'social:lower_member' group.id member.id %}" class='btn lowerMember'><i class="fas fa-arrow-down"
+                                            style="font-size: 24px; color: rgb(128, 128, 128)"></i> Lower</a>
+                                            {% endif %}
                                     {% endif %}
                                     {% endif %}
                                     <!-- Classification -->
@@ -722,8 +724,21 @@
                     method: 'get',
                     dataType: 'json',
                     success: function (response) {
-                        alert('success')
+                        alert('Success, please refresh the page to see changes')
                     }
+                })
+            })
+            $('.lowerMember').click(function(e){
+                e.preventDefault();
+                let thisElement = $(this)
+                $.ajax({
+                    url: thisElement.attr('href'),
+                    data: {},
+                    method: 'get',
+                    dataType: 'json',
+                    success: function (response) {
+                        alert('Lowered, please refresh the page to see changes')
+                    },
                 })
             })
             // End control users

@@ -22,6 +22,7 @@ urlpatterns = [
         # Control members
     path('kick_member/<int:group_pk>/<int:member_pk>/', views.kick_member, name='kick_member'),
     path('hire_member/<int:group_pk>/<int:member_pk>/', views.hire_member, name='hire_member'),
+    path('lower_member/<int:group_pk>/<int:member_pk>/', views.lower_member, name='lower_member'),
     # Society
     path('loadnotifications/', views.load_notifications, name='load_notifications'),
     path('take_down_friend_request/<int:pk>/', views.take_down_friend_request, name='take_down_friend_request'),
