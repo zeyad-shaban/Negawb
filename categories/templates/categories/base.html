@@ -34,6 +34,7 @@
         #stickyChatBtn {
             display: none;
         }
+
         @media (max-width: 575px) {
             #mainChatBtn {
                 display: none;
@@ -236,23 +237,10 @@
         {% endif %}
     </span>
     {% if not user.is_authenticated %}
-    <div class="float-right col-lg-4 col-md-3 col-sm-5 col-6 mt-5" id="floatAuthForm"
-        style="position: relative; display: block">
-        <div class="text-center">
-            <img src="{% static 'categories/favicon.jpg' %}" alt="Dfreemedia favicon" id="signupDfreemediaImage"
-                class="rounded-circle" height="100">
-            <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#signupFloatForm"
-                style="border-radius: 100%;" id="signup">Sign
-                Up</button>
-            <br>
-            <button type="button" class="btn btn-warning m-2" data-toggle="modal" style="border-radius: 100%;"
-                data-target="#loginFloatForm">Login</button>
-        </div>
-    </div>
     <div class="modal fade" id="signupFloatForm" tabindex="-1" role="dialog" aria-labelledby="signupFloatFormLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">
-            <div class="modal-content" style="background:orange;">
+            <div class="modal-content" style="background: #cccccc;">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
@@ -365,12 +353,35 @@
                 }
                 setTimeout(() => {
                     popSignUpForm()
-                }, 3000);
+                }, 5000);
             });
         });
     </script>
+
+
     {% endif %}
     {% block content %} {% endblock content %}
+        {% if not user.is_authenticated %}
+        <style>
+            #floatAuthForm {
+                position: fixed;
+                left: 0;
+                bottom: 0;
+                width: 100%;
+                height: 150px;
+                background-color: rgba(0, 0, 0, 0.473);
+                color: white;
+                text-align: center;
+            }
+        </style>
+        <div id="floatAuthForm">
+            <button type="button" class="btn btn-primary btn-lg" data-toggle="modal"
+                data-target="#loginFloatForm">Login</button>
+                <span>Or</span>
+            <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#signupFloatForm"
+                id="signup">Sign Up</button>
+        </div>
+        {% endif %}
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
         integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
