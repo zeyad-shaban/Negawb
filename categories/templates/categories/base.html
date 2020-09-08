@@ -30,21 +30,7 @@
 </head>
 
 <body>
-    <style>
-        #stickyChatBtn {
-            display: none;
-        }
-
-        @media (max-width: 575px) {
-            #mainChatBtn {
-                display: none;
-            }
-
-            #stickyChatBtn {
-                display: block;
-            }
-        }
-    </style>
+    
     <nav
         class="navbar navbar-expand-xl navbar-expand-lg navbar-expand-md navbar-expand-sm navbar-dark bg-dark {% if user.fixed_navbar or not user.is_authenticated %}sticky-top{% endif %}">
         <a class="navbar-brand" href="{% url 'home' %}">
@@ -362,18 +348,6 @@
     {% endif %}
     {% block content %} {% endblock content %}
         {% if not user.is_authenticated %}
-        <style>
-            #floatAuthForm {
-                position: fixed;
-                left: 0;
-                bottom: 0;
-                width: 100%;
-                height: 150px;
-                background-color: rgba(0, 0, 0, 0.473);
-                color: white;
-                text-align: center;
-            }
-        </style>
         <div id="floatAuthForm">
             <button type="button" class="btn btn-primary btn-lg" data-toggle="modal"
                 data-target="#loginFloatForm">Login</button>

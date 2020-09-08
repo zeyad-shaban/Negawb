@@ -48,14 +48,14 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (response.action == 'unlike_and_dislike') {
                         dislikes++
                         likes -= 1
-                        $(`#id_dislikes${thisElement.attr('data-pk')}`).html(`<p style="color:#065FD4; display: inline;">${dislikes}</p>`)
-                        $(`#id_likes${thisElement.attr('data-pk')}`).html(`<p style="color:black; display: inline;">${likes}</p>`)
+                        $(`#id_dislikes${thisElement.attr('data-pk')}`).html(`<p style="color:#065FD4; display:inline;">${dislikes}</p>`)
+                        $(`#id_likes${thisElement.attr('data-pk')}`).html(`<p style="color:black; display:inline;">${likes}</p>`)
                     } else if (response.action === 'undislike') {
                         dislikes -= 1
-                        $(`#id_dislikes${thisElement.attr('data-pk')}`).html(`<p style="color:black; display: inline;">${dislikes}</p>`)
+                        $(`#id_dislikes${thisElement.attr('data-pk')}`).html(`<p style="color:black; display:inline;">${dislikes}</p>`)
                     } else {
                         dislikes++
-                        $(`#id_dislikes${thisElement.attr('data-pk')}`).html(`<p style="color:#065FD4; display: inline;">${dislikes}</p>`)
+                        $(`#id_dislikes${thisElement.attr('data-pk')}`).html(`<p style="color:#065FD4; display:inline;">${dislikes}</p>`)
                     }
                 }
             })
