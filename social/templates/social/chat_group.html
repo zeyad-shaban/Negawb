@@ -73,6 +73,25 @@
                 <source src="{{ message.video.url }}" type="video/ogg">
                 Your browser does not support the video tag.
             </video>
+            {% elif message.audio %}
+            <audio controls preload="none" draggable="false" style="max-width:450px; max-height:349px;"
+                class="messageAudio">
+                <source src="{{ message.audio.url }}" type="audio/mp4">
+                <source src="{{ message.audio.url }}" type="audio/ogg">
+                Your browser does not support the video tag.
+            </audio>
+            <br>
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Speed
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <button class="btn audioPlayback">0.5</button>
+                <button class="btn audioPlayback">1</button>
+                <button class="btn audioPlayback">1.5</button>
+                <button class="btn audioPlayback">1.75</button>
+                <button class="btn audioPlayback">2</button>
+            </div>
             {% endif %}
             <time>{{ message.date|timesince }} ago</time>
         </div>
@@ -308,6 +327,8 @@
                         <input type="file" name="image" id="uploadImage" class="from-file" accept="image/*">
                         <input type="file" name="video" id="uploadVideo" class="from-file" accept="video/*"
                             style="display:none;" onchange="document.querySelector('#sendFileForm').submit()">
+                        <input type="file" name="audio" id="uploadAudio" class="from-file" accept="audio/*"
+                            style="display:none;" onchange="document.querySelector('#sendFileForm').submit()">
                     </form>
                     <!-- File -->
                     <span class="mr-3 btn d-inline" id="displayUploadFile">
@@ -321,6 +342,9 @@
                     <!-- Send video -->
                     <span class="btn" onclick="document.querySelector('#uploadVideo').click()">
                         <i class="fas fa-video" style="font-size:24px"></i> Video
+                    </span>
+                    <span class="btn" onclick="document.querySelector('#uploadAudio').click()">
+                        <i class="fas fa-headphones-alt" style="font-size:24px"></i> Audio
                     </span>
                 </div>
             </div>
@@ -585,8 +609,28 @@
                 Your browser does not support the video tag.
             </video>
                                         `
+                                    } else if (message.fields.audio) {
+                                        messageContent = `
+                                        <audio controls preload="none" draggable="false" style="max-width:450px; max-height:349px;"
+                class="messageAudio">
+                <source src="/media/${message.fields.audio}" type="audio/mp4">
+                <source src="${message.fields.audio}" type="audio/ogg">
+                Your browser does not support the video tag.
+            </audio>
+            <br>
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Speed
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <button class="btn audioPlayback">0.5</button>
+                <button class="btn audioPlayback">1</button>
+                <button class="btn audioPlayback">1.5</button>
+                <button class="btn audioPlayback">1.75</button>
+                <button class="btn audioPlayback">2</button>
+            </div>
+                                        `
                                     }
-
                                     newLastMessageId = message.pk
                                     $('.chat').append(`
                         <li class="other message" data-pk="${newLastMessageId}">
@@ -604,6 +648,20 @@
                                         .play();
                                 }
                             }
+
+                            function changePlayback() {
+                                $('.audioPlayback').click(function (e) {
+                                    let audios = document.querySelectorAll(
+                                        '.messageAudio')
+                                    for (audio of audios) {
+                                        audio.playbackRate = $(this).html()
+                                    }
+                                })
+                            }
+                            var g = document.createElement('script')
+                            var s = document.getElementsByTagName('script')[0]
+                            g.text = changePlayback()
+                            s.parentNode.insertBefore(g, s)
                         }
                     }
                 })
@@ -766,6 +824,12 @@
                 })
             })
             // End control users
+            $('.audioPlayback').click(function (e) {
+                let audios = document.querySelectorAll(`.messageAudio`)
+                for (audio of audios) {
+                    audio.playbackRate = $(this).html();
+                }
+            })
         });
     });
 </script>

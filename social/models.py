@@ -95,11 +95,15 @@ class GroupMessage(models.Model):
         User, related_name='group_message_sender', null=True, on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)
     message = models.TextField(null=True, blank=True)
+    # //////// Files
     file = models.FileField(
         upload_to='social/group_files', null=True, blank=True)
     video = models.FileField(upload_to='social/group_videos', null=True, blank=True)
     image = models.ImageField(
         upload_to='social/group_images', null=True, blank=True)
+    audio = models.ImageField(
+        upload_to='social/group_audio', null=True, blank=True)
+    # Files ////////
     is_important = models.BooleanField(default=False)
     area = models.ForeignKey(
         Area, on_delete=models.CASCADE, null=True, blank=True, default='')
