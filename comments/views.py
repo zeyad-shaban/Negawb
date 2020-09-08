@@ -18,10 +18,17 @@ import re
 
 # Post
 
+
 def search_by_hashtags(request):
     q = request.GET.get('q')
-    query = Post.objects.filter(hashtags__icontains=q).order_by('-post_date')
-    paginator = Paginator(query, 5)
+    q = q.split('#')[1:]
+    query = Post.objects.all().order_by('-post_date')
+    posts_list = []
+    for post in query:
+        for word in q:
+            if word in post.hashtags:
+                posts_list.append(post)
+    paginator = Paginator(posts_list, 5)
     page = request.GET.get('page')
     if not page:
         page = 1

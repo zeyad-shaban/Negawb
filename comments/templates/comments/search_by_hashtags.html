@@ -7,7 +7,12 @@
 {% block description %}
 
 {% endblock description %}
-
+{% block searchbar %}
+<form action="{% url 'comments:search_by_hashtags' %}" method="GET" class="form-inline">
+    <input type="text" name="q" class="form-control">
+    <button type="submit" class="btn btn-success">Search</button>
+</form>
+{% endblock searchbar %}
 
 {% block content %}
 <div class="container-fluid gedf-wrapper">
