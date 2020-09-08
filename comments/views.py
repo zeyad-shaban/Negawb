@@ -24,9 +24,10 @@ def search_by_hashtags(request):
     q = q.split('#')[1:]
     query = Post.objects.all().order_by('-post_date')
     posts_list = []
+    print(q)
     for post in query:
         for word in q:
-            if word in post.hashtags:
+            if post.hashtags and word in post.hashtags:
                 posts_list.append(post)
     paginator = Paginator(posts_list, 5)
     page = request.GET.get('page')
@@ -135,12 +136,12 @@ def create_post(request, pk):
         if category == None:
             return redirect('home')
         else:
-            return redirect('categories:view_category', pk=pk)
+            return redirect('home')
     elif request.FILES.get('image') != None and request.FILES.get('post_file') != None:
         messages.error(
             request, 'You can\'t have both image and video in the same field')
         if category == None:
-            return redirect('categories:view_category', pk=pk)
+            return redirect('home')
         else:
             return redirect('home')
     else:
@@ -159,7 +160,7 @@ def create_post(request, pk):
         if category == None:
             return redirect('home')
         else:
-            return redirect('categories:view_category', pk=pk)
+            return redirect('home')
 
 
 def analyze_post(request, pk):

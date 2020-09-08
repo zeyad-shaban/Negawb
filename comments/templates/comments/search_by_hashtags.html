@@ -63,7 +63,7 @@
                                 <button type="submit" class="btn btn-primary">share</button>
                             </div>
                             <select name="id_category" id="id_category" style="max-width: 153px">
-                                <option value="test">All</option>
+                                <option value="test">other</option>
                                 {% for acategory in all_categories %}
                                 {% if user.homepage_posts and user.homepage_posts.id == acategory.id  %}
                                 <option value="{{ acategory.id }}" selected="selected">{{ acategory.title }}

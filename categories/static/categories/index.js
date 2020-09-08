@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                 success: function (response) {
                                     let user = response.user
                                     let output = ''
-                                    let postCategory = 'All'
+                                    let postCategory = 'other'
                                     if (post.fields.category) {
                                         postCategory = post.fields.category
                                     }
@@ -187,7 +187,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                 success: function (response) {
                                     let user = response.user
                                     let output = ''
-                                    let postCategory = 'All'
+                                    let postCategory = 'other'
                                     let dateToString = d =>
                                         `${d.getFullYear()}-${('00' + (d.getMonth() + 1)).slice(-2)}-${('00' + d.getDate()).slice(-2)}`
                                     let postDate = new Date(Date.parse(post.fields.post_date))
