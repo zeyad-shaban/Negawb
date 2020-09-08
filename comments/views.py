@@ -9,6 +9,7 @@ from django.contrib import messages
 from django.forms.models import model_to_dict
 from social.models import Notification
 from django.urls import resolve
+from django.core.serializers import serialize
 from webpush import send_user_notification
 from django.utils.timezone import now
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -30,7 +31,10 @@ def search_by_hashtags(request):
         posts = []
     except PageNotAnInteger:
         posts = paginator.page(1)
-    return render(request, 'comments/search_by_hashtags.html', {'posts': posts})
+    if not request.GET.get('page'):
+        return render(request, 'comments/search_by_hashtags.html', {'posts': posts})
+    else:
+        return JsonResponse({'posts': serialize('json', posts)})
 
 
 def view_post(request, pk):
