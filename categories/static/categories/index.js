@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         for (post of posts) {
                             let output = ''
                             $.ajax({
-                                url: $('#categoryContainer').attr('data-url'), // {% url 'get_user_by_id' %}
+                                url: $('#homepagePosts').attr('data-url'), // {% url 'get_user_by_id' %}
                                 data: {
                                     'pk': post.fields.user,
                                 },
@@ -177,7 +177,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         for (post of posts) {
                             let output = ''
                             $.ajax({
-                                url: $('#categoryContainer').attr('data-url'),
+                                url: $('#homepagePosts').attr('data-url'),
                                 data: {
                                     'pk': post.fields.user,
                                 },
