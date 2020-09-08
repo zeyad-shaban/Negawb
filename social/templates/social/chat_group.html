@@ -67,6 +67,12 @@
             <a href="{{ message.file.url }}" download>
                 <p><i class="fas fa-download" style="font-size:30px"></i> <span>{{ message.file.url }}</span></p>
             </a>
+            {% elif message.video %}
+            <video controls preload="none" draggable="false" style="max-width:450px; max-height:349px;">
+                <source src="{{ message.video.url }}" type="video/mp4">
+                <source src="{{ message.video.url }}" type="video/ogg">
+                Your browser does not support the video tag.
+            </video>
             {% endif %}
             <time>{{ message.date|timesince }} ago</time>
         </div>
@@ -131,7 +137,9 @@
                                     <!-- Control members -->
                                     {% if not member == user and not member == group.author and user in group.group_admins.all %}
                                     {% if not member in group.group_admins.all %}
-                                    <a href="{% url 'social:hire_member' group.id member.id %}" class="btn hireMember"><i class="fas fa-arrow-up" style="font-size: 24px; color: green"></i>
+                                    <a href="{% url 'social:hire_member' group.id member.id %}"
+                                        class="btn hireMember"><i class="fas fa-arrow-up"
+                                            style="font-size: 24px; color: green"></i>
                                         Make admin</a>
                                     <a href="{% url 'social:kick_member' group.id member.id %}"
                                         onclick="return confirm('Kick {{ member.username }}?')"
@@ -140,9 +148,10 @@
                                     <!-- member admin -->
                                     {% else %}
                                     {% if user == group.author %}
-                                    <a href="{% url 'social:lower_member' group.id member.id %}" class='btn lowerMember'><i class="fas fa-arrow-down"
+                                    <a href="{% url 'social:lower_member' group.id member.id %}"
+                                        class='btn lowerMember'><i class="fas fa-arrow-down"
                                             style="font-size: 24px; color: rgb(128, 128, 128)"></i> Lower</a>
-                                            {% endif %}
+                                    {% endif %}
                                     {% endif %}
                                     {% endif %}
                                     <!-- Classification -->
@@ -297,7 +306,10 @@
                         <input type="file" name="file" id="uploadFile" class="from-file" accept="*">
 
                         <input type="file" name="image" id="uploadImage" class="from-file" accept="image/*">
+                        <input type="file" name="video" id="uploadVideo" class="from-file" accept="video/*"
+                            style="display:none;" onchange="document.querySelector('#sendFileForm').submit()">
                     </form>
+                    <!-- File -->
                     <span class="mr-3 btn d-inline" id="displayUploadFile">
                         <i class="far fa-file" style="font-size:24px"></i> Document
                     </span>
@@ -305,6 +317,10 @@
                     <!-- Send image -->
                     <span class="btn" id="displayUploadImage">
                         <i class="far fa-image" style="font-size:24px"></i> Image
+                    </span>
+                    <!-- Send video -->
+                    <span class="btn" onclick="document.querySelector('#uploadVideo').click()">
+                        <i class="fas fa-video" style="font-size:24px"></i> Video
                     </span>
                 </div>
             </div>
@@ -561,6 +577,14 @@
                                         messageContent = `<a href="/media/${message.fields.file}" download>
                      <p><i class="fas fa-download" style="font-size:30px"></i> <span>${message.fields.file}</span></p>
                  </a>`
+                                    } else if (message.fields.video) {
+                                        messageContent = `
+                                        <video controls preload="none" draggable="false" style="max-width:450px; max-height:349px;">
+                <source src="/media/${message.fields.video}" type="video/mp4">
+                <source src="/media/${message.fields.video}" type="video/ogg">
+                Your browser does not support the video tag.
+            </video>
+                                        `
                                     }
 
                                     newLastMessageId = message.pk
@@ -715,7 +739,7 @@
                     }
                 })
             })
-            $('.hireMember').click(function(e){
+            $('.hireMember').click(function (e) {
                 e.preventDefault();
                 let thisElement = $(this)
                 $.ajax({
@@ -728,7 +752,7 @@
                     }
                 })
             })
-            $('.lowerMember').click(function(e){
+            $('.lowerMember').click(function (e) {
                 e.preventDefault();
                 let thisElement = $(this)
                 $.ajax({

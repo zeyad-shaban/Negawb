@@ -97,6 +97,7 @@ class GroupMessage(models.Model):
     message = models.TextField(null=True, blank=True)
     file = models.FileField(
         upload_to='social/group_files', null=True, blank=True)
+    video = models.FileField(upload_to='social/group_videos', null=True, blank=True)
     image = models.ImageField(
         upload_to='social/group_images', null=True, blank=True)
     is_important = models.BooleanField(default=False)

@@ -267,7 +267,7 @@ def send_group_file_message(request, pk):
     except:
         area = None
     message = GroupMessage(
-        group=group, message_sender=request.user, file=request.FILES.get('file'), image=request.FILES.get('image'), area=area)
+        group=group, message_sender=request.user, file=request.FILES.get('file'), image=request.FILES.get('image'), video=request.FILES.get('video'), area=area)
     message.save()
     return redirect('social:chat_group', pk=pk)
 
