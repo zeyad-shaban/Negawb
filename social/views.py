@@ -267,7 +267,7 @@ def send_group_file_message(request, pk):
     except:
         area = None
     message = GroupMessage(
-        group=group, message_sender=request.user, file=request.FILES.get('file'), image=request.FILES.get('image') , area=area)
+        group=group, message_sender=request.user, file=request.FILES.get('file'), image=request.FILES.get('image'), area=area)
     message.save()
     return redirect('social:chat_group', pk=pk)
 
@@ -360,6 +360,18 @@ def deny_group(request):
         'tags': 'success'
     }
     return JsonResponse({'message': message, })
+
+
+def kick_member(request, group_pk, member_pk):
+    member = get_object_or_404(User, pk=member_pk)
+    group = get_object_or_404(ChatGroup, pk=group_pk)
+    if request.user == group.author or (request.user in group.group_admins.all() and not member == group.author):
+        group.members.remove(member)
+    return JsonResponse({})
+
+# End groups
+
+# Notifications
 
 
 def load_notifications(request):

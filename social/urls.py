@@ -19,6 +19,8 @@ urlpatterns = [
     path('delete_group/<int:pk>/', views.delete_group, name='delete_group'),
     path('leave_group/<int:pk>/', views.leave_group, name='leave_group'),
     path('denygroup/', views.deny_group, name='deny_group'),
+        # Control members
+    path('kick_member/<int:group_pk>/<int:member_pk>/', views.kick_member, name='kick_member'),
     # Society
     path('loadnotifications/', views.load_notifications, name='load_notifications'),
     path('take_down_friend_request/<int:pk>/', views.take_down_friend_request, name='take_down_friend_request'),

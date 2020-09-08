@@ -127,19 +127,37 @@
                             </a>
 
                             <div class="media-body">
-                                {% if member == group.author %}
-                                <p class="float-right"><i class="fas fa-crown"
-                                        style="font-size: 36px; color: green"></i> Owner
-                                </p>
-                                {% elif member in group.group_admins.all %}
-                                <p class="float-right"><i class="fas fa-tools" style="font-size: 36px"></i> Admin
-                                </p>
-                                {% endif %}
+                                <div class="float-right">
+                                    <!-- Control members -->
+                                    {% if not member == user and not member == group.author and user in group.group_admins.all %}
+                                    {% if not member in group.group_admins.all %}
+                                    <a href="#"><i class="fas fa-arrow-up" style="font-size: 24px; color: green"></i>
+                                        Make admin</a>
+                                    <a href="{% url 'social:kick_member' group.id member.id %}"
+                                        onclick="return confirm('Kick {{ member.username }}?')"
+                                        class="btn kickMember"><i class="fas fa-sign-out-alt"
+                                            style="font-size: 24px; color: red"></i> kick</a>
+                                    <!-- member admin -->
+                                    {% else %}
+                                    <span><i class="fas fa-arrow-down"
+                                            style="font-size: 24px; color: rgb(128, 128, 128)"></i> Lower</span>
+                                    {% endif %}
+                                    {% endif %}
+                                    <!-- Classification -->
+                                    {% if member == group.author %}
+                                    <span><i class="fas fa-crown" style="font-size: 24px; color: #EED974"></i> Owner
+                                    </span>
+                                    {% elif member in group.group_admins.all %}
+                                    <span><i class="fas fa-tools" style="font-size: 24px"></i> Admin
+                                    </span>
+                                    {% endif %}
+                                </div>
                                 <h5 class="mt-0 mb-1">{{ member.username }}</h5>
                                 {% if member.phone %}<i class="fas fa-phone-alt"></i>{{ member.phone }}{% endif %}
                                 {% if member.email and member.show_email %}<i class="fas fa-envelope"></i>
                                 {{ member.email }}{% endif %}
                                 <p>{{member.bio}}</p>
+
                             </div>
                         </li>
                         {% endfor %}
@@ -681,6 +699,21 @@
             })
             // Paginate users
             // End search/invite all users
+            // Control users
+            $('.kickMember').click(function (e) {
+                e.preventDefault();
+                let thisElement = $(this)
+                $.ajax({
+                    url: thisElement.attr('href'),
+                    data: {},
+                    method: 'get',
+                    dataType: 'json',
+                    success: function (response) {
+                        thisElement.parent().parent().parent().fadeOut()
+                    }
+                })
+            })
+            // End control users
         });
     });
 </script>
