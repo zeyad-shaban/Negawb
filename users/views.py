@@ -23,11 +23,11 @@ def signupuser(request):
     else:
         if request.POST.get('password1') == request.POST.get('password2'):
             try:
-                if request.POST.get('homepage_posts'):
-                    homepage_posts_category = get_object_or_404(
-                        Category, pk=request.POST.get('homepage_posts'))
+                if request.POST.get('homepage_hashtags'):
+                    homepage_hashtags_category = get_object_or_404(
+                        Category, pk=request.POST.get('homepage_hashtags'))
                 else:
-                    homepage_posts_category = None
+                    homepage_hashtags_category = None
                 # Start chat only
                 if request.POST.get('chat_only_mode') == 'on':
                     is_chat_only_mode = True
@@ -35,7 +35,7 @@ def signupuser(request):
                     is_chat_only_mode = False
                 # End chat only
                 user = User.objects.create_user(
-                    request.POST.get('username'), password=request.POST.get('password1'), homepage_posts=homepage_posts_category, chat_only_mode=is_chat_only_mode)
+                    request.POST.get('username'), password=request.POST.get('password1'), homepage_hashtags=homepage_hashtags_category, chat_only_mode=is_chat_only_mode)
                 user.save()
                 login(request, user)
                 return redirect('set_email_and_phone')

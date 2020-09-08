@@ -35,23 +35,23 @@ def home(request):
             return JsonResponse({'followed_posts': serialize('json', followed_posts)})
         # Homepage Posts Paginator
         page = request.GET.get('page')
-        if request.user.homepage_posts:
-            homepage_posts_list = request.user.homepage_posts.post_set.all().order_by('-post_date')
+        if request.user.homepage_hashtags:
+            homepage_hashtags_list = request.user.homepage_hashtags.post_set.all().order_by('-post_date')
         else:
-            homepage_posts_list = Post.objects.all().order_by('-post_date')
-        homepage_posts_paginator = Paginator(homepage_posts_list, 5)
-        page = request.GET.get('homepage_posts_page')
+            homepage_hashtags_list = Post.objects.all().order_by('-post_date')
+        homepage_hashtags_paginator = Paginator(homepage_hashtags_list, 5)
+        page = request.GET.get('homepage_hashtags_page')
         try:
-            homepage_posts = homepage_posts_paginator.page(page)
+            homepage_hashtags = homepage_hashtags_paginator.page(page)
         except PageNotAnInteger:
-            homepage_posts = homepage_posts_paginator.page(1)
+            homepage_hashtags = homepage_hashtags_paginator.page(1)
         except EmptyPage:
-            homepage_posts = []
+            homepage_hashtags = []
         if page:
-            return JsonResponse({'homepage_posts': serialize('json', homepage_posts)})
+            return JsonResponse({'homepage_hashtags': serialize('json', homepage_hashtags)})
     else:
         followed_posts = None
-        homepage_posts = Post.objects.all().order_by('-post_date')
+        homepage_hashtags = Post.objects.all().order_by('-post_date')
         followed = []
-    return render(request, 'categories/index.html', {'followed_posts': followed_posts, 'homepage_posts': homepage_posts, 'followed': followed})
+    return render(request, 'categories/index.html', {'followed_posts': followed_posts, 'homepage_hashtags': homepage_hashtags, 'followed': followed})
     

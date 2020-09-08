@@ -25,14 +25,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 $.ajax({
                     url: '',
                     data: {
-                        'homepage_posts_page': homepage_post_page
+                        'homepage_hashtags_page': homepage_post_page
                     },
                     method: 'get',
                     dataType: 'json',
                     async: false,
                     success: function (response) {
                         homepage_post_page++
-                        posts = JSON.parse(response.homepage_posts)
+                        posts = JSON.parse(response.homepage_hashtags)
                         for (post of posts) {
                             let output = ''
                             $.ajax({

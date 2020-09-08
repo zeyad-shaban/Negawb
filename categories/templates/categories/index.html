@@ -81,7 +81,7 @@ only, giving users the power to hide unwanted topics{% endblock description %}
                                 <select name="id_category" id="id_category" style="max-width: 153px">
                                     <option value="test">other</option>
                                     {% for acategory in all_categories %}
-                                    {% if user.homepage_posts and user.homepage_posts.id == acategory.id  %}
+                                    {% if user.homepage_hashtags and user.homepage_hashtags.id == acategory.id  %}
                                     <option value="{{ acategory.id }}" selected="selected">{{ acategory.title }}
                                     </option>
                                     {% else %}
@@ -95,7 +95,7 @@ only, giving users the power to hide unwanted topics{% endblock description %}
                 </div>
                 <!-- Add post /////-->
                 <div id="uploadedImage"></div>
-                {% for post in homepage_posts %}
+                {% for post in homepage_hashtags %}
                 <!--- \\\\\\\Post-->
                 <div class="card gedf-card">
                     <div class="card-header">

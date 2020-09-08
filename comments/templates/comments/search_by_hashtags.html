@@ -65,7 +65,7 @@
                             <select name="id_category" id="id_category" style="max-width: 153px">
                                 <option value="test">other</option>
                                 {% for acategory in all_categories %}
-                                {% if user.homepage_posts and user.homepage_posts.id == acategory.id  %}
+                                {% if user.homepage_hashtags and user.homepage_hashtags.id == acategory.id  %}
                                 <option value="{{ acategory.id }}" selected="selected">{{ acategory.title }}
                                 </option>
                                 {% else %}

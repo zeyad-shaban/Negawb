@@ -152,7 +152,7 @@ def create_post(request, pk):
         if post.description and '#' in post.description:
             output = ''
             for word in re.findall(r'#\w+', post.description):
-                output += word + ' '
+                output += word[1:] + ' '
             post.hashtags = output
         post.save()
         messages.success(

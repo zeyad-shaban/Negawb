@@ -60,8 +60,6 @@ def home(request):
         return render(request, 'userpage/index.html', {'user': user, 'form': form, 'privacy_form': privacy_form, 'distraction_free_form': distraction_free_form, 'requests': requests, 'group_requests': group_requests, 'total_requests': total_requests_count, 'user_posts': user_posts, 'user_invites': user_invites, 'user_group_invites': user_group_invites, 'total_user_invites_count': total_user_invites_count})
     elif request.POST.get('submit') == 'Update':
         try:
-            # if request.POST.get('email'):
-            #     validate_email(request.POST.get('email'))
             form = UserForm(data=request.POST,
                             files=request.FILES, instance=request.user)
             form.save()
@@ -83,7 +81,15 @@ def home(request):
     elif request.POST.get('submit') == 'Dfree':
         form = DistractionFreeForm(request.POST, instance=request.user)
         form.save()
-        messages.success(request, 'DistractionFreeMedia 💪🏻')
+        if request.POST.get('homepage_hashtags'):
+            string_hashtags = request.POST.get('homepage_hashtags')
+            hashtags = string_hashtags.split('#')[1:]
+            output = ''
+            for word in hashtags:
+                output += word
+            request.user.homepage_hashtags = output
+            user.save()
+        messages.success(request, 'Updated successfully')
         return redirect('userpage:home')
 
 

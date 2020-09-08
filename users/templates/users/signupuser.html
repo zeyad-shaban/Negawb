@@ -60,7 +60,7 @@ Dfreemedia.{% endblock description %}
             </div>
             <div class="form-group">
                 <label for="password2">Default homepage posts</label>
-                <select name="homepage_posts" id="id_homepage_posts">
+                <select name="homepage_hashtags" id="id_homepage_hashtags">
                     <option value="" selected="">All</option>
                     {% for category in categories %}
                     <option value="{{ category.id }}">{{ category.title }}</option>

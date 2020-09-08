@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from categories.models import Category
 from PIL import Image
 
 
@@ -44,8 +43,7 @@ class User(AbstractUser):
     chat_only_mode = models.BooleanField(default=False)
     hide_followed_posts = models.BooleanField(default=False)
     fixed_navbar = models.BooleanField(default=True)
-    homepage_posts = models.ForeignKey(
-        Category, on_delete=models.CASCADE, null=True, blank=True)
+    homepage_hashtags = models.TextField(null=True, blank=True)
     # * notifications
     allow_important_friend_messages = models.BooleanField(default=True)
     allow_important_group_message = models.BooleanField(default=True)
