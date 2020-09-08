@@ -6,7 +6,7 @@ User = user_model()
 
 
 class Post(models.Model):
-    description = models.TextField(null=True, blank=True)
+    description = models.TextField()
     image = models.ImageField(
         upload_to='comments/posts_images/', null=True, blank=True)
     post_file = models.FileField(
