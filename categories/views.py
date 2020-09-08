@@ -17,7 +17,6 @@ def home(request):
         messages.warning(
             request, 'You have enabled Chat only mode, you can disable it from profile Distraction Free settings')
         return redirect('chat')
-    categories = Category.objects.all()
 
     if request.user.is_authenticated:
         followed = User.objects.filter(Q(followers=request.user))
@@ -54,23 +53,5 @@ def home(request):
         followed_posts = None
         homepage_posts = Post.objects.all().order_by('-post_date')
         followed = []
-    return render(request, 'categories/index.html', {'categories': categories, 'followed_posts': followed_posts, 'homepage_posts': homepage_posts, 'followed': followed})
-    # todo delete friends_posts
-
-
-def view_category(request, pk):
-    if request.user.is_authenticated and request.user.chat_only_mode:
-        messages.warning(
-            request, 'You have Chat only mode enabled, you can disable it from profile Distraction Free settings')
-        return redirect('chat')
-    category = get_object_or_404(Category, pk=pk)
-    post_list = Post.objects.filter(category=category).order_by('-post_date')
-    paginator = Paginator(post_list, 7)
-    page = request.GET.get('page')
-    try:
-        posts = paginator.page(page)
-    except PageNotAnInteger:
-        posts = paginator.page(1)
-    except EmptyPage:
-        posts = paginator.page(paginator.num_pages)
-    return render(request, f'categories/{category.title}.html', {'category': category, 'posts': posts})
+    return render(request, 'categories/index.html', {'followed_posts': followed_posts, 'homepage_posts': homepage_posts, 'followed': followed})
+    
