@@ -26,7 +26,7 @@ class UserPrivacyForm(ModelForm):
 class DistractionFreeForm(ModelForm):
     class Meta:
         model = User
-        fields = ('hide_comments','hide_followed_posts', 'homepage_hashtags', 'allow_important_friend_messages', 'allow_important_group_message', 'allow_normal_friend_message', 'allow_normal_group_message',
+        fields = ('hide_comments', 'hide_recommended_posts','hide_followed_posts', 'homepage_hashtags', 'allow_important_friend_messages', 'allow_important_group_message', 'allow_normal_friend_message', 'allow_normal_group_message',
                 'allow_comment_message', 'allow_reply_message', 'allow_invites', 'your_invites', 'chat_only_mode', 'fixed_navbar',)
         labels = {
             'allow_important_friend_messages': 'Friend\'s important message',

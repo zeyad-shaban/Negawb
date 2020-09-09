@@ -40,6 +40,7 @@ class User(AbstractUser):
 
     # DISTRACTION FREE!!!!!!!!!!!!!!!
     hide_comments = models.BooleanField(default=False)
+    hide_recommended_posts = models.BooleanField(default=False)
     chat_only_mode = models.BooleanField(default=False)
     hide_followed_posts = models.BooleanField(default=False)
     fixed_navbar = models.BooleanField(default=True)
