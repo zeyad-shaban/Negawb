@@ -88,7 +88,9 @@ def send_friend_message(request, pk):
             user_1=friend, user_2=request.user).first()
     message = Message(chat_box=chat_box, message_sender=request.user,
                       message=request.GET.get('message'))
+    print(request.GET.get('is_important'))
     if request.GET.get('is_important') == "True":
+        print('is important MESSAGE')
         important_messages_in_last_day = Message.objects.filter(date__gt=now(
         ) - datetime.timedelta(days=1), is_important=True, chat_box=chat_box, message_sender=request.user)
         if important_messages_in_last_day.count() >= 3:
@@ -100,6 +102,7 @@ def send_friend_message(request, pk):
             message.is_important = True
             # Notification importnat message
             if message.is_important:
+                print('message is important')
                 if friend.allow_important_friend_messages:
                     notification = Notification.objects.create(
                         notification_type='important_friend_message', sender=request.user, url='/chat/', content=message.message[:100])
@@ -121,28 +124,29 @@ def send_friend_message(request, pk):
                             user=receiver, payload=payload, ttl=1000)
                 message.is_important = request.GET.get(
                     'is_important', False)
-            # Normal friend notification
-            else:
-                if friend.allow_normal_friend_message:
-                    # !ABSOLUTE PATH
-                    notification = Notification.objects.create(
-                        notification_type='normal_friend_message', sender=request.user, url='/chat/', content=message.message[:100])
-                    notification.save()
-                    notification.receiver.add(friend)
-                    for receiver in notification.receiver.all():
-                        if notification.sender.who_see_avatar == 'everyone':
-                            sender_avatar = notification.sender.avatar.url
-                        elif notification.sender.who_see_avatar == 'friends' and receiver in receiver.friends.all():
-                            sender_avatar = notification.sender.avatar.url
-                        else:
-                            sender_avatar = '/media/profile_images/DefaultUserImage.jpg'
-                        payload = {"head": f"Message from {notification.sender}",
-                                   "body": notification.content,
-                                   "url": notification.url,
-                                   "icon": sender_avatar,
-                                   }
-                        send_user_notification(
-                            user=receiver, payload=payload, ttl=1000)
+    # Normal friend notification
+    else:
+        print('message is not important')
+        if friend.allow_normal_friend_message:
+            # !ABSOLUTE PATH
+            notification = Notification.objects.create(
+                notification_type='normal_friend_message', sender=request.user, url='/chat/', content=message.message[:100])
+            notification.save()
+            notification.receiver.add(friend)
+            for receiver in notification.receiver.all():
+                if notification.sender.who_see_avatar == 'everyone':
+                    sender_avatar = notification.sender.avatar.url
+                elif notification.sender.who_see_avatar == 'friends' and receiver in receiver.friends.all():
+                    sender_avatar = notification.sender.avatar.url
+                else:
+                    sender_avatar = '/media/profile_images/DefaultUserImage.jpg'
+                payload = {"head": f"Message from {notification.sender}",
+                           "body": notification.content,
+                           "url": notification.url,
+                           "icon": sender_avatar,
+                           }
+                send_user_notification(
+                    user=receiver, payload=payload, ttl=1000)
         # End normal friend notification
     message.save()
     return JsonResponse({})
@@ -242,7 +246,7 @@ def send_group_message(request, pk):
                 Q(allow_important_group_message=True), ~Q(id=request.user.id))]
             # !ABSOLUTE PATH
             notification = Notification(notification_type='important_group_message',
-                                        sender=request.user, url='/chat/', content=message.message[:100])
+                                        sender=request.user, url=f'/socail/chat_group/{group.id}/', content=message.message[:100])
             if receivers:
                 notification.save()
                 for receiver in receivers:
@@ -255,6 +259,23 @@ def send_group_message(request, pk):
                                }
                     send_user_notification(
                         user=receiver, payload=payload, ttl=1000)
+    else:
+        receivers = [member for member in group.members.filter(
+            Q(allow_normal_group_message=True), ~Q(id=request.user.id))]
+        notification = Notification(notification_type='normal_group_message',
+                                    sender=request.user, url=f'/socail/chat_group/{group.id}/', content=message.message[:100])
+        if receivers:
+            notification.save()
+            for receiver in receivers:
+                notification.receiver.add(receiver)
+            for receiver in notification.receiver.all():
+                payload = {"head": f"A message from {group.title} Group, {notification.sender}",
+                           "body": notification.content,
+                           "url": notification.url,
+                           "icon": group.image.url,
+                           }
+                send_user_notification(
+                    user=receiver, payload=payload, ttl=1000)
 
     message.save()
     return JsonResponse({})
@@ -369,12 +390,15 @@ def kick_member(request, group_pk, member_pk):
         group.members.remove(member)
     return JsonResponse({})
 
+
 def hire_member(request, group_pk, member_pk):
     member = get_object_or_404(User, pk=member_pk)
     group = get_object_or_404(ChatGroup, pk=group_pk)
     if (request.user == group.author or request.user in group.group_admins.all()) and (member not in group.group_admins.all()):
         group.group_admins.add(member)
         return JsonResponse({})
+
+
 def lower_member(request, group_pk, member_pk):
     member = get_object_or_404(User, pk=member_pk)
     group = get_object_or_404(ChatGroup, pk=group_pk)
