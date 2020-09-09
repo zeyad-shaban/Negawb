@@ -81,14 +81,6 @@ def home(request):
     elif request.POST.get('submit') == 'Dfree':
         form = DistractionFreeForm(request.POST, instance=request.user)
         form.save()
-        if request.POST.get('homepage_hashtags'):
-            string_hashtags = request.POST.get('homepage_hashtags')
-            hashtags = string_hashtags.split('#')[1:]
-            output = ''
-            for word in hashtags:
-                output += word
-            request.user.homepage_hashtags = output
-            user.save()
         messages.success(request, 'Updated successfully')
         return redirect('userpage:home')
 

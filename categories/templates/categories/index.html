@@ -7,27 +7,27 @@ only, giving users the power to hide unwanted topics{% endblock description %}
 
 
 
-{% block searchbar %}
-<form action="{% url 'comments:search_by_hashtags' %}" method="GET" class="form-inline">
-    <input type="text" name="q" class="form-control">
-    <button type="submit" class="btn btn-success">Search</button>
-</form>
-{% endblock searchbar %}
-
-
 {% block content %}
 <ul class="list-group list-group-horizontal">
     <li class="list-group-item active homepageView">Posts</li>
     {% if not user.hide_followed_posts %}
     <li class="list-group-item homepageView">Followed</li>
     {% endif %}
+
 </ul>
 <!-- Homepage posts -->
 <div class="homepageItem" id="postsContainer">
+    <form action="{% url 'comments:search_by_hashtags' %}" method="GET"
+        class="form-inline mt-3 row justify-content-center" style="width: 80vw; margin-right: 10vw;margin-left: 10vw;">
+        <input type="search" name="q" class="form-control float-left" placeholder="#Search in Dfreemedia"
+            style="width:80%">
+        <button type="submit" class="btn btn-circle d-inline" style="width: 10%;"><i
+                class="fas fa-search"></i></button>
+    </form>
     {% if not user.is_authenticated %}
     <small>You can change the default hashtag from the Distraction Free menu in your <a
-    href="{% url 'userpage:home' %}">profile</a></small>
-                {% endif %}
+            href="{% url 'userpage:home' %}">profile</a></small>
+    {% endif %}
     <div class="container-fluid gedf-wrapper">
         <div class="row">
             <div class="col-md-3">
@@ -224,14 +224,11 @@ only, giving users the power to hide unwanted topics{% endblock description %}
         <li class="media list-group list-group-item">
             <a href="{% url 'people:people' followed.id %}" class="btn">
                 {% if followed.who_see_avatar == 'everyone' %}
-                <img src="{{followed.avatar.url}}" alt="User Image" width="64" height="64"
-                    class="mr-3 rounded-circle">
+                <img src="{{followed.avatar.url}}" alt="User Image" width="64" height="64" class="mr-3 rounded-circle">
                 {% elif followed.who_see_avatar == 'friends' and user in followed.friends.all %}
-                <img src="{{followed.avatar.url}}" alt="User Image" width="64" height="64"
-                    class="mr-3 rounded-circle">
+                <img src="{{followed.avatar.url}}" alt="User Image" width="64" height="64" class="mr-3 rounded-circle">
                 {% elif followed == user %}
-                <img src="{{followed.avatar.url}}" alt="User Image" width="64" height="64"
-                    class="mr-3 rounded-circle">
+                <img src="{{followed.avatar.url}}" alt="User Image" width="64" height="64" class="mr-3 rounded-circle">
                 {% else %}
                 <img src="/media/profile_images/DefaultUserImage.jpg" alt="User Image" width="64" height="64"
                     class="mr-3 rounded-circle">
