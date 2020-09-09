@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                 success: function (response) {
                                     let user = response.user
                                     let output = ''
-                                    let postCategory = 'All'
+                                    let postCategory = 'other'
                                     if (post.fields.category) {
                                         postCategory = post.fields.category
                                     }
@@ -116,7 +116,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                     if (post.fields.description.length > 45) {
                                         let readMore = '';
                                         if (post.fields.description.length > 227) {
-                                            readMore = `<a href="/comments/${post.pk}/">Read more</a>`;
+                                            readMore = `<a href="#" class="readMore">Read more</a>`;
                                         };
                                         output += `
                                         <p class="card-text" style="white-space: pre-line;">
@@ -156,6 +156,17 @@ document.addEventListener('DOMContentLoaded', function () {
                 </div>
                                 `
                                     $('#homepagePosts').append(output)
+
+                                    function showMore() {
+                                        $('.readMore').click(function (e) {
+                                            e.preventDefault();
+                                            $(this).parent().html(`<br> ${post.fields.description}`)
+                                        })
+                                    }
+                                    let g = document.createElement('script');
+                                    let s = document.getElementsByTagName('script')[0]
+                                    g.text = showMore();
+                                    s.parentNode.insertBefore(g, s)
                                 }
                             })
                         }
@@ -187,7 +198,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                 success: function (response) {
                                     let user = response.user
                                     let output = ''
-                                    let postCategory = 'All'
+                                    let postCategory = 'other'
                                     let dateToString = d =>
                                         `${d.getFullYear()}-${('00' + (d.getMonth() + 1)).slice(-2)}-${('00' + d.getDate()).slice(-2)}`
                                     let postDate = new Date(Date.parse(post.fields.post_date))
@@ -255,7 +266,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                     if (post.fields.description.length > 45) {
                                         let readMore = ''
                                         if (post.fields.description.length > 227) {
-                                            readMore = `<a href="/comments/${post.pk}/">Read more</a>`
+                                            readMore = `<a href="#" class="readMore">Read more</a>`
                                         }
                                         output += `
                                         <p class="card-text" style="white-space: pre-line;">
@@ -294,6 +305,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 </div>
                                 `
                                     $('#followedPostsContainer').append(output)
+                                    function showMore() {
+                                        $('.readMore').click(function (e) {
+                                            e.preventDefault();
+                                            $(this).parent().html(`<br> ${post.fields.description}`)
+                                        })
+                                    }
+                                    let g = document.createElement('script');
+                                    let s = document.getElementsByTagName('script')[0]
+                                    g.text = showMore();
+                                    s.parentNode.insertBefore(g, s)
                                 }
                             })
                         }
