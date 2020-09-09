@@ -24,8 +24,7 @@
     }
 </style>
 <img src="{% if user.is_authenticated %}{{user.avatar.url}}{% else %}/media/profile_images/DefaultUserImage.jpg{% endif %}"
-    class="col-xl-2 col-lg-2 rounded-circle" alt="" width="200" height="200"
-    style="max-width:200px; max-height:200px;">
+    class="col-xl-2 col-lg-2 rounded-circle" alt="" width="200" height="200" style="max-width:200px; max-height:200px;">
 <link rel="stylesheet" href="{% static 'userpage/index.css' %}">
 <button type="button" class="btn btn-outline-secondary float-right mr-5 mt-4" data-toggle="modal"
     data-target="#editProfile" data-whatever="editProfile"><i class="fas fa-edit"></i></button>
@@ -129,11 +128,14 @@
                         {% endif %}
                         <!-- Description -->
                         {% if post.description and post.description|length > 45 %}
-                        <p class="card-text" style="white-space: pre-line;">
-                            {{ post.description| truncatechars:227 }} {% if post.description|length > 227 %} <p
-                                class="btn btn-link" onclick="this.parentElement.innerHTML = `{{ post.description }}`">
-                                Read more</p>{% endif %}
-                        </p>
+                        <div class="mt-2" style="white-space: pre-line;">
+                            <p class="card-text" style="white-space: pre-line;">
+                                {{ post.description| truncatechars:227 }} {% if post.description|length > 227 %} <p
+                                    class="btn btn-link"
+                                    onclick="this.parentElement.innerHTML = `{{ post.description }}`">
+                                    Read more</p>{% endif %}
+                            </p>
+                        </div>
                         {% endif %}
                     </div>
                     <div class="card-footer">

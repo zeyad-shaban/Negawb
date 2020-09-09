@@ -147,11 +147,13 @@
                     {% endif %}
                     <!-- Description -->
                     {% if post.description and post.description|length > 45 %}
-                    <p class="card-text" style="white-space: pre-line;">
-                        {{ post.description| truncatechars:227 }} {% if post.description|length > 227 %} <p
+                    <div class="mt-2" style="white-space: pre-line;">
+                        <p class="card-text" style="white-space: pre-line;">
+                            {{ post.description| truncatechars:227 }} {% if post.description|length > 227 %} <p
                             class="btn btn-link" onclick="this.parentElement.innerHTML = `{{ post.description }}`">
                             Read more</p>{% endif %}
-                    </p>
+                        </p>
+                    </div>
                     {% endif %}
                 </div>
                 <div class="card-footer">
