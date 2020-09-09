@@ -52,7 +52,7 @@ def chat_friend(request, pk):
     chat_messages_list = Message.objects.filter(
         chat_box=chat_box).order_by('date')
     # chat messages Paginator
-    paginator = Paginator(chat_messages_list, 11)
+    paginator = Paginator(chat_messages_list, 7)
     if request.GET.get('page'):
         page = int(request.GET.get('page'))
     else:
@@ -180,7 +180,7 @@ def chat_group(request, pk):
     chat_messages_list = GroupMessage.objects.filter(group=group)
     areas = Area.objects.filter(group=group)
     # chat messages Paginator
-    paginator = Paginator(chat_messages_list, 11)
+    paginator = Paginator(chat_messages_list, 7)
     if request.GET.get('page'):
         page = int(request.GET.get('page'))
     else:
@@ -499,7 +499,7 @@ def load_area(request, group_pk, area_pk):
     chat_messages_list = GroupMessage.objects.filter(group=group, area=area)
     areas = Area.objects.filter(group=group)
     # chat messages Paginator
-    paginator = Paginator(chat_messages_list, 11)
+    paginator = Paginator(chat_messages_list, 7)
     if request.GET.get('page'):
         page = int(request.GET.get('page'))
     else:

@@ -374,7 +374,7 @@
                         success: function (response) {
                             let sender = "self"
                             let senderAvatar = "{{ user.avatar.url }}"
-                            let senderUserName = "{{ user.username }}"
+                            let senderUsername = "{{ user.username }}"
                             chat_messages = JSON.parse(response.chat_messages).reverse()
                             if (chat_messages.length > 0) {
                                 page++
@@ -405,30 +405,11 @@
                                             success: function (response) {
                                                 senderAvatar = response.user
                                                     .avatar
-                                                senderUserName = response
+                                                senderUsername = response
                                                     .user.username
                                             }
                                         })
                                     }
-                                    let senderAvatar = ''
-                                    let senderUsername = ''
-                                    $.ajax({
-                                        url: "{% url 'userpage:get_user_by_id' %}",
-                                        data: {
-                                            'pk': message.fields
-                                                .message_sender,
-                                        },
-                                        method: 'get',
-                                        dataType: 'json',
-                                        async: false,
-                                        success: function (response) {
-                                            senderAvatar = response.user
-                                                .avatar
-                                            senderUsername = response
-                                                .user
-                                                .username
-                                        }
-                                    })
                                     let messageContent = ''
                                     if (message.fields.message) {
                                         messageContent =
@@ -471,25 +452,13 @@
                                         `
                                     }
                                     newLastMessageId = message.pk
-                                    $('.chat').append(`
-                        <li class="other message" data-pk="${newLastMessageId}">
-                    <div class="avatar">
-                        <img src="${senderAvatar}" alt="User Image" width="64" height="64">
-                    </div>
-                    <div class="msg">
-                        <p class="alert-secondary">${senderUsername}</p>
-                        ${messageContent}
-                        <time>Now</time>
-                    </div>
-                </li>
-                        `)
                                     $('.chat').prepend(`
                                     <li class="${sender} message" data-pk="${message.pk}">
                     <div class="avatar">
                         <img src="${senderAvatar}" alt="User Image" width="64" height="64">
                     </div>
                     <div class="msg">
-                        <p class="alert-secondary">${senderUserName} - ${messageArea}</p>
+                        <p class="alert-secondary">${senderUsername} - ${messageArea}</p>
                         ${messageContent}
                         <time>${date}</time>
                     </div>
