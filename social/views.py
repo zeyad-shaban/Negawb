@@ -158,7 +158,7 @@ def send_friend_file_message(request, pk):
             user_1=friend, user_2=request.user).first()
 
     message = Message(chat_box=chat_box, message_sender=request.user,
-                      file=request.FILES.get('file'), image=request.FILES.get('image'))
+                      file=request.FILES.get('file'), image=request.FILES.get('image'), video=request.FILES.get('video'), audio=request.FILES.get('audio'))
     message.save()
     return redirect('social:chat_friend', pk=pk)
 # End friend

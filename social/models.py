@@ -26,6 +26,10 @@ class Message(models.Model):
         upload_to='social_group_message_images', blank=True, null=True)
     image = models.ImageField(
         upload_to='social/friend_message_images', blank=True, null=True)
+    audio = models.ImageField(
+        upload_to='social/friend_message_audio', blank=True, null=True)
+    video = models.ImageField(
+        upload_to='social/friend_message_video', blank=True, null=True)
     is_important = models.BooleanField(default=False)
 
     def __str__(self):
@@ -34,6 +38,7 @@ class Message(models.Model):
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         if self.image:
+            print(self.image)
             img = Image.open(self.image.path)
             if img.width > 140 or img.height > 140:
                 output_size = (140, 140)
@@ -98,7 +103,8 @@ class GroupMessage(models.Model):
     # //////// Files
     file = models.FileField(
         upload_to='social/group_files', null=True, blank=True)
-    video = models.FileField(upload_to='social/group_videos', null=True, blank=True)
+    video = models.FileField(
+        upload_to='social/group_videos', null=True, blank=True)
     image = models.ImageField(
         upload_to='social/group_images', null=True, blank=True)
     audio = models.ImageField(

@@ -20,8 +20,7 @@
         {% elif friend == user %}
         <img src="{{friend.avatar.url}}" alt="User Image" width="64" height="64" id="friendAvatar">
         {% else %}
-        <img src="/media/profile_images/DefaultUserImage.jpg" alt="User Image" width="64" height="64"
-            id="friendAvatar">
+        <img src="/media/profile_images/DefaultUserImage.jpg" alt="User Image" width="64" height="64" id="friendAvatar">
         {% endif %}
     </div>
     <div class="name">{{ friend.username }}</div>
@@ -62,6 +61,31 @@
             <a href="{{ message.file.url }}" download>
                 <p><i class="fas fa-download" style="font-size:30px"></i> <span>{{ message.file.url }}</span></p>
             </a>
+            {% elif message.video %}
+            <video controls preload="none" draggable="false" style="max-width:450px; max-height:349px;">
+                <source src="{{ message.video.url }}" type="video/mp4">
+                <source src="{{ message.video.url }}" type="video/ogg">
+                Your browser does not support the video tag.
+            </video>
+            {% elif message.audio %}
+            <audio controls preload="none" draggable="false" style="max-width:450px; max-height:349px;"
+                class="messageAudio">
+                <source src="{{ message.audio.url }}" type="audio/mp4">
+                <source src="{{ message.audio.url }}" type="audio/ogg">
+                Your browser does not support the video tag.
+            </audio>
+            <br>
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Speed
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <button class="btn audioPlayback">0.5</button>
+                <button class="btn audioPlayback">1</button>
+                <button class="btn audioPlayback">1.5</button>
+                <button class="btn audioPlayback">1.75</button>
+                <button class="btn audioPlayback">2</button>
+            </div>
             {% endif %}
             <time>{{ message.date|timesince }} ago</time>
         </div>
@@ -96,14 +120,25 @@
                         <input type="file" name="file" id="uploadFile" class="from-file" accept="*">
 
                         <input type="file" name="image" id="uploadImage" class="from-file" accept="image/*">
+                        <input type="file" name="video" id="uploadVideo" class="from-file" accept="video/*"
+                            style="display:none;" onchange="document.querySelector('#sendFileForm').submit()">
+                        <input type="file" name="audio" id="uploadAudio" class="from-file" accept="audio/*"
+                            style="display:none;" onchange="document.querySelector('#sendFileForm').submit()">
                     </form>
                     <span class="mr-3 btn d-inline" id="displayUploadFile">
                         <i class="far fa-file" style="font-size:24px"></i> Document
                     </span>
-
                     <!-- Send image -->
                     <span class="btn" id="displayUploadImage">
                         <i class="far fa-image" style="font-size:24px"></i> Image
+                    </span>
+                    <!-- Send video -->
+                    <span class="btn" onclick="document.querySelector('#uploadVideo').click()">
+                        <i class="fas fa-video" style="font-size:24px"></i> Video
+                    </span>
+                    <!-- Audio -->
+                    <span class="btn" onclick="document.querySelector('#uploadAudio').click()">
+                        <i class="fas fa-headphones-alt" style="font-size:24px"></i> Audio
                     </span>
                 </div>
             </div>
@@ -265,16 +300,45 @@
                                     "{{ user.id }}") {
                                     let messageContent = ''
                                     if (message.fields.message) {
-                                        messageContnet =
+                                        messageContent =
                                             `<p>${message.fields.message }</p>`
                                     } else if (message.fields.image) {
-                                        messageContnet =
+                                        messageContent =
                                             `<img src="/media/${message.fields.image}" draggable="false" style="max-width:450px; max-height:349px;" loading="lazy">`
                                     } else if (message.fields.file) {
                                         console.log(message.fields.file)
-                                        messageContnet = `<a href="/media/${message.fields.file}" download>
+                                        messageContent = `<a href="/media/${message.fields.file}" download>
                      <p><i class="fas fa-download" style="font-size:30px"></i> <span>${message.fields.file}</span></p>
                  </a>`
+                                    } else if (message.fields.video) {
+                                        messageContent = `
+                                        <video controls preload="none" draggable="false" style="max-width:450px; max-height:349px;">
+                <source src="/media/${message.fields.video}" type="video/mp4">
+                <source src="/media/${message.fields.video}" type="video/ogg">
+                Your browser does not support the video tag.
+            </video>
+                                        `
+                                    } else if (message.fields.audio) {
+                                        messageContent = `
+                                        <audio controls preload="none" draggable="false" style="max-width:450px; max-height:349px;"
+                class="messageAudio">
+                <source src="/media/${message.fields.audio}" type="audio/mp4">
+                <source src="${message.fields.audio}" type="audio/ogg">
+                Your browser does not support the video tag.
+            </audio>
+            <br>
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Speed
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <button class="btn audioPlayback">0.5</button>
+                <button class="btn audioPlayback">1</button>
+                <button class="btn audioPlayback">1.5</button>
+                <button class="btn audioPlayback">1.75</button>
+                <button class="btn audioPlayback">2</button>
+            </div>
+                                        `
                                     }
                                     newLastMessageId = message.pk
                                     $('.chat').append(`
@@ -283,7 +347,7 @@
                         <img src="${$('#friendAvatar').attr('src')}" alt="User Image" width="64" height="64">
                     </div>
                     <div class="msg">
-                        ${messageContnet}
+                        ${messageContent}
                         <time>Now</time>
                     </div>
                 </li>
@@ -292,10 +356,30 @@
                                         .play();
                                 }
                             }
+
+                            function changePlayback() {
+                                $('.audioPlayback').click(function (e) {
+                                    let audios = document.querySelectorAll(
+                                        '.messageAudio')
+                                    for (audio of audios) {
+                                        audio.playbackRate = $(this).html()
+                                    }
+                                })
+                            }
+                            var g = document.createElement('script')
+                            var s = document.getElementsByTagName('script')[0]
+                            g.text = changePlayback()
+                            s.parentNode.insertBefore(g, s)
                         }
                     }
                 })
             }, 3300);
+            $('.audioPlayback').click(function (e) {
+                let audios = document.querySelectorAll(`.messageAudio`)
+                for (audio of audios) {
+                    audio.playbackRate = $(this).html();
+                }
+            })
         })
     })
 </script>
