@@ -410,7 +410,79 @@
                                             }
                                         })
                                     }
-                                    // End other member
+                                    let senderAvatar = ''
+                                    let senderUsername = ''
+                                    $.ajax({
+                                        url: "{% url 'userpage:get_user_by_id' %}",
+                                        data: {
+                                            'pk': message.fields
+                                                .message_sender,
+                                        },
+                                        method: 'get',
+                                        dataType: 'json',
+                                        async: false,
+                                        success: function (response) {
+                                            senderAvatar = response.user
+                                                .avatar
+                                            senderUsername = response
+                                                .user
+                                                .username
+                                        }
+                                    })
+                                    let messageContent = ''
+                                    if (message.fields.message) {
+                                        messageContent =
+                                            `<p>${message.fields.message }</p>`
+                                    } else if (message.fields.image) {
+                                        messageContent =
+                                            `<img src="/media/${message.fields.image}" draggable="false" style="max-width:450px; max-height:349px;" loading="lazy">`
+                                    } else if (message.fields.file) {
+                                        messageContent = `<a href="/media/${message.fields.file}" download>
+                     <p><i class="fas fa-download" style="font-size:30px"></i> <span>${message.fields.file}</span></p>
+                 </a>`
+                                    } else if (message.fields.video) {
+                                        messageContent = `
+                                        <video controls preload="none" draggable="false" style="max-width:450px; max-height:349px;">
+                <source src="/media/${message.fields.video}" type="video/mp4">
+                <source src="/media/${message.fields.video}" type="video/ogg">
+                Your browser does not support the video tag.
+            </video>
+                                        `
+                                    } else if (message.fields.audio) {
+                                        messageContent = `
+                                        <audio controls preload="none" draggable="false" style="max-width:450px; max-height:349px;"
+                class="messageAudio">
+                <source src="/media/${message.fields.audio}" type="audio/mp4">
+                <source src="${message.fields.audio}" type="audio/ogg">
+                Your browser does not support the video tag.
+            </audio>
+            <br>
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Speed
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <button class="btn audioPlayback">0.5</button>
+                <button class="btn audioPlayback">1</button>
+                <button class="btn audioPlayback">1.5</button>
+                <button class="btn audioPlayback">1.75</button>
+                <button class="btn audioPlayback">2</button>
+            </div>
+                                        `
+                                    }
+                                    newLastMessageId = message.pk
+                                    $('.chat').append(`
+                        <li class="other message" data-pk="${newLastMessageId}">
+                    <div class="avatar">
+                        <img src="${senderAvatar}" alt="User Image" width="64" height="64">
+                    </div>
+                    <div class="msg">
+                        <p class="alert-secondary">${senderUsername}</p>
+                        ${messageContent}
+                        <time>Now</time>
+                    </div>
+                </li>
+                        `)
                                     $('.chat').prepend(`
                                     <li class="${sender} message" data-pk="${message.pk}">
                     <div class="avatar">
@@ -418,7 +490,7 @@
                     </div>
                     <div class="msg">
                         <p class="alert-secondary">${senderUserName} - ${messageArea}</p>
-                        <p>${message.fields.message}</p>
+                        ${messageContent}
                         <time>${date}</time>
                     </div>
                 </li>
