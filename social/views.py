@@ -88,9 +88,7 @@ def send_friend_message(request, pk):
             user_1=friend, user_2=request.user).first()
     message = Message(chat_box=chat_box, message_sender=request.user,
                       message=request.GET.get('message'))
-    print(request.GET.get('is_important'))
     if request.GET.get('is_important') == "True":
-        print('is important MESSAGE')
         important_messages_in_last_day = Message.objects.filter(date__gt=now(
         ) - datetime.timedelta(days=1), is_important=True, chat_box=chat_box, message_sender=request.user)
         if important_messages_in_last_day.count() >= 3:
@@ -102,7 +100,6 @@ def send_friend_message(request, pk):
             message.is_important = True
             # Notification importnat message
             if message.is_important:
-                print('message is important')
                 if friend.allow_important_friend_messages:
                     notification = Notification.objects.create(
                         notification_type='important_friend_message', sender=request.user, url='/chat/', content=message.message[:100])
@@ -126,7 +123,6 @@ def send_friend_message(request, pk):
                     'is_important', False)
     # Normal friend notification
     else:
-        print('message is not important')
         if friend.allow_normal_friend_message:
             # !ABSOLUTE PATH
             notification = Notification.objects.create(
@@ -524,9 +520,9 @@ def load_area(request, group_pk, area_pk):
             group=group, id__gt=last_message_id, area=area).order_by('date')
         return JsonResponse({'chat_messages': serialize('json', chat_messages)})
 
-    # # Paginate messages
-    # elif request.GET.get('page'):
-    #     return JsonResponse({'chat_messages': serialize('json', chat_messages)})
+    # Paginate messages
+    elif request.GET.get('page'):
+        return JsonResponse({'chat_messages': serialize('json', chat_messages)})
 
 
 def search_users(request):
@@ -555,5 +551,4 @@ def search_users(request):
             'is_allowed_group_invite': invite,
         })
 
-        print(serialized_results)
     return JsonResponse({'results': serialized_results})

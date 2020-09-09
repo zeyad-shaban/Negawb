@@ -245,7 +245,120 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         window.addEventListener('load', function () {
+            // top scroll paginator
+            let page = 1
 
+            function topScroll() {
+                if (window.top == window.self) {
+                    $.ajax({
+                        url: "{% url 'social:load_area' 5 curr_area.id %}",
+                        data: {
+                            "page": page,
+                        },
+                        method: 'get',
+                        dataType: 'json',
+                        success: function (response) {
+                            let sender = "self"
+                            let senderAvatar = "{{ user.avatar.url }}"
+                            let senderUsername = "{{ user.username }}"
+                            chat_messages = JSON.parse(response.chat_messages).reverse()
+                            if (chat_messages.length > 0) {
+                                page++
+                                for (message of chat_messages) {
+                                    let messageArea = "All"
+                                    if (message.fields.area != null) {
+                                        messageArea = $('.areaItem').eq(message.fields.area)
+                                            .children().eq(0).html()
+                                    }
+                                    let dateToString = d =>
+                                        `${d.getFullYear()}-${('00' + (d.getMonth() + 1)).slice(-2)}-${('00' + d.getDate()).slice(-2)}`
+                                    let messageDate = new Date(Date.parse(message.fields
+                                        .date))
+                                    let date = dateToString(messageDate)
+                                    // Other member
+                                    if (message.fields.message_sender !=
+                                        "{{ user.id }}") {
+                                        sender = "other"
+                                        $.ajax({
+                                            url: "{% url 'userpage:get_user_by_id' %}",
+                                            data: {
+                                                'pk': message.fields
+                                                    .message_sender,
+                                            },
+                                            method: 'get',
+                                            dataType: 'json',
+                                            async: false,
+                                            success: function (response) {
+                                                senderAvatar = response.user
+                                                    .avatar
+                                                senderUsername = response
+                                                    .user.username
+                                            }
+                                        })
+                                    }
+                                    let messageContent = ''
+                                    if (message.fields.message) {
+                                        messageContent =
+                                            `<p>${message.fields.message }</p>`
+                                    } else if (message.fields.image) {
+                                        messageContent =
+                                            `<img src="/media/${message.fields.image}" draggable="false" style="max-width:450px; max-height:349px;" loading="lazy">`
+                                    } else if (message.fields.file) {
+                                        messageContent = `<a href="/media/${message.fields.file}" download>
+                     <p><i class="fas fa-download" style="font-size:30px"></i> <span>${message.fields.file}</span></p>
+                 </a>`
+                                    } else if (message.fields.video) {
+                                        messageContent = `
+                                        <video controls preload="none" draggable="false" style="max-width:450px; max-height:349px;">
+                <source src="/media/${message.fields.video}" type="video/mp4">
+                <source src="/media/${message.fields.video}" type="video/ogg">
+                Your browser does not support the video tag.
+            </video>
+                                        `
+                                    } else if (message.fields.audio) {
+                                        messageContent = `
+                                        <audio controls preload="none" draggable="false" style="max-width:450px; max-height:349px;"
+                class="messageAudio">
+                <source src="/media/${message.fields.audio}" type="audio/mp4">
+                <source src="${message.fields.audio}" type="audio/ogg">
+                Your browser does not support the video tag.
+            </audio>
+            <br>
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Speed
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <button class="btn audioPlayback">0.5</button>
+                <button class="btn audioPlayback">1</button>
+                <button class="btn audioPlayback">1.5</button>
+                <button class="btn audioPlayback">1.75</button>
+                <button class="btn audioPlayback">2</button>
+            </div>
+                                        `
+                                    }
+                                    newLastMessageId = message.pk
+                                    $('.chat').prepend(`
+                                    <li class="${sender} message" data-pk="${message.pk}">
+                    <div class="avatar">
+                        <img src="${senderAvatar}" alt="User Image" width="64" height="64">
+                    </div>
+                    <div class="msg">
+                        <p class="alert-secondary">${senderUsername} - ${messageArea}</p>
+                        ${messageContent}
+                        <time>${date}</time>
+                    </div>
+                </li>
+                                    `)
+                                }
+                            }
+                        }
+                    })
+                }
+            }
+            topScroll();
+            window.addEventListener('scroll', () => topScroll())
+            // End top scroll paginator
             // Return back
             $('#back').click(() => window.history.back())
             // Group menu
@@ -285,9 +398,9 @@
                 })
             })
             // End send invite
-            
-            
-            
+
+
+
             // Send message
             $('#send').click(function (e) {
                 e.preventDefault();
