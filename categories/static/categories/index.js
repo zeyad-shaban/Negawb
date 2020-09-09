@@ -116,7 +116,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                     if (post.fields.description.length > 45) {
                                         let readMore = '';
                                         if (post.fields.description.length > 227) {
-                                            readMore = `<a href="/comments/${post.pk}/">Read more</a>`;
+                                            readMore = `<a href="#" class="readMore">Read more</a>`;
                                         };
                                         output += `
                                         <p class="card-text" style="white-space: pre-line;">
@@ -156,6 +156,17 @@ document.addEventListener('DOMContentLoaded', function () {
                 </div>
                                 `
                                     $('#homepagePosts').append(output)
+
+                                    function showMore() {
+                                        $('.readMore').click(function (e) {
+                                            e.preventDefault();
+                                            $(this).parent().html(`<br> ${post.fields.description}`)
+                                        })
+                                    }
+                                    let g = document.createElement('script');
+                                    let s = document.getElementsByTagName('script')[0]
+                                    g.text = showMore();
+                                    s.parentNode.insertBefore(g, s)
                                 }
                             })
                         }
@@ -255,7 +266,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                     if (post.fields.description.length > 45) {
                                         let readMore = ''
                                         if (post.fields.description.length > 227) {
-                                            readMore = `<a href="/comments/${post.pk}/">Read more</a>`
+                                            readMore = `<a href="#" class="readMore">Read more</a>`
                                         }
                                         output += `
                                         <p class="card-text" style="white-space: pre-line;">
@@ -294,6 +305,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 </div>
                                 `
                                     $('#followedPostsContainer').append(output)
+                                    function showMore() {
+                                        $('.readMore').click(function (e) {
+                                            e.preventDefault();
+                                            $(this).parent().html(`<br> ${post.fields.description}`)
+                                        })
+                                    }
+                                    let g = document.createElement('script');
+                                    let s = document.getElementsByTagName('script')[0]
+                                    g.text = showMore();
+                                    s.parentNode.insertBefore(g, s)
                                 }
                             })
                         }
