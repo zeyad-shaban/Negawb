@@ -121,8 +121,6 @@
                             Dislike
                         </button>
                     </form>
-                    <a href="{% url 'comments:view_post' post.id %}" class="card-link"><i class="fab fa-rocketchat"></i>
-                        Comments</a>
                     <!-- AddToAny BEGIN -->
                     <a href="https://www.addtoany.com/share#url=https%3A%2F%2Fwww.dfreemedia.com{% url 'comments:view_post' post.id %}&amp;title={{ post.description|truncatechars:45 }}"
                         target="_blank" class="card-link"><i class="fa fa-mail-forward"></i> Share</a>
@@ -335,33 +333,38 @@
         {% endif %}
         <!-- /////////////// COMMENTS -->
         {% if not user.hide_recommended_posts or not user.is_authenticated %}
-        <div class="col-md-3 float-right">
+        <div class="col-md-4 float-right">
             {% if user.is_authenticated %}
             <div class="card-head">Other posts by {{post.user.username}}</div>
             {% else %}
             <div class="alert alert-info">You can hide the recommended posts from the Distraction-Free menu from your <a
                     href="{% url 'userpage:home' %}">profile</a></div>
             {% endif %}
-            {% for post in recommended_posts %}
-            <div class="card gedf-card">
-                <div class="card-body">
-                    <h5 class="card-title">{{ post.description|truncatechars:45 }}</h5>
-                    <!-- Image -->
-                    {% if post.image %}
-                    <img src="{{ post.image.url }}" alt=""
-                        style="width:80%; height: auto; margin-left: auto; margin-right: auto;">
-                    {% endif %}
-                    <!-- File -->
-                    {% if post.post_file %}
-                    <video controls class="col-md-10 col-lg-8" preload="none">
-                        <source src="{{ post.post_file.url }}" type="video/mp4">
-                        <source src="{{ post.post_file.url }}" type="video/ogg">
-                        Your browser does not support the video tag.
-                    </video>
-                    {% endif %}
-                </div>
+            <div id="recommendedPosts">
+                {% for post in recommended_posts %}
+                <a href="{% url 'comments:view_post' post.id %}" class="btn d-block">
+                    <div class="card gedf-card">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ post.description|truncatechars:45 }}</h5>
+                            <!-- Image -->
+                            {% if post.image %}
+                            <img src="{{ post.image.url }}" alt=""
+                                style="width:80%; height: auto; margin-left: auto; margin-right: auto;">
+                            {% endif %}
+                            <!-- File -->
+                            {% if post.post_file %}
+                            <video controls class="col-md-10 col-lg-8" preload="none">
+                                <source src="{{ post.post_file.url }}" type="video/mp4">
+                                <source src="{{ post.post_file.url }}" type="video/ogg">
+                                Your browser does not support the video tag.
+                            </video>
+                            {% endif %}
+                        </div>
+                    </div>
+                </a>
+                {% endfor %}
             </div>
-            {% endfor %}
+            <button class="btn btn-outline-info" id="showMorePosts">Show more</button>
         </div>
         {% endif %}
     </div>
@@ -414,6 +417,59 @@
                     }
                 })
             })
+            // Paginate recommended posts
+            let rec_page = 2
+            $('#showMorePosts').click(function (e) {
+                e.preventDefault();
+                $.ajax({
+                    url: "{% url 'comments:view_post' post.id %}",
+                    data: {
+                        'rec_page': rec_page
+                    },
+                    method: 'get',
+                    dataType: 'json',
+                    success: function (response) {
+                        posts = JSON.parse(response.recommended_posts);
+                        if (posts.length <= 0) {
+                            $('#showMorePosts').html('No posts found');
+                            $('#showMorePosts').removeClass('btn-outline-info')
+                            $('#showMorePosts').addClass('btn-outline-danger')
+                            $('#showMorePosts').click((e) => e.preventDefault())
+                        } else {
+                            for (post of posts) {
+                                let output = `
+                                <a href="/comments/${post.pk}/" class="btn d-block">
+                <div class="card gedf-card">
+                    <div class="card-body">
+                        <h5 class="card-title">${post.fields.description.substring(0, 45)}</h5>
+                                `
+                                let extraFiles = ''
+                                if (post.fields.image) {
+                                    extraFiles = `
+                        <img src="/media/${ post.fields.image}" alt=""
+                            style="width:80%; height: auto; margin-left: auto; margin-right: auto;">
+                                    `
+                                } else if (post.fields.file) {
+                                    extraFiles = `
+                        <video controls class="col-md-10 col-lg-8" preload="none">
+                            <source src="${post.fields.post_file}" type="video/mp4">
+                            <source src="${post.fields.post_file}" type="video/ogg">
+                            Your browser does not support the video tag.
+                        </video>
+                                    `
+                                }
+
+                                output += extraFiles
+                                output += `</div>
+                </div>
+            </a>`
+                                $('#recommendedPosts').append(output)
+                            }
+                        }
+                    }
+                })
+            })
+            // End Paginate recommended posts
         })
     })
 </script>

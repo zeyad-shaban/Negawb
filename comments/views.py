@@ -24,7 +24,6 @@ def search_by_hashtags(request):
     q = q.split('#')[1:]
     query = Post.objects.all().order_by('-post_date')
     posts_list = []
-    print(q)
     for post in query:
         for word in q:
             if post.hashtags and word in post.hashtags:
@@ -49,7 +48,18 @@ def view_post(request, pk):
     post = get_object_or_404(Post, pk=pk)
     comments = Comment.objects.filter(
         post=post).order_by('-comment_date')[:150]
-    recommended_posts = Post.objects.filter(user=post.user).order_by('-post_date')
+    recommended_posts_list = Post.objects.filter(Q(user=post.user), ~Q(id=post.id)).order_by('-post_date')
+    paginator = Paginator(recommended_posts_list, 5)
+    rec_page = request.GET.get('rec_page')
+    try:
+        recommended_posts = paginator.page(rec_page)
+    except EmptyPage:
+        recommended_posts = []
+    except PageNotAnInteger:
+        recommended_posts = paginator.page(1)
+
+    if request.GET.get('rec_page'):
+        return JsonResponse({'recommended_posts': serialize('json', recommended_posts)})
     if request.method == 'GET' and not request.GET.get('action') == 'addComment':
         if request.user.is_authenticated:
             post.views.add(request.user)
@@ -96,7 +106,6 @@ def delete_post(request, pk):
 def post_like_dislike(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
     # Like
-    print(request.GET.get('submit'))
     if request.GET.get('submit') == 'like':
         if request.user in post.dislikes.all():
             post.dislikes.remove(request.user)
@@ -165,7 +174,6 @@ def create_post(request, pk):
 
 
 def analyze_post(request, pk):
-    print('Analyzing post...')
     post = get_object_or_404(Post, pk=pk)
     if request.method == 'GET':
         return render(request, 'comments/analyze_post.html', {'post': post})
