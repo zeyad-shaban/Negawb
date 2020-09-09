@@ -19,13 +19,13 @@ only, giving users the power to hide unwanted topics{% endblock description %}
 <div class="homepageItem" id="postsContainer">
     <form action="{% url 'comments:search_by_hashtags' %}" method="GET"
         class="form-inline mt-3 row justify-content-center" style="width: 80vw; margin-right: 10vw;margin-left: 10vw;">
-        <input type="search" name="q" class="form-control float-left" placeholder="#Search in Dfreemedia"
+        <input type="search" name="q" class="form-control float-left" placeholder="#Search by hashtags"
             style="width:80%">
         <button type="submit" class="btn btn-circle d-inline" style="width: 10%;"><i
                 class="fas fa-search"></i></button>
     </form>
     {% if not user.is_authenticated %}
-    <small>You can change the default hashtag from the Distraction Free menu in your <a
+    <small>Hashtags are used to filter posts in homepage, you can change the hashtag from the Distraction Free menu in your <a
             href="{% url 'userpage:home' %}">profile</a></small>
     {% endif %}
     <div class="container-fluid gedf-wrapper">
