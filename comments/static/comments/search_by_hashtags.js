@@ -78,30 +78,31 @@ document.addEventListener('DOMContentLoaded', function () {
                     success: function (response) {
                         posts = JSON.parse(response.posts);
                         page++
-                        for (post of posts) {
-                            let output = ''
-                            $.ajax({
-                                url: $('#mainPosts').attr('data-url'), // {% url 'get_user_by_id' %}
-                                data: {
-                                    'pk': post.fields.user,
-                                },
-                                method: 'get',
-                                dataType: 'json',
-                                async: false,
-                                success: function (response) {
+                        if (posts.length > 0) {
+                            for (let i = 0; i < posts.length; i++) {
+                                let output = ''
+                                $.ajax({
+                                    url: $('#mainPosts').attr('data-url'), // {% url 'get_user_by_id' %}
+                                    data: {
+                                        'pk': posts[i].fields.user,
+                                    },
+                                    method: 'get',
+                                    dataType: 'json',
+                                    async: false,
+                                    success: function (response) {
 
 
-                                    let user = response.user
-                                    let output = ''
-                                    let postCategory = 'All'
-                                    if (post.fields.category) {
-                                        postCategory = post.fields.category
-                                    }
-                                    let dateToString = d =>
-                                        `${d.getFullYear()}-${('00' + (d.getMonth() + 1)).slice(-2)}-${('00' + d.getDate()).slice(-2)}`
-                                    let postDate = new Date(Date.parse(post.fields.post_date))
-                                    let date = dateToString(postDate)
-                                    output = `
+                                        let user = response.user
+                                        let output = ''
+                                        let postCategory = 'All'
+                                        if (posts[i].fields.category) {
+                                            postCategory = posts[i].fields.category
+                                        }
+                                        let dateToString = d =>
+                                            `${d.getFullYear()}-${('00' + (d.getMonth() + 1)).slice(-2)}-${('00' + d.getDate()).slice(-2)}`
+                                        let postDate = new Date(Date.parse(posts[i].fields.post_date))
+                                        let date = dateToString(postDate)
+                                        output = `
 
                 <div class="card gedf-card">
 <div class="card-header">
@@ -115,7 +116,7 @@ document.addEventListener('DOMContentLoaded', function () {
             </div>
             <div class="ml-2">
                 <div class="h5 m-0">${user.username}</div>
-                <div class="h7 text-muted">${post.fields.views.length} Views -
+                <div class="h7 text-muted">${posts[i].fields.views.length} Views -
                     ${postCategory} Topic
                 </div>
             </div>
@@ -142,80 +143,87 @@ document.addEventListener('DOMContentLoaded', function () {
     <div class="text-muted h7 mb-2"> <i class="fa fa-clock-o"></i>${date}</div>
     <!-- Title -->
     <p class="card-link btn-link" href="#">
-        <h5 class="card-title">${post.fields.description.substring(0, 45)}</h5>
+        <h5 class="card-title">${posts[i].fields.description.substring(0, 45)}</h5>
     </p>
                 `
-                                    // Image
-                                    if (post.fields.image) {
-                                        output += `<img src="/media/${post.fields.image}" alt="" style="width:80%; height: auto; margin-left: auto; margin-right: auto;">`
-                                    }
-                                    // Video
-                                    if (post.fields.post_file) {
-                                        output += `
+                                        // Image
+                                        if (posts[i].fields.image) {
+                                            output += `<img src="/media/${posts[i].fields.image}" alt="" style="width:80%; height: auto; margin-left: auto; margin-right: auto;">`
+                                        }
+                                        // Video
+                                        if (posts[i].fields.post_file) {
+                                            output += `
                     <video controls class="col-md-10 col-lg-8" preload="none">
-        <source src="/media/${post.fields.post_file}" type="video/mp4">
-        <source src="/media/${post.fields.post_file}" type="video/ogg">
+        <source src="/media/${posts[i].fields.post_file}" type="video/mp4">
+        <source src="/media/${posts[i].fields.post_file}" type="video/ogg">
         Your browser does not support the video tag.
     </video>
                 `
-                                    }
-                                    // Description
-                                    if (post.fields.description.length > 45) {
-                                        let readMore = '';
-                                        if (post.fields.description.length > 227) {
-                                            readMore = `<a href="#" class="readMore">Read more</a>`;
-                                        };
-                                        output += `
+                                        }
+                                        // Description
+                                        if (posts[i].fields.description.length > 45) {
+                                            let readMore = '';
+                                            if (posts[i].fields.description.length > 227) {
+                                                readMore = `<a href="#" class="readMore" data-index=${i}>Read more</a>`;
+                                            };
+                                            output += `
                     <p class="card-text" style="white-space: pre-line;">
-        ${post.fields.description.substring(0, 227)} ${readMore}
+        ${posts[i].fields.description.substring(0, 227)} ${readMore}
     </p>
                 `
-                                    };
+                                        };
 
-                                    output += `
+                                        output += `
                 </div>
 <div class="card-footer">
     <form method="GET" class="likeForm d-inline"
-        action="/comments/post_like_dislike/${post.pk}/" data-pk="${post.pk}">
+        action="/comments/post_like_dislike/${posts[i].pk}/" data-pk="${posts[i].pk}">
         <button type="submit" class="btn"><i class="far fa-thumbs-up"></i>
-            <span id="id_likes${post.pk}">
-                <p style="color:black;display: inline">${post.fields.likes.length}</p>
+            <span id="id_likes${posts[i].pk}">
+                <p style="color:black;display: inline">${posts[i].fields.likes.length}</p>
             </span>
             Like</button>
     </form>
-    <form action="/comments/post_like_dislike/${post.pk}/" method="GET"
-        class="d-inline dislikeForm" data-pk="${post.pk}">
+    <form action="/comments/post_like_dislike/${posts[i].pk}/" method="GET"
+        class="d-inline dislikeForm" data-pk="${posts[i].pk}">
         <button type="submit" class="btn"><i class="far fa-thumbs-down"></i>
-            <span id="id_dislikes${post.pk}">
-                <p style="color:black; display: inline;">${post.fields.dislikes.length}</p>
+            <span id="id_dislikes${posts[i].pk}">
+                <p style="color:black; display: inline;">${posts[i].fields.dislikes.length}</p>
             </span>
             Dislike
         </button>
     </form>
-    <a href="/comments/${post.pk}/" class="card-link"><i
+    <a href="/comments/${posts[i].pk}/" class="card-link"><i
             class="fab fa-rocketchat"></i>
         Comments</a>
     <!-- AddToAny BEGIN -->
-    <a href="https://www.addtoany.com/share#url=https%3A%2F%2Fwww.dfreemedia.com/commetns/${post.pk}&amp;title=${post.fields.description.substring(0, 45)}"
+    <a href="https://www.addtoany.com/share#url=https%3A%2F%2Fwww.dfreemedia.com/commetns/${posts[i].pk}&amp;title=${posts[i].fields.description.substring(0, 45)}"
         target="_blank" class="card-link"><i class="fa fa-mail-forward"></i> Share</a>
     <!-- AddToAny END -->
 </div>
 </div>
             `
-                                    $('#mainPosts').append(output)
-                                    function showMore() {
-                                        $('.readMore').click(function (e) {
-                                            e.preventDefault();
-                                            $(this).parent().html(`<br> ${post.fields.description}`)
-                                        })
+                                        $('#mainPosts').append(output)
                                     }
-                                    let g = document.createElement('script');
-                                    let s = document.getElementsByTagName('script')[0]
-                                    g.text = showMore();
-                                    s.parentNode.insertBefore(g, s)
-                                }
+                                })
+                            }
+                        }
+
+                        function showMore() {
+                            $('.readMore').click(function (e) {
+                                e.preventDefault();
+                                var index = 0;
+                                index = $(this).attr('data-index')
+                                let thisPost = posts[parseInt(index)]
+                                let description = thisPost.fields.description
+                                console.log(description)
+                                $(this).parent().html(`<br> ${description}`)
                             })
                         }
+                        let g = document.createElement('script');
+                        let s = document.getElementsByTagName('script')[0]
+                        g.text = showMore();
+                        s.parentNode.insertBefore(g, s)
                     }
                 })
             }
