@@ -1,6 +1,7 @@
 {% load static %}
 {% load crispy_forms_tags %}
 {% load webpush_notifications %}
+{% webpush_header %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -100,6 +101,11 @@ pagead/js/adsbygoogle.js"></script>
                             <div id="notificationsList" data-url="{% url 'social:load_notifications' %}"
                                 data-getUserUrl="{% url 'userpage:get_user_by_id' %}" data-currUser="{{ user }}">
                                 <h4>Notifications</h4>
+                                {% if user.is_authenticated %}
+                                {% webpush_button with_class="btn btn-outline-success btn-sm" %}
+                                <span><i class="fas fa-bell" style="font-size:24px"></i></span>
+                                <small class="form-text text-muted">If you can't enable it disable the notification permission from your browser and click on it again</small>
+                                {% endif %}
                                 <div class="dropdown-divider"></div>
                                 <ul class="list-group list-group-horizontal">
                                     <li class="list-group-item active notificationType" date-wantedType="all">All</li>
@@ -131,20 +137,16 @@ pagead/js/adsbygoogle.js"></script>
                                     <a href="{{ notification.url }}" style="text-decoration: none; color: black">
                                         <div class="media" style="background: #F7F7F7;">
                                             {% if notification.sender.who_see_avatar == 'everyone' %}
-                                            <img src="{{notification.sender.avatar.url}}"
-                                                class=""
-                                                alt="User Image" width="50" height="50">
+                                            <img src="{{notification.sender.avatar.url}}" class="" alt="User Image"
+                                                width="50" height="50">
                                             {% elif notification.sender.who_see_avatar == 'friends' and user in notification.sender.friends.all %}
-                                            <img src="{{notification.sender.avatar.url}}"
-                                                class=""
-                                                alt="User Image" width="50" height="50">
+                                            <img src="{{notification.sender.avatar.url}}" class="" alt="User Image"
+                                                width="50" height="50">
                                             {% elif notification.sender == user %}
-                                            <img src="{{notification.sender.avatar.url}}"
-                                                class=""
-                                                alt="User Image" width="50" height="50">
+                                            <img src="{{notification.sender.avatar.url}}" class="" alt="User Image"
+                                                width="50" height="50">
                                             {% else %}
-                                            <img src="/media/profile_images/DefaultUserImage.jpg"
-                                                class=""
+                                            <img src="/media/profile_images/DefaultUserImage.jpg" class=""
                                                 alt="User Image" width="50" height="64">
                                             {% endif %}
                                             <div class="media-body">
@@ -268,10 +270,12 @@ pagead/js/adsbygoogle.js"></script>
                         </div>
                         <div class="form-group">
                             <label for="password2">Homepage hashtags</label>
-                            <input type="text" class="form-control" name="homepage_hashtags" id="id_homepage_hashtags" placeholder="#sports #love #dfreemedia">
+                            <input type="text" class="form-control" name="homepage_hashtags" id="id_homepage_hashtags"
+                                placeholder="#sports #love #dfreemedia">
                             </input>
                             <br>
-                            <small class="form-text-text-muted">Hashtags you choose will be displayed as your default homepage posts, leave blank to disable filtering</small>
+                            <small class="form-text-text-muted">Hashtags you choose will be displayed as your default
+                                homepage posts, leave blank to disable filtering</small>
                         </div>
                         <small class="form-text text-muted mb-2"> <input type="checkbox" name="" id="" class="mr-2"
                                 required>I agree
