@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block title %}
-
+{{ user.username }} and {{ friend.username }} Chat
 {% endblock title %}
 
 {% block description %}
@@ -27,6 +27,9 @@
     <div class="last">Bio: {{ friend.bio }} -Phone: {{ friend.phone }} -Email: {{ friend.email }} </div>
     <button class="btn float-right mr-3" data-toggle="modal" data-target="#sendFile"><i class="fas fa-paperclip"
             style="color: white; font-size:36px;"></i></button>
+    <button type="button" class="btn float-right mr-3" data-toggle="modal" data-target="#recordModal">
+        <i class="fas fa-microphone" style="font-size: 36px"></i>
+    </button>
 </div>
 <ol class="chat">
     <audio id="notificationSound">
@@ -148,10 +151,139 @@
         </div>
     </div>
 </div>
+<!-- End send file modal -->
+
+<!-- Record audio modal -->
+<div class="modal fade" id="recordModal" tabindex="-1" role="dialog" aria-labelledby="recordLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="recordLabel">Record</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <button class="btn btn-success" id="record"><i class="fas fa-play"></i> Record</button>
+                <button class="btn btn-secondary" id="stop"><i class="fas fa-stop"></i> Stop</button>
+            </div>
+            <div id="userClips"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Record audio modal -->
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         window.addEventListener('load', function () {
+            // Audio record
+            const record = document.querySelector('#record')
+            const stop = document.querySelector('#stop')
+            const userClips = document.querySelector('#userClips')
+            // Check if getUserMedia is supported
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                navigator.mediaDevices.getUserMedia({
+                    audio: true
+                }).then(function (stream) {
+                    let mediaRecorder = new MediaRecorder(stream);
+                    record.onclick = function (e) {
+                        // Start recording
+                        mediaRecorder.start()
+                        record.style.background = "red";
+                        record.style.color = "black";
+                        let chunks = [];
+                        mediaRecorder.ondataavailable = function (e) {
+                            chunks.push(e.data);
+                        };
+                        // End start recording
+
+                        // Stop recording button
+                        stop.onclick = function (e) {
+                            mediaRecorder.stop();
+                            record.style.background = "green"
+                            record.style.color = "white"
+                        }
+                        // End stop recording button
+
+                        // Getting the blob
+                        mediaRecorder.onstop = function (e) {
+                            // Create new audio elements
+                            const clipContainer = document.createElement('article');
+                            const audio = document.createElement('audio');
+                            const deleteButton = document.createElement('button');
+                            // Set classes
+                            clipContainer.classList.add('clip');
+                            deleteButton.classList.add('btn')
+                            deleteButton.classList.add('btn-danger')
+                            deleteButton.innerHTML =
+                                '<i class="fas fa-trash-alt"></i> Delete'
+                            audio.setAttribute('controls', '')
+                            audio.style.float = 'left'
+                            deleteButton.style.float = 'right'
+                            deleteButton.style.margin = '0 30px'
+                            // Displaying them
+                            clipContainer.appendChild(audio);
+                            clipContainer.appendChild(deleteButton);
+                            userClips.appendChild(clipContainer)
+
+                            // Set src for audio
+                            const blob = new Blob(chunks, {
+                                'type': 'audio/ogg; codecs=opus'
+                            });
+                            chunks = [];
+                            const audioURL = window.URL.createObjectURL(blob);
+                            audio.src = audioURL
+
+                            // Delete audio
+                            deleteButton.onclick = function (e) {
+                                let eventTarget = e.target;
+                                eventTarget.parentNode.parentNode.removeChild(
+                                    eventTarget.parentNode);
+                            }
+                            // Sending to django
+                            var filename = new Date().toISOString();
+                            let send = document.createElement('a');
+                            send.href = '#';
+                            send.innerHTML = '<i class="fas fa-paper-plane"></i> Send'
+                            send.classList.add('btn')
+                            send.classList.add('btn-success')
+                            userClips.appendChild(send)
+                            send.onclick = function (e) {
+                                e.preventDefault();
+                                var fd = new FormData();
+                                fd.append('audio', blob);
+                                $.ajax({
+                                    url: "{% url 'social:send_friend_voice_message' friend.id %}",
+                                    type: 'GET',
+                                    data: {
+                                        'audio': fd
+                                    },
+                                    processData: false,
+                                    contentType: false,
+                                    dataType: 'json',
+                                    success: function (response) {
+                                        console.log('response' + JSON
+                                            .stringify(response));
+                                    },
+                                    error: function () {
+                                        // handle error case here
+                                    }
+                                });
+                            }
+                            // End sending to django
+                        }
+                        // End getting the blob
+                    }
+                }).catch(function (err) {
+                    alert('Error occured, see the console')
+                })
+            } else {
+                alert('You cannot record voice message because your device doesn\'t support user media')
+            }
+            // End audio record
             window.scrollTo(0, document.body.scrollHeight)
             // Go back
             $('#back').click(function (e) {
@@ -195,7 +327,6 @@
                                         messageContent =
                                             `<img src="/media/${message.fields.image}" draggable="false" style="max-width:450px; max-height:349px;" loading="lazy">`
                                     } else if (message.fields.file) {
-                                        console.log(message.fields.file)
                                         messageContent = `<a href="/media/${message.fields.file}" download>
                      <p><i class="fas fa-download" style="font-size:30px"></i> <span>${message.fields.file}</span></p>
                  </a>`
@@ -349,7 +480,6 @@
                                         messageContent =
                                             `<img src="/media/${message.fields.image}" draggable="false" style="max-width:450px; max-height:349px;" loading="lazy">`
                                     } else if (message.fields.file) {
-                                        console.log(message.fields.file)
                                         messageContent = `<a href="/media/${message.fields.file}" download>
                      <p><i class="fas fa-download" style="font-size:30px"></i> <span>${message.fields.file}</span></p>
                  </a>`

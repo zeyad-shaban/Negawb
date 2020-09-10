@@ -150,7 +150,6 @@ def send_friend_message(request, pk):
 
 def send_friend_file_message(request, pk):
     friend = get_object_or_404(User, pk=pk)
-    friend = get_object_or_404(User, pk=pk)
     chat_box = ChatBox.objects.filter(
         user_1=request.user, user_2=friend).first()
     if not chat_box:
@@ -161,6 +160,25 @@ def send_friend_file_message(request, pk):
                       file=request.FILES.get('file'), image=request.FILES.get('image'), video=request.FILES.get('video'), audio=request.FILES.get('audio'))
     message.save()
     return redirect('social:chat_friend', pk=pk)
+
+
+def send_friend_voice_message(request, pk):
+    friend = get_object_or_404(User, pk=pk)
+    chat_box = ChatBox.objects.filter(
+        user_1=request.user, user_2=friend).first()
+    if not chat_box:
+        chat_box = ChatBox.objects.filter(
+            user_1=friend, user_2=request.user).first()
+            
+    print('request--------')
+    print(request.GET.get('audio'))
+    print(request.FILES.get('audio'))
+    # message = Message(
+    #     chat_box=chat_box, message_sender=request.user, audio=request.GET.get('audio'))
+    # message.save()
+    return JsonResponse({})
+
+
 # End friend
 
 # Groups

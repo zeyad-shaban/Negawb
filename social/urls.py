@@ -8,6 +8,7 @@ urlpatterns = [
     path('chat_friend/<int:pk>/', views.chat_friend, name='chat_friend'),
     path('send_friend_message/<int:pk>/', views.send_friend_message, name='send_friend_message'),
     path('send_friend_file_message/<int:pk>/', views.send_friend_file_message, name="send_friend_file_message"),
+    path('send_friend_voice_message/<int:pk>/', views.send_friend_voice_message, name='send_friend_voice_message'),
     # Chat Group
     path('chat_group/<int:pk>/', views.chat_group, name='chat_group'),
     path('send_group_message/<int:pk>/', views.send_group_message, name='send_group_message'),
