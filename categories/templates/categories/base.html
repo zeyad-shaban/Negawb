@@ -104,7 +104,8 @@ pagead/js/adsbygoogle.js"></script>
                                 {% if user.is_authenticated %}
                                 {% webpush_button with_class="btn btn-outline-success btn-sm" %}
                                 <span><i class="fas fa-bell" style="font-size:24px"></i></span>
-                                <small class="form-text text-muted">If you can't enable it disable the notification permission from your browser and click on it again</small>
+                                <small class="form-text text-muted">If you can't enable it disable the notification
+                                    permission from your browser and click on it again</small>
                                 {% endif %}
                                 <div class="dropdown-divider"></div>
                                 <ul class="list-group list-group-horizontal">
@@ -241,6 +242,7 @@ pagead/js/adsbygoogle.js"></script>
                         <h4>And organize your chat for better life</h4>
                         <h4>Enable chat only mode for maximum productivity</h4>
                         <h4>Control posts and notifications you receive</h4>
+                        <h4>Hide comments and recommended posts to help you focus</h4>
                         <h4>Set up email and phone num. for friends to easily find you</h4>
                         <p>And much more!</p>
                     </div>
@@ -251,11 +253,6 @@ pagead/js/adsbygoogle.js"></script>
                             <input type="text" name="username" class="form-control" id="username"
                                 aria-describedby="usernameHelp" required maxlength="40">
                         </div>
-                        <!-- <div class="form-group">
-                                            <label for="email">Email</label>
-                                            <small class="form-text text-muted">optional</small>
-                                            <input type="text" name="email" class="form-control" id="email" aria-describedby="usernameHelp">
-                                        </div> -->
                         <div class="form-group">
                             <label for="password1">Password</label>
                             <input type="password" name="password1" class="form-control" id="password1" required>
@@ -357,13 +354,48 @@ pagead/js/adsbygoogle.js"></script>
             color: white;
             text-align: center;
         }
+
+        #appDesc {
+            margin-left: 10vh;
+            margin-top: 15px;
+        }
+
+        #authBtns {
+            padding-top: 20px;
+        }
+
+        #login {
+            margin-right: 10px;
+            border: 2px solid white;
+            border-radius: 30px;
+        }
+
+        #signup {
+            border-radius: 30px
+        }
+        @media screen and (max-width: 638px){
+            #appDesc{
+                display: none
+            }
+            #login{
+                width: 40%;
+            }
+            #signup{
+                width: 40%;
+            }
+        }
     </style>
     <div id="floatAuthForm">
-        <button type="button" class="btn btn-primary btn-lg" data-toggle="modal"
-            data-target="#loginFloatForm">Login</button>
-        <span>Or</span>
-        <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#signupFloatForm"
-            id="signup">Sign Up</button>
+        <div class="float-left" id="appDesc">
+            <h4 style="margin-left: 30px">Don't let social media distract you</h4>
+            <p>Dfreemedia is the least distractive app.</p>
+        </div>
+        <div id="authBtns">
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#loginFloatForm"
+                id="login">Login</button>
+            <button type="button" class="btn btn-light" data-toggle="modal" data-target="#signupFloatForm"
+                id="signup">Sign Up</button>
+        </div>
     </div>
     {% endif %}
     <!-- Bootstrap -->
