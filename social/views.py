@@ -1,3 +1,4 @@
+from django.views.decorators.csrf import csrf_exempt
 from django.core.serializers import serialize
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.utils.timezone import now
@@ -162,6 +163,7 @@ def send_friend_file_message(request, pk):
     return redirect('social:chat_friend', pk=pk)
 
 
+@csrf_exempt
 def send_friend_voice_message(request, pk):
     friend = get_object_or_404(User, pk=pk)
     chat_box = ChatBox.objects.filter(
@@ -169,13 +171,9 @@ def send_friend_voice_message(request, pk):
     if not chat_box:
         chat_box = ChatBox.objects.filter(
             user_1=friend, user_2=request.user).first()
-            
-    print('request--------')
-    print(request.GET.get('audio'))
-    print(request.FILES.get('audio'))
-    # message = Message(
-    #     chat_box=chat_box, message_sender=request.user, audio=request.GET.get('audio'))
-    # message.save()
+    message = Message(
+        chat_box=chat_box, message_sender=request.user, audio=request.FILES.get('audio'))
+    message.save()
     return JsonResponse({})
 
 

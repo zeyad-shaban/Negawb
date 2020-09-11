@@ -223,7 +223,7 @@
                             audio.setAttribute('controls', '')
                             audio.style.float = 'left'
                             deleteButton.style.float = 'right'
-                            deleteButton.style.margin = '0 30px'
+                            // deleteButton.style.margin = '30px'
                             // Displaying them
                             clipContainer.appendChild(audio);
                             clipContainer.appendChild(deleteButton);
@@ -244,7 +244,6 @@
                                     eventTarget.parentNode);
                             }
                             // Sending to django
-                            var filename = new Date().toISOString();
                             let send = document.createElement('a');
                             send.href = '#';
                             send.innerHTML = '<i class="fas fa-paper-plane"></i> Send'
@@ -253,25 +252,50 @@
                             userClips.appendChild(send)
                             send.onclick = function (e) {
                                 e.preventDefault();
-                                var fd = new FormData();
-                                fd.append('audio', blob);
+                                var form = new FormData();
+                                form.append('audio', blob);
                                 $.ajax({
-                                    url: "{% url 'social:send_friend_voice_message' friend.id %}",
-                                    type: 'GET',
-                                    data: {
-                                        'audio': fd
-                                    },
+                                    url: '{% url "social:send_friend_voice_message" friend.id %}',
+                                    type: 'POST',
+                                    data: form,
                                     processData: false,
                                     contentType: false,
-                                    dataType: 'json',
-                                    success: function (response) {
-                                        console.log('response' + JSON
-                                            .stringify(response));
+                                    success: function (data) {
+                                        $('.chat').append(`
+                                        <li class="self message">
+        <div class="avatar">
+            <img src="{{ user.avatar.url }}" alt="User Image" width="64" height="64">
+        </div>
+        <div class="msg">
+            <audio controls preload="none" draggable="false" style="max-width:450px; max-height:349px;"
+                class="messageAudio">
+                <source src="${audioURL}" type="audio/mp4">
+                <source src="${audioURL}" type="audio/ogg">
+                Your browser does not support the video tag.
+            </audio>
+            <br>
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Speed
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <button class="btn audioPlayback">0.5</button>
+                <button class="btn audioPlayback">1</button>
+                <button class="btn audioPlayback">1.5</button>
+                <button class="btn audioPlayback">1.75</button>
+                <button class="btn audioPlayback">2</button>
+            </div>
+            </div>
+            </li>
+                                        `)
+                                        document.getElementById(
+                                                'notificationSound')
+                                            .play()
                                     },
                                     error: function () {
-                                        // handle error case here
+                                        alert('error occured')
                                     }
-                                });
+                                })
                             }
                             // End sending to django
                         }
