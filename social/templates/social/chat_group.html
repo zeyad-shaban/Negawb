@@ -448,6 +448,7 @@
                             let form = new FormData();
                             form.append('audio', blob);
                             form.append('area', $('#voiceArea').val())
+                            form.append('csrfmiddlewaretoken', "{{ csrf_token }}")
                             $.ajax({
                                 url: "{% url 'social:send_group_voice_message' group.id %}",
                                 data: form,

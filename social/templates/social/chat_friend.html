@@ -252,12 +252,13 @@
                             userClips.appendChild(send)
                             send.onclick = function (e) {
                                 e.preventDefault();
-                                var form = new FormData();
-                                form.append('audio', blob);
+                                var fd = new FormData();
+                                fd.append('audio', blob);
+                                fd.append('csrfmiddlewaretoken', "{{ csrf_token }}")
                                 $.ajax({
                                     url: '{% url "social:send_friend_voice_message" friend.id %}',
                                     type: 'POST',
-                                    data: form,
+                                    data: fd,
                                     processData: false,
                                     contentType: false,
                                     success: function (data) {

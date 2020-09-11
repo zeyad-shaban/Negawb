@@ -1,4 +1,3 @@
-from django.views.decorators.csrf import csrf_exempt
 from django.core.serializers import serialize
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.utils.timezone import now
@@ -163,7 +162,6 @@ def send_friend_file_message(request, pk):
     return redirect('social:chat_friend', pk=pk)
 
 
-@csrf_exempt
 def send_friend_voice_message(request, pk):
     friend = get_object_or_404(User, pk=pk)
     chat_box = ChatBox.objects.filter(
@@ -305,7 +303,6 @@ def send_group_file_message(request, pk):
     return redirect('social:chat_group', pk=pk)
 
 
-@csrf_exempt
 def send_group_voice_message(request, pk):
     group = get_object_or_404(ChatGroup, pk=pk)
     print(request.POST.get('area'))
