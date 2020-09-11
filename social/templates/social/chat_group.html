@@ -19,6 +19,8 @@
     <div class="last">{% if group.description %}{{ group.description }}{% endif %}</div>
     <button class="btn float-right mr-3" data-toggle="modal" data-target="#sendFile"><i class="fas fa-paperclip"
             style="color: white; font-size:36px;"></i></button>
+    <button class="btn float-right mr-2" style="font-size: 36px;" data-target="#record" data-toggle="modal"><i
+            class="fas fa-microphone"></i></button>
 </div>
 <ul class="list-group list-group-horizontal fixed-top" style="margin-top: 50px">
     <li class="list-group-item btn active areaItem">All</li>
@@ -356,9 +358,151 @@
     </div>
 </div>
 
+
+<!-- Record audio modal -->
+<div class="modal fade" id="record" tabindex="-1" role="dialog" aria-labelledby="recordLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="recordLabel">Record</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <button class="btn btn-success" id="recordBtn"><i class="fas fa-play"></i> Record</button>
+                <button class="btn btn-secondary" id="stopBtn"><i class="fas fa-stop"></i> Stop</button>
+                <button class="btn btn-primary" id="sendVoice" style="display:none; margin-left:15px;"><i
+                        class="far fa-paper-plane"></i> Send</button>
+                <br>
+                <div id="userClips"></div>
+                <br>
+                <select id="voiceArea" name='area'>
+                    <option value="None">All</option>
+                    {% for area in areas %}
+                    <option value="{{ area.id }}">{{ area.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End record audio modal -->
+
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         window.addEventListener('load', function () {
+            let record = document.querySelector('#recordBtn');
+            let stop = document.querySelector('#stopBtn');
+            let userClips = document.querySelector('#userClips');
+
+            // Record voice
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                navigator.mediaDevices.getUserMedia({
+                    audio: true
+                }).then(function (stream) {
+                    let mediaRecorder = new MediaRecorder(stream);
+                    let chunks = [];
+                    record.onclick = function (e) {
+                        mediaRecorder.start();
+                        record.style.background = 'red';
+                        record.style.color = 'black';
+                        mediaRecorder.ondataavailable = function (e) {
+                            chunks.push(e.data);
+                        }
+                        userClips.innerHTML = '';
+                    }
+
+                    stop.onclick = function (e) {
+                        mediaRecorder.stop();
+                        record.style.background = 'green';
+                        record.style.color = 'white';
+                    }
+                    mediaRecorder.onstop = function (e) {
+                        // Create new audio elements
+                        const clipContainer = document.createElement('article');
+                        const audio = document.createElement('audio');
+                        // Set classes
+                        clipContainer.classList.add('clip');
+                        audio.setAttribute('controls', '')
+                        audio.style.float = 'left'
+                        // Displaying them
+                        clipContainer.appendChild(audio);
+                        userClips.appendChild(clipContainer)
+                        // End displaying
+                        const blob = new Blob(chunks, {
+                            'type': 'audio/ogg; codecs=opus'
+                        });
+                        chunks = [];
+                        const audioURL = window.URL.createObjectURL(blob)
+                        audio.src = audioURL;
+                        // Upload to DJANGO
+                        let send = document.getElementById('sendVoice');
+                        send.style.display = 'inline-block';
+                        send.onclick = function (e) {
+                            e.preventDefault();
+                            let form = new FormData();
+                            form.append('audio', blob);
+                            form.append('area', $('#voiceArea').val())
+                            $.ajax({
+                                url: "{% url 'social:send_group_voice_message' group.id %}",
+                                data: form,
+                                method: 'POST',
+                                dataType: 'json',
+                                processData: false,
+                                contentType: false,
+                                success: function (respone) {
+                                    $('.chat').append(`
+                                        <li class="self message">
+        <div class="avatar">
+            <img src="{{ user.avatar.url }}" alt="User Image" width="64" height="64">
+        </div>
+        <div class="msg">
+            <audio controls preload="none" draggable="false" style="max-width:450px; max-height:349px;"
+                class="messageAudio">
+                <source src="${audioURL}" type="audio/mp4">
+                <source src="${audioURL}" type="audio/ogg">
+                Your browser does not support the video tag.
+            </audio>
+            <br>
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Speed
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <button class="btn audioPlayback">0.5</button>
+                <button class="btn audioPlayback">1</button>
+                <button class="btn audioPlayback">1.5</button>
+                <button class="btn audioPlayback">1.75</button>
+                <button class="btn audioPlayback">2</button>
+            </div>
+            </div>
+            </li>
+                                        `)
+                                    document.getElementById(
+                                            'notificationSound')
+                                        .play()
+                                },
+                                error: function (response) {
+                                    alert(
+                                        'failed to send, please report error'
+                                    )
+                                }
+                            })
+
+                        }
+                    }
+                }).catch(function (err) {
+                    alert('Error occured, see console for more info')
+                })
+            } else {
+                alert('You cannot record voice message because your device doesn\'t support user media')
+            }
+            // End record voice
             // Paginate messages
             let page = 1
             // Top scroll

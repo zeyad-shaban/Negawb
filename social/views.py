@@ -305,6 +305,20 @@ def send_group_file_message(request, pk):
     return redirect('social:chat_group', pk=pk)
 
 
+@csrf_exempt
+def send_group_voice_message(request, pk):
+    group = get_object_or_404(ChatGroup, pk=pk)
+    print(request.POST.get('area'))
+    try:
+        area = get_object_or_404(Area, pk=int(request.POST.get('area')))
+    except:
+        area = None
+    message = GroupMessage(
+        group=group, message_sender=request.user, audio=request.FILES.get('audio'), area=area)
+    message.save()
+    return JsonResponse({})
+
+
 def send_group_invite(request, user_pk, group_pk):
     request_sender = request.user
     reciever = get_object_or_404(User, pk=user_pk)
