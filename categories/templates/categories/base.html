@@ -254,11 +254,14 @@ pagead/js/adsbygoogle.js"></script>
                         </div>
                         <div class="form-group">
                             <label for="password1">Password</label>
-                            <input type="password" name="password1" class="form-control" id="password1" required>
+                            <input type="password" name="password1" class="form-control signupPass" id="password1"
+                                style="float: left; width: 90%;" required>
+                            <i class="fas fa-eye-slash btn" id="toggleSignupPass" style="float: right; width:10%"></i>
                         </div>
                         <div class="form-group">
                             <label for="password2">Confirm Password</label>
-                            <input type="password" name="password2" class="form-control" id="password2" required>
+                            <input type="password" name="password2" class="form-control signupPass" id="password2"
+                                required>
                         </div>
                         <div class="form-group">
                             <label for="chat_only_mode">Chat only mode</label>
@@ -308,14 +311,16 @@ pagead/js/adsbygoogle.js"></script>
                         </div>
                         <div class="form-group">
                             <label for="password">Password</label>
-                            <input type="password" name="password" class="form-control" id="password" required>
+                            <input type="password" name="password" class="form-control" id="password loginPass"
+                                style="float: left; width: 90%" required>
+                            <i class="fas fa-eye-slash btn" id="toggleLoginPass" style="float: right; width:10%"></i>
                         </div>
                         <button type="submit" class="btn btn-success btn-block">Login</button>
                     </form>
-                    <!-- <hr> -->
-                    <!-- <div class="text-center">
-                                        Forgot password? If your account was linked with an email then no worries, <a href="{% url 'password_reset' %}">Reset Password</a>
-                                    </div> -->
+                    <hr>
+                    <div class="text-center">
+                        Forgot password? <a href="{% url 'password_reset' %}">reset here</a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -334,6 +339,32 @@ pagead/js/adsbygoogle.js"></script>
                 setTimeout(() => {
                     popSignUpForm()
                 }, 5000);
+                document.querySelector('#toggleLoginPass').onclick = function (e) {
+                    e.preventDefault();
+                    if ($('#toggleLoginPass').hasClass('fa-eye-slash')) {
+                        $('#loginPass').attr('type', 'text');
+                        $('#toggleLoginPass').removeClass('fa-eye-slash');
+                        $('#toggleLoginPass').addClass('fa-eye');
+                    } else {
+                        console.log('it does not have class')
+                        $('#loginPass').attr('type', 'password')
+                        $('#toggleLoginPass').removeClass(`fa-eye`)
+                        $('#toggleLoginPass').addClass(`fa-eye-slash`)
+                    }
+                }
+                document.querySelector('#toggleSignupPass').onclick = function (e) {
+                    e.preventDefault();
+                    if ($('#toggleSignupPass').hasClass('fa-eye-slash')) {
+                        $('.signupPass').attr('type', 'text');
+                        $('#toggleSignupPass').removeClass('fa-eye-slash');
+                        $('#toggleSignupPass').addClass('fa-eye');
+                    } else {
+                        console.log('it does not have class')
+                        $('.signupPass').attr('type', 'password')
+                        $('#toggleSignupPass').removeClass(`fa-eye`)
+                        $('#toggleSignupPass').addClass(`fa-eye-slash`)
+                    }
+                }
             });
         });
     </script>
@@ -372,14 +403,17 @@ pagead/js/adsbygoogle.js"></script>
         #signup {
             border-radius: 30px
         }
-        @media screen and (max-width: 638px){
-            #appDesc{
+
+        @media screen and (max-width: 638px) {
+            #appDesc {
                 display: none
             }
-            #login{
+
+            #login {
                 width: 40%;
             }
-            #signup{
+
+            #signup {
                 width: 40%;
             }
         }

@@ -41,18 +41,15 @@ Dfreemedia.{% endblock description %}
                 <input type="text" name="username" class="form-control" id="username" aria-describedby="usernameHelp"
                     required maxlength="40">
             </div>
-            <!-- <div class="form-group">
-                <label for="email">Email</label>
-                <small class="form-text text-muted">optional</small>
-                <input type="text" name="email" class="form-control" id="email" aria-describedby="usernameHelp">
-            </div> -->
             <div class="form-group">
                 <label for="password1">Password</label>
-                <input type="password" name="password1" class="form-control" id="password1" required>
+                <input type="password" name="password1" class="form-control password" id="password1" required
+                    style="float: left; width: 90%">
+                <i class="fas fa-eye-slash btn" id="togglePassword" style="float: right; width:10%"></i>
             </div>
             <div class="form-group">
                 <label for="password2">Confirm Password</label>
-                <input type="password" name="password2" class="form-control" id="password2" required>
+                <input type="password" name="password2" class="form-control password" id="password2" required>
             </div>
             <div class="form-group">
                 <label for="chat_only_mode">Chat only mode</label>
@@ -79,4 +76,23 @@ Dfreemedia.{% endblock description %}
         </div>
     </div>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        window.addEventListener('load', function () {
+            document.querySelector('#togglePassword').onclick = function (e) {
+                e.preventDefault();
+                if ($('#togglePassword').hasClass('fa-eye-slash')) {
+                    $('.password').attr('type', 'text');
+                    $('#togglePassword').removeClass('fa-eye-slash');
+                    $('#togglePassword').addClass('fa-eye');
+                } else {
+                    console.log('it does not have class')
+                    $('.password').attr('type', 'password')
+                    $('#togglePassword').removeClass(`fa-eye`)
+                    $('#togglePassword').addClass(`fa-eye-slash`)
+                }
+            }
+        });
+    });
+</script>
 {% endblock content %}
