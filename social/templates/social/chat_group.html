@@ -16,7 +16,8 @@
         <img src="{{ group.image.url }}" alt="User Image" width="64" height="64" id="friendAvatar">
     </div>
     <div class="name">{{ group.title }}</div>
-    <div class="last">{% if group.description %}{{ group.description }}{% endif %}</div>
+    <div class="last" style="max-width:50%;">
+        {% if group.description %}{{ group.description|truncatechars:100 }}{% endif %}</div>
     <button class="btn float-right mr-3" data-toggle="modal" data-target="#sendFile"><i class="fas fa-paperclip"
             style="color: white; font-size:36px;"></i></button>
     <button class="btn float-right mr-2" style="font-size: 36px;" id="record"><i class="fas fa-microphone"></i></button>
@@ -121,9 +122,9 @@
             <div class="modal-header">
                 <h5 class="modal-title" id="groupMenuLabel">
                     <ul class="list-group list-group-horizontal">
-                        <li class="list-group-item active btn groupOption">Members</li>
-                        <li class="list-group-item btn groupOption">Invite</li>
-                        <li class="list-group-item btn groupOption">Settings</li>
+                        <li class="list-group-item active btn groupOption"><i class="fas fa-users"></i> Members</li>
+                        <li class="list-group-item btn groupOption"><i class="fas fa-user-plus"></i> Invite</li>
+                        <li class="list-group-item btn groupOption"><i class="fas fa-cog"></i> Settings</li>
                     </ul>
                 </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -277,17 +278,17 @@
                     <hr>
                     <h4><i class="fas fa-edit"></i> Edit</h4>
 
-                    {% if user == group.author or user in group.group_admins.all %}
                     <form action="{% url 'social:edit_group' group.id %}" method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
                         {{ form|crispy }}
+                        {% if user == group.author or user in group.group_admins.all %}
                         <button type="submit" class="btn btn-success">Save</button>
+                        {% else %}
+                        <div class="alert-info">
+                            <h5>Only group admins can save changes</h5>
+                        </div>
+                        {% endif %}
                     </form>
-                    {% else %}
-                    <div class="alert-info">
-                        <h5>Only group admins can edit</h5>
-                    </div>
-                    {% endif %}
 
                     <hr>
                     <h4><i class="fas fa-exclamation-triangle"></i> Danger area</h4>
@@ -569,7 +570,7 @@
             // Group menu
             $('#groupAddMember').hide()
             $('#groupSettings').hide()
-            $('.name,.last').click(function (e) {
+            $('.name').click(function (e) {
                 e.preventDefault();
                 $("#groupMenu").modal('show');
             })
@@ -579,11 +580,11 @@
                     $('.groupOption').removeClass('active')
                     $(this).addClass('active')
                     $('.groupItem').hide()
-                    if ($(this).html() == 'Members') {
+                    if ($(this).html().includes('Members')) {
                         $('#groupMembers').show()
-                    } else if ($(this).html() == 'Invite') {
+                    } else if ($(this).html().includes('Invite')) {
                         $('#groupAddMember').show()
-                    } else if ($(this).html() == 'Settings') {
+                    } else if ($(this).html().includes('Settings')) {
                         $('#groupSettings').show()
                     }
                 }

@@ -24,7 +24,7 @@
         {% endif %}
     </div>
     <div class="name">{{ friend.username }}</div>
-    <div class="last">Bio: {{ friend.bio }} -Phone: {{ friend.phone }} -Email: {{ friend.email }} </div>
+    <div class="last" style="max-width: 50%; overflow: hidden">Bio: {{ friend.bio }} {% if friend.phone %}-Phone: {{ friend.phone }} {% endif %} {% if friend.email %}- Email: {{ friend.email }} {% endif %}</div>
     <button class="btn float-right mr-3" data-toggle="modal" data-target="#sendFile"><i class="fas fa-paperclip"
             style="color: white; font-size:36px;"></i></button>
     <button type="button" class="btn float-right mr-3" id="record">
