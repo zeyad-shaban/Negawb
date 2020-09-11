@@ -257,21 +257,18 @@
                             <input type="text" name="name" id="id_name" class="form-group" required>
                         </form>
                         {% endif %}
-                        <small class="form-text text-muted">Areas makes messages stay clean and organized, each message
-                            should have an area, if it didn't it will be in "All"</small>
                     </div>
 
-                    <ul class="list-group">
+                    <ul class="list-group" id="areasSettings">
                         {% for area in areas %}
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             {{ area.name }}
                             {% if user == group.author or user in group.group_admins.all %}
                             <a href="{% url 'social:delete_area' area.id %}" class="float-right d-inline deleteArea"
-                                onclick="return confirm('Delete {{ area.name }}?')"
+                                onclick="return confirm('Permanently delete {{ area.name }}')"
                                 style="text-decoration:none; color: red; font-size:20px"><i
                                     class="fas fa-trash-alt"></i></a>
                         </li>
-
                         {% endif %}
                         {% endfor %}
                     </ul>
@@ -444,7 +441,9 @@
 
                     }
                 }).catch(function (err) {
-                    alert('Error occured, see console for more info')
+                    alert(
+                        'Error occured, You won\'t be able to send voice messages. See the console for more info'
+                    )
                 })
             } else {
                 alert('You cannot record voice message because your device doesn\'t support user media')
@@ -814,26 +813,63 @@
                     method: 'get',
                     dataType: 'json',
                     success: function (response) {
-                        // $('#').append(``) // todo
-                        $('#createAreaForm').parent().prepend(
-                            '<p class="alert-info">Please refresh the page to see changes</p>'
-                        )
+                        $('#areasSettings').append(`
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            ${$('#id_name').val()}
+                        </li>
+                        `)
+                        if (!document.querySelector('#createAreaForm').parentNode
+                            .innerHTML
+                            .includes('Reload the page to see changes')) {
+                            $('#createAreaForm').parent().prepend(
+                                '<p class="alert-info">Reload the page to see changes <i class="fas fa-redo" style="background-color: 46CF76; cursor: pointer; font-size:24px; color:white; background-radius: 50%; padding:10px" id="refresh"></i></p>'
+                            )
+                            let g = document.createElement('script');
+                            let s = document.getElementsByTagName('script')[0];
+
+                            function refresh() {
+                                document.querySelector('#refresh').onclick =
+                                    function (
+                                        e) {
+                                        e.preventDefault();
+                                        window.location.reload();
+                                    }
+                            }
+                            g.text = refresh();
+                            s.parentNode.insertBefore(g, s)
+                        }
                     }
                 })
             })
             $('.deleteArea').click(function (e) {
+                let thisElement = $(this);
+                this.parentNode.style.display = 'none'
                 e.preventDefault();
                 $.ajax({
-                    url: $('.deleteArea').attr('href'),
+                    url: thisElement.attr('href'),
                     data: {
 
                     },
                     method: 'get',
                     dataType: 'json',
                     success: function (response) {
-                        $('#createAreaForm').parent().prepend(
-                            '<p class="alert-info">Please refresh the page to see changes</p>'
-                        )
+                        if (!document.querySelector('#createAreaForm').parentNode
+                            .innerHTML.includes('Reload the page to see changes'))
+                            $('#createAreaForm').parent().prepend(
+                                '<p class="alert-info">Reload the page to see changes <i class="fas fa-redo" style="background-color: 46CF76; cursor: pointer; font-size:24px; color:white; background-radius: 50%; padding:10px" id="refresh"></i></p>'
+                            )
+                        let g = document.createElement('script');
+                        let s = document.getElementsByTagName('script')[0];
+
+                        function refresh() {
+                            document.querySelector('#refresh').onclick = function (
+                                e) {
+                                e.preventDefault();
+                                window.location.reload();
+                            }
+                        }
+                        g.text = refresh();
+                        s.parentNode.insertBefore(g, s)
                     }
                 })
             })
@@ -926,7 +962,7 @@
                     method: 'get',
                     dataType: 'json',
                     success: function (response) {
-                        thisElement.parent().parent().parent().fadeOut()
+                        thisElement.parent().parent().hide()
                     }
                 })
             })
