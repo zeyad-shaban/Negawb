@@ -20,7 +20,9 @@
         {% if group.description %}{{ group.description|truncatechars:100 }}{% endif %}</div>
     <button class="btn float-right mr-3" data-toggle="modal" data-target="#sendFile"><i class="fas fa-paperclip"
             style="color: white; font-size:36px;"></i></button>
-    <button class="btn float-right mr-2" style="font-size: 36px;" id="record"><i class="fas fa-microphone"></i></button>
+    <button type="button" class="btn float-right mr-3" id="record">
+        <i class="fas fa-microphone" style="font-size: 36px"></i>
+    </button>
 </div>
 <ul class="list-group list-group-horizontal fixed-top" style="margin-top: 50px">
     <li class="list-group-item btn active areaItem">All</li>
@@ -435,9 +437,7 @@
             </div>
             </li>
                                         `)
-                                document.getElementById(
-                                        'notificationSound')
-                                    .play()
+                                document.querySelector('#notificationSound').play()
                             },
                             error: function (response) {
                                 alert(
@@ -449,7 +449,7 @@
                     }
                 }).catch(function (err) {
                     alert(
-                        'Error occured, You won\'t be able to send voice messages. See the console for more info'
+                        'Error. Please make sure to allow microphone permission or you won\'t be able to send voice messages. See the console for more info'
                     )
                 })
             } else {
@@ -890,7 +890,7 @@
                     // Mute
                     $(this).children().replaceWith(
                         `<i class="fas fa-volume-mute" style="color: rgb(161, 161, 161)"></i>`
-                        )
+                    )
                 } else {
                     // Unmute
                     $(this).children().replaceWith(`<i class="fas fa-volume-up"></i>`)

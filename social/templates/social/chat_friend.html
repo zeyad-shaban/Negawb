@@ -24,7 +24,8 @@
         {% endif %}
     </div>
     <div class="name">{{ friend.username }}</div>
-    <div class="last" style="max-width: 50%; overflow: hidden">Bio: {{ friend.bio }} {% if friend.phone %}-Phone: {{ friend.phone }} {% endif %} {% if friend.email %}- Email: {{ friend.email }} {% endif %}</div>
+    <div class="last" style="max-width: 50%; overflow: hidden">Bio: {{ friend.bio }} {% if friend.phone %}-Phone:
+        {{ friend.phone }} {% endif %} {% if friend.email %}- Email: {{ friend.email }} {% endif %}</div>
     <button class="btn float-right mr-3" data-toggle="modal" data-target="#sendFile"><i class="fas fa-paperclip"
             style="color: white; font-size:36px;"></i></button>
     <button type="button" class="btn float-right mr-3" id="record">
@@ -239,7 +240,8 @@
                         // End getting the blob
                     }
                 }).catch(function (err) {
-                    alert('Error occured, see the console')
+                    alert(
+                        'Error. Please make sure to allow microphone permission or you won\'t be able to send voice messages. See the console for more info')
                 })
             } else {
                 alert('You cannot record voice message because your device doesn\'t support user media')
