@@ -260,7 +260,8 @@ def send_group_message(request, pk):
             if receivers:
                 notification.save()
                 for receiver in receivers:
-                    notification.receiver.add(receiver)
+                    if not receiver in area.muted_users.all():
+                        notification.receiver.add(receiver)
                 for receiver in notification.receiver.all():
                     payload = {"head": f"Important message from {group.title} Group, {notification.sender}",
                                "body": notification.content,
@@ -270,6 +271,7 @@ def send_group_message(request, pk):
                     send_user_notification(
                         user=receiver, payload=payload, ttl=1000)
     else:
+        # Normal group notification
         receivers = [member for member in group.members.filter(
             Q(allow_normal_group_message=True), ~Q(id=request.user.id))]
         notification = Notification(notification_type='normal_group_message',
@@ -277,7 +279,8 @@ def send_group_message(request, pk):
         if receivers:
             notification.save()
             for receiver in receivers:
-                notification.receiver.add(receiver)
+                if not receiver in area.muted_users.all():
+                    notification.receiver.add(receiver)
             for receiver in notification.receiver.all():
                 payload = {"head": f"A message from {group.title} Group, {notification.sender}",
                            "body": notification.content,
@@ -550,6 +553,18 @@ def load_area(request, group_pk, area_pk):
     # Paginate messages
     elif request.GET.get('page'):
         return JsonResponse({'chat_messages': serialize('json', chat_messages)})
+
+
+def mute_area(request, pk):
+    area = get_object_or_404(Area, pk=pk)
+    if request.user in area.muted_users.all():
+        area.muted_users.remove(request.user)
+    else:
+        area.muted_users.add(request.user)
+    return redirect('social:chat_group', pk=area.group.id)
+# End area
+
+# Otehr users
 
 
 def search_users(request):

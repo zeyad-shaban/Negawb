@@ -263,6 +263,13 @@
                         {% for area in areas %}
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             {{ area.name }}
+                            <a href="{% url 'social:mute_area' area.id %}" class="float-right d-inline muteArea">
+                                {% if user in area.muted_users.all %}
+                                <i class="fas fa-volume-mute" style="color: rgb(161, 161, 161)"></i>
+                                {% else %}
+                                <i class="fas fa-volume-up"></i>
+                                {% endif %}
+                            </a>
                             {% if user == group.author or user in group.group_admins.all %}
                             <a href="{% url 'social:delete_area' area.id %}" class="float-right d-inline deleteArea"
                                 onclick="return confirm('Permanently delete {{ area.name }}')"
@@ -874,6 +881,31 @@
                 })
             })
             // End create area
+
+            // Mute area
+            $('.muteArea').click(function (e) {
+                e.preventDefault();
+                let thisElement = $(this)
+                if ($(this).children().hasClass('fa-volume-up')) {
+                    // Mute
+                    $(this).children().replaceWith(
+                        `<i class="fas fa-volume-mute" style="color: rgb(161, 161, 161)"></i>`
+                        )
+                } else {
+                    // Unmute
+                    $(this).children().replaceWith(`<i class="fas fa-volume-up"></i>`)
+                }
+                $.ajax({
+                    url: thisElement.attr('href'),
+                    data: {},
+                    method: 'get',
+                    dataType: 'json',
+                    success: function (response) {},
+                    error: function (response) {},
+                })
+            })
+            // End mute area
+
             // End area
 
             // Search/invite all users
