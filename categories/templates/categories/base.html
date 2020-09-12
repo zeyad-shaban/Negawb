@@ -57,7 +57,8 @@ pagead/js/adsbygoogle.js"></script>
                     <div><a href="{% url 'userpage:home' %}" title="Profile">
                             <span>
                                 <img id="id_nav_avatar" src="{{ user.avatar.url }}" alt="">
-                                <span id="Userusername" data-username="{{user.username}}" data-pk="{{  user.id }}">{{user.username}}
+                                <span id="Userusername" data-username="{{user.username}}"
+                                    data-pk="{{  user.id }}">{{user.username}}
                                 </span>
                             </span>
                         </a>
@@ -80,9 +81,8 @@ pagead/js/adsbygoogle.js"></script>
                         aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-bell" style="font-size: 36px; color: rgb(209, 202, 202); cursor: pointer"></i>
 
-                        {% if notifications.count > 0 %}
-                        <span class="badge" style="color: white;"
-                            id="currNotificationsCount">{{ notifications.count }}</span>
+                        {% if unread_notif_count > 0 %}
+                        <div class="badge unRead" id="currNotificationsCount">{{ unread_notif_count }}</div>
                         {% else %}
                         <span class="badge" style="color: white;" id="currNotificationsCount"></span>
                         {% endif %}
@@ -103,8 +103,6 @@ pagead/js/adsbygoogle.js"></script>
                                 {% if user.is_authenticated %}
                                 {% webpush_button with_class="btn btn-outline-success btn-sm" %}
                                 <span><i class="fas fa-bell" style="font-size:24px"></i></span>
-                                <small class="form-text text-muted">If you can't enable it disable the notification
-                                    permission from your browser and click on it again</small>
                                 {% endif %}
                                 <div class="dropdown-divider"></div>
                                 <ul class="list-group list-group-horizontal">
@@ -131,34 +129,35 @@ pagead/js/adsbygoogle.js"></script>
                                     </li>
                                     {% endif %}
                                 </ul>
-                                <div id="notificationsContainer">
+                                <ul id="notificationsContainer">
                                     {% if notifications.count > 0 %}
                                     {% for notification in notifications %}
-                                    <a href="{{ notification.url }}" style="text-decoration: none; color: black">
-                                        <div class="media" style="background: #F7F7F7;">
-                                            {% if notification.sender.who_see_avatar == 'everyone' %}
-                                            <img src="{{notification.sender.avatar.url}}" class="" alt="User Image"
-                                                width="50" height="50">
-                                            {% elif notification.sender.who_see_avatar == 'friends' and user in notification.sender.friends.all %}
-                                            <img src="{{notification.sender.avatar.url}}" class="" alt="User Image"
-                                                width="50" height="50">
-                                            {% elif notification.sender == user %}
-                                            <img src="{{notification.sender.avatar.url}}" class="" alt="User Image"
-                                                width="50" height="50">
-                                            {% else %}
-                                            <img src="/media/profile_images/DefaultUserImage.jpg" class=""
-                                                alt="User Image" width="50" height="64">
-                                            {% endif %}
-                                            <div class="media-body">
-                                                <h5 class="mt-0">{{ notification.sender.username }}</h5>
-                                                <p>{{ notification.content }}</p>
+                                    <li {% if not notification.is_read %}style="background-color: #EBF0FF;" {% endif %}>
+                                        <a href="{% url 'social:click_notification' notification.id %}">
+                                            <div class="media">
+                                                {% if notification.sender.who_see_avatar == 'everyone' %}
+                                                <img src="{{notification.sender.avatar.url}}" class="" alt="User Image"
+                                                    width="50" height="50">
+                                                {% elif notification.sender.who_see_avatar == 'friends' and user in notification.sender.friends.all %}
+                                                <img src="{{notification.sender.avatar.url}}" class="" alt="User Image"
+                                                    width="50" height="50">
+                                                {% elif notification.sender == user %}
+                                                <img src="{{notification.sender.avatar.url}}" class="" alt="User Image"
+                                                    width="50" height="50">
+                                                {% else %}
+                                                <img src="/media/profile_images/DefaultUserImage.jpg" class=""
+                                                    alt="User Image" width="50" height="64">
+                                                {% endif %}
+                                                <div class="media-body">
+                                                    <h5 class="mt-0">{{ notification.sender.username }}</h5>
+                                                    <p>{{ notification.content }}</p>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </a>
-                                    <hr>
+                                        </a>
+                                    </li>
                                     {% endfor %}
                                     {% endif %}
-                                </div>
+                                </ul>
                                 <div class="dropdown-divider"></div>
                             </div>
                         </div>

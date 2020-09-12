@@ -432,32 +432,6 @@ def lower_member(request, group_pk, member_pk):
         group.group_admins.remove(member)
         return JsonResponse({})
 
-# End groups
-
-# Notifications
-
-
-def load_notifications(request):
-    notification_type = request.GET.get('notification_type')
-    if not request.user.is_authenticated:
-        notifications = []
-    elif notification_type == 'messages':
-        notifications = Notification.objects.filter(Q(receiver=request.user), Q(notification_type='important_friend_message') | Q(
-            notification_type='important_group_message') | Q(notification_type='normal_friend_message') | Q(notification_type='normal_group_message')).order_by('-date')
-    elif notification_type == 'society':
-        notifications = Notification.objects.filter(Q(receiver=request.user), Q(notification_type='comment_message') | Q(
-            notification_type='reply_message')).order_by('-date')
-    elif notification_type == 'invites':
-        notifications = Notification.objects.filter(Q(receiver=request.user), Q(
-            notification_type='invites')).order_by('-date')
-    elif notification_type == 'your_invites':
-        notifications = Notification.objects.filter(Q(receiver=request.user), Q(
-            notification_type='your_invites')).order_by('-date')
-    elif not notification_type or notification_type == 'all':
-        notifications = Notification.objects.filter(
-            receiver=request.user).order_by('-date')
-    return JsonResponse({'notifications': serialize('json', notifications)})
-
 
 @login_required
 def delete_group(request, pk):
@@ -489,6 +463,41 @@ def leave_group(request, pk):
         if request.user in group.group_admins.all():
             group.group_admins.remove(request.user)
     return redirect('chat')
+
+# End groups
+
+# Notifications
+
+
+def load_notifications(request):
+    notification_type = request.GET.get('notification_type')
+    if not request.user.is_authenticated:
+        notifications = []
+    elif notification_type == 'messages':
+        notifications = Notification.objects.filter(Q(receiver=request.user), Q(notification_type='important_friend_message') | Q(
+            notification_type='important_group_message') | Q(notification_type='normal_friend_message') | Q(notification_type='normal_group_message')).order_by('-date')
+    elif notification_type == 'society':
+        notifications = Notification.objects.filter(Q(receiver=request.user), Q(notification_type='comment_message') | Q(
+            notification_type='reply_message')).order_by('-date')
+    elif notification_type == 'invites':
+        notifications = Notification.objects.filter(Q(receiver=request.user), Q(
+            notification_type='invites')).order_by('-date')
+    elif notification_type == 'your_invites':
+        notifications = Notification.objects.filter(Q(receiver=request.user), Q(
+            notification_type='your_invites')).order_by('-date')
+    elif not notification_type or notification_type == 'all':
+        notifications = Notification.objects.filter(
+            receiver=request.user).order_by('-date')
+    return JsonResponse({'notifications': serialize('json', notifications)})
+
+
+def click_notification(request, pk):
+    notification = get_object_or_404(Notification, pk=pk)
+    notification.is_read = True
+    notification.save()
+    return redirect(notification.url)
+
+# End notifications
 
 
 def take_down_friend_request(request, pk):

@@ -32,31 +32,6 @@ nav li a:hover {
     color: black !important;
 }
 
-#doneLabel:hover {
-    background-color: grey;
-}
-
-.notification {
-    background-color: #555 !important;
-    color: white !important;
-    text-decoration: none !important;
-    padding: 15px 26px !important;
-    position: relative !important;
-    display: inline-block !important;
-    border-radius: 2px !important;
-}
-
-
-.notification .badge {
-    position: absolute !important;
-    top: -10px !important;
-    right: -10px !important;
-    padding: 5px 10px !important;
-    border-radius: 50% !important;
-    background-color: red !important;
-    color: white !important;
-}
-
 #notificationDropMenu {
     overflow: scroll;
     width: 430px;
@@ -68,6 +43,33 @@ nav li a:hover {
         max-width: 45vw;
     }
 }
+
+#notificationsContainer {
+    list-style: none;
+    padding-left: 10px;
+}
+
+#notificationsContainer img {
+    border-radius: 50%;
+    margin-right: 20px;
+}
+
+#notificationsContainer li {
+    padding-bottom: 30px;
+}
+
+#notificationsContainer a {
+    text-decoration: none;
+    color: black
+}
+
+.unRead {
+    color: white;
+    background: red;
+    border-radius: 50% !important;
+    padding: 7px !important;
+}
+
 
 #signupFloatForm,
 #loginFloatForm {
