@@ -9,6 +9,7 @@ urlpatterns = [
     path('<int:pk>/', views.view_post, name='view_post'),
     path('createpost/<int:pk>/', views.create_post, name='create_post'),
     path('delete_post/<int:pk>/', views.delete_post, name='delete_post'),
+    path('edit_post/<int:pk>/', views.edit_post, name='edit_post'),
     path('analyze_post/<int:pk>/', views.analyze_post, name='analyze_post'),
     path('search_by_hashtags/', views.search_by_hashtags, name='search_by_hashtags'),
     # Like

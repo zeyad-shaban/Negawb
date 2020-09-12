@@ -1,0 +1,68 @@
+{% extends 'categories/base.html' %}
+{% block title %} Edit {{ post.description }} {% endblock title %}
+{% block description %} {{ post.description }} {% endblock description %}
+
+{% block content %}
+<div class="container-fluid gedf-wrapper">
+    <div class="row">
+        <div class="col-md-3">
+        </div>
+        <div class="col-md-6 gedf-main mt-3">
+            <div class="card gedf-card">
+                <form method="POST" class="mb-4" enctype="multipart/form-data"
+                    action="{% url 'comments:edit_post' post.id %}">
+                    {% csrf_token %}
+                    <div class="card-body">
+                        <div class="tab-content" id="myTabContent">
+                            <div class="tab-pane fade show active" id="posts" role="tabpanel"
+                                aria-labelledby="posts-tab">
+                                <div class="form-group">
+                                    <textarea name="description" class="form-control" rows="3" required>{{ post.description }}</textarea>
+                                </div>
+                                <div>
+                                    <p class="float-left" onclick="document.querySelector('#image').click()">
+                                        <label for="id_image" class="mr-3 btn"><i class="far fa-image"></i>
+                                            photo</label>
+                                            {% if post.image %}
+                                            <img src="{{ post.image.url }}" alt="">
+                                            {% endif %}
+                                        <p><label for="id_post_file" class="btn"
+                                                onclick="document.querySelector('#post_file').click()"><i
+                                                    class="fas fa-video"></i>
+                                                Video</label>
+                                                {% if post.post_file %}
+                                                
+                                                {% endif %}
+                                            <input type="file" name="post_file" accept="video/*" id="post_file"
+                                                style="display: none;"></p>
+                                </div>
+
+                                <input type="file" name="image" accept="image/*" id="image" style='display:none;'>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="btn-toolbar justify-content-between">
+                            <div class="btn-group">
+                                <button type="submit" class="btn btn-primary">Save changes</button>
+                            </div>
+                            <select name="id_category" id="id_category" style="max-width: 153px">
+                                <option value="test">other</option>
+                                {% for acategory in all_categories %}
+                                {% if user.homepage_hashtags and user.homepage_hashtags.id == acategory.id  %}
+                                <option value="{{ acategory.id }}" selected="selected">{{ acategory.title }}
+                                </option>
+                                {% else %}
+                                <option value="{{ acategory.id }}">{{ acategory.title }}</option>
+                                {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- Add post /////-->
+            <div id="uploadedImage"></div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

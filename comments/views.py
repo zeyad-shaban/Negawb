@@ -48,7 +48,8 @@ def view_post(request, pk):
     post = get_object_or_404(Post, pk=pk)
     comments = Comment.objects.filter(
         post=post).order_by('-comment_date')[:150]
-    recommended_posts_list = Post.objects.filter(Q(user=post.user), ~Q(id=post.id)).order_by('-post_date')
+    recommended_posts_list = Post.objects.filter(
+        Q(user=post.user), ~Q(id=post.id)).order_by('-post_date')
     paginator = Paginator(recommended_posts_list, 5)
     rec_page = request.GET.get('rec_page')
     try:
@@ -63,7 +64,7 @@ def view_post(request, pk):
     if request.method == 'GET' and not request.GET.get('action') == 'addComment':
         if request.user.is_authenticated:
             post.views.add(request.user)
-        return render(request, 'comments/view_post.html', {'post': post, 'comments': comments, 'recommended_posts': recommended_posts,})
+        return render(request, 'comments/view_post.html', {'post': post, 'comments': comments, 'recommended_posts': recommended_posts, })
     elif request.GET.get('action') == 'addComment':
         if request.GET.get('description') == '' or request.GET.get('description') == None:
             return None
@@ -104,16 +105,22 @@ def delete_post(request, pk):
         messages.error(request, 'You are not the post owner')
     return redirect('home')
 
+
 def edit_post(request, pk):
-    post  = get_object_or_404(Post, pk=pk)
+    post = get_object_or_404(Post, pk=pk)
     if request.user == post.user:
         if request.method == 'GET':
             return render(request, 'comments/edit_post.html', {'post': post})
         else:
-            pass
+            post = PostForm(data=request.POST,
+                            files=request.FILES, instance=post)
+            post.save()
+            messages.success(request, 'Updated Successfully')
+            return redirect('comments:view_post', pk=pk)
     else:
         messages.error(request, 'You are not the post owner')
         return redirect('home')
+
 
 @login_required
 def post_like_dislike(request, post_id):
