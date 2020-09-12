@@ -13,7 +13,7 @@ class User(AbstractUser):
     email_code = models.IntegerField(null=True, blank=True)
     phone_code = models.IntegerField(null=True, blank=True)
     # PRIVACY
-    show_email = models.BooleanField(default=False)
+    show_email = models.BooleanField(default=True)
     who_see_avatar_choices = [
         ('none', 'No One'),
         ('friends', 'Friends only'),
