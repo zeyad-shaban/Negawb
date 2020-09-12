@@ -13,12 +13,12 @@ Dfreemedia.{% endblock description %}
     }
 
     body {
-        background: url('https://cdn.pixabay.com/photo/2014/02/27/16/10/spring-276014_960_720.jpg');
+        background: url('https://cdn.pixabay.com/photo/2017/12/15/13/51/polynesia-3021072_960_720.jpg');
         background-size: cover;
     }
 
     .box {
-        width: 25rem;
+        width: 50%;
         float: right;
         padding: 2.5rem;
         padding-right: 10%;
@@ -26,6 +26,12 @@ Dfreemedia.{% endblock description %}
         background: rgba(0, 0, 0, 0.6);
         border-radius: 0.625rem;
         color: white;
+    }
+
+    @media screen and (max-width: 914px){
+        .box{
+            width: 100%;
+        }
     }
 
     .box h2 {
