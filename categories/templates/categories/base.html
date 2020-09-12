@@ -311,7 +311,7 @@ pagead/js/adsbygoogle.js"></script>
                         </div>
                         <div class="form-group">
                             <label for="password">Password</label>
-                            <input type="password" name="password" class="form-control" id="password loginPass"
+                            <input type="password" name="password" class="form-control" id="loginPass"
                                 style="float: left; width: 90%" required>
                             <i class="fas fa-eye-slash btn" id="toggleLoginPass" style="float: right; width:10%"></i>
                         </div>
@@ -346,7 +346,6 @@ pagead/js/adsbygoogle.js"></script>
                         $('#toggleLoginPass').removeClass('fa-eye-slash');
                         $('#toggleLoginPass').addClass('fa-eye');
                     } else {
-                        console.log('it does not have class')
                         $('#loginPass').attr('type', 'password')
                         $('#toggleLoginPass').removeClass(`fa-eye`)
                         $('#toggleLoginPass').addClass(`fa-eye-slash`)
@@ -359,7 +358,6 @@ pagead/js/adsbygoogle.js"></script>
                         $('#toggleSignupPass').removeClass('fa-eye-slash');
                         $('#toggleSignupPass').addClass('fa-eye');
                     } else {
-                        console.log('it does not have class')
                         $('.signupPass').attr('type', 'password')
                         $('#toggleSignupPass').removeClass(`fa-eye`)
                         $('#toggleSignupPass').addClass(`fa-eye-slash`)
