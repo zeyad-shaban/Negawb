@@ -17,8 +17,12 @@ only, giving users the power to hide unwanted topics{% endblock description %}
 </ul>
 <!-- Homepage posts -->
 <div class="homepageItem" id="postsContainer">
-    <div class="alert" style="max-width:50%; margin:30px 0 30px 20px; background: #8ce7fa">Hashtags are used to filter posts, you can set a default hashtag from the
-        Distraction Free menu in your <a href="{% url 'userpage:home' %}">profile</a>, leave blank to disable filtering, write anyword without a hashtag to hide homepage posts</div>
+    {% if not user.is_authenticated %}
+    <div class="alert" style="max-width:50%; margin:30px 0 30px 20px; background: #8ce7fa">Hashtags are used to filter
+        posts, you can set a default hashtag from the
+        Distraction Free menu in your <a href="{% url 'userpage:home' %}">profile</a>, leave blank to disable filtering,
+        write anyword without a hashtag to hide homepage posts</div>
+    {% endif %}
     <form action="{% url 'comments:search_by_hashtags' %}" method="GET"
         class="form-inline mt-3 row justify-content-center" style="width: 80vw; margin-right: 10vw;margin-left: 10vw;">
         <input type="search" name="q" class="form-control float-left" placeholder="#Search by hashtags"
@@ -123,19 +127,18 @@ only, giving users the power to hide unwanted topics{% endblock description %}
                                 </div>
                             </div>
                             <div>
+                                {% if post.user == user %}
                                 <div class="dropdown">
                                     <button class="btn btn-link" type="button" id="gedf-drop1" data-toggle="dropdown"
                                         aria-haspopup="true" aria-expanded="false">
                                         <i class="fa fa-ellipsis-h"></i>
                                     </button>
                                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="gedf-drop1">
-                                        <!-- <div class="h6 dropdown-header">Configuration</div>
-                                        <a class="dropdown-item" href="#">Save</a>
-                                        <a class="dropdown-item" href="#">Hide</a>
-                                        <a class="dropdown-item" href="#">Report</a> -->
-                                        Under dev
+                                        <a class="dropdown-item" href="{% url 'comments:delete_post' post.id %}"
+                                            onclick="return confirm('Permanently delete {{ post.description|truncatechars:45 }}')">Delete</a>
                                     </div>
                                 </div>
+                                {% endif %}
                             </div>
                         </div>
 
@@ -287,10 +290,8 @@ only, giving users the power to hide unwanted topics{% endblock description %}
                                         <i class="fa fa-ellipsis-h"></i>
                                     </button>
                                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="gedf-drop1">
-                                        <div class="h6 dropdown-header">Configuration</div>
-                                        <a class="dropdown-item" href="#">Save</a>
-                                        <a class="dropdown-item" href="#">Hide</a>
-                                        <a class="dropdown-item" href="#">Report</a>
+                                        <a class="dropdown-item" href="{% url 'comments:delete_post' post.id %}"
+                                            onclick="return confirm('Permanently delete {{ post.description|truncatechars:45 }}')">Delete</a>
                                     </div>
                                 </div>
                             </div>

@@ -22,40 +22,39 @@ def home(request):
         followed = User.objects.filter(Q(followers=request.user))
         followed_posts_list = Post.objects.filter(
             user__in=followed).order_by('-post_date')
-        # followed paginator
-        followed_page = request.GET.get('followed_page')
-        followed_paginator = Paginator(followed_posts_list, 5)
-        try:
-            followed_posts = followed_paginator.page(followed_page)
-        except PageNotAnInteger:
-            followed_posts = followed_paginator.page(1)
-        except EmptyPage:
-            followed_posts = []
-        if followed_page:
-            return JsonResponse({'followed_posts': serialize('json', followed_posts)})
-        # Homepage Posts Paginator
-        page = request.GET.get('page')
-        if request.user.homepage_hashtags:
-            homepage_hashtags_list = []
-            for post in Post.objects.all():
-                for word in request.user.homepage_hashtags.split(' '):
-                    if post.hashtags and word in post.hashtags:
-                        homepage_hashtags_list.append(post)
-        else:
-            homepage_hashtags_list = Post.objects.all().order_by('-post_date')
-        homepage_hashtags_paginator = Paginator(homepage_hashtags_list, 5)
-        page = request.GET.get('homepage_hashtags_page')
-        try:
-            homepage_hashtags = homepage_hashtags_paginator.page(page)
-        except PageNotAnInteger:
-            homepage_hashtags = homepage_hashtags_paginator.page(1)
-        except EmptyPage:
-            homepage_hashtags = []
-        if page:
-            return JsonResponse({'homepage_hashtags': serialize('json', homepage_hashtags)})
     else:
-        followed_posts = None
-        homepage_hashtags = Post.objects.all().order_by('-post_date')
-        followed = []
+        followed= []
+        followed_posts_list = []
+    # followed paginator
+    followed_page = request.GET.get('followed_page')
+    followed_paginator = Paginator(followed_posts_list, 5)
+    try:
+        followed_posts = followed_paginator.page(followed_page)
+    except PageNotAnInteger:
+        followed_posts = followed_paginator.page(1)
+    except EmptyPage:
+        followed_posts = []
+    if followed_page:
+        return JsonResponse({'followed_posts': serialize('json', followed_posts)})
+    # Homepage Posts Paginator
+    page = request.GET.get('page')
+    if request.user.is_authenticated and request.user.homepage_hashtags:
+        homepage_hashtags_list = []
+        for post in Post.objects.all():
+            for word in request.user.homepage_hashtags.split(' '):
+                if post.hashtags and word in post.hashtags:
+                    homepage_hashtags_list.append(post)
+    else:
+        homepage_hashtags_list = Post.objects.all().order_by('-post_date')
+    homepage_hashtags_paginator = Paginator(homepage_hashtags_list, 5)
+    page = request.GET.get('homepage_hashtags_page')
+    try:
+        homepage_hashtags = homepage_hashtags_paginator.page(page)
+    except PageNotAnInteger:
+        homepage_hashtags = homepage_hashtags_paginator.page(1)
+    except EmptyPage:
+        homepage_hashtags = []
+    if page:
+        return JsonResponse({'homepage_hashtags': serialize('json', homepage_hashtags)})
     return render(request, 'categories/index.html', {'followed_posts': followed_posts, 'homepage_hashtags': homepage_hashtags, 'followed': followed})
     

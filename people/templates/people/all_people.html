@@ -58,7 +58,7 @@ friends.{% endblock description %}
             </div>
 
             <a href="{% url 'people:people' view_user.id %}" class="btn">
-                <label class="name lead">{{ view_user.username }}</label>
+                <label class="name lead btn">{{ view_user.username }}</label>
             </a>
             <div class="userDesc">
                 {% if view_user.phone %}

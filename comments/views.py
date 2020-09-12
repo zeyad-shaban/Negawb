@@ -98,9 +98,22 @@ def view_post(request, pk):
 def delete_post(request, pk):
     post = get_object_or_404(Post, pk=pk)
     if request.user == post.user:
+        messages.success(request, 'Deleted')
         post.delete()
+    else:
+        messages.error(request, 'You are not the post owner')
     return redirect('home')
 
+def edit_post(request, pk):
+    post  = get_object_or_404(Post, pk=pk)
+    if request.user == post.user:
+        if request.method == 'GET':
+            return render(request, 'comments/edit_post.html', {'post': post})
+        else:
+            pass
+    else:
+        messages.error(request, 'You are not the post owner')
+        return redirect('home')
 
 @login_required
 def post_like_dislike(request, post_id):
@@ -166,7 +179,7 @@ def create_post(request, pk):
             post.hashtags = output
         post.save()
         messages.success(
-            request, 'Your post was uploaded, thanks for growing up our DFreeMedia community 💪🏻')
+            request, 'Uploaded successfully')
         if category == None:
             return redirect('home')
         else:

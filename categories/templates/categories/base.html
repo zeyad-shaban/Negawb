@@ -57,7 +57,7 @@ pagead/js/adsbygoogle.js"></script>
                     <div><a href="{% url 'userpage:home' %}" title="Profile">
                             <span>
                                 <img id="id_nav_avatar" src="{{ user.avatar.url }}" alt="">
-                                <span id="Userusername" data-username="{{user.username}}">{{user.username}}
+                                <span id="Userusername" data-username="{{user.username}}" data-pk="{{  user.id }}">{{user.username}}
                                 </span>
                             </span>
                         </a>
