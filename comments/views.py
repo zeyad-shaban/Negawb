@@ -112,9 +112,21 @@ def edit_post(request, pk):
         if request.method == 'GET':
             return render(request, 'comments/edit_post.html', {'post': post})
         else:
-            post = PostForm(data=request.POST,
+            form = PostForm(data=request.POST,
                             files=request.FILES, instance=post)
-            post.save()
+            post = form.save(commit=False)
+            if request.POST.get('clearImage'):
+                post.image = None
+            if request.POST.get('clearVideo'):
+                post.post_file = None
+            if post.post_file and post.image:
+                messages.error(request, 'You can\'t have both image and video, please remove one')
+                return redirect('comments:edit_post', pk=pk)
+            elif not post.post_file and not post.image and not post.description:
+                messages.error(request, 'You cannot have a blank post!')
+                return redirect('comments:edit_post', pk=pk)
+            else:
+                post.save()
             messages.success(request, 'Updated Successfully')
             return redirect('comments:view_post', pk=pk)
     else:

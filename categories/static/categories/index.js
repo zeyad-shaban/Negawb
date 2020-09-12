@@ -55,6 +55,8 @@ document.addEventListener('DOMContentLoaded', function () {
                                             <i class="fa fa-ellipsis-h"></i>
                                         </button>
                                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="gedf-drop1">
+                                        <a class="dropdown-item" href="/comments/delete_post/${post.pk}" onclick="return confirm('Permanently delete ${post.fields.description.substring(0, 45) }')">Delete</a>
+                                        <a class="dropdown-item" href="/comments/edit_post/${post.pk}">Edit</a>
                                         </div>
                                     </div>`
                                     }
@@ -207,6 +209,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                         </button>
                                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="gedf-drop1">
                                         <a class="dropdown-item" href="/comments/delete_post/${post.pk}" onclick="return confirm('Permanently delete ${post.fields.description.substring(0, 45) }')">Delete</a>
+                                        <a class="dropdown-item" href="/comments/edit_post/${post.pk}">Edit</a>
                                         </div>
                                     </div>`
                                     }
