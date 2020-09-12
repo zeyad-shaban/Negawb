@@ -338,7 +338,7 @@ pagead/js/adsbygoogle.js"></script>
                 }
                 setTimeout(() => {
                     popSignUpForm()
-                }, 5000);
+                }, 10000);
                 document.querySelector('#toggleLoginPass').onclick = function (e) {
                     e.preventDefault();
                     if ($('#toggleLoginPass').hasClass('fa-eye-slash')) {
@@ -380,33 +380,43 @@ pagead/js/adsbygoogle.js"></script>
             bottom: 0;
             width: 100%;
             height: 15vh;
-            background-color: rgba(0, 0, 0, 0.473);
+            background-color: #1DA1F2;
             color: white;
             text-align: center;
         }
 
         #appDesc {
             margin-left: 10vh;
-            margin-top: 15px;
+            margin-top: 0.5%;
         }
 
         #authBtns {
-            padding-top: 20px;
+            position: absolute;
+            top: 20%;
+            right: 10px;
         }
 
         #login {
             margin-right: 10px;
+            color: white;
             border: 2px solid white;
             border-radius: 30px;
+            background: #2B19E6;
         }
 
         #signup {
+            background-color: #D9A523;
             border-radius: 30px
         }
 
         @media screen and (max-width: 638px) {
             #appDesc {
                 display: none
+            }
+
+            #authBtns {
+                position: static;
+                padding-top: 20px;
             }
 
             #login {
@@ -424,10 +434,10 @@ pagead/js/adsbygoogle.js"></script>
             <p>Dfreemedia is the least distractive app.</p>
         </div>
         <div id="authBtns">
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#loginFloatForm"
+            <button type="button" class="btn " data-toggle="modal" data-target="#loginFloatForm"
                 id="login">Login</button>
-            <button type="button" class="btn btn-light" data-toggle="modal" data-target="#signupFloatForm"
-                id="signup">Sign Up</button>
+            <button type="button" class="btn" data-toggle="modal" data-target="#signupFloatForm" id="signup">Sign
+                Up</button>
         </div>
     </div>
     {% endif %}

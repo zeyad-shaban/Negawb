@@ -15,7 +15,16 @@ friends.{% endblock description %}
 {% endblock searchbar %}
 
 {% block content %}
-
+<style>
+    #contact-list{
+        list-style: none;
+    }
+    #contact-list li{
+        position: relative;
+        margin: 30px 30px 10px 30px;
+    }
+    
+</style>
 {% if user.is_authenticated %}
 <small class="from-text text-muted">view <a href="{% url 'userpage:friendrequest' %}">Friend requests</a></small>
 {% endif %}
@@ -25,7 +34,7 @@ friends.{% endblock description %}
         <ul class="list-group pull-down" id="contact-list">
             {% for view_user in users %}
             {% if not view_user == user %}
-            <li class="list-group-item">
+            <li>
                 <div class="row w-100">
                     <div class="col-12 col-sm-6 col-md-3 px-0">
                         <a href="{% url 'people:people' view_user.id %}">
@@ -67,7 +76,7 @@ friends.{% endblock description %}
                         {% if view_user == user or view_user in user_friends %}
                         {%  else %}
                         <form action="{% url 'people:addfriend' %}" method="GET" id="idAddFriendForm">
-                            <input type="button" value="Add Friend" onclick="$(this).fadeOut()" name="addfriend,"
+                            <input type="button" value="Add Friend" onclick="$(this).fadeOut()" name="addfriend"
                                 class="btn btn-success float-right" id='idAddFriendButton{{ view_user.id }}'>
                         </form>
                         {% endif %}
@@ -82,7 +91,7 @@ friends.{% endblock description %}
                         $('#idAddFriendForm').submit(function (event) {
                             event.preventDefault()
                         })
-                        $('#idAddFriendButton{{ view_user.id }}').click(function () {
+                        $('#addFriend{{ view_user.id }}').click(function () {
                             let thisElement = $(this)
                             $.ajax({
                                 url: "{% url 'people:addfriend' %}",
