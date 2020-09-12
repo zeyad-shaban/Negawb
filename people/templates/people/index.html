@@ -93,10 +93,8 @@
             // Add Friend
             $('#addFriendRequest').click(function () {
                 $.ajax({
-                    url: "{% url 'people:addfriend' %}",
-                    data: {
-                        'pk': "{{ view_user.id }}"
-                    },
+                    url: "{% url 'people:add_friend' view_user.id %}",
+                    data: {},
                     dataType: 'json',
                     success: function (data) {
                         $('#message_area').html('')

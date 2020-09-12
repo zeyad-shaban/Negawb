@@ -60,7 +60,7 @@ Analyze {{post.description|truncatechars:60}}
                 <span class="small text-truncate">{{ user.bio }}</span>
                 {% if user == user or user in user_friends %}
                 {%  else %}
-                <form action="{% url 'people:addfriend' %}" method="GET" id="idAddFriendForm">
+                <form action="{% url 'people:add_friend' %}" method="GET" id="idAddFriendForm">
                     <input type="button" value="Add Friend" onclick="$(this).fadeOut()" name="addfriend,"
                         class="btn btn-success float-right" id='idAddFriendButton{{ user.id }}'>
                 </form>
