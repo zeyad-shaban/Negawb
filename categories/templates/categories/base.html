@@ -23,7 +23,7 @@ pagead/js/adsbygoogle.js"></script>
         gtag('config', 'UA-176113474-1');
     </script>
     <script async src="https://kit.fontawesome.com/78f2495e06.js" crossorigin="anonymous"></script>
-    <link rel='shortcut icon' href="{% static 'categories/favicon.jpg' %}" type="image/jpg">
+    <link rel='shortcut icon' href="{% static 'categories/favicon.png' %}" type="image/jpg">
     <meta name="description" content="{% block description %} {% endblock description %}">
     <meta name="author" content="Zeyad Shaban">
     <meta charset=" UTF-8">
@@ -36,7 +36,7 @@ pagead/js/adsbygoogle.js"></script>
     <nav
         class="navbar navbar-expand-xl navbar-expand-lg navbar-expand-md navbar-expand-sm navbar-dark bg-dark {% if user.fixed_navbar or not user.is_authenticated %}sticky-top{% endif %}">
         <a class="navbar-brand" href="{% url 'home' %}">
-            <img src="{% static 'categories/favicon.jpg' %}" width="35" height="30" alt="Website Logo" loading="lazy"
+            <img src="{% static 'categories/favicon.png' %}" width="35" height="30" alt="Website Logo" loading="lazy"
                 title="Dfreemedia">
         </a>
         <li class="nav-item" id="stickyChatBtn">
@@ -299,7 +299,7 @@ pagead/js/adsbygoogle.js"></script>
                 </div>
                 <div class="modal-body">
                     <div class="text-center">
-                        <img src="{% static 'categories/favicon.jpg' %}" alt="Dfreemedia favicon" class="rounded-circle"
+                        <img src="{% static 'categories/logo.png' %}" alt="Dfreemedia favicon" class="rounded-circle"
                             height="200">
                         <h1>Log into Dfreemedia</h1>
                     </div>

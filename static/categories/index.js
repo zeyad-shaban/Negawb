@@ -47,6 +47,19 @@ document.addEventListener('DOMContentLoaded', function () {
                                     let user = response.user
                                     let output = ''
                                     let postCategory = 'other'
+                                    let postConfig = ''
+                                    if (post.fields.user == $('#Userusername').attr('data-pk')) {
+                                        postConfig = ` <div class="dropdown">
+                                        <button class="btn btn-link" type="button" id="gedf-drop1" data-toggle="dropdown"
+                                            aria-haspopup="true" aria-expanded="false">
+                                            <i class="fa fa-ellipsis-h"></i>
+                                        </button>
+                                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="gedf-drop1">
+                                        <a class="dropdown-item" href="/comments/delete_post/${post.pk}" onclick="return confirm('Permanently delete ${post.fields.description.substring(0, 45) }')">Delete</a>
+                                        <a class="dropdown-item" href="/comments/edit_post/${post.pk}">Edit</a>
+                                        </div>
+                                    </div>`
+                                    }
                                     if (post.fields.category) {
                                         postCategory = post.fields.category
                                     }
@@ -74,19 +87,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                 </div>
                             </div>
                             <div>
-                                <div class="dropdown">
-                                    <button class="btn btn-link" type="button" id="gedf-drop1" data-toggle="dropdown"
-                                        aria-haspopup="true" aria-expanded="false">
-                                        <i class="fa fa-ellipsis-h"></i>
-                                    </button>
-                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="gedf-drop1">
-                                        <!-- <div class="h6 dropdown-header">Configuration</div>
-                                        <a class="dropdown-item" href="#">Save</a>
-                                        <a class="dropdown-item" href="#">Hide</a>
-                                        <a class="dropdown-item" href="#">Report</a> -->
-                                        Under dev
-                                    </div>
-                                </div>
+                               ${postConfig}
                             </div>
                         </div>
 
@@ -197,8 +198,21 @@ document.addEventListener('DOMContentLoaded', function () {
                                 async: false,
                                 success: function (response) {
                                     let user = response.user
-                                    let output = ''
-                                    let postCategory = 'other'
+                                    let output = '';
+                                    let postCategory = 'other';
+                                    let postConfig = '';
+                                    if (post.fields.user == $('#Userusername').attr('data-pk')) {
+                                        postConfig = ` <div class="dropdown">
+                                        <button class="btn btn-link" type="button" id="gedf-drop1" data-toggle="dropdown"
+                                            aria-haspopup="true" aria-expanded="false">
+                                            <i class="fa fa-ellipsis-h"></i>
+                                        </button>
+                                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="gedf-drop1">
+                                        <a class="dropdown-item" href="/comments/delete_post/${post.pk}" onclick="return confirm('Permanently delete ${post.fields.description.substring(0, 45) }')">Delete</a>
+                                        <a class="dropdown-item" href="/comments/edit_post/${post.pk}">Edit</a>
+                                        </div>
+                                    </div>`
+                                    }
                                     let dateToString = d =>
                                         `${d.getFullYear()}-${('00' + (d.getMonth() + 1)).slice(-2)}-${('00' + d.getDate()).slice(-2)}`
                                     let postDate = new Date(Date.parse(post.fields.post_date))
@@ -226,18 +240,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                 </div>
                             </div>
                             <div>
-                                <div class="dropdown">
-                                    <button class="btn btn-link" type="button" id="gedf-drop1" data-toggle="dropdown"
-                                        aria-haspopup="true" aria-expanded="false">
-                                        <i class="fa fa-ellipsis-h"></i>
-                                    </button>
-                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="gedf-drop1">
-                                        <div class="h6 dropdown-header">Configuration</div>
-                                        <a class="dropdown-item" href="#">Save</a>
-                                        <a class="dropdown-item" href="#">Hide</a>
-                                        <a class="dropdown-item" href="#">Report</a>
-                                    </div>
-                                </div>
+                               ${postConfig}
                             </div>
                         </div>
 
@@ -305,6 +308,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 </div>
                                 `
                                     $('#followedPostsContainer').append(output)
+
                                     function showMore() {
                                         $('.readMore').click(function (e) {
                                             e.preventDefault();
