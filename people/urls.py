@@ -9,7 +9,7 @@ urlpatterns = [
     path('',views.all_people,name='all_people'),
     path('results/',views.all_peopleresults, name='all_peopleresults'),
     path('<int:pk>/', views.people, name='people'),
-    path('addfriend/', views.addfriend, name='addfriend'),
+    path('add_friend/<int:pk>/', views.add_friend, name='add_friend'),
     path('follow/<int:pk>/', views.follow, name='follow'),
 ]
 
