@@ -39,8 +39,8 @@ sitemaps = {
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('pwa.urls')),
     path('', category_views.home, name='home'),
+    path('', include('pwa.urls')),
     # Sitemap
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps},
          name='django.contrib.sitemaps.views.sitemap'),
