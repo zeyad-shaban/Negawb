@@ -334,17 +334,6 @@ pagead/js/adsbygoogle.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             window.addEventListener('load', function () {
-                function popSignUpForm() {
-                    if (!$('#signupFloatForm').hasClass('show') && !$('#loginFloatForm')
-                        .hasClass('show') && !window.location.href.includes('/signup/') &&
-                        !window.location.href.includes('/login/') && !window.location.href.includes(
-                            '/chat/')) {
-                        $('#signupFloatForm').modal('show')
-                    }
-                }
-                setTimeout(() => {
-                    popSignUpForm()
-                }, 10000);
                 document.querySelector('#toggleLoginPass').onclick = function (e) {
                     e.preventDefault();
                     if ($('#toggleLoginPass').hasClass('fa-eye-slash')) {
@@ -447,7 +436,7 @@ pagead/js/adsbygoogle.js"></script>
     {% endif %}
 
 
-
+    <!-- CDN -->
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
         integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
@@ -465,6 +454,16 @@ pagead/js/adsbygoogle.js"></script>
     <link rel="stylesheet" href="{% static 'social/emojionearea.min.css' %}">
     <script src="{% static 'social/emojionearea.min.js' %}"></script>
     <script src="{% static 'categories/basescript.js' %}"></script>
+    <!-- END CDN -->
+    <!-- Manefist -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('service-worker.js')
+                .then(function (reg) {}).catch(function (err) {});
+        }
+    </script>
+    <!-- End manefist -->
+
 </body>
 
 </html>
