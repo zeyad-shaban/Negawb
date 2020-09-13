@@ -77,39 +77,6 @@ pagead/js/adsbygoogle.js"></script>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <style>
-                        #notificationBell {
-                            font-size: 36px;
-                            color: rgb(209, 202, 202);
-                            cursor: pointer
-                        }
-
-                        #notificationsContainer img {
-                            border-radius: 50%;
-                            margin: 20px 20px 20px 20px;
-                        }
-
-                        #notificationsContainer h5 {
-                            margin-top: 20px !important;
-                        }
-
-                        #notificationsContainer a {
-                            text-decoration: none;
-                            color: black
-                        }
-
-                        #notifications ul {
-                            list-style: none;
-                            padding-left: 0px;
-                        }
-
-                        .unRead {
-                            color: white;
-                            background: red;
-                            border-radius: 50% !important;
-                            padding: 7px !important;
-                        }
-                    </style>
                     <button class="btn" data-toggle="modal" data-target="#notifications">
                         <i class="fas fa-bell" id="notificationBell"></i>
                         {% if unread_notif_count > 0 %}

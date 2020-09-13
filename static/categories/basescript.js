@@ -65,8 +65,5 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             })
         }, 7000);
-        $('#notificationDropMenu').click(function (event) {
-            event.stopPropagation();
-        });
     });
 });
