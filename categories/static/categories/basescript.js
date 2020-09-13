@@ -55,8 +55,11 @@ document.addEventListener('DOMContentLoaded', function () {
                                 }
                             })
                         }
-                        $('#notificationsCount').html(notifications.length +
-                            parseInt($('#notificationsCount').html()))
+                        let currNotifCount = parseInt($('#notificationsCount').html())
+                        if (!currNotifCount || currNotifCount == '') {
+                            currNotifCount = 0;
+                        };
+                        $('#notificationsCount').html(notifications.length + currNotifCount)
                         document.querySelector('#notificationSound').play()
                     }
                 }

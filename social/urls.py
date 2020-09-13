@@ -25,10 +25,8 @@ urlpatterns = [
     path('kick_member/<int:group_pk>/<int:member_pk>/', views.kick_member, name='kick_member'),
     path('hire_member/<int:group_pk>/<int:member_pk>/', views.hire_member, name='hire_member'),
     path('lower_member/<int:group_pk>/<int:member_pk>/', views.lower_member, name='lower_member'),
-    # Notifications
-    path('loadnotifications/', views.load_notifications, name='load_notifications'),
-    path('click_notification/<int:pk>/', views.click_notification, name='click_notification'),
-    # Society
+
+    # Requests
     path('take_down_friend_request/<int:pk>/', views.take_down_friend_request, name='take_down_friend_request'),
 
     # Area
@@ -36,6 +34,13 @@ urlpatterns = [
     path('delete_area/<int:pk>/', views.delete_area, name='delete_area'),
     path('load_area/<int:group_pk>/<int:area_pk>/', views.load_area, name='load_area'),
     path('mute_area/<int:pk>/', views.mute_area, name='mute_area'),
+
+    # Notifications
+    path('loadnotifications/', views.load_notifications, name='load_notifications'),
+    path('click_notification/<int:pk>/', views.click_notification, name='click_notification'),
+    path('delete_all_notifications/', views.delete_all_notifications, name='delete_all_notifications'),
+    path('read_all_notifications/', views.read_all_notifications, name='read_all_notifications'),
+    
     # users
     path('search_users/', views.search_users, name='search_users'),
 ]

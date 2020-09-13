@@ -478,7 +478,7 @@ def load_notifications(request):
         notifications = []
     else:
         notifications = Notification.objects.filter(
-            receiver=request.user, is_read = False, id__gt=last_notification_id).order_by('-date')
+            receiver=request.user, is_read=False, id__gt=last_notification_id).order_by('-date')
     return JsonResponse({'notifications': serialize('json', notifications)})
 
 
@@ -487,6 +487,24 @@ def click_notification(request, pk):
     notification.is_read = True
     notification.save()
     return redirect(notification.url)
+
+
+def read_all_notifications(request):
+    notifications = Notification.objects.filter(
+        receiver=request.user, is_read=False)
+    for notification in notifications:
+        notification.is_read = True
+        notification.save()
+    messages.success(request, 'Read all ✅')
+    return redirect('home')
+
+
+def delete_all_notifications(request):
+    notifications = Notification.objects.filter(receiver=request.user)
+    for notification in notifications:
+        notification.delete()
+    messages.success(request, 'Deleted all ✅')
+    return redirect('home')
 
 # End notifications
 

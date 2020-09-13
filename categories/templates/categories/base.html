@@ -83,7 +83,7 @@ pagead/js/adsbygoogle.js"></script>
                         {% if unread_notif_count > 0 %}
                         <div class="badge unRead" id="notificationsCount">{{ unread_notif_count }}</div>
                         {% else %}
-                        <span class="badge" style="color: white;" id="notificationsCount"></span>
+                        <span class="badge unRead" style="color: white;" id="notificationsCount"></span>
                         {% endif %}
                     </div>
                     <li class="dropright">
@@ -99,6 +99,16 @@ pagead/js/adsbygoogle.js"></script>
                             <div id="notificationsList" data-url="{% url 'social:load_notifications' %}"
                                 data-getUserUrl="{% url 'userpage:get_user_by_id' %}" data-currUser="{{ user }}">
                                 <div style="margin: 30px auto 30px auto; text-align: center;">
+                                    {% if notifications.count > 0 %}
+                                    <div class="float-left">
+                                        <a href="{% url 'social:read_all_notifications' %}" class="btn"> Mark all as
+                                            read</a>
+                                        <br>
+                                        <a href="{% url 'social:delete_all_notifications' %}"
+                                            style="text-decoration: none; color: red;"><i class="fas fa-trash-alt"></i>
+                                            Delete all</a>
+                                    </div>
+                                    {% endif %}
                                     <h4>Notifications</h4>
                                     {% if user.is_authenticated %}
                                     {% webpush_button with_class="btn btn-outline-success btn-sm" %}
