@@ -76,80 +76,56 @@ pagead/js/adsbygoogle.js"></script>
                             style="font-size:24px; color: rgb(255, 255, 255)"></i><span>Chat</span>
                     </a>
                 </li>
-                <div class="btn-group" id="notifications">
-                    <div title="Notifications" class="master-menu-right-item" id="app-menu" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-bell"></i>
+                <li class="nav-item">
+                    <style>
+                        #notificationBell {
+                            font-size: 36px;
+                            color: rgb(209, 202, 202);
+                            cursor: pointer
+                        }
+
+                        #notificationsContainer img {
+                            border-radius: 50%;
+                            margin: 20px 20px 20px 20px;
+                        }
+
+                        #notificationsContainer h5 {
+                            margin-top: 20px !important;
+                        }
+
+                        #notificationsContainer a {
+                            text-decoration: none;
+                            color: black
+                        }
+
+                        #notifications ul {
+                            list-style: none;
+                            padding-left: 0px;
+                        }
+
+                        .unRead {
+                            color: white;
+                            background: red;
+                            border-radius: 50% !important;
+                            padding: 7px !important;
+                        }
+                    </style>
+                    <button class="btn" data-toggle="modal" data-target="#notifications">
+                        <i class="fas fa-bell" id="notificationBell"></i>
                         {% if unread_notif_count > 0 %}
                         <div class="badge unRead" id="notificationsCount">{{ unread_notif_count }}</div>
                         {% else %}
                         <span class="badge unRead" style="color: white;" id="notificationsCount"></span>
                         {% endif %}
-                    </div>
-                    <li class="dropright">
-                        <div class="dropdown-menu master-menu-dropdown" aria-labelledby="app-menu"
-                            id="notificationDropMenu">
-                            <audio id="notificationSound">
-                                <source src="{% static 'social/notificationsound.wav' %}" type="audio/wav">
-                                <source src="{% static 'social/notificationsound.wav' %}" type="audio/mp3">
-                                <source src="{% static 'social/notificationsound.wav' %}" type="audio/ogg">
-                                <source src="{% static 'social/notificationsound.wav' %}" type="audio/mpeg">
-                                Your browser does not support the audio element.
-                            </audio>
-                            <div id="notificationsList" data-url="{% url 'social:load_notifications' %}"
-                                data-getUserUrl="{% url 'userpage:get_user_by_id' %}" data-currUser="{{ user }}">
-                                <div style="margin: 30px auto 30px auto; text-align: center;">
-                                    {% if notifications.count > 0 %}
-                                    <div class="float-left">
-                                        <a href="{% url 'social:read_all_notifications' %}" class="btn"> Mark all as
-                                            read</a>
-                                        <br>
-                                        <a href="{% url 'social:delete_all_notifications' %}"
-                                            onclick="return confirm('Delete all notifications?')"
-                                            style="text-decoration: none; color: red;"><i class="fas fa-trash-alt"></i>
-                                            Delete all</a>
-                                    </div>
-                                    {% endif %}
-                                    <h4>Notifications</h4>
-                                    {% if user.is_authenticated %}
-                                    {% webpush_button with_class="btn btn-outline-success btn-sm" %}
-                                    <span><i class="fas fa-bell" style="font-size:24px"></i></span>
-                                    {% endif %}
-                                </div>
-                                <ul id="notificationsContainer">
-                                    {% if notifications.count > 0 %}
-                                    {% for notification in notifications %}
-                                    <li {% if not notification.is_read %}style="background-color: #EBF0FF;" {% endif %}
-                                        class="notification" data-pk="{{ notification.id }}">
-                                        <a href="{% url 'social:click_notification' notification.id %}">
-                                            <div class="media">
-                                                {% if notification.sender.who_see_avatar == 'everyone' %}
-                                                <img src="{{notification.sender.avatar.url}}" class="" alt="User Image"
-                                                    width="50" height="50">
-                                                {% elif notification.sender.who_see_avatar == 'friends' and user in notification.sender.friends.all %}
-                                                <img src="{{notification.sender.avatar.url}}" class="" alt="User Image"
-                                                    width="50" height="50">
-                                                {% elif notification.sender == user %}
-                                                <img src="{{notification.sender.avatar.url}}" class="" alt="User Image"
-                                                    width="50" height="50">
-                                                {% else %}
-                                                <img src="/media/profile_images/DefaultUserImage.jpg" class=""
-                                                    alt="User Image" width="50" height="64">
-                                                {% endif %}
-                                                <div class="media-body">
-                                                    <h5 class="mt-0">{{ notification.sender.username }}</h5>
-                                                    <p>{{ notification.content }}</p>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    {% endfor %}
-                                    {% endif %}
-                                </ul>
-                            </div>
-                        </div>
-                    </li>
-                </div>
+                    </button>
+                </li>
+                <audio id="notificationSound">
+                    <source src="{% static 'social/notificationsound.wav' %}" type="audio/wav">
+                    <source src="{% static 'social/notificationsound.wav' %}" type="audio/mp3">
+                    <source src="{% static 'social/notificationsound.wav' %}" type="audio/ogg">
+                    <source src="{% static 'social/notificationsound.wav' %}" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
                 <li class="dropdown ml-3 dropleft">
                     <a href="#" class="" data-toggle="dropdown" role="button" aria-haspopup="true"
                         aria-expanded="false"><i class="fas fa-sort-down"
@@ -211,6 +187,79 @@ pagead/js/adsbygoogle.js"></script>
         {% endfor %}
         {% endif %}
     </span>
+
+    <!-- notifications modal -->
+    <div class="modal fade" id="notifications" tabindex="-1" role="dialog" aria-labelledby="notificationsLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="notificationsLabel">({{ unread_notif_count }}) Notifications
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="notificationsList" data-url="{% url 'social:load_notifications' %}"
+                        data-getUserUrl="{% url 'userpage:get_user_by_id' %}" data-currUser="{{ user }}">
+                        <div style="margin: 30px auto 30px auto; text-align: center;">
+                            <h4>Notifications</h4>
+                            {% if user.is_authenticated %}
+                            <span class="ml-2">
+                                {% webpush_button with_class="btn btn-outline-success btn-sm" %}
+                            </span>
+                            <span><i class="fas fa-bell" style="font-size:24px"></i></span>
+                            {% endif %}
+                        </div>
+                        <ul id="notificationsContainer">
+                            {% if notifications.count > 0 %}
+                            {% for notification in notifications %}
+                            <li {% if not notification.is_read %}style="background-color: #EBF0FF;" {% endif %}
+                                class="notification" data-pk="{{ notification.id }}">
+                                <a href="{% url 'social:click_notification' notification.id %}">
+                                    <div class="media">
+                                        {% if notification.sender.who_see_avatar == 'everyone' %}
+                                        <img src="{{notification.sender.avatar.url}}" class="" alt="User Image"
+                                            width="50" height="50">
+                                        {% elif notification.sender.who_see_avatar == 'friends' and user in notification.sender.friends.all %}
+                                        <img src="{{notification.sender.avatar.url}}" class="" alt="User Image"
+                                            width="50" height="50">
+                                        {% elif notification.sender == user %}
+                                        <img src="{{notification.sender.avatar.url}}" class="" alt="User Image"
+                                            width="50" height="50">
+                                        {% else %}
+                                        <img src="/media/profile_images/DefaultUserImage.jpg" class="" alt="User Image"
+                                            width="50" height="64">
+                                        {% endif %}
+                                        <div class="media-body">
+                                            <h5 class="mt-0">{{ notification.sender.username }}</h5>
+                                            <p>{{ notification.content }}</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            {% endfor %}
+                            {% endif %}
+                        </ul>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    {% if notifications.count > 0 %}
+                    <a href="{% url 'social:read_all_notifications' %}" class="btn"> Mark all as read</a>
+                    <br>
+                    <a href="{% url 'social:delete_all_notifications' %}"
+                        onclick="return confirm('Delete all notifications?')"
+                        style="text-decoration: none; color: red; margin-right: 30px;"><i class="fas fa-trash-alt"></i>
+                        Delete all</a>
+                    {% endif %}
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End notifications modal -->
     {% if not user.is_authenticated %}
     <div class="modal fade" id="signupFloatForm" tabindex="-1" role="dialog" aria-labelledby="signupFloatFormLabel"
         aria-hidden="true">
