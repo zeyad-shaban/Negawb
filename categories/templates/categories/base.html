@@ -76,18 +76,18 @@ pagead/js/adsbygoogle.js"></script>
                             style="font-size:24px; color: rgb(255, 255, 255)"></i><span>Chat</span>
                     </a>
                 </li>
-                <div class="btn-group">
+                <div class="btn-group" style="position: relative;">
                     <div title="Notifications" class="master-menu-right-item" id="app-menu" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-bell" style="font-size: 36px; color: rgb(209, 202, 202); cursor: pointer"></i>
 
                         {% if unread_notif_count > 0 %}
-                        <div class="badge unRead" id="currNotificationsCount">{{ unread_notif_count }}</div>
+                        <div class="badge unRead" id="notificationsCount">{{ unread_notif_count }}</div>
                         {% else %}
-                        <span class="badge" style="color: white;" id="currNotificationsCount"></span>
+                        <span class="badge" style="color: white;" id="notificationsCount"></span>
                         {% endif %}
                     </div>
-                    <li class="dropright mt-5">
+                    <li class="dropright" style="position: absolute; top: 100px; right:30vw">
                         <div class="dropdown-menu master-menu-dropdown" aria-labelledby="app-menu"
                             id="notificationDropMenu">
                             <audio id="notificationSound">
@@ -99,40 +99,18 @@ pagead/js/adsbygoogle.js"></script>
                             </audio>
                             <div id="notificationsList" data-url="{% url 'social:load_notifications' %}"
                                 data-getUserUrl="{% url 'userpage:get_user_by_id' %}" data-currUser="{{ user }}">
-                                <h4>Notifications</h4>
-                                {% if user.is_authenticated %}
-                                {% webpush_button with_class="btn btn-outline-success btn-sm" %}
-                                <span><i class="fas fa-bell" style="font-size:24px"></i></span>
-                                {% endif %}
-                                <div class="dropdown-divider"></div>
-                                <ul class="list-group list-group-horizontal">
-                                    <li class="list-group-item active notificationType" date-wantedType="all">All</li>
-                                    {% if user.allow_important_friend_messages or user.allow_important_group_message or user.allow_normal_friend_message or user.allow_normal_group_message %}
-                                    <li class="list-group-item notificationType" date-wantedType="messages">Messages
-                                    </li>
+                                <div style="margin: 30px auto 30px auto; text-align: center;">
+                                    <h4>Notifications</h4>
+                                    {% if user.is_authenticated %}
+                                    {% webpush_button with_class="btn btn-outline-success btn-sm" %}
+                                    <span><i class="fas fa-bell" style="font-size:24px"></i></span>
                                     {% endif %}
-
-                                    {% if user.allow_comment_message or user.allow_reply_message %}
-                                    <li class="list-group-item notificationType" date-wantedType="society">
-                                        Comments/Replies
-                                    </li>
-                                    {% endif %}
-                                </ul>
-                                <ul class="list-group list-group-horizontal">
-                                    {% if user.allow_invites %}
-                                    <li class="list-group-item notificationType" date-wantedType="invites">Invites</li>
-                                    {% endif %}
-
-                                    {% if user.your_invites %}
-                                    <li class="list-group-item notificationType" date-wantedType="your_invites">Your
-                                        invites
-                                    </li>
-                                    {% endif %}
-                                </ul>
+                                </div>
                                 <ul id="notificationsContainer">
                                     {% if notifications.count > 0 %}
                                     {% for notification in notifications %}
-                                    <li {% if not notification.is_read %}style="background-color: #EBF0FF;" {% endif %}>
+                                    <li {% if not notification.is_read %}style="background-color: #EBF0FF;" {% endif %}
+                                        class="notification" data-pk="{{ notification.id }}">
                                         <a href="{% url 'social:click_notification' notification.id %}">
                                             <div class="media">
                                                 {% if notification.sender.who_see_avatar == 'everyone' %}
@@ -158,7 +136,6 @@ pagead/js/adsbygoogle.js"></script>
                                     {% endfor %}
                                     {% endif %}
                                 </ul>
-                                <div class="dropdown-divider"></div>
                             </div>
                         </div>
                     </li>
@@ -438,6 +415,9 @@ pagead/js/adsbygoogle.js"></script>
         </div>
     </div>
     {% endif %}
+
+
+
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
         integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">

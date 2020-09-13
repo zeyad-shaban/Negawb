@@ -470,24 +470,15 @@ def leave_group(request, pk):
 
 
 def load_notifications(request):
-    notification_type = request.GET.get('notification_type')
+    try:
+        last_notification_id = int(request.GET.get('last_notification_id'))
+    except:
+        last_notification_id = 0
     if not request.user.is_authenticated:
         notifications = []
-    elif notification_type == 'messages':
-        notifications = Notification.objects.filter(Q(receiver=request.user), Q(notification_type='important_friend_message') | Q(
-            notification_type='important_group_message') | Q(notification_type='normal_friend_message') | Q(notification_type='normal_group_message')).order_by('-date')
-    elif notification_type == 'society':
-        notifications = Notification.objects.filter(Q(receiver=request.user), Q(notification_type='comment_message') | Q(
-            notification_type='reply_message')).order_by('-date')
-    elif notification_type == 'invites':
-        notifications = Notification.objects.filter(Q(receiver=request.user), Q(
-            notification_type='invites')).order_by('-date')
-    elif notification_type == 'your_invites':
-        notifications = Notification.objects.filter(Q(receiver=request.user), Q(
-            notification_type='your_invites')).order_by('-date')
-    elif not notification_type or notification_type == 'all':
+    else:
         notifications = Notification.objects.filter(
-            receiver=request.user).order_by('-date')
+            receiver=request.user, is_read = False, id__gt=last_notification_id).order_by('-date')
     return JsonResponse({'notifications': serialize('json', notifications)})
 
 
