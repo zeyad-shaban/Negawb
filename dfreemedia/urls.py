@@ -24,6 +24,7 @@ from production import views as production_views
 from django.contrib.auth import views as auth_views
 from django.contrib.sitemaps.views import sitemap
 from categories import sitemaps
+from django.views.generic import TemplateView
 
 handler404 = production_views.handler404
 handler500 = production_views.handler500
@@ -38,6 +39,7 @@ sitemaps = {
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', include('pwa.urls')),
     path('', category_views.home, name='home'),
     # Sitemap
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps},
@@ -82,6 +84,7 @@ urlpatterns = [
     path('confirm_phone', users_views.confirm_phone, name="confirm_phone"),
     # Web-Push
     path('webpush/', include('webpush.urls')),
+    # Menifest
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

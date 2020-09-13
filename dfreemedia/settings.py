@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'comments',
     'social',
     'production',
+    'pwa',
     'django_cleanup',
 ]
 
@@ -144,6 +145,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 LOGIN_URL = '/login/'
 AUTH_USER_MODEL = 'userpage.User'
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+PWA_SERVICE_WORKER_PATH = os.path.join(BASE_DIR, 'categories/static/categories', 'serviceworker.js')
 
 # Email Messaging
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

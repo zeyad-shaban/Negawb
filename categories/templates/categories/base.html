@@ -1,6 +1,8 @@
 {% load static %}
 {% load crispy_forms_tags %}
 {% load webpush_notifications %}
+{% load pwa %}
+{% progressive_web_app_meta %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -459,7 +461,7 @@ pagead/js/adsbygoogle.js"></script>
     <!-- Manefist -->
     <script>
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('service-worker.js')
+            navigator.serviceWorker.register("/serviceworker.js")
                 .then(function (reg) {
                     console.log('Yes it worked!')
                 }).catch(function (err) {
