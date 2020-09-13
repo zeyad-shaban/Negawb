@@ -3,7 +3,7 @@
     "name": "Dfreemedia",
     "icons": [
         {
-            "src": "/static/categories/favicon.png",
+            "src": "https://www.dfreemedia.com/static/categories/favicon.png",
             "sizes": "192x192",
             "type": "image/png"
         }

@@ -455,11 +455,16 @@ pagead/js/adsbygoogle.js"></script>
     <script src="{% static 'social/emojionearea.min.js' %}"></script>
     <script src="{% static 'categories/basescript.js' %}"></script>
     <!-- END CDN -->
+
     <!-- Manefist -->
     <script>
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('service-worker.js')
-                .then(function (reg) {}).catch(function (err) {});
+                .then(function (reg) {
+                    console.log('Yes it worked!')
+                }).catch(function (err) {
+                    console.log('No it did not work!')
+                });
         }
     </script>
     <!-- End manefist -->
