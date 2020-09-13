@@ -93,7 +93,7 @@ def add_friend(request, pk):
                 friend_request.save()
                 if friend_request.to_user.allow_invites:
                     notification = Notification(notification_type='invites', sender=request.user,
-                                                url="/userpage/friendrequest/", content=f'{friend_request.from_user} wants to be your friend')
+                                                url="/userpage/friendrequest/", content=f'{friend_request.from_user} Send you a friend request')
                     notification.save()
                     notification.receiver.add(friend_request.to_user)
                     for receiver in notification.receiver.all():

@@ -144,7 +144,7 @@ def unfriend(request):
     friend.friends.remove(user)
     if request.user.your_invites:
         notification = Notification(notification_type='your_invite', sender=request.user,
-                                    url=f"/people/{request.user.id}", content=f'{request.user} Unfriended You')
+                                    url=f"/people/{request.user.id}", content=f'{request.user} Unfriended you')
         notification.save()
         notification.receiver.add(friend)
     return JsonResponse({})

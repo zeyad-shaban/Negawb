@@ -105,6 +105,7 @@ pagead/js/adsbygoogle.js"></script>
                                             read</a>
                                         <br>
                                         <a href="{% url 'social:delete_all_notifications' %}"
+                                            onclick="return confirm('Delete all notifications?')"
                                             style="text-decoration: none; color: red;"><i class="fas fa-trash-alt"></i>
                                             Delete all</a>
                                     </div>

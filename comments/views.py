@@ -76,7 +76,7 @@ def view_post(request, pk):
                 if post.user != request.user:
                     # !ABSOLUTE PATH
                     notification = Notification(notification_type='comment_message', sender=request.user,
-                                                url=f'/comments/{post.id}/', content=comment.description[:100])
+                                                url=f'/comments/{post.id}/', content=f'{request.user.username} commented on your post: {comment.description[:100]}')
                     notification.save()
                     notification.receiver.add(post.user)
                     for receiver in notification.receiver.all():
@@ -120,7 +120,8 @@ def edit_post(request, pk):
             if request.POST.get('clearVideo'):
                 post.post_file = None
             if post.post_file and post.image:
-                messages.error(request, 'You can\'t have both image and video, please remove one')
+                messages.error(
+                    request, 'You can\'t have both image and video, please remove one')
                 return redirect('comments:edit_post', pk=pk)
             elif not post.post_file and not post.image and not post.description:
                 messages.error(request, 'You cannot have a blank post!')
@@ -221,7 +222,7 @@ def create_reply(request, pk):
     if comment.user.allow_reply_message and not comment.user.chat_only_mode:
         # TODO FIX THE URL
         notification = Notification(notification_type='reply_message',
-                                    sender=request.user, url=f'404', content=reply.description[:100])
+                                    sender=request.user, url=f'/comments/{comment.post.id}/', content=f'{request.user.username} Repliled: {reply.description[:100]}')
         notification.save()
         notification.receiver.add(comment.user)
         for receiver in notification.receiver.all():

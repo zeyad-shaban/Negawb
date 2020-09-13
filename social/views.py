@@ -102,7 +102,7 @@ def send_friend_message(request, pk):
             if message.is_important:
                 if friend.allow_important_friend_messages:
                     notification = Notification.objects.create(
-                        notification_type='important_friend_message', sender=request.user, url='/chat/', content=message.message[:100])
+                        notification_type='important_friend_message', sender=request.user, url=f'/social/chat_friend/{friend.id}', content=f'Important message from {friend.username}: {message.message[:100]}')
                     notification.save()
                     notification.receiver.add(friend)
                     for receiver in notification.receiver.all():
@@ -126,7 +126,7 @@ def send_friend_message(request, pk):
         if friend.allow_normal_friend_message:
             # !ABSOLUTE PATH
             notification = Notification.objects.create(
-                notification_type='normal_friend_message', sender=request.user, url='/chat/', content=message.message[:100])
+                notification_type='normal_friend_message', sender=request.user, url=f'/social/chat_friend/{friend.id}', content=f'a message from {friend.username}: {message.message[:100]}')
             notification.save()
             notification.receiver.add(friend)
             for receiver in notification.receiver.all():
