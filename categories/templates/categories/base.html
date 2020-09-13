@@ -76,18 +76,17 @@ pagead/js/adsbygoogle.js"></script>
                             style="font-size:24px; color: rgb(255, 255, 255)"></i><span>Chat</span>
                     </a>
                 </li>
-                <div class="btn-group" style="position: relative;">
+                <div class="btn-group" id="notifications">
                     <div title="Notifications" class="master-menu-right-item" id="app-menu" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-bell" style="font-size: 36px; color: rgb(209, 202, 202); cursor: pointer"></i>
-
+                        <i class="fas fa-bell"></i>
                         {% if unread_notif_count > 0 %}
                         <div class="badge unRead" id="notificationsCount">{{ unread_notif_count }}</div>
                         {% else %}
                         <span class="badge" style="color: white;" id="notificationsCount"></span>
                         {% endif %}
                     </div>
-                    <li class="dropright" style="position: absolute; top: 100px; right:30vw">
+                    <li class="dropright">
                         <div class="dropdown-menu master-menu-dropdown" aria-labelledby="app-menu"
                             id="notificationDropMenu">
                             <audio id="notificationSound">
