@@ -1,3 +1,18 @@
+#addToHomeScreen {
+    position: absolute;
+    right: 30px;
+    border-radius: 35%;
+    background-color: #FC7E2B;
+    color: white
+}
+
+@media screen and (max-width: 412px) {
+    #addToHomeScreen {
+        right: 10px;
+        top: 60px
+    }
+}
+
 .homepageView {
     cursor: pointer;
     background: yellow;
