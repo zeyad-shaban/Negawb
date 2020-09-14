@@ -8,12 +8,27 @@ only, giving users the power to hide unwanted topics{% endblock description %}
 
 
 {% block content %}
-<ul class="list-group list-group-horizontal">
-    <li class="list-group-item active homepageView">Posts</li>
+<style>
+    #addToHomeScreen {
+        position: absolute;
+        right: 30px;
+        border-radius: 35%;
+        background-color: #FC7E2B;
+        color: white
+    }
+    @media screen and (max-width: 412px){
+        #addToHomeScreen{
+            right: 10px;
+            top: 60px
+        }
+    }
+</style>
+<ul class="list-group list-group-horizontal" style="position: relative; margin-top: 20px">
+    <li class="list-group-item active homepageView mr-2">Posts</li>
     {% if not user.hide_followed_posts %}
     <li class="list-group-item homepageView">Followed</li>
     {% endif %}
-
+    <button class="btn" id="addToHomeScreen">Add To <br> Home Screen</button>
 </ul>
 <!-- Homepage posts -->
 <div class="homepageItem" id="postsContainer">
@@ -378,6 +393,12 @@ only, giving users the power to hide unwanted topics{% endblock description %}
 <small class="from-text text-muted">Your Distraction Free settings doesn't allow posts to show in home page</small>
 {% endif %}
 </div>
+
+<!-- Add-To-HomeScreen -->
+
+<!-- End Add-To-HomeScreen -->
+
+
 <script src="{% static 'categories/index.js' %}"></script>
 <link rel="stylesheet" href="{% static 'categories/index.css' %}">
 {% endblock content %}
