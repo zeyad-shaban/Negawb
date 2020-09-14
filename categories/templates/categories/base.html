@@ -2,11 +2,11 @@
 {% load crispy_forms_tags %}
 {% load webpush_notifications %}
 {% load pwa %}
-{% progressive_web_app_meta %}
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
+    {% progressive_web_app_meta %}
     <script data-ad-client="ca-pub-2852400661142864" async
         src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
     <script data-ad-client="pub-2852400661142864" async src="https://pagead2.googlesyndication.com/
@@ -30,6 +30,7 @@ pagead/js/adsbygoogle.js"></script>
 
     <link rel="manifest" href="{% static 'categories/empty-manifest.json' %}">
     <link rel='shortcut icon' href="{% static 'categories/favicon.png' %}" type="image/jpg">
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="description" content="{% block description %} {% endblock description %}">
     <meta name="author" content="Zeyad Shaban">
     <meta charset=" UTF-8">

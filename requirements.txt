@@ -31,7 +31,7 @@ django-jsonfield==1.4.0
 django-model-utils==4.0.0
 django-notifications-hq==1.6.0
 django-picklefield==3.0.1
-django-progressive-web-app==0.1.1
+django-pwa==1.0.10
 django-sendsms==0.4
 django-sites==0.10
 django-uuidfield-2==0.6.6

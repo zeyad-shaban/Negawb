@@ -145,7 +145,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 LOGIN_URL = '/login/'
 AUTH_USER_MODEL = 'userpage.User'
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
-PWA_SERVICE_WORKER_PATH = os.path.join(BASE_DIR, 'categories/static/categories', 'serviceworker.js')
 
 # Email Messaging
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -154,6 +153,32 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'dfreemedia@gmail.com'
 EMAIL_HOST_PASSWORD = '<D44200444FreeMedia>'
+
+
+# PWA
+# PWA_SERVICE_WORKER_PATH = os.path.join(
+#     BASE_DIR, 'categories/static/categories', 'serviceworker.js')
+
+PWA_APP_DEBUG_MODE = False
+
+PWA_APP_NAME = 'Dfreemedia'
+PWA_APP_DESCRIPTION = "Social media platform made to be less distractive and more porductive"
+PWA_APP_THEME_COLOR = '#0A0302'
+PWA_APP_BACKGROUND_COLOR = '#ffffff'
+PWA_APP_DISPLAY = 'standalone'
+PWA_APP_SCOPE = '/'
+PWA_APP_ORIENTATION = 'any'
+PWA_APP_START_URL = '/'
+PWA_APP_STATUS_BAR_COLOR = 'default'
+PWA_APP_ICONS = [{'src': '/static/categories/logo.png', 'sizes': '160x160'}]
+PWA_APP_ICONS_APPLE = [
+    {'src': '/static/categories/logo.png', 'sizes': '160x160'}]
+PWA_APP_SPLASH_SCREEN = [{'src': '/static/categories/logo.png',
+                          'media': '(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)'}]
+PWA_APP_DIR = 'ltr'
+PWA_APP_LANG = 'en-US'
+# End PWA
+
 
 # Sms
 
