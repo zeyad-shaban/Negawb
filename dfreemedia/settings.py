@@ -162,7 +162,7 @@ EMAIL_HOST_PASSWORD = '<D44200444FreeMedia>'
 PWA_APP_DEBUG_MODE = False
 
 PWA_APP_NAME = 'Dfreemedia'
-PWA_APP_DESCRIPTION = "Social media platform made to be less distractive and more porductive"
+PWA_APP_DESCRIPTION = "Dfreemedia"
 PWA_APP_THEME_COLOR = '#0A0302'
 PWA_APP_BACKGROUND_COLOR = '#ffffff'
 PWA_APP_DISPLAY = 'standalone'
