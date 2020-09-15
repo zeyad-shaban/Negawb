@@ -34,7 +34,12 @@ friends.{% endblock description %}
 
     .userDesc {
         display: block;
+        margin-left: 20px
+    }
 
+    .userDesc span {
+        letter-spacing: 1px;
+        word-spacing: 4px
     }
 </style>
 <ul id="contact-list">
@@ -56,24 +61,22 @@ friends.{% endblock description %}
                     {% endif %}
                 </a>
             </div>
-
-            <a href="{% url 'people:people' view_user.id %}" class="btn">
-                <label class="name lead btn">{{ view_user.username }}</label>
-            </a>
             <div class="userDesc">
+                <a href="{% url 'people:people' view_user.id %}" class="btn" style="font-size: 150%; font-weight: 300;">
+                    <span style="margin-bottom: 10px; display: inline-block">{{ view_user.username }}</span>
+                </a>
+                <br>
                 {% if view_user.phone %}
-                <span class="fa fa-fw fa-phone fa-fw text-muted" data-toggle="tooltip" title="Phone Number"
-                    data-original-title="{{ view_user.phone }}"></span>
-                <span class="text-muted small">{{ view_user.phone }}</span>
-                <br>
+                <span class="fa fa-fw fa-phone fa-fw"></span>
+                <span class="small">{{ view_user.phone }}</span>
+                <br style="margin-bottom: 10px">
                 {% endif %}
-                {% if view_user.email and view_user.show_email == True %}
-                <span class="fa fa-fw fa-envelope fa-fw text-muted" data-toggle="tooltip" title="Email"
-                    data-original-title="{{ view_user.email }}"></span>
-                <span class="text-muted small text-truncate">{{ view_user.email }}</span>
-                <br>
+                {% if view_user.email and view_user.show_email %}
+                <span class="fa fa-fw fa-envelope fa-fw"></span>
+                <span class="small text-truncate">{{ view_user.email }}</span>
+                <br style="margin-bottom: 10px">
                 {% endif %}
-                <p class="small text-break">{{ view_user.bio }}</p>
+                <p class="text-break">{{ view_user.bio }}</p>
                 {% if not view_user == user or not view_user in user_friends %}
                 <a href="{% url 'people:add_friend' view_user.id %}" class="btn addFriend"><i
                         class="fas fa-user-plus"></i> Add friend</a>

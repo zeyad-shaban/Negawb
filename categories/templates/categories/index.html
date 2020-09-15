@@ -17,12 +17,6 @@ only, giving users the power to hide unwanted topics{% endblock description %}
 </ul>
 <!-- Homepage posts -->
 <div class="homepageItem" id="postsContainer">
-    {% if not user.is_authenticated %}
-    <div class="alert" style="max-width:50%; margin:30px 0 30px 20px; background: #8ce7fa">Hashtags are used to filter
-        posts, you can set a default hashtag from the
-        Distraction Free menu in your <a href="{% url 'userpage:home' %}">profile</a>, leave blank to disable filtering,
-        write anyword without a hashtag to hide homepage posts</div>
-    {% endif %}
     <form action="{% url 'comments:search_by_hashtags' %}" method="GET"
         class="form-inline mt-3 row justify-content-center" style="width: 80vw; margin-right: 10vw;margin-left: 10vw;">
         <input type="search" name="q" class="form-control float-left" placeholder="#Search by hashtags"

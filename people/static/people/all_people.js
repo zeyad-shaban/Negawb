@@ -44,42 +44,51 @@ document.addEventListener('DOMContentLoaded', function () {
                         for (user of users) {
                             let userAvatar
                             let userPhoneNum = ''
+                            let userEmail = ''
+                            if (user.fields.show_email) {
+                                userEmail = `
+                                <span class="fa fa-fw fa-envelope fa-fw"></span>
+                                <span class="small text-truncate">${user.fields.email}</span>
+                                <br style="margin-bottom: 10px">
+                                `
+                            }
                             if (user.fields.who_see_avatar == 'everyone') {
                                 userAvatar =
-                                    `<img src="/media/${user.fields.avatar}" alt="{{ view_user.username }}"
+                                    `<img src="/media/${user.fields.avatar}" alt="X"
                             class="img-fluid rounded-circle d-block mx-auto" height="73" width="73">`
-                            } else if (user.fields.who_see_avatar == 'friends' &&
-                                "{{user}}" in user
+                            } else if (user.fields.who_see_avatar == 'friends' && $('#Userusername').attr('data-username') in user
                                 .fields.friends) {
                                 userAvatar =
-                                    `<img src="/media/${user.fields.avatar}" alt="${user.fields.username}"
+                                    `<img src="/media/${user.fields.avatar}" alt="X"
                             class="img-fluid rounded-circle d-block mx-auto" height="73" width="73">`
                             } else {
                                 userAvatar =
-                                    `<img src="/media/profile_images/DefaultUserImage.jpg" alt="${user.fields.username}"
+                                    `<img src="/media/profile_images/DefaultUserImage.jpg" alt="X"
                                 class="img-fluid rounded-circle d-block mx-auto" height="73" width="73">`
                             }
                             if (user.fields.phone) {
                                 userPhoneNum = `<span class="fa fa-fw fa-phone fa-fw text-muted" data-toggle="tooltip" title="Phone Number"
                         data-original-title="${ user.fields.phone }"></span>
                     <span class="text-muted small">${ user.fields.phone }</span>
-                    <br>`
+                <br style="margin-bottom: 10px">
+                `
                             }
                             output = `
                     <li class="">
                     <div class="row w-100">
                     <div class="userInfo">
-                        <a href="/people/${user.pk}">
-                        ${userAvatar}
+                    <a href="/people/${user.pk}">
+                    ${userAvatar}
                     </a>
                     </div>
-                    <a href="/people/${user.pk}">
-                        <label class="name lead">${user.fields.username}</label>
-                        </a>
-                        <br>
-                        
-                        <div class="userDesc">
-                            ${userPhoneNum}
+                    <div class="userDesc">
+                    <a href="/people/${user.pk}" class="btn" style="font-size: 150%; font-weight: 300;">
+                    <span style="margin-bottom: 10px; display: inline-block">${user.fields.username}</span>
+                </a>
+                <br>
+                    ${userPhoneNum}
+                ${userEmail}
+
                             <span class="small text-truncate">${ user.fields.bio }</span>
                             <form action="/people/addfriend/${user.pk}" method="GET" id="idAddFriendForm">
                                 <a href="/people/add_friend/${user.pk}" class="btn addFriend"><i
