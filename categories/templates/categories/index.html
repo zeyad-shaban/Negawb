@@ -143,7 +143,7 @@ only, giving users the power to hide unwanted topics{% endblock description %}
                         </div>
                         <!-- Title -->
                         <p class="card-link btn-link" href="#">
-                            <h5 class="card-title">{{ post.description|truncatechars:45 }}</h5>
+                            <h5 class="card-title postDescription">{{ post.description|truncatechars:45 }}</h5>
                         </p>
                         <!-- Image -->
                         {% if post.image %}
@@ -161,7 +161,7 @@ only, giving users the power to hide unwanted topics{% endblock description %}
                         <!-- Description -->
                         {% if post.description and post.description|length > 45 %}
                         <div class="mt-2" style="white-space: pre-line">
-                            <p class="card-text" style="white-space: pre-line;">
+                            <p class="card-text postDescription" style="white-space: pre-line;">
                                 {{ post.description| truncatechars:227 }} {% if post.description|length > 227 %} <p
                                     class="btn btn-link"
                                     onclick="this.parentElement.innerHTML = `{{ post.description }}`">
@@ -299,7 +299,7 @@ only, giving users the power to hide unwanted topics{% endblock description %}
                         </div>
                         <!-- Title -->
                         <p class="card-link btn-link" href="#">
-                            <h5 class="card-title">{{ post.description|truncatechars:45 }}</h5>
+                            <h5 class="card-title postDescription">{{ post.description|truncatechars:45 }}</h5>
                         </p>
                         <!-- Image -->
                         {% if post.image %}
@@ -317,7 +317,7 @@ only, giving users the power to hide unwanted topics{% endblock description %}
                         <!-- Description -->
                         {% if post.description and post.description|length > 45 %}
                         <div style="white-space: pre-line" class="mt-2">
-                            <p class="card-text" style="white-space: pre-line;">
+                            <p class="card-text postDescription" style="white-space: pre-line;">
                                 {{ post.description| truncatechars:227 }} {% if post.description|length > 227 %} <p
                                     class="btn btn-link"
                                     onclick="this.parentElement.innerHTML = `{{ post.description }}`">
