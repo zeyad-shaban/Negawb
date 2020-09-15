@@ -12,7 +12,8 @@
 {% block content %}
 <link rel="stylesheet" href="{% static 'social/chat.css' %}">
 <div class="menu">
-    <div class="back" id="back"><i class="fa fa-chevron-left"></i>
+    <a href="{% url 'chat' %}" class="back"><i class="fa fa-chevron-left"></i></a>
+    <a href="{% url 'people:people' friend.id %}">
         {% if friend.who_see_avatar == 'everyone' %}
         <img src="{{friend.avatar.url}}" alt="User Image" width="64" height="64" id="friendAvatar">
         {% elif friend.who_see_avatar == 'friends' and user in friend.friends.all %}
@@ -22,10 +23,8 @@
         {% else %}
         <img src="/media/profile_images/DefaultUserImage.jpg" alt="User Image" width="64" height="64" id="friendAvatar">
         {% endif %}
-    </div>
-    <div class="name">{{ friend.username }}</div>
-    <div class="last" style="max-width: 50%; overflow: hidden">Bio: {{ friend.bio }} {% if friend.phone %}-Phone:
-        {{ friend.phone }} {% endif %} {% if friend.email %}- Email: {{ friend.email }} {% endif %}</div>
+        <span class="name">{{ friend.username }}</span>
+    </a>
     <button class="btn float-right mr-3" data-toggle="modal" data-target="#sendFile"><i class="fas fa-paperclip"
             style="color: white; font-size:36px;"></i></button>
     <button type="button" class="btn float-right mr-3" id="record">
@@ -241,18 +240,14 @@
                     }
                 }).catch(function (err) {
                     alert(
-                        'Error. Please allow microphone permission or messages you send won\'t be seen by others')
+                        'Error. Please allow microphone permission or messages you send won\'t be seen by others'
+                    )
                 })
             } else {
                 alert('You cannot record voice message because your device doesn\'t support user media')
             }
             // End audio record
             window.scrollTo(0, document.body.scrollHeight)
-            // Go back
-            $('#back').click(function (e) {
-                e.preventDefault();
-                window.history.back();
-            })
             let page = 1
             // Top scroll
             function topScroll() {

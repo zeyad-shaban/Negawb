@@ -9,9 +9,13 @@ Set up Email and phone number
 you{% endblock description %}
 
 {% block content %}
-<div class="alert alert-warning">Without an email address you won't be able to reset your password</div>
 <div class="m-2">
+    <br>
     <h1 class="row justify-content-center mb-4">Set up email and phone number</h1>
+    <br><br>
+    {% if not user.email and not user.phone %}
+    <div class="alert alert-warning">Without an email address you won't be able to reset your password</div>
+    {% endif %}
     <br>
     {% if not user.email %}
     <br>
@@ -48,7 +52,7 @@ you{% endblock description %}
 </div> -->
 <br>
 <br>
-<a href="{% url 'userpage:home' %}" class="btn btn-secondary"><i class="fas fa-sign-out-alt"></i> Exit</a>
+<a href="{% url 'userpage:home' %}" class="btn btn-secondary"><i class="fas fa-sign-out-alt"></i> No thanks</a>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {

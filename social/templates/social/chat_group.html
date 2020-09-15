@@ -12,19 +12,16 @@
 {% block content %}
 <link rel="stylesheet" href="{% static 'social/chat.css' %}">
 <div class="menu">
-    <div class="back" id="back"><i class="fa fa-chevron-left"></i>
-        <img src="{{ group.image.url }}" alt="User Image" width="64" height="64" id="friendAvatar">
-    </div>
-    <div class="name">{{ group.title }}</div>
-    <div class="last" style="max-width:50%;">
-        {% if group.description %}{{ group.description|truncatechars:100 }}{% endif %}</div>
+    <a href="{% url 'chat' %}" class="back"><i class="fa fa-chevron-left"></i></a>
+    <img src="{{ group.image.url }}" alt="User Image" width="64" height="64" id="friendAvatar">
+    <span class="name">{{ group.title }}</span>
     <button class="btn float-right mr-3" data-toggle="modal" data-target="#sendFile"><i class="fas fa-paperclip"
             style="color: white; font-size:36px;"></i></button>
     <button type="button" class="btn float-right mr-3" id="record">
         <i class="fas fa-microphone" style="font-size: 36px"></i>
     </button>
 </div>
-<ul class="list-group list-group-horizontal fixed-top" style="margin-top: 50px">
+<ul class="list-group list-group-horizontal fixed-top areas">
     <li class="list-group-item btn active areaItem">All</li>
     {% for area in areas %}
     <li class="list-group-item btn areaItem">
@@ -368,6 +365,9 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         window.addEventListener('load', function () {
+
+            $(window).resize(() => $('.areas').css('top', $('.menu').height()+20))
+            $('.areas').css('top', $('.menu').height()+20)
             const record = document.querySelector('#record');
             // Record voice
             if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
@@ -437,7 +437,8 @@
             </div>
             </li>
                                         `)
-                                document.querySelector('#notificationSound').play()
+                                document.querySelector('#notificationSound')
+                                    .play()
                             },
                             error: function (response) {
                                 alert(
@@ -576,7 +577,7 @@
             // Group menu
             $('#groupAddMember').hide()
             $('#groupSettings').hide()
-            $('.name').click(function (e) {
+            $('.name, #friendAvatar').click(function (e) {
                 e.preventDefault();
                 $("#groupMenu").modal('show');
             })
