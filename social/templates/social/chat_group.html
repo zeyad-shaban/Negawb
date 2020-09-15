@@ -366,8 +366,13 @@
     document.addEventListener('DOMContentLoaded', function () {
         window.addEventListener('load', function () {
 
-            $(window).resize(() => $('.areas').css('top', $('.menu').height()+20))
-            $('.areas').css('top', $('.menu').height()+20)
+
+            $(window).resize(() => {
+                $('.areas').css('top', $('.menu').height() + 20);
+                $('.chat').css('margin-top', $('.areas').height() + 50)
+            })
+            $('.areas').css('top', $('.menu').height() + 20)
+            $('.chat').css('margin-top', $('.areas').height()+50)
             const record = document.querySelector('#record');
             // Record voice
             if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
