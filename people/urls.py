@@ -7,7 +7,7 @@ app_name = 'people'
 
 urlpatterns = [
     path('',views.all_people,name='all_people'),
-    path('results/',views.all_peopleresults, name='all_peopleresults'),
+    path('search_people/',views.search_people, name='search_people'),
     path('<int:pk>/', views.people, name='people'),
     path('add_friend/<int:pk>/', views.add_friend, name='add_friend'),
     path('follow/<int:pk>/', views.follow, name='follow'),

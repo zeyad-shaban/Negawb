@@ -5,13 +5,6 @@
 {% block description %}Explore out the new social media platform Dfreemedia community, find and add your
 friends.{% endblock description %}
 
-{% block searchbar %}
-<form class="form-inline" id="idSearchForm" action="{% url 'people:all_peopleresults' %}" method="GET">
-    <input class="form-control mr-sm-2" id="idSearchInput" type="search" name="q" placeholder="Search"
-        aria-label="Search">
-</form>
-{% endblock searchbar %}
-
 {% block content %}
 <style>
     #contact-list {
@@ -34,7 +27,9 @@ friends.{% endblock description %}
         margin-top: 10px;
         transition: background-color 0.2s !important;
     }
-    .addFriend:hover, .addFriend:active{
+
+    .addFriend:hover,
+    .addFriend:active {
         background-color: #36b8ec !important;
     }
 
@@ -48,7 +43,28 @@ friends.{% endblock description %}
         letter-spacing: 1px;
         word-spacing: 4px
     }
+
+    #search {
+        display: inline-block;
+        margin: 30px auto 30px 10px;
+        width: 75%;
+    }
+
+    #search input {
+        width: 75%;
+        display: inline-block;
+    }
+
+    #search button {
+        background-color: #0fbcf9;
+        color: white;
+    }
 </style>
+
+<form action="{% url 'people:search_people' %}" method="get" id="search">
+    <input type="text" class="form-control" name="q">
+    <button type="submit" class="btn"><i class="fas fa-search"></i></button>
+</form>
 <ul id="contact-list">
     {% for view_user in users %}
     {% if not view_user == user %}
@@ -84,7 +100,7 @@ friends.{% endblock description %}
                 <br style="margin-bottom: 10px">
                 {% endif %}
                 <p class="text-break">{{ view_user.bio }}</p>
-                {% if not view_user == user or not view_user in user_friends %}
+                {% if not view_user == user or not view_user in user.friends.all %}
                 <a href="{% url 'people:add_friend' view_user.id %}" class="btn addFriend"><i
                         class="fas fa-user-plus"></i> Add friend</a>
                 {% endif %}
@@ -95,122 +111,5 @@ friends.{% endblock description %}
     {% endif %}
     {% endfor %}
 </ul>
-<!-- Search people -->
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        window.addEventListener('load', function () {
-
-            // Search people
-            $('#idSearchForm').submit(function (event) {
-                event.preventDefault()
-            })
-            $('#idSearchInput').keyup(function (event) {
-                $.ajax({
-                    url: "{% url 'people:all_peopleresults' %}",
-                    data: {
-                        'q': $('#idSearchInput').val(),
-                    },
-                    dataType: 'json',
-                    success: function (data) {
-                        let results = JSON.parse(data.results)
-                        let output = ''
-
-                        if (results.length === 0) {
-                            $('#contact-list').html('<h4>User not found</h4>')
-                        } else {
-
-                            for (result of results) {
-                                // ABSOLUTE URL
-                                output += `
-                        <li class="list-group-item">
-                <div class="row w-100">
-                    <div class="col-12 col-sm-6 col-md-3 px-0">
-                        <a href="/people/${result.pk }">
-                            {% if result.fields.who_see_avatar == 'everyone' %}
-                            <img src="${ result.fields.avatar.url }" alt="${ result.fields.username }"
-                                class="img-fluid rounded-circle d-block mx-auto" height="73" width="73">
-                                {% else %}
-                                <img src="/media/profile_images/DefaultUserImage.jpg" alt="${ result.fields.username }"
-                                    class="img-fluid rounded-circle d-block mx-auto" height="73" width="73">
-                            {% endif %}
-                        </a>
-                    </div>
-
-                    <div class="col-12 col-sm-6 col-md-9 text-center text-sm-left">
-                        <a href="/people/${result.pk}/">
-                            <label class="name lead">${ result.fields.username }</label>
-                        </a>
-                        <br>
-
-                        {% if result.fields.phone %}
-                        <span class="fa fa-fw fa-phone fa-fw text-muted" data-toggle="tooltip" title="Phone Number"
-                            data-original-title="${ result.fields.phone }"></span>
-                        <span class="text-muted small">${ result.fields.phone }</span>
-                        <br>
-                        {% endif %}
-                        {% if result.fields.email and result.fields.show_email == True %}
-                        <span class="fa fa-fw fa-envelope fa-fw text-muted" data-toggle="tooltip" title="Email"
-                            data-original-title="${ result.fields.email }"></span>
-                        <span class="text-muted small text-truncate">${ result.fields.email }</span>
-                        <br>
-                        {% endif %}
-                        <span class="small text-truncate">${ result.fields.bio }</span>
-                            <button type="submit" name="addfriend," class="btn btn-success float-right addFriend" data-pk=${result.pk}>Add Friend</button>
-                    </div>
-                </div>
-            </li>
-            `
-                            }
-                        }
-                        $('#contact-list').html(output)
-
-                        function addFriend() {
-                            $('.addFriend').click(function (e) {
-                                e.preventDefault();
-                                let thisElement = $(this)
-                                $.ajax({
-                                    url: "",
-                                    data: {
-                                        'pk': thisElement.attr(
-                                            'data-pk'),
-                                    },
-                                    dataType: 'json',
-                                    success: function (response) {
-                                        thisElement.fadeOut();
-                                        $('#message_area').html(
-                                            '')
-                                        if (data.message
-                                            .tags === 'error') {
-                                            $('#message_area')
-                                                .append(`
-                            <div class="alert alert-danger fixed-top">${data.message.text}</div>
-                            `)
-                                        } else {
-                                            $('#message_area')
-                                                .append(`
-        <div class="alert alert-${data.message.tags} fixed-top">${data.message.text}</div>
-                                `)
-                                        }
-                                    }
-                                })
-                            });
-                        }
-                        let g = document.createElement('script');
-                        let s = document.getElementsByTagName('script')[0]
-                        g.text = addFriend();
-                        s.parentNode.insertBefore(g, s)
-                    }
-                })
-            })
-        })
-    })
-</script>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        window.addEventListener('load', function () {
-            let i = 2;
-        })
-    })
-</script>
 <script src="{% static 'people/all_people.js' %}"></script>
 {% endblock content %}

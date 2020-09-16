@@ -159,7 +159,7 @@ EMAIL_HOST_PASSWORD = '<D44200444FreeMedia>'
 #     BASE_DIR, 'categories/static/categories', 'serviceworker.js')
 
 PWA_APP_DEBUG_MODE = False
-PWA_SERVICE_WORKER_PATH  =os.path.join(BASE_DIR, 'categories/static/js', 'serviceworker.js')
+PWA_SERVICE_WORKER_PATH  =os.path.join(BASE_DIR, 'static/categories', 'serviceworker.js')
 
 PWA_APP_NAME = 'Dfreemedia'
 PWA_APP_DESCRIPTION = "Dfreemedia"

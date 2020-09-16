@@ -40,22 +40,17 @@ def all_people(request):
         users = paginator.page(1)
     except EmptyPage:
         users = []
-    if request.user.is_authenticated:
-        user_friends = User.objects.filter(friends=request.user)
-    else:
-        user_friends = []
     if request.GET.get('page'):
         return JsonResponse({'users': serialize('json', users)})
     else:
-        return render(request, 'people/all_people.html', {'users': users, 'user_friends': user_friends, })
+        return render(request, 'people/all_people.html', {'users': users})
 
 
-def all_peopleresults(request):
+def search_people(request):
     query = request.GET.get('q')
-    # todo add phone number query
-    results = User.objects.filter(
-        Q(username__icontains=query) | Q(email__icontains=query), ~Q(id=request.user.id))
-    return JsonResponse({'results': serialize('json', results)})
+    results = User.objects.filter(Q(username__icontains=query) | Q(
+        email__icontains=query) | Q(phone__icontains=query), ~Q(id=request.user.id))
+    return render(request, 'people/search_people.html', {'users': results})
 
 
 @login_required
