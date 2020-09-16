@@ -25,12 +25,19 @@ friends.{% endblock description %}
     }
 
     .addFriend {
-        position: absolute;
-        right: 30px;
-        top: 50px;
-        background-color: #3bd5f6 !important;
+        display: inline-block;
+        padding: 10px 30px;
+        background-color: #55c3ef !important;
         color: white !important;
+        font-size: 90% !important;
+        border-radius: 200px !important;
+        margin-top: 10px;
+        transition: background-color 0.2s !important;
     }
+    .addFriend:hover, .addFriend:active{
+        background-color: #36b8ec !important;
+    }
+
 
     .userDesc {
         display: block;

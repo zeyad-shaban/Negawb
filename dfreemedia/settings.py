@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sitemaps',
     'crispy_forms',
-    'six',
     'webpush',
     'categories',
     'users',

@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 data: {},
                 dataType: 'json',
                 success: function (response) {
-                    thisElement.parent().fadeOut()
+                    thisElement.fadeOut()
                     $('#message_area').html('')
                     if (response.message.tags === 'error') {
                         $('#message_area').append(`
@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                     data: {},
                                     dataType: 'json',
                                     success: function (response) {
-                                        thisElement.parent().fadeOut()
+                                        thisElement.fadeOut()
                                         $('#message_area').html('')
                                         if (response.message.tags === 'error') {
                                             $('#message_area').append(`
