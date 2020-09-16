@@ -15,9 +15,8 @@
 </nav>
 
 <ul id="followed">
-
-    {% if all_followed.count <= 0 %}
-    <h1 style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">You are not <br> following
+    {% if all_followed.count <= 0 or not all_followed %}
+    <h1 style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">You are not <br> following
         anyone</h1>
     {% endif %}
     {% for followed in all_followed %}

@@ -38,13 +38,21 @@ class User(AbstractUser):
     is_confirmed = models.BooleanField(default=False)
     allow_friend_request = models.BooleanField(default=True)
 
-    # DISTRACTION FREE!!!!!!!!!!!!!!!
+    # DISTRACTION FREE
     hide_comments = models.BooleanField(default=False)
-    hide_recommended_posts = models.BooleanField(default=False, blank=True, null=True)
+    hide_recommended_posts = models.BooleanField(
+        default=False, blank=True, null=True)
     chat_only_mode = models.BooleanField(default=False)
     hide_followed_posts = models.BooleanField(default=False)
     homepage_hashtags = models.TextField(null=True, blank=True)
-    # * notifications
+    default_home_choices = [
+        ('all_posts', 'All posts (default)'),
+        ('followed_posts', 'Followed posts'),
+        ('chat', 'Chat'),
+    ]
+    homepage = models.CharField(
+        max_length=25, choices=default_home_choices, default=default_home_choices[0])
+    # notifications
     allow_important_friend_messages = models.BooleanField(default=True)
     allow_important_group_message = models.BooleanField(default=True)
     allow_normal_friend_message = models.BooleanField(default=True)

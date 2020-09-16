@@ -62,14 +62,16 @@
         margin-left: auto;
         margin-right: auto;
     }
-    @media screen and (max-width: 752px){
-        #posts{
+
+    @media screen and (max-width: 752px) {
+        #posts {
             margin-left: 10%;
         }
     }
-    @media screen and (max-width: 492px){
-        #posts{
-            margin-right: 0 ;
+
+    @media screen and (max-width: 492px) {
+        #posts {
+            margin-right: 0;
         }
     }
 
@@ -85,7 +87,9 @@
     <a href="{% url 'followed' %}"><i class="far fa-user-circle"></i> <br> Followed</a>
 </nav>
 
-<div id="posts">
+<h1 style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">No posts found</h1>
+
+<div id="posts" data-url="{% url 'userpage:get_user_by_id' %}">
     {% for post in posts %}
     <div class="card gedf-card">
         <div class="card-header">
