@@ -133,7 +133,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                     })
                                 })
                             }
-                            var s = document.getElementsByName('script')[0]
+                            let s = document.getElementsByName('script')[0]
                             g.text = addFriend();
                             s.parentNode.insertBefore(g, s)
                         }

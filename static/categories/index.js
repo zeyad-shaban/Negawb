@@ -22,6 +22,9 @@ document.addEventListener('DOMContentLoaded', function () {
         function bottomScroll() {
             // homepage posts
             if ($(window).scrollTop() + $(window).height() == $(document).height() && $('.homepageView.active').html() == 'Posts') {
+                document.querySelector('#loading').innerHTML = `<div class="spinner-border text-primary" role="status">
+                <span class="sr-only">Loading...</span>
+              </div>`
                 $.ajax({
                     url: '',
                     data: {
@@ -33,23 +36,24 @@ document.addEventListener('DOMContentLoaded', function () {
                     success: function (response) {
                         homepage_post_page++
                         posts = JSON.parse(response.homepage_hashtags)
-                        for (post of posts) {
-                            let output = ''
-                            $.ajax({
-                                url: $('#homepagePosts').attr('data-url'), // {% url 'get_user_by_id' %}
-                                data: {
-                                    'pk': post.fields.user,
-                                },
-                                method: 'get',
-                                dataType: 'json',
-                                async: false,
-                                success: function (response) {
-                                    let user = response.user
-                                    let output = ''
-                                    let postCategory = 'other'
-                                    let postConfig = ''
-                                    if (post.fields.user == $('#Userusername').attr('data-pk')) {
-                                        postConfig = ` <div class="dropdown">
+                        if (posts.length > 0) {
+                            for (post of posts) {
+                                let output = ''
+                                $.ajax({
+                                    url: $('#homepagePosts').attr('data-url'), // {% url 'get_user_by_id' %}
+                                    data: {
+                                        'pk': post.fields.user,
+                                    },
+                                    method: 'get',
+                                    dataType: 'json',
+                                    async: false,
+                                    success: function (response) {
+                                        let user = response.user
+                                        let output = ''
+                                        let postCategory = 'other'
+                                        let postConfig = ''
+                                        if (post.fields.user == $('#Userusername').attr('data-pk')) {
+                                            postConfig = ` <div class="dropdown">
                                         <button class="btn btn-link" type="button" id="gedf-drop1" data-toggle="dropdown"
                                             aria-haspopup="true" aria-expanded="false">
                                             <i class="fa fa-ellipsis-h"></i>
@@ -59,15 +63,15 @@ document.addEventListener('DOMContentLoaded', function () {
                                         <a class="dropdown-item" href="/comments/edit_post/${post.pk}">Edit</a>
                                         </div>
                                     </div>`
-                                    }
-                                    if (post.fields.category) {
-                                        postCategory = post.fields.category
-                                    }
-                                    let dateToString = d =>
-                                        `${d.getFullYear()}-${('00' + (d.getMonth() + 1)).slice(-2)}-${('00' + d.getDate()).slice(-2)}`
-                                    let postDate = new Date(Date.parse(post.fields.post_date))
-                                    let date = dateToString(postDate)
-                                    output = `
+                                        }
+                                        if (post.fields.category) {
+                                            postCategory = post.fields.category
+                                        }
+                                        let dateToString = d =>
+                                            `${d.getFullYear()}-${('00' + (d.getMonth() + 1)).slice(-2)}-${('00' + d.getDate()).slice(-2)}`
+                                        let postDate = new Date(Date.parse(post.fields.post_date))
+                                        let date = dateToString(postDate)
+                                        output = `
 
                                     <div class="card gedf-card">
                     <div class="card-header">
@@ -99,34 +103,34 @@ document.addEventListener('DOMContentLoaded', function () {
                             <h5 class="card-title postDescription">${post.fields.description.substring(0, 45)}</h5>
                         </p>
                                     `
-                                    // Image
-                                    if (post.fields.image) {
-                                        output += `<img src="/media/${post.fields.image}" alt="" style="width:80%; height: auto; margin-left: auto; margin-right: auto;">`
-                                    }
-                                    // Video
-                                    if (post.fields.post_file) {
-                                        output += `
+                                        // Image
+                                        if (post.fields.image) {
+                                            output += `<img src="/media/${post.fields.image}" alt="" style="width:80%; height: auto; margin-left: auto; margin-right: auto;">`
+                                        }
+                                        // Video
+                                        if (post.fields.post_file) {
+                                            output += `
                                         <video controls class="col-md-10 col-lg-8" preload="none">
                             <source src="/media/${post.fields.post_file}" type="video/mp4">
                             <source src="/media/${post.fields.post_file}" type="video/ogg">
                             Your browser does not support the video tag.
                         </video>
                                     `
-                                    }
-                                    // Description
-                                    if (post.fields.description.length > 45) {
-                                        let readMore = '';
-                                        if (post.fields.description.length > 227) {
-                                            readMore = `<a href="#" class="readMore">Read more</a>`;
-                                        };
-                                        output += `
+                                        }
+                                        // Description
+                                        if (post.fields.description.length > 45) {
+                                            let readMore = '';
+                                            if (post.fields.description.length > 227) {
+                                                readMore = `<a href="#" class="readMore">Read more</a>`;
+                                            };
+                                            output += `
                                         <p class="card-text postDescription" style="white-space: pre-line;">
                             ${post.fields.description.substring(0, 227)} ${readMore}
                         </p>
                                     `
-                                    };
+                                        };
 
-                                    output += `
+                                        output += `
                                     </div>
                     <div class="card-footer">
                         <form method="GET" class="likeForm d-inline"
@@ -156,25 +160,31 @@ document.addEventListener('DOMContentLoaded', function () {
                     </div>
                 </div>
                                 `
-                                    $('#homepagePosts').append(output)
+                                        $('#homepagePosts').append(output)
 
-                                    function showMore() {
-                                        $('.readMore').click(function (e) {
-                                            e.preventDefault();
-                                            $(this).parent().html(`<br> ${post.fields.description}`)
-                                        })
+                                        function showMore() {
+                                            $('.readMore').click(function (e) {
+                                                e.preventDefault();
+                                                $(this).parent().html(`<br> ${post.fields.description}`)
+                                            })
+                                        }
+                                        let g = document.createElement('script');
+                                        let s = document.getElementsByTagName('script')[0]
+                                        g.text = showMore();
+                                        s.parentNode.insertBefore(g, s)
                                     }
-                                    let g = document.createElement('script');
-                                    let s = document.getElementsByTagName('script')[0]
-                                    g.text = showMore();
-                                    s.parentNode.insertBefore(g, s)
-                                }
-                            })
+                                })
+                            }
+                        } else {
+                            document.querySelector('#loading').innerHTML = ''
                         }
                     }
                 })
                 // Follwed posts
             } else if ($(window).scrollTop() + $(window).height() == $(document).height() && $('.homepageView.active').html() == 'Followed') {
+                document.querySelector('#loading').innerHTML = `<div class="spinner-border text-primary" role="status">
+                <span class="sr-only">Loading...</span>
+              </div>`
                 $.ajax({
                     url: '',
                     data: {
@@ -186,23 +196,24 @@ document.addEventListener('DOMContentLoaded', function () {
                     success: function (response) {
                         followed_post_page++
                         posts = JSON.parse(response.followed_posts)
-                        for (post of posts) {
-                            let output = ''
-                            $.ajax({
-                                url: $('#homepagePosts').attr('data-url'),
-                                data: {
-                                    'pk': post.fields.user,
-                                },
-                                method: 'get',
-                                dataType: 'json',
-                                async: false,
-                                success: function (response) {
-                                    let user = response.user
-                                    let output = '';
-                                    let postCategory = 'other';
-                                    let postConfig = '';
-                                    if (post.fields.user == $('#Userusername').attr('data-pk')) {
-                                        postConfig = ` <div class="dropdown">
+                        if (posts.length > 0) {
+                            for (post of posts) {
+                                let output = ''
+                                $.ajax({
+                                    url: $('#homepagePosts').attr('data-url'),
+                                    data: {
+                                        'pk': post.fields.user,
+                                    },
+                                    method: 'get',
+                                    dataType: 'json',
+                                    async: false,
+                                    success: function (response) {
+                                        let user = response.user
+                                        let output = '';
+                                        let postCategory = 'other';
+                                        let postConfig = '';
+                                        if (post.fields.user == $('#Userusername').attr('data-pk')) {
+                                            postConfig = ` <div class="dropdown">
                                         <button class="btn btn-link" type="button" id="gedf-drop1" data-toggle="dropdown"
                                             aria-haspopup="true" aria-expanded="false">
                                             <i class="fa fa-ellipsis-h"></i>
@@ -212,15 +223,15 @@ document.addEventListener('DOMContentLoaded', function () {
                                         <a class="dropdown-item" href="/comments/edit_post/${post.pk}">Edit</a>
                                         </div>
                                     </div>`
-                                    }
-                                    let dateToString = d =>
-                                        `${d.getFullYear()}-${('00' + (d.getMonth() + 1)).slice(-2)}-${('00' + d.getDate()).slice(-2)}`
-                                    let postDate = new Date(Date.parse(post.fields.post_date))
-                                    let date = dateToString(postDate)
-                                    if (post.fields.category) {
-                                        postCateogry = post.fileds.category
-                                    }
-                                    output = `
+                                        }
+                                        let dateToString = d =>
+                                            `${d.getFullYear()}-${('00' + (d.getMonth() + 1)).slice(-2)}-${('00' + d.getDate()).slice(-2)}`
+                                        let postDate = new Date(Date.parse(post.fields.post_date))
+                                        let date = dateToString(postDate)
+                                        if (post.fields.category) {
+                                            postCateogry = post.fileds.category
+                                        }
+                                        output = `
                                     <div class="card gedf-card">
                     <div class="card-header">
                         <div class="d-flex justify-content-between align-items-center">
@@ -254,30 +265,30 @@ document.addEventListener('DOMContentLoaded', function () {
                             <h5 class="card-title postDescription">${post.fields.description.substring(0, 45)}</h5>
                         </p>
                                     `
-                                    if (post.fields.image) {
-                                        output += `<img src="${post.fields.image}" alt="" style="width:80%; height: auto; margin-left: auto; margin-right: auto;">`
-                                    }
-                                    if (post.fields.post_file) {
-                                        output += `
+                                        if (post.fields.image) {
+                                            output += `<img src="${post.fields.image}" alt="" style="width:80%; height: auto; margin-left: auto; margin-right: auto;">`
+                                        }
+                                        if (post.fields.post_file) {
+                                            output += `
                                         <video width="100%" controls class="col-md-10 col-lg-8" preload="none">
                 <source src="${ post.fields.post_file }" type="video/mp4">
                 <source src="/media/${ post.fields.post_file }" type="video/ogg">
                 Your browser does not support the video tag.
             </video>
                                     `
-                                    }
-                                    if (post.fields.description.length > 45) {
-                                        let readMore = ''
-                                        if (post.fields.description.length > 227) {
-                                            readMore = `<a href="#" class="readMore">Read more</a>`
                                         }
-                                        output += `
+                                        if (post.fields.description.length > 45) {
+                                            let readMore = ''
+                                            if (post.fields.description.length > 227) {
+                                                readMore = `<a href="#" class="readMore">Read more</a>`
+                                            }
+                                            output += `
                                         <p class="card-text postDescription" style="white-space: pre-line;">
                             ${post.fields.description.substring(0, 227)} ${readMore}
                         </p>
                                     `
-                                    }
-                                    output += `
+                                        }
+                                        output += `
                                     </div>
                     <div class="card-footer">
                         <form method="GET" class="likeForm d-inline"
@@ -307,20 +318,23 @@ document.addEventListener('DOMContentLoaded', function () {
                     </div>
                 </div>
                                 `
-                                    $('#followedPostsContainer').append(output)
+                                        $('#followedPostsContainer').append(output)
 
-                                    function showMore() {
-                                        $('.readMore').click(function (e) {
-                                            e.preventDefault();
-                                            $(this).parent().html(`<br> ${post.fields.description}`)
-                                        })
+                                        function showMore() {
+                                            $('.readMore').click(function (e) {
+                                                e.preventDefault();
+                                                $(this).parent().html(`<br> ${post.fields.description}`)
+                                            })
+                                        }
+                                        let g = document.createElement('script');
+                                        let s = document.getElementsByTagName('script')[0]
+                                        g.text = showMore();
+                                        s.parentNode.insertBefore(g, s)
                                     }
-                                    let g = document.createElement('script');
-                                    let s = document.getElementsByTagName('script')[0]
-                                    g.text = showMore();
-                                    s.parentNode.insertBefore(g, s)
-                                }
-                            })
+                                })
+                            }
+                        } else {
+                            document.querySelector('#loading').innerHTML = ''
                         }
                     }
                 })

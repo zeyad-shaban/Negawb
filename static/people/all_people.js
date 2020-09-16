@@ -30,6 +30,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
         function bottomScroll(event) {
             if ($(window).scrollTop() + $(window).height() == $(document).height()) {
+                document.querySelector('#loading').innerHTML = `<div class="spinner-border text-primary" role="status">
+                <span class="sr-only">Loading...</span>
+              </div>`
                 $.ajax({
                     url: window.location.pathname,
                     data: {
@@ -41,39 +44,42 @@ document.addEventListener('DOMContentLoaded', function () {
                     success: function (response) {
                         i++
                         users = JSON.parse(response.users)
-                        for (user of users) {
-                            let userAvatar
-                            let userPhoneNum = ''
-                            let userEmail = ''
-                            if (user.fields.show_email) {
-                                userEmail = `
+                        if (users.length <= 0) {
+                            document.querySelector('#loading').innerHTML = ''
+                        } else {
+                            for (user of users) {
+                                let userAvatar
+                                let userPhoneNum = ''
+                                let userEmail = ''
+                                if (user.fields.show_email) {
+                                    userEmail = `
                                 <span class="fa fa-fw fa-envelope fa-fw"></span>
                                 <span class="small text-truncate">${user.fields.email}</span>
                                 <br style="margin-bottom: 10px">
                                 `
-                            }
-                            if (user.fields.who_see_avatar == 'everyone') {
-                                userAvatar =
-                                    `<img src="/media/${user.fields.avatar}" alt="X"
+                                }
+                                if (user.fields.who_see_avatar == 'everyone') {
+                                    userAvatar =
+                                        `<img src="/media/${user.fields.avatar}" alt="X"
                             class="img-fluid rounded-circle d-block mx-auto" height="73" width="73">`
-                            } else if (user.fields.who_see_avatar == 'friends' && $('#Userusername').attr('data-username') in user
-                                .fields.friends) {
-                                userAvatar =
-                                    `<img src="/media/${user.fields.avatar}" alt="X"
+                                } else if (user.fields.who_see_avatar == 'friends' && $('#Userusername').attr('data-username') in user
+                                    .fields.friends) {
+                                    userAvatar =
+                                        `<img src="/media/${user.fields.avatar}" alt="X"
                             class="img-fluid rounded-circle d-block mx-auto" height="73" width="73">`
-                            } else {
-                                userAvatar =
-                                    `<img src="/media/profile_images/DefaultUserImage.jpg" alt="X"
+                                } else {
+                                    userAvatar =
+                                        `<img src="/media/profile_images/DefaultUserImage.jpg" alt="X"
                                 class="img-fluid rounded-circle d-block mx-auto" height="73" width="73">`
-                            }
-                            if (user.fields.phone) {
-                                userPhoneNum = `<span class="fa fa-fw fa-phone fa-fw text-muted" data-toggle="tooltip" title="Phone Number"
+                                }
+                                if (user.fields.phone) {
+                                    userPhoneNum = `<span class="fa fa-fw fa-phone fa-fw text-muted" data-toggle="tooltip" title="Phone Number"
                         data-original-title="${ user.fields.phone }"></span>
                     <span class="text-muted small">${ user.fields.phone }</span>
                 <br style="margin-bottom: 10px">
                 `
-                            }
-                            output = `
+                                }
+                                output = `
                     <li class="">
                     <div class="row w-100">
                     <div class="userInfo">
@@ -98,46 +104,47 @@ document.addEventListener('DOMContentLoaded', function () {
                     </div>
                     </li>
                         `
-                            $('#contact-list').append(output)
-                        }
-                        var g = document.createElement('script')
+                                $('#contact-list').append(output)
+                            }
+                            var g = document.createElement('script')
 
-                        function addFriend() {
-                            $('.addFriend').click(function (e) {
-                                e.preventDefault();
-                                let thisElement = $(this)
-                                $.ajax({
-                                    url: thisElement.attr('href'),
-                                    data: {},
-                                    dataType: 'json',
-                                    success: function (response) {
-                                        thisElement.fadeOut()
-                                        $('#message_area').html('')
-                                        if (response.message.tags === 'error') {
-                                            $('#message_area').append(`
+                            function addFriend() {
+                                $('.addFriend').click(function (e) {
+                                    e.preventDefault();
+                                    let thisElement = $(this)
+                                    $.ajax({
+                                        url: thisElement.attr('href'),
+                                        data: {},
+                                        dataType: 'json',
+                                        success: function (response) {
+                                            thisElement.fadeOut()
+                                            $('#message_area').html('')
+                                            if (response.message.tags === 'error') {
+                                                $('#message_area').append(`
                                                 <div class="alert alert-danger fixed-top">${response.message.text}</div>
                                                 `)
-                                        } else {
-                                            $('#message_area').append(`
+                                            } else {
+                                                $('#message_area').append(`
                             <div class="alert alert-${response.message.tags} fixed-top">${response.message.text}</div>
                                                     `)
+                                            }
+                                            thisElement.fadeOut()
                                         }
-                                        thisElement.fadeOut()
-                                    }
+                                    })
                                 })
-                            })
+                            }
+                            let s = document.getElementsByName('script')[0]
+                            g.text = addFriend();
+                            s.parentNode.insertBefore(g, s)
                         }
-                        var s = document.getElementsByName('script')[0]
-                        g.text = addFriend();
-                        s.parentNode.insertBefore(g, s)
                     }
                 })
             }
         }
         bottomScroll()
-        $(window).scroll(function () {
+        window.onscroll = function () {
             bottomScroll()
-        });
+        };
 
     });
 });
