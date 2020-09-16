@@ -59,6 +59,11 @@ friends.{% endblock description %}
         background-color: #0fbcf9;
         color: white;
     }
+
+    #loading {
+        margin: 30px 45%;
+        font-size: 200%;
+    }
 </style>
 
 <form action="{% url 'people:search_people' %}" method="get" id="search">
@@ -111,5 +116,6 @@ friends.{% endblock description %}
     {% endif %}
     {% endfor %}
 </ul>
+<div id="loading"></div>
 <script src="{% static 'people/all_people.js' %}"></script>
 {% endblock content %}
