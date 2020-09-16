@@ -38,6 +38,8 @@ sitemaps = {
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', category_views.home, name='home'),
+    path('followed_posts/', category_views.followed_posts, name='followed_posts'),
+    path('followed/', category_views.followed, name='followed'),
     # PWA
     path('', include('pwa.urls')),
     # Sitemap

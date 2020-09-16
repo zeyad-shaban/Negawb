@@ -11,6 +11,7 @@ urlpatterns = [
     path('<int:pk>/', views.people, name='people'),
     path('add_friend/<int:pk>/', views.add_friend, name='add_friend'),
     path('follow/<int:pk>/', views.follow, name='follow'),
+    path('unfollow/<int:pk>/', views.unfollow, name='unfollow'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

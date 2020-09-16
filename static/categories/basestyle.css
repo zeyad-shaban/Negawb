@@ -16,10 +16,6 @@ body {
     text-decoration: none !important;
 }
 
-nav li a:hover {
-    background-color: rgb(40, 30, 7);
-}
-
 #id_nav_avatar {
     height: auto;
     width: auto;

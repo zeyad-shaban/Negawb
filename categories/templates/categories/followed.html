@@ -1,0 +1,88 @@
+{% extends 'categories/base.html' %}
+{% load static %}
+
+{% block title %}People you follow | Dfreemedia{% endblock title %}
+
+{% block description %}Control people you follow on Dfreemedia{% endblock description %}
+
+
+{% block content %}
+<button class="btn" id="toggleSidebar"><i class="fas fa-bars"></i></button>
+<nav class="sidebar">
+    <a href="{% url 'home' %}"><i class="fas fa-home"></i> <br> Home</a>
+    <a href="{% url 'followed_posts' %}"><i class="fas fa-paste"></i> <br> Posts</a>
+    <a href="#" onclick="return false" style="color: #3498db"><i class="far fa-user-circle"></i> <br> Followed</a>
+</nav>
+
+<ul id="followed">
+
+    {% if all_followed.count <= 0 %}
+    <h1 style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">You are not <br> following
+        anyone</h1>
+    {% endif %}
+    {% for followed in all_followed %}
+    <li>
+        <div class="row w-100">
+            <div class="userInfo">
+                <a href="{% url 'people:people' followed.id %}">
+                    {% if followed.who_see_avatar == 'everyone' %}
+                    <img src="{{ followed.avatar.url }}" alt="{{ followed.username }}"
+                        class="img-fluid rounded-circle d-block mx-auto" height="73" width="73">
+                    {% elif followed.who_see_avatar == 'friends' and user in followed.friends.all %}
+                    <img src="{{ followed.avatar.url }}" alt="{{ followed.username }}"
+                        class="img-fluid rounded-circle d-block mx-auto" height="73" width="73">
+                    {% else %}
+                    <img src="/media/profile_images/DefaultUserImage.jpg" alt="{{ followed.username }}"
+                        class="img-fluid rounded-circle d-block mx-auto" height="73" width="73">
+                    {% endif %}
+                </a>
+            </div>
+            <div class="userDesc">
+                <a href="{% url 'people:people' followed.id %}" class="btn" style="font-size: 150%; font-weight: 300;">
+                    <span style="margin-bottom: 10px; display: inline-block">{{ followed.username }}</span>
+                </a>
+                <br>
+                {% if followed.phone %}
+                <span class="fa fa-fw fa-phone fa-fw"></span>
+                <span class="small">{{ followed.phone }}</span>
+                <br style="margin-bottom: 10px">
+                {% endif %}
+                {% if followed.email and followed.show_email %}
+                <span class="fa fa-fw fa-envelope fa-fw"></span>
+                <span class="small text-truncate">{{ followed.email }}</span>
+                <br style="margin-bottom: 10px">
+                {% endif %}
+                <p class="text-break">{{ followed.bio }}</p>
+                {% if not followed == user or not followed in user.friends.all %}
+                <a href="{% url 'people:unfollow' followed.id %}" class="btn unfollow"><i class="fas fa-user-minus"></i>
+                    Unfollow</a>
+                {% endif %}
+            </div>
+
+        </div>
+    </li>
+    {% endfor %}
+</ul>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function (e) {
+        window.addEventListener('load', function (e) {
+            $('#toggleSidebar').click(function (e) {
+                $('.sidebar').slideToggle();
+            })
+            $('.unfollow').click(function (e) {
+                e.preventDefault();
+                let thisElement = $(this)
+                $.ajax({
+                    url: thisElement.attr('href'),
+                    method: 'get',
+                    dataType: 'json',
+                    success: function (response) {}
+                })
+                thisElement.parent().parent().fadeOut()
+            })
+        })
+    })
+</script>
+<link rel="stylesheet" href="{% static 'categories/followed.css' %}">
+{% endblock content %}

@@ -23,7 +23,7 @@ def home(request):
         followed_posts_list = Post.objects.filter(
             user__in=followed).order_by('-post_date')
     else:
-        followed= []
+        followed = []
         followed_posts_list = []
     # followed paginator
     followed_page = request.GET.get('followed_page')
@@ -57,4 +57,15 @@ def home(request):
     if page:
         return JsonResponse({'homepage_hashtags': serialize('json', homepage_hashtags)})
     return render(request, 'categories/index.html', {'followed_posts': followed_posts, 'homepage_hashtags': homepage_hashtags, 'followed': followed})
-    
+
+
+def followed_posts(request):
+    followed = User.objects.filter(Q(followers=request.user))
+    posts = Post.objects.filter(
+        user__in=followed).order_by('-post_date')
+    return render(request, 'categories/followed_posts.html', {'posts': posts})
+
+def followed(request):
+    all_followed = User.objects.filter(Q(followers=request.user))
+    return render(request, 'categories/followed.html', {'all_followed': all_followed})
+

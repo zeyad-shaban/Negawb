@@ -141,3 +141,11 @@ def follow(request, pk):
         }
         action = 'follow'
     return JsonResponse({'message': message, 'action': action})
+
+
+def unfollow(request, pk):
+    user = get_object_or_404(User, pk=pk)
+    print(user)
+    if request.user in user.followers.all():
+        user.followers.remove(request.user)
+    return redirect('follow')

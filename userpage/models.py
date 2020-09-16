@@ -43,7 +43,6 @@ class User(AbstractUser):
     hide_recommended_posts = models.BooleanField(default=False, blank=True, null=True)
     chat_only_mode = models.BooleanField(default=False)
     hide_followed_posts = models.BooleanField(default=False)
-    fixed_navbar = models.BooleanField(default=True)
     homepage_hashtags = models.TextField(null=True, blank=True)
     # * notifications
     allow_important_friend_messages = models.BooleanField(default=True)

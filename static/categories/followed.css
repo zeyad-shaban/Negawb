@@ -1,0 +1,99 @@
+/* ------------------------------- */
+/* Navigation */
+/* ------------------------------- */
+
+#toggleSidebar {
+    position: fixed;
+    z-index: 1000;
+    font-size: 150%;
+    font-weight: 300;
+    margin-left: 20px;
+}
+
+.sidebar {
+    position: fixed;
+    margin-right: 30px;
+    top: 17vh;
+    left: 0;
+    width: 100px;
+    border: 1px solid #eee;
+    z-index: 1000;
+    display: none;
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.sidebar a {
+    display: inline-block;
+    width: 100%;
+    text-decoration: none;
+    color: black;
+    margin-bottom: 30px;
+    font-size: 90%;
+    font-weight: 300;
+    text-align: center;
+    transition: background-color 0.2s;
+    color: white
+}
+
+.sidebar a:hover,
+.sidebar a:active {
+    background-color: #eee;
+    text-decoration: none;
+    color: black;
+}
+
+/* ----------------- */
+/* Followed */
+/* ----------------- */
+#followed {
+    list-style: none;
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;
+}
+
+#followed li {
+    position: relative;
+    margin: 30px 30px 50px 30px;
+}
+
+@media screen and (max-width: 752px) {
+    #followed {
+        margin-left: 10%;
+    }
+}
+
+@media screen and (max-width: 492px) {
+    #followed {
+        margin-right: 0;
+    }
+}
+
+.unfollow {
+    display: inline-block;
+    padding: 10px 30px;
+    border: 1px solid #EA2027 !important;
+    color: black;
+    font-size: 90% !important;
+    border-radius: 200px !important;
+    margin-top: 10px;
+    transition: background-color 0.2s, padding 0.2s !important;
+}
+
+.unfollow:hover,
+.unfollow:active {
+    background-color: #d4141b !important;
+    color: white !important;
+    padding: 12px 20px;
+}
+
+
+.userDesc {
+    display: block;
+    margin-left: 20px
+}
+
+.userDesc span {
+    letter-spacing: 1px;
+    word-spacing: 4px
+}

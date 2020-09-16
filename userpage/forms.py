@@ -26,8 +26,8 @@ class UserPrivacyForm(ModelForm):
 class DistractionFreeForm(ModelForm):
     class Meta:
         model = User
-        fields = ('hide_comments', 'hide_recommended_posts','hide_followed_posts', 'homepage_hashtags', 'allow_important_friend_messages', 'allow_important_group_message', 'allow_normal_friend_message', 'allow_normal_group_message',
-                'allow_comment_message', 'allow_reply_message', 'allow_invites', 'your_invites', 'chat_only_mode', 'fixed_navbar',)
+        fields = ('hide_comments', 'hide_recommended_posts', 'hide_followed_posts', 'homepage_hashtags', 'allow_important_friend_messages', 'allow_important_group_message', 'allow_normal_friend_message', 'allow_normal_group_message',
+                  'allow_comment_message', 'allow_reply_message', 'allow_invites', 'your_invites', 'chat_only_mode',)
         labels = {
             'allow_important_friend_messages': 'Friend\'s important message',
             'allow_important_group_message': 'Group important message',
@@ -37,7 +37,7 @@ class DistractionFreeForm(ModelForm):
             'allow_comment_message': '<hr>Comments',
             'allow_reply_message': 'Replies',
             'allow_invites': '<hr>friend and group Invites',
-            'your_invites':'Your own invites',
+            'your_invites': 'Your own invites',
             'homepage_hashtags': 'Homepage posts <small class="form-text text-muted">Use # before each word, leave blank to disable filtering</small>',
             'chat_only_mode': '<b style="color:orange;">Chat only mode</b>',
         }
