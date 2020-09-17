@@ -46,9 +46,23 @@ def followed_posts(request):
         followed = User.objects.filter(Q(followers=request.user))
     else:
         followed = []
-    posts = Post.objects.filter(
+    posts_list = Post.objects.filter(
         user__in=followed).order_by('-post_date')
-    return render(request, 'categories/followed_posts.html', {'posts': posts})
+    paginator = Paginator(posts_list, 5)
+    page = request.GET.get('page')
+    try:
+        posts = paginator.page(page)
+
+    except PageNotAnInteger:
+        posts = paginator.page(1)
+
+    except EmptyPage:
+        posts = []
+
+    if page:
+        return JsonResponse({'posts': serialize('json', posts)})
+    else:
+        return render(request, 'categories/followed_posts.html', {'posts': posts})
 
 
 def followed(request):

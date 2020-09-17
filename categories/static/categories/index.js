@@ -1,8 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
     window.addEventListener('load', function () {
         let page = 2
-
-
         function bottomScroll() {
             // homepage posts
             if ($(window).scrollTop() + $(window).height() == $(document).height()) {

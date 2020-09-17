@@ -216,7 +216,6 @@ document.addEventListener('DOMContentLoaded', function () {
                                 index = $(this).attr('data-index')
                                 let thisPost = posts[parseInt(index)]
                                 let description = thisPost.fields.description
-                                console.log(description)
                                 $(this).parent().html(`<br> ${description}`)
                             })
                         }

@@ -78,6 +78,14 @@
     .card.gedf-card {
         margin: 20px 30px 40px 30px;
     }
+
+    /* --------------------- */
+    /* Loading */
+    /* --------------------- */
+    #loading {
+        margin: 30px 45%;
+        font-size: 200%;
+    }
 </style>
 
 <button class="btn" id="toggleSidebar"><i class="fas fa-bars"></i></button>
@@ -86,8 +94,9 @@
     <a href="#" onclick="return false" style="color: #3498db"><i class="fas fa-paste"></i> <br> Posts</a>
     <a href="{% url 'followed' %}"><i class="far fa-user-circle"></i> <br> Followed</a>
 </nav>
-
+{% if posts.count <= 0 or not posts %}
 <h1 style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">No posts found</h1>
+{% endif %}
 
 <div id="posts" data-url="{% url 'userpage:get_user_by_id' %}">
     {% for post in posts %}
@@ -187,6 +196,7 @@
     <!-- Post /////-->
     {% endfor %}
 </div>
+<div id="loading"></div>
 
 <script src="{% static 'categories/followed_posts.js' %}"></script>
 {% endblock content %}
