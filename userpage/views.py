@@ -66,7 +66,20 @@ def posts(request):
 
 
 def friends(request):
-    return render(request, 'userpage/friends.html')
+    # friends_list = User.objects.filter(friends=request.user)
+    friends_list = User.objects.filter(friends=request.user)
+    paginator = Paginator(friends_list, 5)
+    page = request.GET.get('page')
+    try:
+        friends = paginator.page(page)
+    except PageNotAnInteger:
+        friends = paginator.page(1)
+    except EmptyPage:
+        friends = []
+    if request.GET.get('page'):
+        return JsonResponse({'friends': serialize('json', friends)})
+    else:
+        return render(request, 'userpage/friends.html', {'friends': friends})
 
 
 @login_required

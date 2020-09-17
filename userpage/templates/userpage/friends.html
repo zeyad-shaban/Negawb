@@ -1,5 +1,5 @@
 {% extends 'userpage/userbase.html' %}
-
+{% load static %}
 {% block option %}
 
 <style>
@@ -24,7 +24,7 @@
     }
 </style>
 <ul id="contact-list">
-    {% for friend in user.friends.all %}
+    {% for friend in friends %}
     <li>
         <div class="row w-100">
             <div class="userInfo">
@@ -65,29 +65,6 @@
     </li>
     {% endfor %}
 </ul>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        window.addEventListener('load', function () {
-            $('.unfriend').click(function (e) {
-                e.preventDefault();
-                let thisElement = $(this)
-                confirmation = confirm('Unfriend?')
-                if (confirmation) {
-                    thisElement.parent().parent().fadeOut()
-                    $('#message_area').html(
-                        `<div class="alert alert-success"> You successfully unfriended him`
-                    )
-                    $.ajax({
-                        url: thisElement.attr('href'),
-                        data: {},
-                        method: 'get',
-                        dataType: 'json',
-                        success: function (response) {}
-                    })
-                }
-            })
-        });
-    });
-</script>
-
+<div id="loading"></div>
+<script src="{% static 'userpage/friends.js' %}"></script>
 {% endblock option %}
