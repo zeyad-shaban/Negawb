@@ -8,8 +8,8 @@
 <img src="{% if user.is_authenticated %}{{user.avatar.url}}{% else %}/media/profile_images/DefaultUserImage.jpg{% endif %}"
     class="col-xl-2 col-lg-2 rounded-circle" alt="" width="200" height="200" style="max-width:200px; max-height:200px;">
 <link rel="stylesheet" href="{% static 'userpage/index.css' %}">
-<button type="button" class="btn btn-outline-secondary float-right mr-5 mt-4" data-toggle="modal"
-    data-target="#editProfile" data-whatever="editProfile"><i class="fas fa-edit"></i></button>
+<button type="button" class="btn btn-outline-warning float-right mr-5 mt-4" style="color: black;" data-toggle="modal"
+    data-target="#editProfile" data-whatever="editProfile"><i class="fas fa-edit"></i> Edit profile</button>
 <span class="ml-5">
     {% if not user.is_authenticated %}
     <span class="alert-danger">Please don't try to save any form since you are not logged in</span>
@@ -23,11 +23,6 @@
     <li class="list-group-item userMenuItem btn">My Invites {{ total_user_invites_count }}</li>
 </ul>
 <div id="mainContainer">
-    <button type="button" class="btn btn-warning m-3 btn-lg rounded" data-toggle="modal" data-target="#privacy"
-        data-whatever="privacy"><i class="fas fa-unlock"></i>Privacy</button>
-    <button type="button" class="btn btn-success btn-lg rounded" data-toggle="modal" data-target="#distractionFree"
-        data-whatever="distractionFree">Distraction Free</button>
-    <hr>
     <!-- user posts -->
 
     {% if user.post_set.count <= 0 %}
@@ -192,159 +187,129 @@
     aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog modal-dialog-scrollable modal-lg">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Edit {{user.username}} Profile</h5>
+            <div class="modal-header" style="background-color: rgba(3, 123, 208, 0.7)">
+                <nav id="editNavbar">
+                    <ul>
+                        <li>Personal</li>
+                        <li>Distraction Free</li>
+                        <li>Privacy</li>
+                        <li>Advance</li>
+                    </ul>
+                </nav>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <form action="" method="POST" enctype="multipart/form-data">
+                <!-- Personal form -->
+                <form action="{% url 'userpage:home' %}" method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
-                    <div class="form-group">
-                        <label for="id_username">Username</label>
-                        <input type="text" class="form-control" name="username" id="id_username" maxlength=30
-                            value="{{ user.username }}">
-                    </div>
-                    <div class="form-group">
-                        <label for="id_first_name">First Name</label>
-                        <input type="text" class="form-control" name="first_name" id="id_first_name" maxlength=30
-                            value="{{ user.first_name }}">
-                    </div>
-                    <div class="form-group">
-                        <label for="id_last_name">Last Name</label>
-                        <input type="text" class="form-control" name="last_name" id="id_last_name" maxlength=30
-                            value="{{ user.last_name }}">
-                    </div>
-                    <div class="form-group">
-                    </div>
-                    <div class="form-group">
-                        <label for="id_bio">Bio</label>
-                        <input type="text" class="form-control" name="bio" id="id_bio" value="{{ user.bio }}">
-                    </div>
-                    <div class="form-group">
-                        <p><label for="id_avatar">Avatar:</label>
-                            <input type="file" name="avatar" accept="image/*" id="id_avatar"></p>
-                    </div>
-                    <label for="id_email">Email: {{ user.email }}</label>
-                    <a href="{% url 'set_email_and_phone' %}">
-                        <span<i class="far fa-edit"></i>Change</span>
-                    </a>
-                    <br>
-                    <label for="id_email">Phone number: {{ user.phone }}</label>
-                    <a href="{% url 'set_email_and_phone' %}">
-                        <span<i class="far fa-edit"></i>Change</span>
-                    </a>
-                    <br>
-                    <a href="{% url 'password_reset' %}">Reset Password</a>
-                    <br>
-                    <br>
-                    <input type="submit" value="Update" class="btn btn-success" name="submit">
-                    <br>
-                    <hr>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
-
-
-<div class="modal fade " id="privacy" tabindex="-1" role="dialog" data-backdrop="static" aria-labelledby="privacyLabel"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Privacy</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form action="" method="POST" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    {{privacy_form|crispy}}
-                    <input type="submit" value="Update Privacy" class="btn btn-success" name="submit">
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
-<div class="modal fade " id="distractionFree" tabindex="-1" role="dialog" aria-labelledby="distractionFreeLabel"
-    aria-hidden="true" data-backdrop="static">
-    <div class="modal-dialog modal-dialog-scrollable modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Distration Free</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form action="" name="distractionFree" method="post">
-                    {% csrf_token %}
-
-                    <div class="btn-group dropright">
-                        <button type="button" class="btn btn dropdown-toggle" data-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false">
-                            Notifications
-                        </button>
-                        <div class="dropdown-menu" id="notificationFields"
-                            style="width: 250px; max-height:200px; overflow:scroll; ">
+                    <div id="personalForm" class="editForm">
+                        <div class="form-group">
+                            <label for="id_username">Username</label>
+                            <input type="text" class="form-control" name="username" id="id_username" maxlength=30
+                                value="{{ user.username }}">
                         </div>
+                        <div class="form-group">
+                            <label for="id_first_name">First Name</label>
+                            <input type="text" class="form-control" name="first_name" id="id_first_name" maxlength=30
+                                value="{{ user.first_name }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="id_last_name">Last Name</label>
+                            <input type="text" class="form-control" name="last_name" id="id_last_name" maxlength=30
+                                value="{{ user.last_name }}">
+                        </div>
+                        <div class="form-group">
+                        </div>
+                        <div class="form-group">
+                            <label for="id_bio">Bio</label>
+                            <input type="text" class="form-control" name="bio" id="id_bio" value="{{ user.bio }}">
+                        </div>
+                        <div class="form-group">
+                            <p><label for="id_avatar">Avatar:</label>
+                                <input type="file" name="avatar" accept="image/*" id="id_avatar"></p>
+                        </div>
+                        <label for="id_email">Email: {{ user.email }}</label>
+                        <a href="{% url 'set_email_and_phone' %}">
+                            <span<i class="far fa-edit"></i>Change</span>
+                        </a>
+                        <br>
+                        <label for="id_email">Phone number: {{ user.phone }}</label>
+                        <a href="{% url 'set_email_and_phone' %}">
+                            <span<i class="far fa-edit"></i>Change</span>
+                        </a>
+                        <br>
+                        <a href="{% url 'password_reset' %}">Reset Password</a>
                     </div>
-                    <br>
-                    <br>
-                    {% for field in distraction_free_form %}
-                    {% if field.html_name == 'hide_followed_posts' %}
-                    {{field.label|safe}}
-                    {{field}}
-                    <hr>
-                    <br>
-                    {% elif field.html_name == 'allow_important_friend_messages' or field.html_name == 'allow_important_group_message' or field.html_name == 'allow_normal_friend_message' or field.html_name == 'allow_normal_group_message' or field.html_name == 'allow_comment_message' or field.html_name == 'allow_reply_message' or field.html_name == 'allow_invites' or field.html_name == 'your_invites' %}
-                    <script>
-                        document.addEventListener('DOMContentLoaded', function () {
-                            window.addEventListener('load', function () {
-                                $('#notificationFields').append(`
+
+                    <!-- Distraction Free form -->
+                    <div id="distractionFreeForm" class="editForm">
+                        <div class="btn-group dropright">
+                            <button type="button" class="btn btn dropdown-toggle" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
+                                Notifications
+                            </button>
+                            <div class="dropdown-menu" id="notificationFields"
+                                style="width: 250px; max-height:200px; overflow:scroll; ">
+                            </div>
+                        </div>
+                        <br>
+                        <br>
+                        {% for field in distraction_free_form %}
+                        {% if field.html_name == 'hide_followed_posts' %}
+                        {{field.label|safe}}
+                        {{field}}
+                        <hr>
+                        <br>
+                        {% elif field.html_name == 'allow_important_friend_messages' or field.html_name == 'allow_important_group_message' or field.html_name == 'allow_normal_friend_message' or field.html_name == 'allow_normal_group_message' or field.html_name == 'allow_comment_message' or field.html_name == 'allow_reply_message' or field.html_name == 'allow_invites' or field.html_name == 'your_invites' %}
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function () {
+                                window.addEventListener('load', function () {
+                                    $('#notificationFields').append(`
                             {{field.label|safe}}
                             {{field}}
                             <br>
                             `)
+                                })
                             })
-                        })
-                    </script>
-                    {% else %}
-                    {{field.label|safe}}
-                    {{field}}
-                    <br>
-                    <br>
-                    {% endif %}
-                    {% endfor %}
-                    <input type="submit" name="submit" value="Dfree" class="btn btn-success" id="submitDFree"
-                        style="display: none;">
+                        </script>
+                        {% else %}
+                        {{field.label|safe}}
+                        {{field}}
+                        <br>
+                        <br>
+                        {% endif %}
+                        {% endfor %}
+                        <input type="submit" name="submit" value="Dfree" class="btn btn-success" id="submitDFree"
+                            style="display: none;">
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function () {
+                                window.addEventListener('load', function () {
+                                    $('#notificationFields').click(function (event) {
+                                        event.stopPropagation();
+                                    })
+                                })
+                            })
+                        </script>
+                    </div>
+
+                    <!-- Privacy Form -->
+                    <div id="privacyForm" class="editForm">
+                        {{privacy_form|crispy}}
+                    </div>
+                    <button type="submit" id="saveChanges" style="display: none;"></button>
                 </form>
-                <script>
-                    document.addEventListener('DOMContentLoaded', function () {
-                        window.addEventListener('load', function () {
-                            $('#notificationFields').click(function (event) {
-                                event.stopPropagation();
-                            })
-                        })
-                    })
-                </script>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-success" onclick="$('#submitDFree').click()">Save Changes</button>
+                <button type="button" class="btn btn-success"
+                    onclick="document.querySelector('#saveChanges').click()">Save changes</button>
             </div>
         </div>
     </div>
 </div>
+
 <script src="{% static 'userpage/index.js' %}"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -694,5 +659,5 @@
         });
     });
 </script>
-
+<link rel="stylesheet" href="{% static 'userpage/index.css' %}">
 {% endblock content %}

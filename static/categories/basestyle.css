@@ -2,6 +2,10 @@ body {
     background-color: white
 }
 
+.btn{
+    border-radius: 200px;
+}
+
 .container {
     font-size: 1.25em;
 }

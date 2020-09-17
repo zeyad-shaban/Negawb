@@ -1,0 +1,22 @@
+#editNavbar {
+    margin-right: auto;
+    margin-left: auto;
+    color: white;
+}
+
+#editNavbar ul {
+    list-style: none;
+}
+
+#editNavbar ul li {
+    display: inline-block;
+    letter-spacing: 1px;
+    margin-right: 30px;
+    cursor: pointer;
+    border-bottom: 0px white transparent;
+    transition: border-bottom 0.2s;
+}
+
+#editNavbar ul li:hover {
+    border-bottom: 1px solid #fff;
+}

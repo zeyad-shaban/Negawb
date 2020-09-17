@@ -15,36 +15,39 @@ User = user_model()
 
 
 def home(request):
-    user = request.user
     # Forms
-    form = UserForm()
-    privacy_form = UserPrivacyForm()
-    distraction_free_form = DistractionFreeForm()
     if request.user.is_authenticated:
+        # Forms
         form = UserForm(instance=request.user)
         privacy_form = UserPrivacyForm(instance=request.user)
         distraction_free_form = DistractionFreeForm(instance=request.user)
-    # Requests
-    requests = []
-    group_requests = []
-    total_requests_count = []
-    if request.user.is_authenticated:
+        # Requests
         requests = FriendRequest.objects.filter(to_user=request.user)
         group_requests = GroupRequest.objects.filter(reciever=request.user)
         total_requests_count = len(requests) + len(group_requests)
-    # Invites
-    user_invites = []
-    user_group_invites = []
-    total_user_invites_count = []
-    if request.user.is_authenticated:
+        # INvites
         user_invites = FriendRequest.objects.filter(
             from_user=request.user).order_by('-date')
         user_group_invites = GroupRequest.objects.filter(
             request_sender=request.user).order_by('-date')
         total_user_invites_count = len(user_invites) + len(user_group_invites)
-    user_posts_list = []
-    if request.user.is_authenticated:
         user_posts_list = request.user.post_set.all()
+    else:
+        # Forms
+        form = UserForm()
+        privacy_form = UserPrivacyForm()
+        distraction_free_form = DistractionFreeForm()
+        # Requests
+        requests = []
+        group_requests = []
+        total_requests_count = []
+        # Invites
+        user_invites = []
+        user_group_invites = []
+        total_user_invites_count = []
+        # posts
+        user_posts_list = []
+
     page = request.GET.get('page')
     paginator = Paginator(user_posts_list, 5)
     try:
@@ -54,24 +57,22 @@ def home(request):
     except EmptyPage:
         user_posts = paginator.page(paginator.num_pages)
     if request.method == 'GET':
-        return render(request, 'userpage/index.html', {'user': user, 'form': form, 'privacy_form': privacy_form, 'distraction_free_form': distraction_free_form, 'requests': requests, 'group_requests': group_requests, 'total_requests': total_requests_count, 'user_posts': user_posts, 'user_invites': user_invites, 'user_group_invites': user_group_invites, 'total_user_invites_count': total_user_invites_count})
-    elif request.POST.get('submit') == 'Update':
-        form = UserForm(data=request.POST,
-                        files=request.FILES, instance=request.user)
-        form.save()
-        messages.success(request, 'Updated successfully')
-        return redirect('userpage:home')
-    elif request.POST.get('submit') == 'Update Privacy':
-        form = UserPrivacyForm(
+        return render(request, 'userpage/index.html', {'form': form, 'privacy_form': privacy_form, 'distraction_free_form': distraction_free_form, 'requests': requests, 'group_requests': group_requests, 'total_requests': total_requests_count, 'user_posts': user_posts, 'user_invites': user_invites, 'user_group_invites': user_group_invites, 'total_user_invites_count': total_user_invites_count})
+    else:
+        personal_form = UserForm(
             data=request.POST, files=request.FILES, instance=request.user)
-        form.save()
-        messages.success(request, 'Successfully updated privacy settings')
-        return redirect('userpage:home')
-    elif request.POST.get('submit') == 'Dfree':
-        form = DistractionFreeForm(request.POST, instance=request.user)
-        user = form.save(commit=False)
-        user.homepage_hashtags = user.homepage_hashtags.lower()
-        user.save()
+        # Distraction Free
+        distraction_free_form = DistractionFreeForm(
+            request.POST, instance=request.user)
+        distraction_free = distraction_free_form.save(commit=False)
+        distraction_free.homepage_hashtags = distraction_free.homepage_hashtags.lower()
+        # Privacy
+        privacy_form = UserPrivacyForm(
+            data=request.POST, files=request.FILES, instance=request.user)
+
+        personal_form.save()
+        distraction_free.save()
+        privacy_form.save()
         messages.success(request, 'Updated successfully')
         return redirect('userpage:home')
 

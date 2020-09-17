@@ -1,6 +1,29 @@
 document.addEventListener('DOMContentLoaded', function () {
     window.addEventListener('load', function () {
+
+        // --------------------------------
+        // Navigate edit profile
+        // --------------------------------
+        $('.editForm').hide()
+        $('#personalForm').show()
+        $('#editNavbar ul li').click(function(e){
+            e.preventDefault()
+            $('.editForm').hide()
+            if ($(this).html().includes('Personal')){
+                $('#personalForm').show()
+            }
+            else if ($(this).html().includes('Distraction Free')){
+                $('#distractionFreeForm').show()
+            } else if ($(this).html().includes('Privacy')){
+                $('#privacyForm').show()
+            } else{
+                $('#advanceForm').show()
+            }
+        })
+
+        // --------------------------------
         // Like
+        // --------------------------------
         $('.likeForm').submit(function (e) {
             e.preventDefault();
             let thisElement = $(this)
