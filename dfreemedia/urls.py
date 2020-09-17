@@ -59,7 +59,7 @@ urlpatterns = [
     # Includes
     path('category/', include('categories.urls'), name='category'),
     path('comments/', include('comments.urls'), name='comments'),
-    path('userpage/', include('userpage.urls'), name='userpage'),
+    path('user/', include('userpage.urls'), name='userpage'),
     path('people/', include('people.urls'), name='people'),
     path('social/', include('social.urls'), name='social'),
     path('production/', include('production.urls'), name='production'),

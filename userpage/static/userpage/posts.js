@@ -1,7 +1,10 @@
 document.addEventListener('DOMContentLoaded', function () {
     window.addEventListener('load', function () {
 
-        // Post paginator
+        // --------------------------------
+        // Posts Paginator
+        // --------------------------------
+
         let page = 2
 
         function bottomScroll() {
@@ -154,71 +157,9 @@ document.addEventListener('DOMContentLoaded', function () {
             bottomScroll()
         })
 
-
-        // Friend
-        $('#addFriend').click(function (e) {
-            e.preventDefault();
-            $.ajax({
-                url: $('#addFriend').attr(
-                    'href'), // people:add_friend view_user.id
-                data: {},
-                dataType: 'json',
-                success: function (data) {
-                    $('#message_area').html('')
-                    if (data.message.tags === 'error') {
-                        $('#message_area').append(`
-            <div class="alert alert-danger fixed-top">${data.message.text}</div>
-            `)
-                    } else {
-                        $('#message_area').append(`
-<div class="alert alert-${data.message.tags} fixed-top">${data.message.text}</div>
-                `)
-                    }
-                    $('#addFriend').fadeOut()
-                }
-            })
-        })
-        // Unfriend
-        $('#unfriend').click(function (e) {
-            e.preventDefault();
-            confirmation = confirm('Unfriend?')
-            if (confirmation) {
-                $('#unfriend').fadeOut()
-                $('#message_area').html(
-                    `<div class="alert alert-success"> You successfully unfriended him`
-                )
-                $.ajax({
-                    url: $('#unfriend').attr('href'),
-                    data: {},
-                    method: 'get',
-                    dataType: 'json',
-                    success: function (response) {}
-                })
-            }
-        })
-        // Follow and Unfollow
-        $('#followUser').click(function () {
-            if ($('#followUser').html().includes('Unfollow')) {
-                $('#followUser').html('<i class="fas fa-plus"></i> Follow')
-                $('#followUser').removeClass('unfollow')
-                $('#followUser').addClass('follow')
-                $('#followersCount').html(parseInt($('#followersCount')
-                    .html()) - 1)
-            } else {
-                $('#followUser').html('<i class="fas fa-minus"></i> Unfollow')
-                $('#followUser').removeClass('follow')
-                $('#followUser').addClass('unfollow')
-                $('#followersCount').html(parseInt($('#followersCount')
-                    .html()) + 1)
-            }
-            $.ajax({
-                url: "{% url 'people:follow' view_user.id %}",
-                dataType: 'json',
-                success: function (data) {}
-            })
-        })
-
+        // --------------------------------
         // Like
+        // --------------------------------
         $('.likeForm').submit(function (e) {
             e.preventDefault();
             let thisElement = $(this)
@@ -266,17 +207,18 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (response.action == 'unlike_and_dislike') {
                         dislikes++
                         likes -= 1
-                        $(`#id_dislikes${thisElement.attr('data-pk')}`).html(`<p style="color:#065FD4; display:inline;">${dislikes}</p>`)
-                        $(`#id_likes${thisElement.attr('data-pk')}`).html(`<p style="color:black; display:inline;">${likes}</p>`)
+                        $(`#id_dislikes${thisElement.attr('data-pk')}`).html(`<p style="color:#065FD4; display: inline;">${dislikes}</p>`)
+                        $(`#id_likes${thisElement.attr('data-pk')}`).html(`<p style="color:black; display: inline;">${likes}</p>`)
                     } else if (response.action === 'undislike') {
                         dislikes -= 1
-                        $(`#id_dislikes${thisElement.attr('data-pk')}`).html(`<p style="color:black; display:inline;">${dislikes}</p>`)
+                        $(`#id_dislikes${thisElement.attr('data-pk')}`).html(`<p style="color:black; display: inline;">${dislikes}</p>`)
                     } else {
                         dislikes++
-                        $(`#id_dislikes${thisElement.attr('data-pk')}`).html(`<p style="color:#065FD4; display:inline;">${dislikes}</p>`)
+                        $(`#id_dislikes${thisElement.attr('data-pk')}`).html(`<p style="color:#065FD4; display: inline;">${dislikes}</p>`)
                     }
                 }
             })
         })
-    })
-})
+
+    });
+});

@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Post paginator
         let page = 2
+
         function bottomScroll() {
             if ($(window).scrollTop() + $(window).height() == $(document).height()) {
                 document.querySelector('#loading').innerHTML = `<div class="spinner-border text-primary" role="status">
@@ -182,17 +183,16 @@ document.addEventListener('DOMContentLoaded', function () {
             e.preventDefault();
             confirmation = confirm('Unfriend?')
             if (confirmation) {
+                $('#unfriend').fadeOut()
+                $('#message_area').html(
+                    `<div class="alert alert-success"> You successfully unfriended him`
+                )
                 $.ajax({
                     url: $('#unfriend').attr('href'),
                     data: {},
                     method: 'get',
                     dataType: 'json',
-                    success: function (response) {
-                        $('#unfriend').fadeOut()
-                        $('#message_area').html(
-                            `<div class="alert alert-success"> You successfully unfriended him`
-                        )
-                    }
+                    success: function (response) {}
                 })
             }
         })

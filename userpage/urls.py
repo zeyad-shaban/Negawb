@@ -6,8 +6,10 @@ from django.conf import settings
 app_name = 'userpage'
 
 urlpatterns = [
-    path('', views.home, name='home'),
-    path('friendrequest/', views.friendrequest, name='friendrequest'),
+    path('posts/', views.posts, name='posts'),
+    path('friends/', views.friends, name='friends'),
+    path('requests/', views.requests, name='requests'),
+
     path('denyrequest/',
          views.denyrequest, name='denyrequest'),
     path('acceptrequest/',

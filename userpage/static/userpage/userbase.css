@@ -1,0 +1,102 @@
+/* ------------- */
+/* User profile */
+/* ------------- */
+
+.cover {
+    background-size: cover;
+    background-position: center;
+    min-height: 30vh;
+    color: white;
+    padding: 20px;
+}
+
+.cover img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-right: 30px;
+    margin-top: 30px;
+    float: left;
+}
+
+.cover h1,
+.cover p {
+    margin-top: 30px;
+    word-spacing: 4px;
+    font-weight: 300;
+}
+
+
+/* ------------- */
+/* Edit navigation */
+/* ------------- */
+#editNavbar {
+    margin-right: auto;
+    margin-left: auto;
+    color: white;
+}
+
+#editNavbar ul {
+    list-style: none;
+}
+
+#editNavbar ul li {
+    display: inline-block;
+    letter-spacing: 1px;
+    margin-right: 30px;
+    cursor: pointer;
+    border-bottom: 0px white transparent;
+    transition: border-bottom 0.2s;
+}
+
+#editNavbar ul li:hover {
+    border-bottom: 1px solid #fff;
+}
+
+textarea {
+    height: 50px
+}
+
+/* ------------------------------- */
+/* Options paginator */
+/* ------------------------------- */
+
+#optionsNavbar {
+    background-color: #09a2c2;
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+
+#optionsNavbar ul {
+    list-style: none;
+}
+
+#optionsNavbar ul li {
+    display: inline-block;
+    margin-right: 30px;
+    letter-spacing: 1px;
+}
+
+#optionsNavbar ul li a {
+    padding: 10px 30px;
+    border-radius: 200px;
+    text-decoration: none;
+    color: white;
+    border: 0px transparent white;
+    transition: border-bottom 0.2s, background-color 0.2s;
+}
+
+#optionsNavbar ul li a:hover,
+#optionsNavbar ul li a:active {
+    padding-bottom: 2px;
+    border-bottom: 1px solid white;
+    background-color: #0abde3;
+}
+
+/* --------------------- */
+/* Loading */
+/* --------------------- */
+#loading {
+    margin: 30px 45%;
+    font-size: 200%;
+}

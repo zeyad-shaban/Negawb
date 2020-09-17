@@ -15,36 +15,7 @@ User = user_model()
 
 
 def home(request):
-    # Forms
-    if request.user.is_authenticated:
-        # Forms
-        form = UserForm(instance=request.user)
-        privacy_form = UserPrivacyForm(instance=request.user)
-        distraction_free_form = DistractionFreeForm(instance=request.user)
-        # posts
-        posts_list = request.user.post_set.all().order_by('-post_date')
-    else:
-        # Forms
-        form = UserForm()
-        privacy_form = UserPrivacyForm()
-        distraction_free_form = DistractionFreeForm()
-        # posts
-        posts_list = []
-
-    page = request.GET.get('page')
-    paginator = Paginator(posts_list, 5)
-    try:
-        posts = paginator.page(page)
-    except PageNotAnInteger:
-        posts = paginator.page(1)
-    except EmptyPage:
-        posts = []
-    if request.method == 'GET':
-        if request.GET.get('page'):
-            return JsonResponse({'posts': serialize('json', posts)})
-        else:
-            return render(request, 'userpage/index.html', {'form': form, 'privacy_form': privacy_form, 'distraction_free_form': distraction_free_form, 'posts': posts})
-    else:
+    if request.method == 'POST':
         personal_form = UserForm(
             data=request.POST, files=request.FILES, instance=request.user)
         # Distraction Free
@@ -60,11 +31,46 @@ def home(request):
         distraction_free.save()
         privacy_form.save()
         messages.success(request, 'Updated successfully')
-        return redirect('userpage:home')
+        return redirect('userpage:posts')
+
+# Options
+
+
+def posts(request):
+    if request.user.is_authenticated:
+        posts_list = request.user.post_set.all().order_by('-post_date')
+
+        form = UserForm(instance=request.user)
+        privacy_form = UserPrivacyForm(instance=request.user)
+        distraction_free_form = DistractionFreeForm(instance=request.user)
+    else:
+        posts_list = []
+
+        form = UserForm()
+        privacy_form = UserPrivacyForm()
+        distraction_free_form = DistractionFreeForm()
+    page = request.GET.get('page')
+    paginator = Paginator(posts_list, 5)
+    try:
+        posts = paginator.page(page)
+    except PageNotAnInteger:
+        posts = paginator.page(1)
+    except EmptyPage:
+        posts = []
+    if request.method == 'GET':
+        if request.GET.get('page'):
+            return JsonResponse({'posts': serialize('json', posts)})
+        else:
+            print('about to render the wanted page')
+            return render(request, 'userpage/posts.html', {'posts': posts, 'privacy_form': privacy_form, 'distraction_free_form': distraction_free_form, })
+
+
+def friends(request):
+    return render(request, 'userpage/friends.html')
 
 
 @login_required
-def friendrequest(request):
+def requests(request):
     requests = FriendRequest.objects.filter(to_user=request.user)
     group_requests = GroupRequest.objects.filter(reciever=request.user)
     user_friends = User.objects.filter(friends=request.user)

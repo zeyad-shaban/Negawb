@@ -339,7 +339,7 @@
             <div class="card-head">Other posts by {{post.user.username}}</div>
             {% else %}
             <div class="alert alert-info">You can hide the recommended posts from the Distraction-Free menu from your <a
-                    href="{% url 'userpage:home' %}">profile</a></div>
+                    href="{% url 'userpage:posts' %}">profile</a></div>
             {% endif %}
             <div id="recommendedPosts">
                 {% for post in recommended_posts %}
