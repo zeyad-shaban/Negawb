@@ -21,43 +21,29 @@ def home(request):
         form = UserForm(instance=request.user)
         privacy_form = UserPrivacyForm(instance=request.user)
         distraction_free_form = DistractionFreeForm(instance=request.user)
-        # Requests
-        requests = FriendRequest.objects.filter(to_user=request.user)
-        group_requests = GroupRequest.objects.filter(reciever=request.user)
-        total_requests_count = len(requests) + len(group_requests)
-        # INvites
-        user_invites = FriendRequest.objects.filter(
-            from_user=request.user).order_by('-date')
-        user_group_invites = GroupRequest.objects.filter(
-            request_sender=request.user).order_by('-date')
-        total_user_invites_count = len(user_invites) + len(user_group_invites)
-        user_posts_list = request.user.post_set.all()
+        # posts
+        posts_list = request.user.post_set.all().order_by('-post_date')
     else:
         # Forms
         form = UserForm()
         privacy_form = UserPrivacyForm()
         distraction_free_form = DistractionFreeForm()
-        # Requests
-        requests = []
-        group_requests = []
-        total_requests_count = []
-        # Invites
-        user_invites = []
-        user_group_invites = []
-        total_user_invites_count = []
         # posts
-        user_posts_list = []
+        posts_list = []
 
     page = request.GET.get('page')
-    paginator = Paginator(user_posts_list, 5)
+    paginator = Paginator(posts_list, 5)
     try:
-        user_posts = paginator.page(page)
+        posts = paginator.page(page)
     except PageNotAnInteger:
-        user_posts = paginator.page(1)
+        posts = paginator.page(1)
     except EmptyPage:
-        user_posts = paginator.page(paginator.num_pages)
+        posts = []
     if request.method == 'GET':
-        return render(request, 'userpage/index.html', {'form': form, 'privacy_form': privacy_form, 'distraction_free_form': distraction_free_form, 'requests': requests, 'group_requests': group_requests, 'total_requests': total_requests_count, 'user_posts': user_posts, 'user_invites': user_invites, 'user_group_invites': user_group_invites, 'total_user_invites_count': total_user_invites_count})
+        if request.GET.get('page'):
+            return JsonResponse({'posts': serialize('json', posts)})
+        else:
+            return render(request, 'userpage/index.html', {'form': form, 'privacy_form': privacy_form, 'distraction_free_form': distraction_free_form, 'posts': posts})
     else:
         personal_form = UserForm(
             data=request.POST, files=request.FILES, instance=request.user)

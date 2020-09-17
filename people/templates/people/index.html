@@ -9,7 +9,8 @@
 {% block content %}
 <style>
     .cover {
-        background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url("{{ view_user.cover.url }}");
+        background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+        url("{{ view_user.cover.url }}");
     }
 </style>
 <div style="margin-left: auto; margin-right: auto; width: 90%;">
@@ -52,98 +53,104 @@
     </div>
     <div id="posts" data-url="{% url 'userpage:get_user_by_id' %}">
         {% for post in posts %}
-        <div class="card-header">
-            <div class="d-flex justify-content-between align-items-center">
+        <div class="card gedf-card">
+            <div class="card-header">
                 <div class="d-flex justify-content-between align-items-center">
-                    <div class="mr-2">
-                        <a href="{% url 'people:view_user' post.user.id %}" target='_blank'>
-                            {% if post.user.who_see_avatar == 'everyone' %}
-                            <img src="{{post.user.avatar.url}}" alt="" width="45" class="rounded-circle" loading="lazy">
-                            {% elif post.user.who_see_avatar == 'friends' and user in post.user.friends.all %}
-                            <img src="{{post.user.avatar.url}}" alt="" width="45" class="rounded-circle" loading="lazy">
-                            {% elif post.user == user %}
-                            <img src="{{post.user.avatar.url}}" alt="" width="45" class="rounded-circle" loading="lazy">
-                            {% else %}
-                            <img src="/media/profile_images/DefaultUserImage.jpg" alt="" width="45"
-                                class="rounded-circle" loading="lazy">
-                            {% endif %}
-                        </a>
-                    </div>
-                    <div class="ml-2">
-                        <div class="h5 m-0">{{ post.user.username }}</div>
-                        <div class="h7 text-muted">{{post.views.count}} Views -
-                            {% if post.category %}{{ post.category.title }} {% else %}All{% endif %} Topic
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="mr-2">
+                            <a href="{% url 'people:view_user' post.user.id %}" target='_blank'>
+                                {% if post.user.who_see_avatar == 'everyone' %}
+                                <img src="{{post.user.avatar.url}}" alt="" width="45" class="rounded-circle"
+                                    loading="lazy">
+                                {% elif post.user.who_see_avatar == 'friends' and user in post.user.friends.all %}
+                                <img src="{{post.user.avatar.url}}" alt="" width="45" class="rounded-circle"
+                                    loading="lazy">
+                                {% elif post.user == user %}
+                                <img src="{{post.user.avatar.url}}" alt="" width="45" class="rounded-circle"
+                                    loading="lazy">
+                                {% else %}
+                                <img src="/media/profile_images/DefaultUserImage.jpg" alt="" width="45"
+                                    class="rounded-circle" loading="lazy">
+                                {% endif %}
+                            </a>
+                        </div>
+                        <div class="ml-2">
+                            <div class="h5 m-0">{{ post.user.username }}</div>
+                            <div class="h7 text-muted">{{post.views.count}} Views -
+                                {% if post.category %}{{ post.category.title }} {% else %}All{% endif %} Topic
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-        </div>
-        <div class="card-body">
-            <div class="text-muted h7 mb-2"> <i class="fa fa-clock-o"></i>{{ post.post_date|timesince }} ago
             </div>
-            <!-- Title -->
-            <p class="card-link btn-link" href="#">
-                <h5 class="card-title">{{ post.description|truncatechars:45 }}</h5>
-            </p>
-            <!-- Image -->
-            {% if post.image %}
-            <img src="{{ post.image.url }}" alt=""
-                style="width:80%; height: auto; margin-left: auto; margin-right: auto;">
-            {% endif %}
-            <!-- File -->
-            {% if post.post_file %}
-            <video controls class="col-md-10 col-lg-8" preload="none">
-                <source src="{{ post.post_file.url }}" type="video/mp4">
-                <source src="{{ post.post_file.url }}" type="video/ogg">
-                Your browser does not support the video tag.
-            </video>
-            {% endif %}
-            <!-- Description -->
-            {% if post.description and post.description|length > 45 %}
-            <div class="mt-2" style="white-space: pre-line;">
-                <p class="card-text" style="white-space: pre-line;">
-                    {{ post.description| truncatechars:227 }} {% if post.description|length > 227 %} <p
-                        class="btn btn-link" onclick="this.parentElement.innerHTML = `{{ post.description }}`">
-                        Read more</p>{% endif %}
+            <div class="card-body">
+                <div class="text-muted h7 mb-2"> <i class="fa fa-clock-o"></i>{{ post.post_date|timesince }} ago
+                </div>
+                <!-- Title -->
+                <p class="card-link btn-link" href="#">
+                    <h5 class="card-title">{{ post.description|truncatechars:45 }}</h5>
                 </p>
+                <!-- Image -->
+                {% if post.image %}
+                <img src="{{ post.image.url }}" alt=""
+                    style="width:80%; height: auto; margin-left: auto; margin-right: auto;">
+                {% endif %}
+                <!-- File -->
+                {% if post.post_file %}
+                <video controls class="col-md-10 col-lg-8" preload="none">
+                    <source src="{{ post.post_file.url }}" type="video/mp4">
+                    <source src="{{ post.post_file.url }}" type="video/ogg">
+                    Your browser does not support the video tag.
+                </video>
+                {% endif %}
+                <!-- Description -->
+                {% if post.description and post.description|length > 45 %}
+                <div class="mt-2" style="white-space: pre-line;">
+                    <p class="card-text" style="white-space: pre-line;">
+                        {{ post.description| truncatechars:227 }} {% if post.description|length > 227 %} <p
+                            class="btn btn-link" onclick="this.parentElement.innerHTML = `{{ post.description }}`">
+                            Read more</p>{% endif %}
+                    </p>
+                </div>
+                {% endif %}
             </div>
-            {% endif %}
+            <div class="card-footer">
+                <form method="GET" class="likeForm d-inline" action="{% url 'comments:post_like_dislike' post.id %}"
+                    data-pk="{{post.id}}">
+                    <button type="submit" class="btn"><i class="far fa-thumbs-up"></i>
+                        <span id="id_likes{{post.id}}">
+                            {% if user in post.likes.all %}
+                            <p style="color:#065FD4;display: inline">{{post.likes.count}}</p>
+                            {% else %}
+                            <p style="color:black;display: inline">{{post.likes.count}}</p>
+                            {% endif %}
+                        </span>
+                        Like</button>
+                </form>
+                <form action="{% url 'comments:post_like_dislike' post.id %}" method="GET" class="d-inline dislikeForm"
+                    data-pk="{{ post.id }}">
+                    <button type="submit" class="btn"><i class="far fa-thumbs-down"></i>
+                        <span id="id_dislikes{{post.id}}">
+                            {% if user in post.dislikes.all %}
+                            <p style="color:#065FD4; display: inline;">{{post.dislikes.count}}</p>
+                            {% else %}
+                            <p style="color:black; display: inline;">{{post.dislikes.count}}</p>
+                            {% endif %}
+                        </span>
+                        Dislike
+                    </button>
+                </form>
+                <a href="{% url 'comments:view_post' post.id %}" class="card-link"><i class="fab fa-rocketchat"></i>
+                    Comments</a>
+                <!-- AddToAny BEGIN -->
+                <a href="https://www.addtoany.com/share#url=https%3A%2F%2Fwww.dfreemedia.com{% url 'comments:view_post' post.id %}&amp;title={{ post.description|truncatechars:45 }}"
+                    target="_blank" class="card-link"><i class="fa fa-mail-forward"></i> Share</a>
+                <!-- AddToAny END -->
+            </div>
+            <!-- Post /////-->
         </div>
-        <div class="card-footer">
-            <form method="GET" class="likeForm d-inline" action="{% url 'comments:post_like_dislike' post.id %}"
-                data-pk="{{post.id}}">
-                <button type="submit" class="btn"><i class="far fa-thumbs-up"></i>
-                    <span id="id_likes{{post.id}}">
-                        {% if user in post.likes.all %}
-                        <p style="color:#065FD4;display: inline">{{post.likes.count}}</p>
-                        {% else %}
-                        <p style="color:black;display: inline">{{post.likes.count}}</p>
-                        {% endif %}
-                    </span>
-                    Like</button>
-            </form>
-            <form action="{% url 'comments:post_like_dislike' post.id %}" method="GET" class="d-inline dislikeForm"
-                data-pk="{{ post.id }}">
-                <button type="submit" class="btn"><i class="far fa-thumbs-down"></i>
-                    <span id="id_dislikes{{post.id}}">
-                        {% if user in post.dislikes.all %}
-                        <p style="color:#065FD4; display: inline;">{{post.dislikes.count}}</p>
-                        {% else %}
-                        <p style="color:black; display: inline;">{{post.dislikes.count}}</p>
-                        {% endif %}
-                    </span>
-                    Dislike
-                </button>
-            </form>
-            <a href="{% url 'comments:view_post' post.id %}" class="card-link"><i class="fab fa-rocketchat"></i>
-                Comments</a>
-            <!-- AddToAny BEGIN -->
-            <a href="https://www.addtoany.com/share#url=https%3A%2F%2Fwww.dfreemedia.com{% url 'comments:view_post' post.id %}&amp;title={{ post.description|truncatechars:45 }}"
-                target="_blank" class="card-link"><i class="fa fa-mail-forward"></i> Share</a>
-            <!-- AddToAny END -->
-        </div>
-        <!-- Post /////-->
+
         {% endfor %}
     </div>
     <div id="loading"></div>

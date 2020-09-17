@@ -1,7 +1,7 @@
 .cover {
     background-size: cover;
     background-position: center;
-    height: 30vh;
+    min-height: 30vh;
     color: white;
     padding: 20px;
 }
@@ -26,6 +26,7 @@
     margin: 30px auto 100px 10px;
     display: block;
 }
+
 
 .follow {
     border-radius: 200px;
@@ -95,7 +96,8 @@
 /* Posts */
 /* ------------------------------- */
 .card.gedf-card {
-    margin: 20px 30px 40px 30px;
+    margin-top: 20px;
+    margin-bottom: 40px;
 }
 
 /* --------------------- */

@@ -5,312 +5,262 @@
 
 {% block description %}{{user.bio}}{% endblock description %}
 {% block content %}
-<img src="{% if user.is_authenticated %}{{user.avatar.url}}{% else %}/media/profile_images/DefaultUserImage.jpg{% endif %}"
-    class="col-xl-2 col-lg-2 rounded-circle" alt="" width="200" height="200" style="max-width:200px; max-height:200px;">
-<link rel="stylesheet" href="{% static 'userpage/index.css' %}">
-<button type="button" class="btn btn-outline-warning float-right mr-5 mt-4" style="color: black;" data-toggle="modal"
-    data-target="#editProfile" data-whatever="editProfile"><i class="fas fa-edit"></i> Edit profile</button>
-<span class="ml-5">
-    {% if not user.is_authenticated %}
-    <span class="alert-danger">Please don't try to save any form since you are not logged in</span>
-    {% endif %}
-</span>
-<br>
-<ul class="list-group list-group-horizontal row justify-content-center mb-5 mt-5">
-    <li class="list-group-item userMenuItem btn active">Home</li>
-    <li class="list-group-item userMenuItem btn">Friends {{user.friends.count}}</li>
-    <li class="list-group-item userMenuItem btn">Requests {{total_requests}}</li>
-    <li class="list-group-item userMenuItem btn">My Invites {{ total_user_invites_count }}</li>
-</ul>
-<div id="mainContainer">
-    <!-- user posts -->
+<style>
+    .cover {
+        background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+        url("{{ user.cover.url }}");
+    }
+</style>
+<div style="margin-left: auto; margin-right: auto; width: 90%;">
+    <div class="cover">
+        <a href="#">
+            <img src="{{user.avatar.url}}" alt="User Image">
+        </a>
+        <h1>{{ user.username }}</h1>
+        <button type="button" class="btn btn-outline-warning float-right mr-5" data-toggle="modal"
+            data-target="#editProfile"><i class="fas fa-edit"></i> Edit
+            profile</button>
+        <p><span id="followersCount">{{ user.followers.count }}</span> Followers</p>
+    </div>
+    <div id="mainContainer">
+        <!-- user posts -->
 
-    {% if user.post_set.count <= 0 %}
-    <h1>You don't have any posts</h1>
-    {% else %}
-    <div class="container-fluid gedf-wrapper">
-        <div class="row">
-            <div class="col-md-3">
-            </div>
-            <div class="col-md-6 gedf-main">
-                {% for post in user_posts %}
-                <!--- \\\\\\\Post-->
-                <div class="card gedf-card">
-                    <div class="card-header">
+        {% if user.post_set.count <= 0 %}
+        <h1>You don't have any posts</h1>
+        {% else %}
+        <div id="posts" data-url="{% url 'userpage:get_user_by_id' %}">
+            {% for post in posts %}
+            <div class="card gedf-card">
+                <div class="card-header">
+                    <div class="d-flex justify-content-between align-items-center">
                         <div class="d-flex justify-content-between align-items-center">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="mr-2">
-                                    <a href="{% url 'people:view_user' post.user.id %}" target='_blank'>
-                                        {% if post.user.who_see_avatar == 'everyone' %}
-                                        <img src="{{post.user.avatar.url}}" alt="" width="45" class="rounded-circle"
-                                            loading="lazy">
-                                        {% elif post.user.who_see_avatar == 'friends' and user in post.user.friends.all %}
-                                        <img src="{{post.user.avatar.url}}" alt="" width="45" class="rounded-circle"
-                                            loading="lazy">
-                                        {% elif post.user == user %}
-                                        <img src="{{post.user.avatar.url}}" alt="" width="45" class="rounded-circle"
-                                            loading="lazy">
-                                        {% else %}
-                                        <img src="/media/profile_images/DefaultUserImage.jpg" alt="" width="45"
-                                            class="rounded-circle" loading="lazy">
-                                        {% endif %}
-                                    </a>
-                                </div>
-                                <div class="ml-2">
-                                    <div class="h5 m-0">{{ post.user.username }}</div>
-                                    <div class="h7 text-muted">{{post.views.count}} Views -
-                                        {% if post.category %}{{ post.category.title }} {% else %}All{% endif %} Topic
-                                    </div>
-                                </div>
+                            <div class="mr-2">
+                                <a href="{% url 'people:view_user' post.user.id %}" target='_blank'>
+                                    {% if post.user.who_see_avatar == 'everyone' %}
+                                    <img src="{{post.user.avatar.url}}" alt="" width="45" class="rounded-circle"
+                                        loading="lazy">
+                                    {% elif post.user.who_see_avatar == 'friends' and user in post.user.friends.all %}
+                                    <img src="{{post.user.avatar.url}}" alt="" width="45" class="rounded-circle"
+                                        loading="lazy">
+                                    {% elif post.user == user %}
+                                    <img src="{{post.user.avatar.url}}" alt="" width="45" class="rounded-circle"
+                                        loading="lazy">
+                                    {% else %}
+                                    <img src="/media/profile_images/DefaultUserImage.jpg" alt="" width="45"
+                                        class="rounded-circle" loading="lazy">
+                                    {% endif %}
+                                </a>
                             </div>
-                            <div>
-                                <div class="dropdown">
-                                    <button class="btn btn-link" type="button" id="gedf-drop1" data-toggle="dropdown"
-                                        aria-haspopup="true" aria-expanded="false">
-                                        <i class="fa fa-ellipsis-h"></i>
-                                    </button>
-                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="gedf-drop1">
-                                        <div class="h6 dropdown-header">Configuration</div>
-                                        <a class="dropdown-item" href="#">Save</a>
-                                        <a class="dropdown-item" href="#">Hide</a>
-                                        <a class="dropdown-item" href="#">Report</a>
-                                    </div>
+                            <div class="ml-2">
+                                <div class="h5 m-0">{{ post.user.username }}</div>
+                                <div class="h7 text-muted">{{post.views.count}} Views -
+                                    {% if post.category %}{{ post.category.title }} {% else %}All{% endif %} Topic
                                 </div>
                             </div>
                         </div>
+                    </div>
 
+                </div>
+                <div class="card-body">
+                    <div class="text-muted h7 mb-2"> <i class="fa fa-clock-o"></i>{{ post.post_date|timesince }} ago
                     </div>
-                    <div class="card-body">
-                        <div class="text-muted h7 mb-2"> <i class="fa fa-clock-o"></i>{{ post.post_date|timesince }} ago
-                        </div>
-                        <!-- Title -->
-                        <p class="card-link btn-link" href="#">
-                            <h5 class="card-title">{{ post.description|truncatechars:45 }}</h5>
+                    <!-- Title -->
+                    <p class="card-link btn-link" href="#">
+                        <h5 class="card-title">{{ post.description|truncatechars:45 }}</h5>
+                    </p>
+                    <!-- Image -->
+                    {% if post.image %}
+                    <img src="{{ post.image.url }}" alt=""
+                        style="width:80%; height: auto; margin-left: auto; margin-right: auto;">
+                    {% endif %}
+                    <!-- File -->
+                    {% if post.post_file %}
+                    <video controls class="col-md-10 col-lg-8" preload="none">
+                        <source src="{{ post.post_file.url }}" type="video/mp4">
+                        <source src="{{ post.post_file.url }}" type="video/ogg">
+                        Your browser does not support the video tag.
+                    </video>
+                    {% endif %}
+                    <!-- Description -->
+                    {% if post.description and post.description|length > 45 %}
+                    <div class="mt-2" style="white-space: pre-line;">
+                        <p class="card-text" style="white-space: pre-line;">
+                            {{ post.description| truncatechars:227 }} {% if post.description|length > 227 %} <p
+                                class="btn btn-link" onclick="this.parentElement.innerHTML = `{{ post.description }}`">
+                                Read more</p>{% endif %}
                         </p>
-                        <!-- Image -->
-                        {% if post.image %}
-                        <img src="{{ post.image.url }}" alt=""
-                            style="width:80%; height: auto; margin-left: auto; margin-right: auto;">
-                        {% endif %}
-                        <!-- File -->
-                        {% if post.post_file %}
-                        <video controls class="col-md-10 col-lg-8" preload="none">
-                            <source src="{{ post.post_file.url }}" type="video/mp4">
-                            <source src="{{ post.post_file.url }}" type="video/ogg">
-                            Your browser does not support the video tag.
-                        </video>
-                        {% endif %}
-                        <!-- Description -->
-                        {% if post.description and post.description|length > 45 %}
-                        <div class="mt-2" style="white-space: pre-line;">
-                            <p class="card-text" style="white-space: pre-line;">
-                                {{ post.description| truncatechars:227 }} {% if post.description|length > 227 %} <p
-                                    class="btn btn-link"
-                                    onclick="this.parentElement.innerHTML = `{{ post.description }}`">
-                                    Read more</p>{% endif %}
-                            </p>
-                        </div>
-                        {% endif %}
                     </div>
-                    <div class="card-footer">
-                        <form method="GET" class="likeForm d-inline"
-                            action="{% url 'comments:post_like_dislike' post.id %}" data-pk="{{post.id}}">
-                            <button type="submit" class="btn"><i class="far fa-thumbs-up"></i>
-                                <span id="id_likes{{post.id}}">
-                                    {% if user in post.likes.all %}
-                                    <p style="color:#065FD4;display: inline">{{post.likes.count}}</p>
-                                    {% else %}
-                                    <p style="color:black;display: inline">{{post.likes.count}}</p>
-                                    {% endif %}
-                                </span>
-                                Like</button>
-                        </form>
-                        <form action="{% url 'comments:post_like_dislike' post.id %}" method="GET"
-                            class="d-inline dislikeForm" data-pk="{{ post.id }}">
-                            <button type="submit" class="btn"><i class="far fa-thumbs-down"></i>
-                                <span id="id_dislikes{{post.id}}">
-                                    {% if user in post.dislikes.all %}
-                                    <p style="color:#065FD4; display: inline;">{{post.dislikes.count}}</p>
-                                    {% else %}
-                                    <p style="color:black; display: inline;">{{post.dislikes.count}}</p>
-                                    {% endif %}
-                                </span>
-                                Dislike
-                            </button>
-                        </form>
-                        <a href="{% url 'comments:view_post' post.id %}" class="card-link"><i
-                                class="fab fa-rocketchat"></i>
-                            Comments</a>
-                        <!-- AddToAny BEGIN -->
-                        <a href="https://www.addtoany.com/share#url=https%3A%2F%2Fwww.dfreemedia.com{% url 'comments:view_post' post.id %}&amp;title={{ post.description|truncatechars:45 }}"
-                            target="_blank" class="card-link"><i class="fa fa-mail-forward"></i> Share</a>
-                        <!-- AddToAny END -->
-                    </div>
+                    {% endif %}
+                </div>
+                <div class="card-footer">
+                    <form method="GET" class="likeForm d-inline" action="{% url 'comments:post_like_dislike' post.id %}"
+                        data-pk="{{post.id}}">
+                        <button type="submit" class="btn"><i class="far fa-thumbs-up"></i>
+                            <span id="id_likes{{post.id}}">
+                                {% if user in post.likes.all %}
+                                <p style="color:#065FD4;display: inline">{{post.likes.count}}</p>
+                                {% else %}
+                                <p style="color:black;display: inline">{{post.likes.count}}</p>
+                                {% endif %}
+                            </span>
+                            Like</button>
+                    </form>
+                    <form action="{% url 'comments:post_like_dislike' post.id %}" method="GET"
+                        class="d-inline dislikeForm" data-pk="{{ post.id }}">
+                        <button type="submit" class="btn"><i class="far fa-thumbs-down"></i>
+                            <span id="id_dislikes{{post.id}}">
+                                {% if user in post.dislikes.all %}
+                                <p style="color:#065FD4; display: inline;">{{post.dislikes.count}}</p>
+                                {% else %}
+                                <p style="color:black; display: inline;">{{post.dislikes.count}}</p>
+                                {% endif %}
+                            </span>
+                            Dislike
+                        </button>
+                    </form>
+                    <a href="{% url 'comments:view_post' post.id %}" class="card-link"><i class="fab fa-rocketchat"></i>
+                        Comments</a>
+                    <!-- AddToAny BEGIN -->
+                    <a href="https://www.addtoany.com/share#url=https%3A%2F%2Fwww.dfreemedia.com{% url 'comments:view_post' post.id %}&amp;title={{ post.description|truncatechars:45 }}"
+                        target="_blank" class="card-link"><i class="fa fa-mail-forward"></i> Share</a>
+                    <!-- AddToAny END -->
                 </div>
                 <!-- Post /////-->
-                {% endfor %}
             </div>
-        </div>
-    </div>
-    <!-- Paginator -->
-    <nav aria-label="...">
-        <ul class="pagination">
-            {% if user_posts.has_previous %}
-            <li class="page-item">
-                <a href="?page={{ user_posts.previous_page_number }}" class="page-link">&laquo</a>
-            </li>
-            {% endif %}
 
-
-            {% for page in user_posts.paginator.page_range %}
-            {% if user_posts.number == page %}
-            <li class="page-item active">
-                <a href="?page={{ page }}" class="page-link">{{ page }}</a>
-            </li>
-            {% else %}
-            <li class="page-item">
-                <a href="?page={{ page }}" class="page-link">{{ page }}</a>
-            </li>
-            {% endif %}
             {% endfor %}
-            {% if user_posts.has_next %}
-            <li class="page-item">
-                <a class="page-link" href="?page={{ user_posts.next_page_number }}">&raquo</a>
-            </li>
-            {% endif %}
-        </ul>
-    </nav>
-    {% endif %}
+        </div>
+        <div id="loading"></div>
+        {% endif %}
 
-</div>
-<div class="modal fade " id="editProfile" tabindex="-1" role="dialog" aria-labelledby="editProfileLabel"
-    aria-hidden="true" data-backdrop="static">
-    <div class="modal-dialog modal-dialog-scrollable modal-lg">
-        <div class="modal-content">
-            <div class="modal-header" style="background-color: rgba(3, 123, 208, 0.7)">
-                <nav id="editNavbar">
-                    <ul>
-                        <li>Personal</li>
-                        <li>Distraction Free</li>
-                        <li>Privacy</li>
-                        <li>Advance</li>
-                    </ul>
-                </nav>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <!-- Personal form -->
-                <form action="{% url 'userpage:home' %}" method="POST" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <div id="personalForm" class="editForm">
-                        <div class="form-group">
-                            <label for="id_username">Username</label>
-                            <input type="text" class="form-control" name="username" id="id_username" maxlength=30
-                                value="{{ user.username }}">
-                        </div>
-                        <div class="form-group">
-                            <label for="id_first_name">First Name</label>
-                            <input type="text" class="form-control" name="first_name" id="id_first_name" maxlength=30
-                                value="{{ user.first_name }}">
-                        </div>
-                        <div class="form-group">
-                            <label for="id_last_name">Last Name</label>
-                            <input type="text" class="form-control" name="last_name" id="id_last_name" maxlength=30
-                                value="{{ user.last_name }}">
-                        </div>
-                        <div class="form-group">
-                        </div>
-                        <div class="form-group">
-                            <label for="id_bio">Bio</label>
-                            <input type="text" class="form-control" name="bio" id="id_bio" value="{{ user.bio }}">
-                        </div>
-                        <div class="form-group">
-                            <p><label for="id_avatar">Avatar:</label>
-                                <input type="file" name="avatar" accept="image/*" id="id_avatar"></p>
-                        </div>
-                        <label for="id_email">Email: {{ user.email }}</label>
-                        <a href="{% url 'set_email_and_phone' %}">
-                            <span<i class="far fa-edit"></i>Change</span>
-                        </a>
-                        <br>
-                        <label for="id_email">Phone number: {{ user.phone }}</label>
-                        <a href="{% url 'set_email_and_phone' %}">
-                            <span<i class="far fa-edit"></i>Change</span>
-                        </a>
-                        <br>
-                        <a href="{% url 'password_reset' %}">Reset Password</a>
-                    </div>
-
-                    <!-- Distraction Free form -->
-                    <div id="distractionFreeForm" class="editForm">
-                        <div class="btn-group dropright">
-                            <button type="button" class="btn btn dropdown-toggle" data-toggle="dropdown"
-                                aria-haspopup="true" aria-expanded="false">
-                                Notifications
-                            </button>
-                            <div class="dropdown-menu" id="notificationFields"
-                                style="width: 250px; max-height:200px; overflow:scroll; ">
+    </div>
+    <div class="modal fade " id="editProfile" tabindex="-1" role="dialog" aria-labelledby="editProfileLabel"
+        aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog modal-dialog-scrollable modal-lg">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: rgba(3, 123, 208, 0.7)">
+                    <nav id="editNavbar">
+                        <ul>
+                            <li>Personal</li>
+                            <li>Distraction Free</li>
+                            <li>Privacy</li>
+                            <li>Advance</li>
+                        </ul>
+                    </nav>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Personal form -->
+                    <form action="{% url 'userpage:home' %}" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div id="personalForm" class="editForm">
+                            <div class="form-group">
+                                <label for="id_username">Username</label>
+                                <input type="text" class="form-control" name="username" id="id_username" maxlength=30
+                                    value="{{ user.username }}">
                             </div>
+                            <div class="form-group">
+                                <label for="id_first_name">First Name</label>
+                                <input type="text" class="form-control" name="first_name" id="id_first_name"
+                                    maxlength=30 value="{{ user.first_name }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="id_last_name">Last Name</label>
+                                <input type="text" class="form-control" name="last_name" id="id_last_name" maxlength=30
+                                    value="{{ user.last_name }}">
+                            </div>
+                            <div class="form-group">
+                            </div>
+                            <div class="form-group">
+                                <label for="id_bio">Bio</label>
+                                <input type="text" class="form-control" name="bio" id="id_bio" value="{{ user.bio }}">
+                            </div>
+                            <div class="form-group">
+                                <p><label for="id_avatar">Avatar:</label>
+                                    <input type="file" name="avatar" accept="image/*" id="id_avatar"></p>
+                            </div>
+                            <label for="id_email">Email: {{ user.email }}</label>
+                            <a href="{% url 'set_email_and_phone' %}">
+                                <span<i class="far fa-edit"></i>Change</span>
+                            </a>
+                            <br>
+                            <label for="id_email">Phone number: {{ user.phone }}</label>
+                            <a href="{% url 'set_email_and_phone' %}">
+                                <span<i class="far fa-edit"></i>Change</span>
+                            </a>
+                            <br>
+                            <a href="{% url 'password_reset' %}">Reset Password</a>
                         </div>
-                        <br>
-                        <br>
-                        {% for field in distraction_free_form %}
-                        {% if field.html_name == 'hide_followed_posts' %}
-                        {{field.label|safe}}
-                        {{field}}
-                        <hr>
-                        <br>
-                        {% elif field.html_name == 'allow_important_friend_messages' or field.html_name == 'allow_important_group_message' or field.html_name == 'allow_normal_friend_message' or field.html_name == 'allow_normal_group_message' or field.html_name == 'allow_comment_message' or field.html_name == 'allow_reply_message' or field.html_name == 'allow_invites' or field.html_name == 'your_invites' %}
-                        <script>
-                            document.addEventListener('DOMContentLoaded', function () {
-                                window.addEventListener('load', function () {
-                                    $('#notificationFields').append(`
+
+                        <!-- Distraction Free form -->
+                        <div id="distractionFreeForm" class="editForm">
+                            <div class="btn-group dropright">
+                                <button type="button" class="btn btn dropdown-toggle" data-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="false">
+                                    Notifications
+                                </button>
+                                <div class="dropdown-menu" id="notificationFields"
+                                    style="width: 250px; max-height:200px; overflow:scroll; ">
+                                </div>
+                            </div>
+                            <br>
+                            <br>
+                            {% for field in distraction_free_form %}
+                            {% if field.html_name == 'hide_followed_posts' %}
+                            {{field.label|safe}}
+                            {{field}}
+                            <hr>
+                            <br>
+                            {% elif field.html_name == 'allow_important_friend_messages' or field.html_name == 'allow_important_group_message' or field.html_name == 'allow_normal_friend_message' or field.html_name == 'allow_normal_group_message' or field.html_name == 'allow_comment_message' or field.html_name == 'allow_reply_message' or field.html_name == 'allow_invites' or field.html_name == 'your_invites' %}
+                            <script>
+                                document.addEventListener('DOMContentLoaded', function () {
+                                    window.addEventListener('load', function () {
+                                        $('#notificationFields').append(`
                             {{field.label|safe}}
                             {{field}}
                             <br>
                             `)
-                                })
-                            })
-                        </script>
-                        {% else %}
-                        {{field.label|safe}}
-                        {{field}}
-                        <br>
-                        <br>
-                        {% endif %}
-                        {% endfor %}
-                        <input type="submit" name="submit" value="Dfree" class="btn btn-success" id="submitDFree"
-                            style="display: none;">
-                        <script>
-                            document.addEventListener('DOMContentLoaded', function () {
-                                window.addEventListener('load', function () {
-                                    $('#notificationFields').click(function (event) {
-                                        event.stopPropagation();
                                     })
                                 })
-                            })
-                        </script>
-                    </div>
+                            </script>
+                            {% else %}
+                            {{field.label|safe}}
+                            {{field}}
+                            <br>
+                            <br>
+                            {% endif %}
+                            {% endfor %}
+                            <input type="submit" name="submit" value="Dfree" class="btn btn-success" id="submitDFree"
+                                style="display: none;">
+                            <script>
+                                document.addEventListener('DOMContentLoaded', function () {
+                                    window.addEventListener('load', function () {
+                                        $('#notificationFields').click(function (event) {
+                                            event.stopPropagation();
+                                        })
+                                    })
+                                })
+                            </script>
+                        </div>
 
-                    <!-- Privacy Form -->
-                    <div id="privacyForm" class="editForm">
-                        {{privacy_form|crispy}}
-                    </div>
-                    <button type="submit" id="saveChanges" style="display: none;"></button>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-success"
-                    onclick="document.querySelector('#saveChanges').click()">Save changes</button>
+                        <!-- Privacy Form -->
+                        <div id="privacyForm" class="editForm">
+                            {{privacy_form|crispy}}
+                        </div>
+                        <button type="submit" id="saveChanges" style="display: none;"></button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success"
+                        onclick="document.querySelector('#saveChanges').click()">Save changes</button>
+                </div>
             </div>
         </div>
     </div>
 </div>
-
-<script src="{% static 'userpage/index.js' %}"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         window.addEventListener('load', function () {
@@ -318,14 +268,7 @@
                 e.preventDefault();
                 $('.userMenuItem').removeClass('active');
                 $(this).addClass('active');
-                if ($(this).html() == 'Home') {
-                    $('#mainContainer').html(`
-        <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#privacy" data-whatever="privacy"><i
-            class="fas fa-unlock"></i>Privacy</button>
-    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#distractionFree"
-        data-whatever="distractionFree">Distraction Free</button>
-        `)
-                } else if ($(this).html().includes('Friends')) {
+                if ($(this).html().includes('Friends')) {
                     $('#mainContainer').html(`
             <div class="card card-default" id="card_contacts">
     <div id="contacts" class="panel-collapse collapse show" aria-expanded="true">
@@ -660,4 +603,5 @@
     });
 </script>
 <link rel="stylesheet" href="{% static 'userpage/index.css' %}">
+<script src="{% static 'userpage/index.js' %}"></script>
 {% endblock content %}
