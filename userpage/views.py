@@ -1,4 +1,3 @@
-from django.dispatch import receiver
 from django.core.serializers import serialize
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
@@ -6,8 +5,6 @@ from django.http import JsonResponse, HttpResponseRedirect
 from comments.models import Post, Comment
 from people.models import FriendRequest
 from django.contrib import messages
-from django.core.validators import validate_email
-from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.contrib.auth import authenticate
 from django.contrib.auth import get_user_model as user_model
@@ -59,19 +56,11 @@ def home(request):
     if request.method == 'GET':
         return render(request, 'userpage/index.html', {'user': user, 'form': form, 'privacy_form': privacy_form, 'distraction_free_form': distraction_free_form, 'requests': requests, 'group_requests': group_requests, 'total_requests': total_requests_count, 'user_posts': user_posts, 'user_invites': user_invites, 'user_group_invites': user_group_invites, 'total_user_invites_count': total_user_invites_count})
     elif request.POST.get('submit') == 'Update':
-        try:
-            form = UserForm(data=request.POST,
-                            files=request.FILES, instance=request.user)
-            form.save()
-            messages.success(request, 'Updated successfully')
-            return redirect('userpage:home')
-        except ValidationError:
-            messages.error(request, 'Invalid email address')
-            return redirect('userpage:home')
-        except:
-            messages.error(
-                request, 'unknown error occured, please try again and report a feedback so we can fix this error')
-            return redirect('userpage:home')
+        form = UserForm(data=request.POST,
+                        files=request.FILES, instance=request.user)
+        form.save()
+        messages.success(request, 'Updated successfully')
+        return redirect('userpage:home')
     elif request.POST.get('submit') == 'Update Privacy':
         form = UserPrivacyForm(
             data=request.POST, files=request.FILES, instance=request.user)
@@ -80,7 +69,9 @@ def home(request):
         return redirect('userpage:home')
     elif request.POST.get('submit') == 'Dfree':
         form = DistractionFreeForm(request.POST, instance=request.user)
-        form.save()
+        user = form.save(commit=False)
+        user.homepage_hashtags = user.homepage_hashtags.lower()
+        user.save()
         messages.success(request, 'Updated successfully')
         return redirect('userpage:home')
 

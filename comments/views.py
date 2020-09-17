@@ -20,7 +20,7 @@ import re
 
 
 def search_by_hashtags(request):
-    q = request.GET.get('q')
+    q = request.GET.get('q').lower()
     q = q.split('#')[1:]
     query = Post.objects.all().order_by('-post_date')
     posts_list = []
@@ -196,7 +196,7 @@ def create_post(request, pk):
             output = ''
             for word in re.findall(r'#\w+', post.description):
                 output += word[1:] + ' '
-            post.hashtags = output
+            post.hashtags = output.lower()
         post.save()
         messages.success(
             request, 'Uploaded successfully')
