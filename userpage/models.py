@@ -43,7 +43,6 @@ class User(AbstractUser):
     hide_comments = models.BooleanField(default=False)
     hide_recommended_posts = models.BooleanField(
         default=False, blank=True, null=True)
-    hide_followed_posts = models.BooleanField(default=False)
     homepage_hashtags = models.TextField(null=True, blank=True)
     default_home_choices = [
         ('all_posts', 'All posts (default)'),

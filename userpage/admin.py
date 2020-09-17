@@ -14,7 +14,7 @@ class MyUserAdmin(UserAdmin):
     form = MyUserChangeForm
 
     fieldsets = UserAdmin.fieldsets + (
-        (None, {'fields': ('phone', 'bio', 'avatar','cover' , 'show_email', 'who_see_avatar', 'who_add_group', 'friends', 'followers', 'is_confirmed', 'allow_friend_request', 'homepage', 'hide_comments', 'hide_recommended_posts', 'hide_followed_posts',
+        (None, {'fields': ('phone', 'bio', 'avatar','cover' , 'show_email', 'who_see_avatar', 'who_add_group', 'friends', 'followers', 'is_confirmed', 'allow_friend_request', 'homepage', 'hide_comments', 'hide_recommended_posts',
                            'homepage_hashtags', 'allow_important_friend_messages', 'allow_important_group_message', 'allow_normal_friend_message', 'allow_normal_group_message', 'allow_comment_message', 'allow_reply_message', 'allow_invites', 'your_invites',)}),
     )
 
