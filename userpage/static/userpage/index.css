@@ -53,8 +53,44 @@
     border-bottom: 1px solid #fff;
 }
 
-textarea{
+textarea {
     height: 50px
+}
+
+/* ------------------------------- */
+/* Options paginator */
+/* ------------------------------- */
+
+#optionsNavbar {
+    background-color: #09a2c2;
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+
+#optionsNavbar ul {
+    list-style: none;
+}
+
+#optionsNavbar ul li {
+    display: inline-block;
+    margin-right: 30px;
+    letter-spacing: 1px;
+}
+
+#optionsNavbar ul li a {
+    padding: 10px 30px;
+    border-radius: 200px;
+    text-decoration: none;
+    color: white;
+    border: 0px transparent white;
+    transition: border-bottom 0.2s, background-color 0.2s;
+}
+
+#optionsNavbar ul li a:hover,
+#optionsNavbar ul li a:active {
+    padding-bottom: 2px;
+    border-bottom: 1px solid white;
+    background-color: #0abde3;
 }
 
 /* ------------------------------- */
