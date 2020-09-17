@@ -45,7 +45,7 @@
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="mr-2">
-                                    <a href="{% url 'people:people' post.user.id %}" target='_blank'>
+                                    <a href="{% url 'people:view_user' post.user.id %}" target='_blank'>
                                         {% if post.user.who_see_avatar == 'everyone' %}
                                         <img src="{{post.user.avatar.url}}" alt="" width="45" class="rounded-circle"
                                             loading="lazy">
@@ -372,7 +372,7 @@
             <li class="list-group-item">
                 <div class="row w-100">
                     <div class="col-12 col-sm-6 col-md-3 px-0">
-                        <a href="{% url 'people:people' friend.id %}">
+                        <a href="{% url 'people:view_user' friend.id %}">
                             {% if friend.who_see_avatar == 'everyone' or friend.who_see_avatar == 'friends' %}
                             <img src="{{ friend.avatar.url }}" alt="{{ friend.username }}"
                                 class="img-fluid rounded-circle d-block mx-auto" height="73" width="73">
@@ -384,7 +384,7 @@
                     </div>
 
                     <div class="col-12 col-sm-6 col-md-9 text-center text-sm-left">
-                        <a href="{% url 'people:people' friend.id %}">
+                        <a href="{% url 'people:view_user' friend.id %}">
                             <label class="name lead">{{ friend.username }}</label>
                         </a>
                         <br>
@@ -403,7 +403,7 @@
                         {% endif %}
                         <span class="small text-truncate">{{ friend.bio }}</span>
 
-                        <button type="button" class="btn btn-danger btn-sm float-right unfriend" data-username="{{friend.username}}" data-pk="{{friend.id}}">UnFriend</button>
+                        <a href="{% url 'userpage:unfriend' friend.id %}" type="button" class="btn btn-danger btn-sm float-right unfriend" data-username="{{  friend.username }}">UnFriend</a>
                         <a class="btn btn-primary float-right mr-4" href="{% url 'social:chat_friend' friend.id %}">Chat</a>
                     </div>
                 </div>
@@ -415,25 +415,21 @@
             `)
 
                     $('.unfriend').click(function (e) {
+                        let thisElement = $(this)
                         e.preventDefault();
                         let confirmation = confirm(
-                            'Are you sure you want to unfriend ' + $(
-                                this)
-                            .attr('data-username') + '')
+                            'Are you sure you want to unfriend ' + $(this)
+                            .attr('data-username'))
                         if (confirmation) {
-                            let friendUsername = $(this).attr('data-username') + ''
-                            let thisButton = $(this)
                             $.ajax({
-                                url: "{% url 'userpage:unfriend' %}",
-                                data: {
-                                    'pk': $(this).attr('data-pk')
-                                },
+                                url: thisElement.attr('href'),
+                                data: {},
                                 method: 'get',
                                 dataType: 'json',
                                 success: function (response) {
-                                    thisButton.parent().parent().fadeOut()
+                                    thisElement.parent().parent().fadeOut()
                                     $('#message_area').html(
-                                        `<div class="alert alert-success"> You unfriended ${friendUsername}`
+                                        `<div class="alert alert-success"> You unfriended ${thisElement.attr('data-username')}`
                                     )
                                 }
                             })
@@ -457,7 +453,7 @@
     {% endif %}
 
     <div class="media-body">
-        <h5 class="mt-0"><a href="{% url 'people:people' request.from_user.id %}">{{ request.from_user }}</a> sent you a
+        <h5 class="mt-0"><a href="{% url 'people:view_user' request.from_user.id %}">{{ request.from_user }}</a> sent you a
             friend request <small class="form-text text-muted">
                 {{request.date|date:"j b o"}}</small></small></h5>
 
@@ -636,7 +632,7 @@
     {% endif %}
 
     <div class="media-body">
-        <h5 class="mt-0">You sent a friend requests to <a href="{% url 'people:people' request.to_user.id %}">{{ request.to_user }}</a><small class="form-text text-muted">
+        <h5 class="mt-0">You sent a friend requests to <a href="{% url 'people:view_user' request.to_user.id %}">{{ request.to_user }}</a><small class="form-text text-muted">
                 {{request.date|date:"j b o"}}</small></small></h5>
 
     </div>

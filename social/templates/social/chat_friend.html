@@ -13,7 +13,7 @@
 <link rel="stylesheet" href="{% static 'social/chat.css' %}">
 <div class="menu">
     <a href="{% url 'chat' %}" class="back"><i class="fa fa-chevron-left"></i></a>
-    <a href="{% url 'people:people' friend.id %}">
+    <a href="{% url 'people:view_user' friend.id %}">
         {% if friend.who_see_avatar == 'everyone' %}
         <img src="{{friend.avatar.url}}" alt="User Image" width="64" height="64" id="friendAvatar">
         {% elif friend.who_see_avatar == 'friends' and user in friend.friends.all %}

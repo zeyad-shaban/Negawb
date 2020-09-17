@@ -22,7 +22,7 @@ Analyze {{post.description|truncatechars:60}}
     <li class="list-group-item col-md-6">
         <div class="row w-100">
             <div class="col-12 col-sm-6 col-md-3 px-0">
-                <a href="{% url 'people:people' user.id %}">
+                <a href="{% url 'people:view_user' user.id %}">
                     {% if user.who_see_avatar == 'everyone' %}
                     <img src="{{ user.avatar.url }}" alt="{{ user.username }}"
                         class="img-fluid rounded-circle d-block mx-auto"
@@ -40,7 +40,7 @@ Analyze {{post.description|truncatechars:60}}
             </div>
 
             <div class="col-12 col-sm-6 col-md-9 text-center text-sm-left">
-                <a href="{% url 'people:people' user.id %}">
+                <a href="{% url 'people:view_user' user.id %}">
                     <label class="name lead">{{ user.username }}</label>
                 </a>
                 <br>
@@ -76,7 +76,7 @@ Analyze {{post.description|truncatechars:60}}
     <li class="list-group-item col-md-6">
         <div class="row w-100">
             <div class="col-12 col-sm-6 col-md-3 px-0">
-                <a href="{% url 'people:people' user.id %}">
+                <a href="{% url 'people:view_user' user.id %}">
                     {% if user.who_see_avatar == 'everyone' %}
                     <img src="{{ user.avatar.url }}" alt="{{ user.username }}"
                         class="img-fluid rounded-circle d-block mx-auto"
@@ -94,7 +94,7 @@ Analyze {{post.description|truncatechars:60}}
             </div>
 
             <div class="col-12 col-sm-6 col-md-9 text-center text-sm-left">
-                <a href="{% url 'people:people' user.id %}">
+                <a href="{% url 'people:view_user' user.id %}">
                     <label class="name lead">{{ user.username }}</label>
                 </a>
                 <br>

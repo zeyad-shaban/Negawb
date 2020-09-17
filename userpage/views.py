@@ -127,8 +127,7 @@ def acceptrequest(request):
 
 
 @login_required
-def unfriend(request):
-    pk = request.GET.get('pk')
+def unfriend(request, pk):
     friend = get_object_or_404(User, pk=pk)
     user = request.user
     user.friends.remove(friend)

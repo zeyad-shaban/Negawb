@@ -22,7 +22,7 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="mr-2">
-                                <a href="{% url 'people:people' post.user.id %}" target='_blank'>
+                                <a href="{% url 'people:view_user' post.user.id %}" target='_blank'>
                                     {% if post.user.who_see_avatar == 'everyone' %}
                                     <img src="{{post.user.avatar.url}}" alt="" width="45" class="rounded-circle"
                                         loading="lazy">
@@ -148,7 +148,7 @@
             <div class="comment-tabs">
                 {% for comment in comments %}
                 <li class="media">
-                    <a href="{% url 'people:people' comment.user.id %}">
+                    <a href="{% url 'people:view_user' comment.user.id %}">
                         {% if comment.user.who_see_avatar == 'everyone' %}
                         <img src="{{comment.user.avatar.url}}" alt="User Image" width="64" height="64"
                             class="media-object img-circle">
@@ -293,7 +293,7 @@
                     <ul class="media-list">
                         {% for reply in comment.reply_set.all %}
                         <li class="media media-replied">
-                            <a href="{% url 'people:people' reply.user.id %}">
+                            <a href="{% url 'people:view_user' reply.user.id %}">
                                 {% if reply.user.who_see_avatar == 'everyone' %}
                                 <img src="{{reply.user.avatar.url}}" alt="User Image" width="64" height="64"
                                     class="media-object img-circle">

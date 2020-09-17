@@ -9,308 +9,148 @@
 
 
 {% block content %}
+<div style="margin-left: auto; margin-right: auto; width: 90%;">
+    <div class="cover">
+        <a href="{% url 'people:view_user' view_user.id %}">
+            {% if view_user.who_see_avatar == 'everyone' %}
+            <img src="{{view_user.avatar.url}}" alt="User Image">
+            {% elif view_user.who_see_avatar == 'friends' and user in view_user.friends.all %}
+            <img src="{{view_user.avatar.url}}" alt="User Image">
+            {% elif view_user == user %}
+            <img src="{{view_user.avatar.url}}" alt="User Image">
+            {% else %}
+            <img src="/media/profile_images/DefaultUserImage.WebP" alt="User Image">
+            {% endif %}
+        </a>
+        <h1>{{ view_user.username }}</h1>
+        <p><span id="followersCount">{{ view_user.followers.count }}</span> Followers</p>
 
-<a href="{% url 'people:people' view_user.id %}">
-    {% if view_user.who_see_avatar == 'everyone' %}
-    <img src="{{view_user.avatar.url}}" alt="User Image" class="img-fluid float-left mr-4 rounded-circle" width="170"
-        height="170">
-    {% elif view_user.who_see_avatar == 'friends' and user in view_user.friends.all %}
-    <img src="{{view_user.avatar.url}}" alt="User Image" class="img-fluid float-left mr-4 rounded-circle" width="170"
-        height="170">
-    {% elif view_user == user %}
-    <img src="{{view_user.avatar.url}}" alt="User Image" class="img-fluid float-left mr-4 rounded-circle" width="170"
-        height="170">
-    {% else %}
-    <img src="/media/profile_images/DefaultUserImage.jpg" alt="User Image"
-        class="img-fluid float-left mr-4 rounded-circle" width="170" height="170">
-    {% endif %}
-</a>
-<div class="">
-    <h3>{{view_user.username}}</h3>
-    <p><b>Bio</b>: {{view_user.bio}}</p>
-    {% if user.show_email %}
-    <p><b>Email</b>: {{view_user.email}}</p>
-    {% endif %}
-    <p><b>Friends</b>: {{ view_user.friends.count }}</p>
-    <p><b>Followers</b>: {{view_user.followers.count}}</p>
-    <p id="viewPostsPosts">Posts: {{view_user.post_set.count}}</p>
-</div>
+    </div>
+    <div id="buttons">
+        <!-- Follow -->
+        {% if user in view_user.followers.all %}
+        <button id="followUser" type="submit" name='submit' class="unfollow"><i class="fas fa-minus"></i>
+            Unfollow</button>
+        {% else %}
+        <button id="followUser" type="submit" name='submit' class="follow"><i class="fas fa-plus"></i>
+            Follow</button>
+        {% endif %}
 
-<div class="fb-profile-block-thumb cover-container">
-    {% if user in view_user.followers.all %}
-    <input id="followUser" type="submit" name='submit' value="{{view_user.followers.count}} Unfollow"
-        class="btn btn-primary">
-    {% else %}
-    <input id="followUser" type="submit" name='submit' value="{{view_user.followers.count}} Follow"
-        class="btn btn-primary">
-    {% endif %}
-    {% if user.allow_friend_request %}
-    {% if user in view_user.friends.all %}
-    <form method="GET" class="form-inline d-inline ml-3 unfriend">
-        <input type="submit" name='submit' value="Unfriend" class="btn btn-danger">
-    </form>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            window.addEventListener('load', function () {
-                $('.unfriend').submit(function (e) {
-                    e.preventDefault();
-                    let confirmation = confirm(
-                        'Are you sure you want to unfriend {{ view_user.username }}')
-                    if (confirmation) {
-                        let friendUsername = "{{view_user.username}}"
-                        let thisButton = $(this)
-                        $.ajax({
-                            url: "{% url 'userpage:unfriend' %}",
-                            data: {
-                                'pk': "{{view_user.id}}"
-                            },
-                            method: 'get',
-                            dataType: 'json',
-                            success: function (response) {
-                                thisButton.fadeOut()
-                                $('#message_area').html(
-                                    `<div class="alert alert-success"> You unfriended {{ view_user.username }} `
-                                )
-                            }
-                        })
-                    }
-                })
-            })
-        })
-    </script>
-    {% else %}
-    <input id="addFriendRequest" type="submit" name='submit' value="Add Friend" class="btn btn-success">
-    {% endif %}
-    {% endif %}
-    {% if user.is_authenticated and user in view_user.friends.all %}
-    <a href="{% url 'social:chat_friend' view_user.id %}" class="btn btn-primary ml-3">Chat</a>
-    {% endif %}
-</div>
-<!-- Adding Friend and Follow -->
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        window.addEventListener('load', function () {
-            // Add Friend
-            $('#addFriendRequest').click(function () {
-                $.ajax({
-                    url: "{% url 'people:add_friend' view_user.id %}",
-                    data: {},
-                    dataType: 'json',
-                    success: function (data) {
-                        $('#message_area').html('')
-                        if (data.message.tags === 'error') {
-                            $('#message_area').append(`
-                            <div class="alert alert-danger fixed-top">${data.message.text}</div>
-                            `)
-                        } else {
-                            $('#message_area').append(`
-        <div class="alert alert-${data.message.tags} fixed-top">${data.message.text}</div>
-                                `)
-                        }
-                        $('#addFriendRequest').fadeOut()
-                    }
-                })
-            })
-            // Follow User
-            $('#followUser').click(function () {
-                $.ajax({
-                    url: "{% url 'people:follow' view_user.id %}",
-                    dataType: 'json',
-                    success: function (data) {
-                        let followers = "{{view_user.followers.count}}"
-                        if (data.action == 'follow') {
-                            followers++
-                            $('#followUser').val(followers + ' Unfollow')
-                        } else if (data.action == 'unfollow') {
-                            followers--
-                            $('#followUser').val(followers + ' Follow')
-                        }
-                        $('#message_area').html('')
-                        if (data.message.tags === 'error') {
-                            $('#message_area').append(`
-                            <div class="alert alert-danger fixed-top">${data.message.text}</div>
-                            `)
-                        } else {
-                            $('#message_area').append(`
-        <div class="alert alert-${data.message.tags} fixed-top">${data.message.text}</div>
-                                `)
-                        }
-                    }
-                })
-            })
-        })
-    })
-</script>
-<hr>
-<div id="view_userPosts">
-    <!-- *Show posts Script -->
-    <script>
-        $('#view_userPosts').css('display', 'none')
-        $('#viewPosts').click(function (e) {
-            e.preventDefault();
-            $('#view_userPosts').fadeToggle()
-        })
-    </script>
-    <div class="container-fluid gedf-wrapper">
-        <div class="row">
-            <div class="col-md-3">
-            </div>
-            <div class="col-md-6 gedf-main">
-
-
-                {% for post in posts %}
-                <!--- \\\\\\\Post-->
-                <div class="card gedf-card">
-                    <div class="card-header">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="mr-2">
-                                    <a href="{% url 'people:people' post.user.id %}" target='_blank'>
-                                        {% if post.user.who_see_avatar == 'everyone' %}
-                                        <img src="{{post.user.avatar.url}}" alt="" width="45" class="rounded-circle"
-                                            loading="lazy">
-                                        {% elif post.user.who_see_avatar == 'friends' and user in post.user.friends.all %}
-                                        <img src="{{post.user.avatar.url}}" alt="" width="45" class="rounded-circle"
-                                            loading="lazy">
-                                        {% elif post.user == user %}
-                                        <img src="{{post.user.avatar.url}}" alt="" width="45" class="rounded-circle"
-                                            loading="lazy">
-                                        {% else %}
-                                        <img src="/media/profile_images/DefaultUserImage.jpg" alt="" width="45"
-                                            class="rounded-circle" loading="lazy">
-                                        {% endif %}
-                                    </a>
-                                </div>
-                                <div class="ml-2">
-                                    <div class="h5 m-0">{{ post.user.username }}</div>
-                                    <div class="h7 text-muted">{{post.views.count}} Views -
-                                        {% if post.category %}{{ post.category.title }} {% else %}All{% endif %} Topic
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="dropdown">
-                                    <button class="btn btn-link" type="button" id="gedf-drop1" data-toggle="dropdown"
-                                        aria-haspopup="true" aria-expanded="false">
-                                        <i class="fa fa-ellipsis-h"></i>
-                                    </button>
-                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="gedf-drop1">
-                                        <div class="h6 dropdown-header">Configuration</div>
-                                        <a class="dropdown-item" href="#">Save</a>
-                                        <a class="dropdown-item" href="#">Hide</a>
-                                        <a class="dropdown-item" href="#">Report</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
+        {% if view_user.allow_friend_request %}
+        {% if user in view_user.friends.all %}
+        <!--  Unfriend -->
+        <a href="{% url 'userpage:unfriend' view_user.id %}" id="unfriend">Unfriend</a>
+        {% else %}
+        <!-- Addfriend -->
+        <a href="{% url 'people:add_friend' view_user.id %}" id="addFriend"><i class="fas fa-user-plus"></i> Add
+            friend</a>
+        {% endif %}
+        {% endif %}
+    </div>
+    <div id="posts" data-url="{% url 'userpage:get_user_by_id' %}">
+        {% for post in posts %}
+        <div class="card-header">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="mr-2">
+                        <a href="{% url 'people:view_user' post.user.id %}" target='_blank'>
+                            {% if post.user.who_see_avatar == 'everyone' %}
+                            <img src="{{post.user.avatar.url}}" alt="" width="45" class="rounded-circle" loading="lazy">
+                            {% elif post.user.who_see_avatar == 'friends' and user in post.user.friends.all %}
+                            <img src="{{post.user.avatar.url}}" alt="" width="45" class="rounded-circle" loading="lazy">
+                            {% elif post.user == user %}
+                            <img src="{{post.user.avatar.url}}" alt="" width="45" class="rounded-circle" loading="lazy">
+                            {% else %}
+                            <img src="/media/profile_images/DefaultUserImage.jpg" alt="" width="45"
+                                class="rounded-circle" loading="lazy">
+                            {% endif %}
+                        </a>
                     </div>
-                    <div class="card-body">
-                        <div class="text-muted h7 mb-2"> <i class="fa fa-clock-o"></i>{{ post.post_date|timesince }} ago
+                    <div class="ml-2">
+                        <div class="h5 m-0">{{ post.user.username }}</div>
+                        <div class="h7 text-muted">{{post.views.count}} Views -
+                            {% if post.category %}{{ post.category.title }} {% else %}All{% endif %} Topic
                         </div>
-                        <!-- Title -->
-                        <p class="card-link btn-link" href="#">
-                            <h5 class="card-title">{{ post.description|truncatechars:45 }}</h5>
-                        </p>
-                        <!-- Image -->
-                        {% if post.image %}
-                        <img src="{{ post.image.url }}" alt=""
-                            style="width:80%; height: auto; margin-left: auto; margin-right: auto;">
-                        {% endif %}
-                        <!-- File -->
-                        {% if post.post_file %}
-                        <video controls class="col-md-10 col-lg-8" preload="none">
-                            <source src="{{ post.post_file.url }}" type="video/mp4">
-                            <source src="{{ post.post_file.url }}" type="video/ogg">
-                            Your browser does not support the video tag.
-                        </video>
-                        {% endif %}
-                        <!-- Description -->
-                        {% if post.description and post.description|length > 45 %}
-                        <div class="mt-2" style="white-space: pre-line;">
-                            <p class="card-text" style="white-space: pre-line;">
-                                {{ post.description| truncatechars:227 }} {% if post.description|length > 227 %} <p
-                                    class="btn btn-link"
-                                    onclick="this.parentElement.innerHTML = `{{ post.description }}`">
-                                    Read more</p>{% endif %}
-                            </p>
-                        </div>
-                        {% endif %}
-                    </div>
-                    <div class="card-footer">
-                        <form method="GET" class="likeForm d-inline"
-                            action="{% url 'comments:post_like_dislike' post.id %}" data-pk="{{post.id}}">
-                            <button type="submit" class="btn"><i class="far fa-thumbs-up"></i>
-                                <span id="id_likes{{post.id}}">
-                                    {% if user in post.likes.all %}
-                                    <p style="color:#065FD4;display: inline">{{post.likes.count}}</p>
-                                    {% else %}
-                                    <p style="color:black;display: inline">{{post.likes.count}}</p>
-                                    {% endif %}
-                                </span>
-                                Like</button>
-                        </form>
-                        <form action="{% url 'comments:post_like_dislike' post.id %}" method="GET"
-                            class="d-inline dislikeForm" data-pk="{{ post.id }}">
-                            <button type="submit" class="btn"><i class="far fa-thumbs-down"></i>
-                                <span id="id_dislikes{{post.id}}">
-                                    {% if user in post.dislikes.all %}
-                                    <p style="color:#065FD4; display: inline;">{{post.dislikes.count}}</p>
-                                    {% else %}
-                                    <p style="color:black; display: inline;">{{post.dislikes.count}}</p>
-                                    {% endif %}
-                                </span>
-                                Dislike
-                            </button>
-                        </form>
-                        <a href="{% url 'comments:view_post' post.id %}" class="card-link"><i
-                                class="fab fa-rocketchat"></i>
-                            Comments</a>
-                        <!-- AddToAny BEGIN -->
-                        <a href="https://www.addtoany.com/share#url=https%3A%2F%2Fwww.dfreemedia.com{% url 'comments:view_post' post.id %}&amp;title={{ post.description|truncatechars:45 }}"
-                            target="_blank" class="card-link"><i class="fa fa-mail-forward"></i> Share</a>
-                        <!-- AddToAny END -->
                     </div>
                 </div>
-                <!-- Post /////-->
-
-                {% endfor %}
             </div>
+
         </div>
+        <div class="card-body">
+            <div class="text-muted h7 mb-2"> <i class="fa fa-clock-o"></i>{{ post.post_date|timesince }} ago
+            </div>
+            <!-- Title -->
+            <p class="card-link btn-link" href="#">
+                <h5 class="card-title">{{ post.description|truncatechars:45 }}</h5>
+            </p>
+            <!-- Image -->
+            {% if post.image %}
+            <img src="{{ post.image.url }}" alt=""
+                style="width:80%; height: auto; margin-left: auto; margin-right: auto;">
+            {% endif %}
+            <!-- File -->
+            {% if post.post_file %}
+            <video controls class="col-md-10 col-lg-8" preload="none">
+                <source src="{{ post.post_file.url }}" type="video/mp4">
+                <source src="{{ post.post_file.url }}" type="video/ogg">
+                Your browser does not support the video tag.
+            </video>
+            {% endif %}
+            <!-- Description -->
+            {% if post.description and post.description|length > 45 %}
+            <div class="mt-2" style="white-space: pre-line;">
+                <p class="card-text" style="white-space: pre-line;">
+                    {{ post.description| truncatechars:227 }} {% if post.description|length > 227 %} <p
+                        class="btn btn-link" onclick="this.parentElement.innerHTML = `{{ post.description }}`">
+                        Read more</p>{% endif %}
+                </p>
+            </div>
+            {% endif %}
+        </div>
+        <div class="card-footer">
+            <form method="GET" class="likeForm d-inline" action="{% url 'comments:post_like_dislike' post.id %}"
+                data-pk="{{post.id}}">
+                <button type="submit" class="btn"><i class="far fa-thumbs-up"></i>
+                    <span id="id_likes{{post.id}}">
+                        {% if user in post.likes.all %}
+                        <p style="color:#065FD4;display: inline">{{post.likes.count}}</p>
+                        {% else %}
+                        <p style="color:black;display: inline">{{post.likes.count}}</p>
+                        {% endif %}
+                    </span>
+                    Like</button>
+            </form>
+            <form action="{% url 'comments:post_like_dislike' post.id %}" method="GET" class="d-inline dislikeForm"
+                data-pk="{{ post.id }}">
+                <button type="submit" class="btn"><i class="far fa-thumbs-down"></i>
+                    <span id="id_dislikes{{post.id}}">
+                        {% if user in post.dislikes.all %}
+                        <p style="color:#065FD4; display: inline;">{{post.dislikes.count}}</p>
+                        {% else %}
+                        <p style="color:black; display: inline;">{{post.dislikes.count}}</p>
+                        {% endif %}
+                    </span>
+                    Dislike
+                </button>
+            </form>
+            <a href="{% url 'comments:view_post' post.id %}" class="card-link"><i class="fab fa-rocketchat"></i>
+                Comments</a>
+            <!-- AddToAny BEGIN -->
+            <a href="https://www.addtoany.com/share#url=https%3A%2F%2Fwww.dfreemedia.com{% url 'comments:view_post' post.id %}&amp;title={{ post.description|truncatechars:45 }}"
+                target="_blank" class="card-link"><i class="fa fa-mail-forward"></i> Share</a>
+            <!-- AddToAny END -->
+        </div>
+        <!-- Post /////-->
+        {% endfor %}
     </div>
+    <div id="loading"></div>
+</div>
 
 
-    <!-- PAGINATOR -->
-    {% if view_user.post_set.count > 0 %}
-    <nav aria-label="...">
-        <ul class="pagination">
-            {% if posts.has_previous %}
-            <li class="page-item">
-                <a href="?page={{ posts.previous_page_number }}" class="page-link">&laquo</a>
-            </li>
-            {% endif %}
+{% if posts.count <= 0 or not posts %}
+<h4 style="margin-left: 7%">This users Doesn't have any posts</h4>
+{% endif %}
 
-
-            {% for page in posts.paginator.page_range %}
-            {% if posts.number == page %}
-            <li class="page-item active">
-                <a href="?page={{ page }}" class="page-link">{{ page }}</a>
-            </li>
-            {% else %}
-            <li class="page-item">
-                <a href="?page={{ page }}" class="page-link">{{ page }}</a>
-            </li>
-            {% endif %}
-            {% endfor %}
-            {% if posts.has_next %}
-            <li class="page-item">
-                <a class="page-link" href="?page={{ posts.next_page_number }}">&raquo</a>
-            </li>
-            {% endif %}
-        </ul>
-    </nav>
-    {% else %}
-    <h1>This users has 0 Posts</h1>
-    {% endif %}
-    <script src="{% static 'people/index.js' %}"></script>
-    {% endblock content %}
+<script src="{% static 'people/index.js' %}"></script>
+<link rel="stylesheet" href="{% static 'people/index.css' %}">
+{% endblock content %}

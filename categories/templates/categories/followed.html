@@ -23,7 +23,7 @@
     <li>
         <div class="row w-100">
             <div class="userInfo">
-                <a href="{% url 'people:people' followed.id %}">
+                <a href="{% url 'people:view_user' followed.id %}">
                     {% if followed.who_see_avatar == 'everyone' %}
                     <img src="{{ followed.avatar.url }}" alt="{{ followed.username }}"
                         class="img-fluid rounded-circle d-block mx-auto" height="73" width="73">
@@ -37,7 +37,7 @@
                 </a>
             </div>
             <div class="userDesc">
-                <a href="{% url 'people:people' followed.id %}" class="btn" style="font-size: 150%; font-weight: 300;">
+                <a href="{% url 'people:view_user' followed.id %}" class="btn" style="font-size: 150%; font-weight: 300;">
                     <span style="margin-bottom: 10px; display: inline-block">{{ followed.username }}</span>
                 </a>
                 <br>

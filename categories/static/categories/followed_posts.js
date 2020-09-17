@@ -3,8 +3,6 @@ document.addEventListener('DOMContentLoaded', function (e) {
 
         // Paginator
         let page = 2
-
-
         function bottomScroll() {
             // homepage posts
             if ($(window).scrollTop() + $(window).height() == $(document).height()) {

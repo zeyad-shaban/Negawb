@@ -57,7 +57,7 @@ class PeopleSitemap(Sitemap):
         return User.objects.all()
 
     def location(self, obj):
-        return reverse('people:people', args=[obj.id])
+        return reverse('people:view_user', args=[obj.id])
 
 
 class FeedbackSitemap(Sitemap):

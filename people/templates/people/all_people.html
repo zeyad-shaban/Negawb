@@ -83,7 +83,7 @@ friends.{% endblock description %}
     <li>
         <div class="row w-100">
             <div class="userInfo">
-                <a href="{% url 'people:people' view_user.id %}">
+                <a href="{% url 'people:view_user' view_user.id %}">
                     {% if view_user.who_see_avatar == 'everyone' %}
                     <img src="{{ view_user.avatar.url }}" alt="{{ view_user.username }}"
                         class="img-fluid rounded-circle d-block mx-auto" height="73" width="73">
@@ -97,7 +97,7 @@ friends.{% endblock description %}
                 </a>
             </div>
             <div class="userDesc">
-                <a href="{% url 'people:people' view_user.id %}" class="btn" style="font-size: 150%; font-weight: 300;">
+                <a href="{% url 'people:view_user' view_user.id %}" class="btn" style="font-size: 150%; font-weight: 300;">
                     <span style="margin-bottom: 10px; display: inline-block">{{ view_user.username }}</span>
                 </a>
                 <br>

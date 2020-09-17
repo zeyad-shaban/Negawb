@@ -1,0 +1,108 @@
+.cover {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('https://cdn.pixabay.com/photo/2016/11/05/08/31/rome-1799670_960_720.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 30vh;
+    color: white;
+    padding: 20px;
+}
+
+.cover img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-right: 30px;
+    margin-top: 30px;
+    float: left;
+}
+
+.cover h1,
+.cover p {
+    margin-top: 30px;
+    word-spacing: 4px;
+    font-weight: 300;
+}
+
+#buttons {
+    margin: 30px auto 100px 10px;
+    display: block;
+}
+
+.follow {
+    border-radius: 200px;
+    float: right;
+    transition: background-color 0.2s;
+    background-color: #48dbfb;
+    float: right;
+    color: white;
+    padding: 10px 30px;
+    border: 0px;
+}
+
+.follow:hover {
+    background-color: #16d1fa;
+}
+
+.unfollow {
+    border-radius: 200px;
+    float: right;
+    color: red;
+    background-color: rgba(255, 255, 255, 0);
+    padding: 10px 30px;
+    border: 1px solid red;
+    transition: background-color 0.2s, border 0.2s, color 0.2s;
+}
+
+.unfollow:hover {
+    background-color: #f22;
+    border: 1px solid #f22;
+    color: white
+}
+
+#addFriend {
+    padding: 10px 30px;
+    margin-right: 20px;
+    background-color: #2ecc71;
+    float: right;
+    color: white;
+    border-radius: 200px;
+    text-decoration: none;
+    transition: background-color 0.2s;
+}
+
+#addFriend:hover {
+    background-color: #28b062;
+}
+
+
+#unfriend {
+    padding: 10px 30px;
+    margin-right: 20px;
+    float: right;
+    color: red;
+    border: 1px solid red;
+    border-radius: 200px;
+    text-decoration: none;
+    transition: background-color 0.2s;
+}
+
+#unfriend:hover {
+    background-color: #f22;
+    color: white;
+    border: 1px solid #f22;
+}
+
+/* ------------------------------- */
+/* Posts */
+/* ------------------------------- */
+.card.gedf-card {
+    margin: 20px 30px 40px 30px;
+}
+
+/* --------------------- */
+/* Loading */
+/* --------------------- */
+#loading {
+    margin: 30px 45%;
+    font-size: 200%;
+}

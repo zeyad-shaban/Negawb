@@ -104,7 +104,7 @@
                     <ul class="list-unstyled">
                         {% for member in group.members.all %}
                         <li class="media">
-                            <a href="{% url 'people:people' member.id %}" target="_blank">
+                            <a href="{% url 'people:view_user' member.id %}" target="_blank">
                                 {% if member.who_see_avatar == 'everyone' %}
                                 <img src="{{member.avatar.url}}" alt="User Image" width="64" height="64"
                                     class="rounded-circle">
@@ -145,7 +145,7 @@
                         {% for friend in user.friends.all %}
                         {% if not friend in group.members.all %}
                         <li class="media">
-                            <a href="{% url 'people:people' friend.id %}" target="_blank">
+                            <a href="{% url 'people:view_user' friend.id %}" target="_blank">
                                 {% if friend.who_see_avatar == 'everyone' %}
                                 <img src="{{friend.avatar.url}}" alt="User Image" width="64" height="64"
                                     class="rounded-circle">

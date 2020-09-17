@@ -13,7 +13,7 @@ from django.contrib.auth import get_user_model as user_model
 User = user_model()
 
 
-def people(request, pk):
+def view_user(request, pk):
     """ View Other Users Accounts """
     view_user = get_object_or_404(User, pk=pk)
     friends = User.objects.filter(friends=view_user)
@@ -26,8 +26,11 @@ def people(request, pk):
     except PageNotAnInteger:
         posts = paginator.page(1)
     except EmptyPage:
-        posts = paginator.page(paginator.num_pages)
-    return render(request, 'people/index.html', {'view_user': view_user, 'friends': friends, 'posts': posts})
+        posts = []
+    if request.GET.get('page'):
+        return JsonResponse({'posts': serialize('json', posts)})
+    else:
+        return render(request, 'people/index.html', {'view_user': view_user, 'friends': friends, 'posts': posts})
 
 
 def all_people(request):

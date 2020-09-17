@@ -24,7 +24,7 @@
     {% endif %}
 
     <div class="media-body">
-        <h5 class="mt-0"><a href="{% url 'people:people' request.from_user.id %}">{{ request.from_user }}</a> sent you a
+        <h5 class="mt-0"><a href="{% url 'people:view_user' request.from_user.id %}">{{ request.from_user }}</a> sent you a
             friend request <small class="form-text text-muted">
                 {{request.date|date:"j b o"}}</small></small></h5>
 

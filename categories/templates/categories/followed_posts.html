@@ -105,7 +105,7 @@
             <div class="d-flex justify-content-between align-items-center">
                 <div class="d-flex justify-content-between align-items-center">
                     <div class="mr-2">
-                        <a href="{% url 'people:people' post.user.id %}" target='_blank'>
+                        <a href="{% url 'people:view_user' post.user.id %}" target='_blank'>
                             {% if post.user.who_see_avatar == 'everyone' %}
                             <img src="{{post.user.avatar.url}}" alt="" width="45" class="rounded-circle" loading="lazy">
                             {% elif post.user.who_see_avatar == 'friends' and user in post.user.friends.all %}
