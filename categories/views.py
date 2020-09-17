@@ -13,7 +13,7 @@ User = get_user_model()
 
 
 def home(request):
-    if request.user.is_authenticated and (request.user.chat_only_mode or request.user.homepage == 'chat'):
+    if request.user.is_authenticated and request.user.homepage == 'chat':
         return redirect('chat')
     elif request.user.is_authenticated and request.user.homepage == 'followed_posts':
         return redirect('followed_posts')

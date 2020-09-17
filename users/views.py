@@ -27,14 +27,8 @@ def signupuser(request):
                     homepage_hashtags = request.POST.get('homepage_hashtags')
                 else:
                     homepage_hashtags = None
-                # Start chat only
-                if request.POST.get('chat_only_mode') == 'on':
-                    is_chat_only_mode = True
-                else:
-                    is_chat_only_mode = False
-                # End chat only
                 user = User.objects.create_user(
-                    request.POST.get('username'), password=request.POST.get('password1'), homepage_hashtags=homepage_hashtags, chat_only_mode=is_chat_only_mode)
+                    request.POST.get('username'), password=request.POST.get('password1'), homepage_hashtags=homepage_hashtags)
                 user.save()
                 login(request, user)
                 return redirect('set_email_and_phone')

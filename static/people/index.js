@@ -2,11 +2,8 @@ document.addEventListener('DOMContentLoaded', function () {
     window.addEventListener('load', function () {
 
         // Post paginator
-        // Paginator
         let page = 2
-
         function bottomScroll() {
-            // homepage posts
             if ($(window).scrollTop() + $(window).height() == $(document).height()) {
                 document.querySelector('#loading').innerHTML = `<div class="spinner-border text-primary" role="status">
                 <span class="sr-only">Loading...</span>

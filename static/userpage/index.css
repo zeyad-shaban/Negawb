@@ -1,3 +1,35 @@
+/* ------------- */
+/* User profile */
+/* ------------- */
+
+.cover {
+    background-size: cover;
+    background-position: center;
+    min-height: 30vh;
+    color: white;
+    padding: 20px;
+}
+
+.cover img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-right: 30px;
+    margin-top: 30px;
+    float: left;
+}
+
+.cover h1,
+.cover p {
+    margin-top: 30px;
+    word-spacing: 4px;
+    font-weight: 300;
+}
+
+
+/* ------------- */
+/* Edit navigation */
+/* ------------- */
 #editNavbar {
     margin-right: auto;
     margin-left: auto;
@@ -19,4 +51,20 @@
 
 #editNavbar ul li:hover {
     border-bottom: 1px solid #fff;
+}
+
+/* ------------------------------- */
+/* Posts */
+/* ------------------------------- */
+.card.gedf-card {
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+/* --------------------- */
+/* Loading */
+/* --------------------- */
+#loading {
+    margin: 30px 45%;
+    font-size: 200%;
 }

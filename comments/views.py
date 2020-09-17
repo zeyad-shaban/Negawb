@@ -72,7 +72,7 @@ def view_post(request, pk):
             comment = Comment(description=request.GET.get(
                 'description'), post=post, user=request.user)
             comment.save()
-            if post.user.allow_comment_message and not post.user.chat_only_mode:
+            if post.user.allow_comment_message and not post.user.homepage == 'Chat':
                 if post.user != request.user:
                     # !ABSOLUTE PATH
                     notification = Notification(notification_type='comment_message', sender=request.user,
@@ -219,7 +219,7 @@ def create_reply(request, pk):
     reply = Reply(description=request.GET.get('description'),
                   comment=comment, user=request.user)
     reply.save()
-    if comment.user.allow_reply_message and not comment.user.chat_only_mode:
+    if comment.user.allow_reply_message and not comment.user.homepage == Chat:
         # TODO FIX THE URL
         notification = Notification(notification_type='reply_message',
                                     sender=request.user, url=f'/comments/{comment.post.id}/', content=f'{request.user.username} Repliled: {reply.description[:100]}')
