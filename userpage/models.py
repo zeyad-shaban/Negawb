@@ -9,6 +9,7 @@ class User(AbstractUser):
         max_length=200, default='Hi there!', blank=True, null=True,)
     avatar = models.ImageField(
         upload_to='profile_images', default='profile_images/DefaultUserImage.jpg',)
+    cover = models.ImageField(upload_to='userpage/cover', default="userpage/DefaultCover.jpg")
     phone = models.CharField(max_length=14, null=True, blank=True, unique=True)
     email_code = models.IntegerField(null=True, blank=True)
     phone_code = models.IntegerField(null=True, blank=True)

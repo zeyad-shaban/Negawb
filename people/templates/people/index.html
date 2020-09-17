@@ -2,13 +2,16 @@
 {% load static %}
 {% block title %} {{view_user.username}} | Dfreemedia {% endblock title %}
 
-
 {% block description %}
 {{view_user.bio}}
 {% endblock description %}
 
-
 {% block content %}
+<style>
+    .cover {
+        background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url("{{ view_user.cover.url }}");
+    }
+</style>
 <div style="margin-left: auto; margin-right: auto; width: 90%;">
     <div class="cover">
         <a href="{% url 'people:view_user' view_user.id %}">

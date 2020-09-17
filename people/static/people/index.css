@@ -1,5 +1,4 @@
 .cover {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('https://cdn.pixabay.com/photo/2016/11/05/08/31/rome-1799670_960_720.jpg');
     background-size: cover;
     background-position: center;
     height: 30vh;
