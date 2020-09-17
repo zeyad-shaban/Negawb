@@ -27,7 +27,7 @@
         <ul>
             <li><a href="{% url 'userpage:posts' %}">Posts</a></li>
             <li><a href="{% url 'userpage:friends' %}">{{user.friends.all.count}} Friends</a></li>
-            <li><a href="#">Requests</a></li>
+            <li><a href="{% url 'userpage:requests' %}">Requests</a></li>
             <li><a href="#">Invites</a></li>
         </ul>
     </nav>

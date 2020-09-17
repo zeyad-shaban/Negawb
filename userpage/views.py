@@ -88,7 +88,7 @@ def requests(request):
     group_requests = GroupRequest.objects.filter(reciever=request.user)
     user_friends = User.objects.filter(friends=request.user)
     if request.method == 'GET':
-        return render(request, 'userpage/friendrequest.html', {'requests': requests, 'group_requests': group_requests, 'user_friends': user_friends})
+        return render(request, 'userpage/requests.html', {'requests': requests, 'group_requests': group_requests, 'user_friends': user_friends})
 
 
 @login_required

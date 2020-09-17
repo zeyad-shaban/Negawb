@@ -78,7 +78,7 @@ def add_friend(request, pk):
         return JsonResponse({'message': message})
     elif friend_request_check_2:
         message = {
-            'text': f'{to_user} has already send a you a <a href="/userpage/friendrequest/" >friend request Here</a>',
+            'text': f'{to_user} has already send a you a <a href="/user/requests/" >friend request Here</a>',
             'tags': 'warning',
         }
         return JsonResponse({'message': message})
@@ -91,7 +91,7 @@ def add_friend(request, pk):
                 friend_request.save()
                 if friend_request.to_user.allow_invites:
                     notification = Notification(notification_type='invites', sender=request.user,
-                                                url="/userpage/friendrequest/", content=f'{friend_request.from_user} Send you a friend request')
+                                                url="/user/requests/", content=f'{friend_request.from_user} Send you a friend request')
                     notification.save()
                     notification.receiver.add(friend_request.to_user)
                     for receiver in notification.receiver.all():

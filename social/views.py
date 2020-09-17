@@ -351,7 +351,7 @@ def send_group_invite(request, user_pk, group_pk):
         # !ABSOLUTE PATH
         if reciever.allow_invites:
             notification = Notification(notification_type='invites', sender=request.user,
-                                        url='/userpage/friendrequest/', content=f'{request.user.username} invited you to join {group.title}')
+                                        url='/user/requests/', content=f'{request.user.username} invited you to join {group.title}')
             notification.save()
             notification.receiver.add(reciever)
             for receiver in notification.receiver.all():

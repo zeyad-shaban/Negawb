@@ -1,14 +1,7 @@
-{% extends 'categories/base.html' %}
-
-{% block title %}Check out Friend and Group Requests | Dfreemedia{% endblock title %}
-
-
-{% block content %}
-<small class="from-text text-muted"><a href="{% url 'people:all_people' %}">Find Friend</a></small>
-<h1>Social Friends Requests</h1>
-<p>{{requests.count}} Friend Request{{requests.count|pluralize}}</p>
-<br>
-
+{% extends 'userpage/userbase.html' %}
+{% load static %}
+{% block option %}
+<h1>Friends</h1>
 {% for request in requests %}
 <div class="media" id="{{request.id}}Friend">
 
@@ -24,7 +17,8 @@
     {% endif %}
 
     <div class="media-body">
-        <h5 class="mt-0"><a href="{% url 'people:view_user' request.from_user.id %}">{{ request.from_user }}</a> sent you a
+        <h5 class="mt-0"><a href="{% url 'people:view_user' request.from_user.id %}">{{ request.from_user }}</a> sent
+            you a
             friend request <small class="form-text text-muted">
                 {{request.date|date:"j b o"}}</small></small></h5>
 
@@ -43,9 +37,6 @@
 
             // ACCEPT 
             $('#acceptFriendForm{{request.id}}').submit(function (event) {
-                event.preventDefault()
-            })
-            $('#acceptFriend{{request.id}}').click(function (event) {
                 event.preventDefault();
                 $.ajax({
                     type: "get",
@@ -110,10 +101,7 @@
     })
 </script>
 {% endfor %}
-<hr>
-<h1>Group Requests</h1>
-<p>{{group_requests.count}} Group Request{{group_requests.count|pluralize}}</p>
-<br>
+<h1>Group</h1>
 {% for request in group_requests %}
 <div class="media" id="{{request.id}}Group">
     {% if request.request_sender.who_see_avatar == 'everyone' %}
@@ -211,4 +199,4 @@
 </script>
 {% endfor %}
 
-{% endblock content %}
+{% endblock option %}
