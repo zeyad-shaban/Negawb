@@ -18,7 +18,8 @@ User = get_user_model()
 def chat(request):
     if request.method == 'GET':
         if request.user.is_authenticated:
-            chat_boxes = ChatBox.objects.filter(Q(user_1=request.user) | Q(user_2=request.user))
+            chat_boxes = ChatBox.objects.filter(
+                Q(user_1=request.user) | Q(user_2=request.user))
             groups = ChatGroup.objects.filter(members=request.user)
         else:
             chat_boxes = []
@@ -45,9 +46,13 @@ def chat_friend(request, pk):
     if not chat_box:
         chat_box = ChatBox.objects.filter(
             user_1=friend, user_2=request.user).first()
-    if not chat_box:
-        chat_box = ChatBox(user_1=request.user, user_2=friend)
-        chat_box.save()
+
+    # Read all messages
+    for message in Message.objects.filter(Q(is_read=False), ~Q(message_sender=request.user)):
+        message.is_read = True
+        message.save()
+    for notification in Notification.objects.filter(sender=friend, url=f"/social/chat_friend/{friend.id}"):
+        notification.delete()
 
     chat_messages_list = Message.objects.filter(
         chat_box=chat_box).order_by('date')
@@ -126,7 +131,7 @@ def send_friend_message(request, pk):
         if friend.allow_normal_friend_message:
             # !ABSOLUTE PATH
             notification = Notification.objects.create(
-                notification_type='normal_friend_message', sender=request.user, url=f'/social/chat_friend/{request.user.id}', content=f'a message from {friend.username}: {message.message[:100]}')
+                notification_type='normal_friend_message', sender=request.user, url=f'/social/chat_friend/{request.user.id}', content=f'a message from {request.user.username}: {message.message[:100]}')
             notification.save()
             notification.receiver.add(friend)
             for receiver in notification.receiver.all():

@@ -54,36 +54,37 @@
                     </div>
                     <div class="user_info">
                         <h4>{{ chat_box.user_2.username }}</h4>
-                        <p style="font-size: 80%;">{{ chat_box.message_set.all.last|truncatechars:80 }}</p>
-                    </div>
-                    {% else %}
-                    <a href="{% url 'social:chat_friend' chat_box.user_1.id %}" class="mb-7">
-                        <div class="d-flex bd-highlight">
-                            <div class="img_cont">
-                                <!-- -----------------------  -->
-                                <!-- FRIEND IS USER 1  -->
-                                <!-- -----------------------  -->
-                                {% if friend.who_see_avatar == 'everyone' %}
-                                <img src="{{chat_box.user_1.avatar.url}}" alt="User Image" width="64" height="64"
-                                    class="rounded-circle user_img" loading="lazy">
-                                {% elif chat_box.user_1.who_see_avatar == 'friends' and user in chat_box.user_1.friends.all %}
-                                <img src="{{chat_box.user_1.avatar.url}}" alt="User Image" width="64" height="64"
-                                    class="rounded-circle user_img" loading="lazy">
-                                {% elif friend == user %}
-                                <img src="{{chat_box.user_1.avatar.url}}" alt="User Image" width="64" height="64"
-                                    class="rounded-circle user_img" loading="lazy">
-                                {% else %}
-                                <img src="/media/profile_images/DefaultUserImage.jpg" alt="User Image" width="64"
-                                    height="64" class="rounded-circle user_img" loading="lazy">
+                        {% else %}
+                        <a href="{% url 'social:chat_friend' chat_box.user_1.id %}" class="mb-7">
+                            <div class="d-flex bd-highlight">
+                                <div class="img_cont">
+                                    <!-- -----------------------  -->
+                                    <!-- FRIEND IS USER 1  -->
+                                    <!-- -----------------------  -->
+                                    {% if friend.who_see_avatar == 'everyone' %}
+                                    <img src="{{chat_box.user_1.avatar.url}}" alt="User Image" width="64" height="64"
+                                        class="rounded-circle user_img" loading="lazy">
+                                    {% elif chat_box.user_1.who_see_avatar == 'friends' and user in chat_box.user_1.friends.all %}
+                                    <img src="{{chat_box.user_1.avatar.url}}" alt="User Image" width="64" height="64"
+                                        class="rounded-circle user_img" loading="lazy">
+                                    {% elif friend == user %}
+                                    <img src="{{chat_box.user_1.avatar.url}}" alt="User Image" width="64" height="64"
+                                        class="rounded-circle user_img" loading="lazy">
+                                    {% else %}
+                                    <img src="/media/profile_images/DefaultUserImage.jpg" alt="User Image" width="64"
+                                        height="64" class="rounded-circle user_img" loading="lazy">
+                                    {% endif %}
+                                </div>
+                                <div class="user_info">
+                                    <h4>{{ chat_box.user_1.username }}</h4>
+                                    {% endif %}
+                                    <p style="font-size: 80%;">{{ chat_box.message_set.all.last.message|truncatechars:80 }}</p>
+                                </div>
+                                {% if chat_box.new_messages_count > 0 %}
+                                <span class="badge badge-pill badge-danger" style="position: absolute; padding: 7px; left: 50px;">{{ chat_box.new_messages_count }}</span>
                                 {% endif %}
                             </div>
-                            <div class="user_info">
-                                <h4>{{ chat_box.user_1.username }}</h4>
-                                <p style="font-size: 80%;">{{ chat_box.message_set.all.last|truncatechars:80 }}</p>
-                            </div>
-                            {% endif %}
-                        </div>
-                    </a>
+                        </a>
         </li>
         {% endfor %}
     </ui>
