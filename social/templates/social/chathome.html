@@ -3,137 +3,137 @@
 {% load crispy_forms_tags %}
 {% block title %} Dfreemedia chat {% endblock title %}
 {% block content %}
-<div id="container">
-    <h1 class="text-white">Contacts {{friends.count}}</h1>
-    {% if groups.count <= 0 and friends.count <= 0 or not user.is_authenticated %}
-    <h1 id="noFriends">You don't have any friends</h1>
-    {% endif %}
-    <ui id="contacts">
-        {% for group in groups %}
-        <li>
-            <a href="{% url 'social:chat_group' group.id %}" class="mb-7">
-                <div class="d-flex bd-highlight">
-                    <div class="img_cont">
-                        <img src="{{ group.image.url }}" class="rounded-circle user_img" loading="lazy">
-                    </div>
-                    <div class="user_info">
-                        <h4>{{ group.title }}</h4>
-                        <p style="font-size: 80%;">
-                            {{group.chat_group.all.last.message_sender.username|truncatechars:50 }}:
-                            {{ group.chat_group.all.last.message|truncatechars:70 }}</p>
-                    </div>
-                    <i class="fas fa-users float-right" style="font-size: 30px; color: white"></i>
+<h1 class="text-white">Contacts {{friends.count}}</h1>
+{% if groups.count <= 0 and friends.count <= 0 or not user.is_authenticated %}
+<h1 id="noFriends">You don't have any friends</h1>
+{% endif %}
+<ui id="contacts">
+    {% for group in groups %}
+    <li>
+        <a href="{% url 'social:chat_group' group.id %}" class="mb-7">
+            <div class="d-flex bd-highlight">
+                <div class="img_cont">
+                    <img src="{{ group.image.url }}" class="rounded-circle user_img" loading="lazy">
                 </div>
-            </a>
-        </li>
+                <div class="user_info">
+                    <h4>{{ group.title }}</h4>
+                    <p style="font-size: 80%;">
+                        {{group.chat_group.all.last.message_sender.username|truncatechars:50 }}:
+                        {{ group.chat_group.all.last.message|truncatechars:70 }}</p>
+                </div>
+                <i class="fas fa-users float-right" style="font-size: 30px; color: white"></i>
+            </div>
+        </a>
+    </li>
 
-        {% endfor %}
-        {% for chat_box in chat_boxes %}
-        <li>
+    {% endfor %}
+    {% for chat_box in chat_boxes %}
+    <li>
 
-            {% if chat_box.user_1 == user %}
-            <!-- -----------------------  -->
-            <!-- FRIEND IS USER 2  -->
-            <!-- -----------------------  -->
-            <a href="{% url 'social:chat_friend' chat_box.user_2.id %}" class="mb-7">
-                <div class="d-flex bd-highlight">
-                    <div class="img_cont">
-                        {% if friend.who_see_avatar == 'everyone' %}
-                        <img src="{{chat_box.user_2.avatar.url}}" alt="User Image" width="64" height="64"
-                            class="rounded-circle user_img" loading="lazy">
-                        {% elif chat_box.user_1.who_see_avatar == 'friends' and user in chat_box.user_2.friends.all %}
-                        <img src="{{chat_box.user_2.avatar.url}}" alt="User Image" width="64" height="64"
-                            class="rounded-circle user_img" loading="lazy">
-                        {% elif friend == user %}
-                        <img src="{{chat_box.user_2.avatar.url}}" alt="User Image" width="64" height="64"
-                            class="rounded-circle user_img" loading="lazy">
-                        {% else %}
-                        <img src="/media/profile_images/DefaultUserImage.jpg" alt="User Image" width="64" height="64"
-                            class="rounded-circle user_img" loading="lazy">
-                        {% endif %}
-                    </div>
-                    <div class="user_info">
-                        <h4>{{ chat_box.user_2.username }}</h4>
-                        {% else %}
-                        <a href="{% url 'social:chat_friend' chat_box.user_1.id %}" class="mb-7">
-                            <div class="d-flex bd-highlight">
-                                <div class="img_cont">
-                                    <!-- -----------------------  -->
-                                    <!-- FRIEND IS USER 1  -->
-                                    <!-- -----------------------  -->
-                                    {% if chat_box.user_1.who_see_avatar == 'everyone' %}
-                                    <img src="{{chat_box.user_1.avatar.url}}" alt="User Image" width="64" height="64"
+        {% if chat_box.user_1 == user %}
+        <!-- -----------------------  -->
+        <!-- FRIEND IS USER 2  -->
+        <!-- -----------------------  -->
+        <a href="{% url 'social:chat_friend' chat_box.user_2.id %}" class="mb-7">
+            <div class="d-flex bd-highlight">
+                <div class="img_cont">
+                    {% if friend.who_see_avatar == 'everyone' %}
+                    <img src="{{chat_box.user_2.avatar.url}}" alt="User Image" width="64" height="64"
+                        class="rounded-circle user_img" loading="lazy">
+                    {% elif chat_box.user_1.who_see_avatar == 'friends' and user in chat_box.user_2.friends.all %}
+                    <img src="{{chat_box.user_2.avatar.url}}" alt="User Image" width="64" height="64"
+                        class="rounded-circle user_img" loading="lazy">
+                    {% elif friend == user %}
+                    <img src="{{chat_box.user_2.avatar.url}}" alt="User Image" width="64" height="64"
+                        class="rounded-circle user_img" loading="lazy">
+                    {% else %}
+                    <img src="/media/profile_images/DefaultUserImage.jpg" alt="User Image" width="64" height="64"
+                        class="rounded-circle user_img" loading="lazy">
+                    {% endif %}
+                </div>
+                <div class="user_info">
+                    <h4>{{ chat_box.user_2.username }}</h4>
+                    {% else %}
+                    <a href="{% url 'social:chat_friend' chat_box.user_1.id %}" class="mb-7">
+                        <div class="d-flex bd-highlight">
+                            <div class="img_cont">
+                                <!-- -----------------------  -->
+                                <!-- FRIEND IS USER 1  -->
+                                <!-- -----------------------  -->
+                                {% if chat_box.user_1.who_see_avatar == 'everyone' %}
+                                <img src="{{chat_box.user_1.avatar.url}}" alt="User Image" width="64" height="64"
                                     class="rounded-circle user_img" loading="lazy">
-                                    {% elif chat_box.user_1.who_see_avatar == 'friends' and user in chat_box.user_1.friends.all %}
-                                    <img src="{{chat_box.user_1.avatar.url}}" alt="User Image" width="64" height="64"
-                                        class="rounded-circle user_img" loading="lazy">
-                                    {% elif friend == user %}
-                                    <img src="{{chat_box.user_1.avatar.url}}" alt="User Image" width="64" height="64"
-                                        class="rounded-circle user_img" loading="lazy">
-                                    {% else %}
-                                    <img src="/media/profile_images/DefaultUserImage.jpg" alt="User Image" width="64"
-                                        height="64" class="rounded-circle user_img" loading="lazy">
-                                    {% endif %}
-                                </div>
-                                <div class="user_info">
-                                    <h4>{{ chat_box.user_1.username }}</h4>
-                                    {% endif %}
-                                    <p style="font-size: 80%;">{{ chat_box.message_set.all.last.message|truncatechars:80 }}</p>
-                                </div>
-                                {% if not chat_box.message_set.all.last.message_sender == user %}
-                                {% if chat_box.new_messages_count > 0 %}
-                                <span class="badge badge-pill badge-danger" style="position: absolute; padding: 7px; left: 50px;">{{ chat_box.new_messages_count }}</span>
-                                {% endif %}
+                                {% elif chat_box.user_1.who_see_avatar == 'friends' and user in chat_box.user_1.friends.all %}
+                                <img src="{{chat_box.user_1.avatar.url}}" alt="User Image" width="64" height="64"
+                                    class="rounded-circle user_img" loading="lazy">
+                                {% elif friend == user %}
+                                <img src="{{chat_box.user_1.avatar.url}}" alt="User Image" width="64" height="64"
+                                    class="rounded-circle user_img" loading="lazy">
+                                {% else %}
+                                <img src="/media/profile_images/DefaultUserImage.jpg" alt="User Image" width="64"
+                                    height="64" class="rounded-circle user_img" loading="lazy">
                                 {% endif %}
                             </div>
-                        </a>
-        </li>
-        {% endfor %}
-    </ui>
-    <!-- Create group -->
-    <button type="button" data-toggle="modal" data-target="#createGroup" id="createGroupBtn"><i
-            class="fas fa-plus"></i></button>
+                            <div class="user_info">
+                                <h4>{{ chat_box.user_1.username }}</h4>
+                                {% endif %}
+                                <p style="font-size: 80%;">{{ chat_box.message_set.all.last.message|truncatechars:80 }}
+                                </p>
+                            </div>
+                            {% if not chat_box.message_set.all.last.message_sender == user %}
+                            {% if chat_box.new_messages_count > 0 %}
+                            <span class="badge badge-pill badge-danger"
+                                style="position: absolute; padding: 7px; left: 50px;">{{ chat_box.new_messages_count }}</span>
+                            {% endif %}
+                            {% endif %}
+                        </div>
+                    </a>
+    </li>
+    {% endfor %}
+</ui>
+<!-- Create group -->
+<button type="button" data-toggle="modal" data-target="#createGroup" id="createGroupBtn"><i
+        class="fas fa-plus"></i></button>
 
-    <div class="modal fade" id="createGroup" tabindex="-1" role="dialog" aria-labelledby="createGroupLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="createGroupLabel">Add Group</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form action="{% url 'chat' %}" method="POST" id="createGroupForm" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        <div class="from-group">
-                            <label for="id_group_title">Title</label>
-                            <input type="text" class="form-control" name="title" id="id_group_title" required
-                                maxlength="25">
-                        </div>
-                        <div class="from-group">
-                            <label for="id_group_description">Description</label>
-                            <input type="text" class="form-control" name="description" id="id_group_description"
-                                placeholder="optional">
-                        </div>
-                        <div class="form-group">
-                            <label for="id_group_image"><i class="fas fa-image"></i> Image</label>
-                            <input type="file" name="image" accept="image/*" id="id_image">
-                        </div>
-                        <div class="form-group">
-                            <label for="id_is_public">public</label>
-                            <input type="checkbox" id="id_is_public" name="is_public" class="" maxlength="200">
-                        </div>
-                        <!-- todo choose members -->
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal" style="margin-right: 20px"><i
-                            class="fas fa-times"></i> Cancel</button>
-                    <button type="button" class="btn" style="background-color: #09a2c2; color: white"
-                        onclick="$('#createGroupForm').submit()"><i class="fas fa-plus"></i> Add</button>
-                </div>
+<div class="modal fade" id="createGroup" tabindex="-1" role="dialog" aria-labelledby="createGroupLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createGroupLabel">Add Group</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="{% url 'chat' %}" method="POST" id="createGroupForm" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="from-group">
+                        <label for="id_group_title">Title</label>
+                        <input type="text" class="form-control" name="title" id="id_group_title" required
+                            maxlength="25">
+                    </div>
+                    <div class="from-group">
+                        <label for="id_group_description">Description</label>
+                        <input type="text" class="form-control" name="description" id="id_group_description"
+                            placeholder="optional">
+                    </div>
+                    <div class="form-group">
+                        <label for="id_group_image"><i class="fas fa-image"></i> Image</label>
+                        <input type="file" name="image" accept="image/*" id="id_image">
+                    </div>
+                    <div class="form-group">
+                        <label for="id_is_public">public</label>
+                        <input type="checkbox" id="id_is_public" name="is_public" class="" maxlength="200">
+                    </div>
+                    <!-- todo choose members -->
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" style="margin-right: 20px"><i
+                        class="fas fa-times"></i> Cancel</button>
+                <button type="button" class="btn" style="background-color: #09a2c2; color: white"
+                    onclick="$('#createGroupForm').submit()"><i class="fas fa-plus"></i> Add</button>
             </div>
         </div>
     </div>
