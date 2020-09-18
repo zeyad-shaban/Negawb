@@ -14,7 +14,7 @@
             <a href="{% url 'social:chat_group' group.id %}" class="mb-7">
                 <div class="d-flex bd-highlight">
                     <div class="img_cont">
-                        <img src="{{ group.image.url }}" class="rounded-circle user_img">
+                        <img src="{{ group.image.url }}" class="rounded-circle user_img" loading="lazy">
                     </div>
                     <div class="user_info">
                         <h4>{{ group.title }}</h4>

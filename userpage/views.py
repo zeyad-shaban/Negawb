@@ -146,6 +146,10 @@ def invites(request):
 def unfriend(request, pk):
     friend = get_object_or_404(User, pk=pk)
     user = request.user
+    chat_box = ChatBox.objects.filter(user_1=request.user, user_2=friend)
+    if not chat_box:
+        chat_box = ChatBox.objects.filter(user_2=request.user, user_1=friend)
+    chat_box.delete()
     user.friends.remove(friend)
     friend.friends.remove(user)
     if request.user.your_invites:
