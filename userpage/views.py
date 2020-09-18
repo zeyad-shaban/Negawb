@@ -66,7 +66,6 @@ def posts(request):
 
 
 def friends(request):
-    # friends_list = User.objects.filter(friends=request.user)
     friends_list = User.objects.filter(friends=request.user)
     paginator = Paginator(friends_list, 5)
     page = request.GET.get('page')
@@ -130,6 +129,12 @@ def acceptrequest(request):
         'tags': 'success'
     }
     return JsonResponse({'message': message})
+
+
+def invites(request):
+    friend_requests = FriendRequest.objects.filter(from_user=request.user)
+    group_requests = GroupRequest.objects.filter(request_sender=request.user)
+    return render(request, 'userpage/invites.html', {'group_requests': group_requests, 'friend_requests': friend_requests, })
 
 
 @login_required

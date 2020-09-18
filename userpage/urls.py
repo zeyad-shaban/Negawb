@@ -9,6 +9,7 @@ urlpatterns = [
     path('posts/', views.posts, name='posts'),
     path('friends/', views.friends, name='friends'),
     path('requests/', views.requests, name='requests'),
+    path('invites/', views.invites, name='invites'),
 
     path('denyrequest/',
          views.denyrequest, name='denyrequest'),

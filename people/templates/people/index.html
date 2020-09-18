@@ -17,13 +17,13 @@
     <div class="cover">
         <a href="{% url 'people:view_user' view_user.id %}">
             {% if view_user.who_see_avatar == 'everyone' %}
-            <img src="{{view_user.avatar.url}}" alt="User Image">
+            <img src="{{view_user.avatar.url}}" alt="User Image" loading="lazy">
             {% elif view_user.who_see_avatar == 'friends' and user in view_user.friends.all %}
-            <img src="{{view_user.avatar.url}}" alt="User Image">
+            <img src="{{view_user.avatar.url}}" alt="User Image" loading="lazy">
             {% elif view_user == user %}
-            <img src="{{view_user.avatar.url}}" alt="User Image">
+            <img src="{{view_user.avatar.url}}" alt="User Image" loading="lazy">
             {% else %}
-            <img src="/media/profile_images/DefaultUserImage.WebP" alt="User Image">
+            <img src="/media/profile_images/DefaultUserImage.jpg" alt="User Image" loading="lazy">
             {% endif %}
         </a>
         <h1>{{ view_user.username }}</h1>
@@ -94,7 +94,7 @@
                 <!-- Image -->
                 {% if post.image %}
                 <img src="{{ post.image.url }}" alt=""
-                    style="width:80%; height: auto; margin-left: auto; margin-right: auto;">
+                    style="width:80%; height: auto; margin-left: auto; margin-right: auto;" loading="lazy">
                 {% endif %}
                 <!-- File -->
                 {% if post.post_file %}

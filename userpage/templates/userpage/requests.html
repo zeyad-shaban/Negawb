@@ -7,13 +7,13 @@
 
     {% if request.from_user.who_see_avatar == 'everyone' %}
     <img src="{{ request.from_user.avatar.url }}" class="mr-3" alt="{{ request.from_user.username }}" width="64"
-        height="64" style="border-radius: 50%;">
+        height="64" style="border-radius: 50%;" loading="lazy">
     {% elif request.from_user.who_see_avatar == 'friends' and user in request.from_user.friedns.all %}
     <img src="{{ request.from_user.avatar.url }}" class="mr-3" alt="{{ request.from_user.username }}" width="64"
-        height="64" style="border-radius: 50%;">
+        height="64" style="border-radius: 50%;" loading="lazy">
     {% else %}
     <img src="/media/profile_images/DefaultUserImage.jpg" class="mr-3" alt="{{ request.from_user.username }}" width="64"
-        height="64" style="border-radius: 50%;">
+        height="64" style="border-radius: 50%;" loading="lazy">
     {% endif %}
 
     <div class="media-body">
@@ -106,13 +106,13 @@
 <div class="media" id="{{request.id}}Group">
     {% if request.request_sender.who_see_avatar == 'everyone' %}
     <img src="{{ request.request_sender.avatar.url }}" class="mr-3" alt="{{ request.request_sender.username }}"
-        width="64" height="64">
+        width="64" height="64" loading="lazy">
     {% elif request.request_sender.who_see_avatar == 'friends' and request.request_sender in user_friends %}
     <img src="{{ request.request_sender.avatar.url }}" class="mr-3" alt="{{ request.request_sender.username }}"
-        width="64" height="64">
+        width="64" height="64" loading="lazy">
     {% else %}
     <img src="/media/profile_images/DefaultUserImage.jpg" class="mr-3" alt="{{ request.request_sender.username }}"
-        width="64" height="64">
+        width="64" height="64" loading="lazy">
     {% endif %}
 
     <div class="media-body">
