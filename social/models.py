@@ -17,7 +17,7 @@ class ChatBox(models.Model):
 
 class Message(models.Model):
     chat_box = models.ForeignKey(
-        ChatBox, related_name='chat_box', null=True, on_delete=models.CASCADE)
+        ChatBox, null=True, on_delete=models.CASCADE)
     message_sender = models.ForeignKey(
         User, related_name='message_sender', null=True, on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)

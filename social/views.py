@@ -18,12 +18,12 @@ User = get_user_model()
 def chat(request):
     if request.method == 'GET':
         if request.user.is_authenticated:
-            friends = User.objects.filter(friends=request.user)
+            chat_boxes = ChatBox.objects.filter(Q(user_1=request.user) | Q(user_2=request.user))
             groups = ChatGroup.objects.filter(members=request.user)
         else:
-            friends = []
+            chat_boxes = []
             groups = []
-        return render(request, 'social/chathome.html', {'friends': friends, 'groups': groups})
+        return render(request, 'social/chathome.html', {'chat_boxes': chat_boxes, 'groups': groups})
     else:
         form = ChatGroupForm(data=request.POST, files=request.FILES)
         group = form.save(commit=False)

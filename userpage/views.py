@@ -10,7 +10,7 @@ from django.contrib.auth import authenticate
 from django.contrib.auth import get_user_model as user_model
 from .forms import UserForm, UserPrivacyForm, DistractionFreeForm
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from social.models import GroupRequest, ChatGroup, Notification
+from social.models import GroupRequest, ChatGroup, Notification, ChatBox
 User = user_model()
 
 
@@ -116,8 +116,13 @@ def acceptrequest(request):
 
     from_user.friends.add(to_user)
     from_user.followers.add(to_user)
+
     to_user.friends.add(from_user)
     to_user.followers.add(from_user)
+
+    chat_box = ChatBox(user_1=from_user, user_2=to_user)
+    chat_box.save()
+
     friend_request.delete()
     if friend_request.from_user.your_invites:
         notification = Notification(notification_type='your_invites', sender=request.user,
