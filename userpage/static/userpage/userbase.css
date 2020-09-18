@@ -73,12 +73,12 @@ textarea {
 
 #optionsNavbar ul li {
     display: inline-block;
-    margin-right: 30px;
     letter-spacing: 1px;
+    margin-top: 10px
 }
 
 #optionsNavbar ul li a {
-    padding: 10px 30px;
+    padding: 10px 20px;
     border-radius: 200px;
     text-decoration: none;
     color: white;
