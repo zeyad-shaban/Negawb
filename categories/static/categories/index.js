@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                         let postCategory = 'other'
                                         let postConfig = ''
                                         if (post.fields.user == $('#Userusername').attr('data-pk')) {
-                                            postConfig = ` <div class="dropdown">
+                                            postConfig = `<div class="dropdown">
                                         <button class="btn btn-link" type="button" id="gedf-drop1" data-toggle="dropdown"
                                             aria-haspopup="true" aria-expanded="false">
                                             <i class="fa fa-ellipsis-h"></i>

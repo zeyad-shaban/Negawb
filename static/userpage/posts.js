@@ -6,14 +6,14 @@ document.addEventListener('DOMContentLoaded', function () {
         // --------------------------------
 
         let page = 2
-
         function bottomScroll() {
+            // homepage posts
             if ($(window).scrollTop() + $(window).height() == $(document).height()) {
                 document.querySelector('#loading').innerHTML = `<div class="spinner-border text-primary" role="status">
                 <span class="sr-only">Loading...</span>
               </div>`
                 $.ajax({
-                    url: window.location.pathname,
+                    url: '',
                     data: {
                         'page': page
                     },
@@ -37,6 +37,19 @@ document.addEventListener('DOMContentLoaded', function () {
                                         let user = response.user
                                         let output = ''
                                         let postCategory = 'other'
+                                        let postConfig = ''
+                                        if (post.fields.user == $('#Userusername').attr('data-pk')) {
+                                            postConfig = `<div class="dropdown">
+                                        <button class="btn btn-link" type="button" id="gedf-drop1" data-toggle="dropdown"
+                                            aria-haspopup="true" aria-expanded="false">
+                                            <i class="fa fa-ellipsis-h"></i>
+                                        </button>
+                                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="gedf-drop1">
+                                        <a class="dropdown-item" href="/comments/delete_post/${post.pk}" onclick="return confirm('Permanently delete ${post.fields.description.substring(0, 45) }')">Delete</a>
+                                        <a class="dropdown-item" href="/comments/edit_post/${post.pk}">Edit</a>
+                                        </div>
+                                    </div>`
+                                        }
                                         if (post.fields.category) {
                                             postCategory = post.fields.category
                                         }
@@ -62,6 +75,9 @@ document.addEventListener('DOMContentLoaded', function () {
                                         ${postCategory} Topic
                                     </div>
                                 </div>
+                            </div>
+                            <div>
+                               ${postConfig}
                             </div>
                         </div>
 
