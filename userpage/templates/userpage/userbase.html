@@ -52,7 +52,7 @@
                 </div>
                 <div class="modal-body">
                     <!-- Personal form -->
-                    <form action="{% url 'userpage:posts' %}" method="POST" enctype="multipart/form-data">
+                    <form action="{% url 'userpage:edit_user' %}" method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
                         <div id="personalForm" class="editForm">
                             <div class="form-group">

@@ -6,6 +6,7 @@ from django.conf import settings
 app_name = 'userpage'
 
 urlpatterns = [
+    path('edit_user/', views.edit_user, name='edit_user'),
     path('posts/', views.posts, name='posts'),
     path('friends/', views.friends, name='friends'),
     path('requests/', views.requests, name='requests'),

@@ -14,7 +14,7 @@ from social.models import GroupRequest, ChatGroup, Notification
 User = user_model()
 
 
-def home(request):
+def edit_user(request):
     if request.method == 'POST':
         personal_form = UserForm(
             data=request.POST, files=request.FILES, instance=request.user)
