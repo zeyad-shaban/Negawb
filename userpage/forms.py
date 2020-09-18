@@ -3,14 +3,14 @@ from django.contrib.auth import get_user_model as user_model
 User = user_model()
 
 
-class UserForm(ModelForm):
+class PersonalForm(ModelForm):
     """Update User after creating it from user page"""
 
     class Meta:
-        """Meta definition for Userform."""
+        """Meta definition for PersonalForm."""
 
         model = User
-        fields = ('username', 'bio', 'avatar', 'cover')
+        fields = ('username', 'bio', 'avatar', 'cover', 'birthday', 'country',)
 
 
 class UserPrivacyForm(ModelForm):

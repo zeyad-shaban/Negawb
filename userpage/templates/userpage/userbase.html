@@ -22,7 +22,7 @@
             profile</button>
         <p><span id="followersCount">{{ user.followers.count }}</span> Followers</p>
     </div>
-    
+
     <nav id="optionsNavbar">
         <ul>
             <li><a href="{% url 'userpage:posts' %}">{{ user.post_set.count }} Posts</a></li>
@@ -31,7 +31,7 @@
             <li><a href="{% url 'userpage:invites' %}">Invites</a></li>
         </ul>
     </nav>
-    
+
     {% block option %}{% endblock option %}
     <div class="modal fade " id="editProfile" tabindex="-1" role="dialog" aria-labelledby="editProfileLabel"
         aria-hidden="true" data-backdrop="static">
@@ -55,29 +55,7 @@
                     <form action="{% url 'userpage:edit_user' %}" method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
                         <div id="personalForm" class="editForm">
-                            <div class="form-group">
-                                <label for="id_username">Username</label>
-                                <input type="text" class="form-control" name="username" id="id_username" maxlength=30
-                                    value="{{ user.username }}">
-                            </div>
-                            <div class="form-group">
-                                <label for="id_bio">Bio</label>
-                                <input type="text" class="form-control" name="bio" id="id_bio" value="{{ user.bio }}">
-                            </div>
-                            <div class="form-group">
-                                <p><label for="id_avatar" class="btn btn-outline-success"
-                                        onclick="document.querySelector('#id_avatar').click()"><i
-                                            class="fas fa-camera-retro"></i> Avatar</label>
-                                    <input type="file" name="avatar" accept="image/*" id="id_avatar"
-                                        style="display:none"></p>
-                            </div>
-                            <div class="form-group">
-                                <p><label for="id_avatar" class="btn btn-outline-info"
-                                        onclick="document.querySelector('#id_cover').click()"><i
-                                            class="fas fa-image"></i> Profile cover</label>
-                                    <input type="file" name="cover" accept="image/*" id="id_cover"
-                                        style="display: none;"></p>
-                            </div>
+                            {{ personal_form|crispy }}
                             <div class="form-group">
                                 <label for="id_email">Email: {{ user.email }}</label>
                                 <a href="{% url 'set_email_and_phone' %}" target="_blank">
@@ -89,9 +67,6 @@
                                 <a href="{% url 'set_email_and_phone' %}" target="_blank">
                                     <span<i class="far fa-edit ml-3"></i>Change</span>
                                 </a>
-                            </div>
-                            <div class="form-group">
-                                <a href="{% url 'password_reset' %}">Reset Password</a>
                             </div>
                         </div>
 
@@ -145,6 +120,14 @@
                         <div id="privacyForm" class="editForm">
                             {{privacy_form|crispy}}
                         </div>
+
+                        <!-- Advance Form -->
+                        <div id="advanceForm" class="editForm">
+                            <div class="form-group">
+                                <a href="{% url 'password_reset' %}">Reset Password</a>
+                            </div>
+                        </div>
+
                         <button type="submit" id="saveChanges" style="display: none;"></button>
                     </form>
                 </div>

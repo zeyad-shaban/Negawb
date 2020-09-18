@@ -8,7 +8,7 @@ from django.contrib import messages
 from django.db.models import Q
 from django.contrib.auth import authenticate
 from django.contrib.auth import get_user_model as user_model
-from .forms import UserForm, UserPrivacyForm, DistractionFreeForm
+from .forms import PersonalForm, UserPrivacyForm, DistractionFreeForm
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from social.models import GroupRequest, ChatGroup, Notification, ChatBox
 User = user_model()
@@ -16,7 +16,7 @@ User = user_model()
 
 def edit_user(request):
     if request.method == 'POST':
-        personal_form = UserForm(
+        personal_form = PersonalForm(
             data=request.POST, files=request.FILES, instance=request.user)
         # Distraction Free
         distraction_free_form = DistractionFreeForm(
@@ -40,13 +40,13 @@ def posts(request):
     if request.user.is_authenticated:
         posts_list = request.user.post_set.all().order_by('-post_date')
 
-        form = UserForm(instance=request.user)
+        personal_form = PersonalForm(instance=request.user)
         privacy_form = UserPrivacyForm(instance=request.user)
         distraction_free_form = DistractionFreeForm(instance=request.user)
     else:
         posts_list = []
-
-        form = UserForm()
+        # Forms
+        personal_form = PersonalForm()
         privacy_form = UserPrivacyForm()
         distraction_free_form = DistractionFreeForm()
     page = request.GET.get('page')
@@ -62,11 +62,23 @@ def posts(request):
             return JsonResponse({'posts': serialize('json', posts)})
         else:
             print('about to render the wanted page')
-            return render(request, 'userpage/posts.html', {'posts': posts, 'privacy_form': privacy_form, 'distraction_free_form': distraction_free_form, })
+            return render(request, 'userpage/posts.html', {'posts': posts, 'personal_form': personal_form, 'privacy_form': privacy_form, 'distraction_free_form': distraction_free_form, })
 
 
 def friends(request):
-    friends_list = User.objects.filter(friends=request.user)
+    if request.user.is_authenticated:
+        friends_list = User.objects.filter(friends=request.user)
+        # Forms
+        personal_form = PersonalForm(instance=request.user)
+        privacy_form = UserPrivacyForm(instance=request.user)
+        distraction_free_form = DistractionFreeForm(instance=request.user)
+    else:
+        friends_list = []
+        # Forms
+        personal_form = PersonalForm()
+        privacy_form = UserPrivacyForm()
+        distraction_free_form = DistractionFreeForm()
+
     paginator = Paginator(friends_list, 5)
     page = request.GET.get('page')
     try:
@@ -78,16 +90,28 @@ def friends(request):
     if request.GET.get('page'):
         return JsonResponse({'friends': serialize('json', friends)})
     else:
-        return render(request, 'userpage/friends.html', {'friends': friends})
+        return render(request, 'userpage/friends.html', {'friends': friends, 'personal_form': personal_form, 'privacy_form': privacy_form, 'distraction_free_form': distraction_free_form, })
 
 
 @login_required
 def requests(request):
-    requests = FriendRequest.objects.filter(to_user=request.user)
+    if request.user.is_authenticated:
+        requests = FriendRequest.objects.filter(to_user=request.user)
+        # Forms
+        personal_form = PersonalForm(instance=request.user)
+        privacy_form = UserPrivacyForm(instance=request.user)
+        distraction_free_form = DistractionFreeForm(instance=request.user)
+    else:
+        requests = FriendRequest.objects.filter(to_user=request.user)
+        # Forms
+        personal_form = PersonalForm()
+        privacy_form = UserPrivacyForm()
+        distraction_free_form = DistractionFreeForm()
+
     group_requests = GroupRequest.objects.filter(reciever=request.user)
     user_friends = User.objects.filter(friends=request.user)
     if request.method == 'GET':
-        return render(request, 'userpage/requests.html', {'requests': requests, 'group_requests': group_requests, 'user_friends': user_friends})
+        return render(request, 'userpage/requests.html', {'requests': requests, 'group_requests': group_requests, 'user_friends': user_friends, 'personal_form': personal_form, 'privacy_form': privacy_form, 'distraction_free_form': distraction_free_form, })
 
 
 @login_required
