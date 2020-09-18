@@ -4,16 +4,24 @@ from PIL import Image
 
 
 class User(AbstractUser):
+    # Advance
+    company_name = models.CharField(max_length=100, blank=True, null=True)
+    website = models.URLField(blank=True, null=True)
+
+    # Admin stuff
+    is_confirmed = models.BooleanField(default=False)
+    # Society
     friends = models.ManyToManyField('User', blank=True)
+    followers = models.ManyToManyField(
+        'User', related_name='user_followers', blank=True)
+    # Personal
     bio = models.CharField(
         max_length=200, default='Hi there!', blank=True, null=True,)
+    phone = models.CharField(max_length=14, null=True, blank=True, unique=True)
     avatar = models.ImageField(
         upload_to='profile_images', default='profile_images/DefaultUserImage.jpg',)
     cover = models.ImageField(
         upload_to='userpage/cover', default="userpage/cover/DefaultCover.jpg")
-    phone = models.CharField(max_length=14, null=True, blank=True, unique=True)
-    email_code = models.IntegerField(null=True, blank=True)
-    phone_code = models.IntegerField(null=True, blank=True)
     birthday = models.DateField(blank=True, null=True)
     COUNTRIES_CHOICES = (
         ('AD', 'Andorra'),
@@ -255,7 +263,11 @@ class User(AbstractUser):
         ('ZR', 'Zaire'),
         ('ZW', 'Zimbabwe'),
     )
-    country = models.CharField(max_length=2, choices=COUNTRIES_CHOICES, blank=True, null=True)
+    country = models.CharField(
+        max_length=2, choices=COUNTRIES_CHOICES, blank=True, null=True)
+    # Confirmation
+    email_code = models.IntegerField(null=True, blank=True)
+    phone_code = models.IntegerField(null=True, blank=True)
 
     # PRIVACY
     show_email = models.BooleanField(default=True)
@@ -267,7 +279,7 @@ class User(AbstractUser):
     who_see_avatar = models.CharField(
         max_length=30,
         choices=who_see_avatar_choices,
-        default='friends',
+        default='everyone',
     )
     who_add_group_choices = [
         ('none', 'No One'),
@@ -277,10 +289,7 @@ class User(AbstractUser):
     who_add_group = models.CharField(
         max_length=30,
         choices=who_add_group_choices,
-        default='friends')
-    followers = models.ManyToManyField(
-        'User', related_name='user_followers', blank=True)
-    is_confirmed = models.BooleanField(default=False)
+        default='everyone')
     allow_friend_request = models.BooleanField(default=True)
 
     # DISTRACTION FREE

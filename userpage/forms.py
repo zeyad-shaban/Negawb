@@ -1,9 +1,9 @@
-from django.forms import ModelForm
+from django import forms
 from django.contrib.auth import get_user_model as user_model
 User = user_model()
 
 
-class PersonalForm(ModelForm):
+class PersonalForm(forms.ModelForm):
     """Update User after creating it from user page"""
 
     class Meta:
@@ -11,18 +11,25 @@ class PersonalForm(ModelForm):
 
         model = User
         fields = ('username', 'bio', 'avatar', 'cover', 'birthday', 'country',)
+        # widget = {
+        #     'birthday': forms.DateInput(attrs={'type': 'date'})
+        # }
+        widgets = {
+            'birthday': forms.DateInput(attrs={'type': 'date'})
+        }
 
 
-class UserPrivacyForm(ModelForm):
+class UserPrivacyForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ('show_email', 'allow_friend_request', 'who_see_avatar',
                   'who_add_group')
+
         labels = {'who_add_group': 'Who can add me to groups',
                   'who_see_avatar': 'Who can see my profile image'}
 
 
-class DistractionFreeForm(ModelForm):
+class DistractionFreeForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ('homepage', 'hide_recommended_posts', 'hide_comments', 'homepage_hashtags', 'allow_important_friend_messages', 'allow_important_group_message', 'allow_normal_friend_message', 'allow_normal_group_message',
@@ -39,3 +46,6 @@ class DistractionFreeForm(ModelForm):
             'your_invites': 'Your invites',
             'homepage_hashtags': 'Homepage posts <small class="form-text text-muted mb-3">Separate words with #hashtags <br class="mb-2"> *Leave blank to disable filtering</small>',
         }
+
+class AdvanceForm(forms.ModelForm):
+    pass
