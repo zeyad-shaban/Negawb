@@ -96,7 +96,7 @@ messages to keep your time and life safe. free 100% free. Be more productive wit
     <form method="POST">
         {% csrf_token %}
         <div class="inputBox">
-            <input type="text" name="username" required onkeyup="this.setAttribute('value', this.value);" value="">
+            <input type="text" name="username" required onkeyup="this.setAttribute('value', this.value);" maxlength="30">
             <label>Username</label>
         </div>
         <div class="inputBox">

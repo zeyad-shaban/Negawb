@@ -1,5 +1,5 @@
-from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.db import models
 from PIL import Image
 
 
@@ -15,6 +15,15 @@ class User(AbstractUser):
     followers = models.ManyToManyField(
         'User', related_name='user_followers', blank=True)
     # Personal
+    username = models.CharField(
+        ('username'),
+        max_length=30,
+        unique=True,
+        help_text=('30 characters or fewer.'),
+        error_messages={
+            'unique': ("A user with that username already exists."),
+        },
+    )
     bio = models.CharField(
         max_length=200, default='Hi there!', blank=True, null=True,)
     phone = models.CharField(max_length=14, null=True, blank=True, unique=True)
