@@ -56,7 +56,6 @@ class ChatGroup(models.Model):
     description = models.CharField(max_length=200, null=True, blank=True)
     image = models.ImageField(upload_to='group_images',
                               default='profile_images/DefaultUserImage.jpg')
-    is_public = models.BooleanField(default=False)
     created_date = models.DateTimeField(auto_now_add=True)
     # USERS
     author = models.ForeignKey(User, on_delete=models.CASCADE)

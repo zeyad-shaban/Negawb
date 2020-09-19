@@ -8,4 +8,4 @@ class ChatGroupForm(ModelForm):
         """Meta definition for ChatGroupform."""
 
         model = ChatGroup
-        fields = ('title', 'description', 'image', 'is_public',)
+        fields = ('title', 'description', 'image',)

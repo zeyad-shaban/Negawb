@@ -86,19 +86,12 @@ pagead/js/adsbygoogle.js"></script>
                     <button class="btn" data-toggle="modal" data-target="#notifications">
                         <i class="fas fa-bell" id="notificationBell"></i>
                         {% if unread_notif_count > 0 %}
-                        <div class="badge unRead" id="notificationsCount">{{ unread_notif_count }}</div>
+                        <div class="badge unRead">{{ unread_notif_count }}</div>
                         {% else %}
                         <span class="badge unRead" style="color: white;" id="notificationsCount"></span>
                         {% endif %}
                     </button>
                 </li>
-                <audio id="notificationSound">
-                    <source src="{% static 'social/notificationsound.wav' %}" type="audio/wav">
-                    <source src="{% static 'social/notificationsound.wav' %}" type="audio/mp3">
-                    <source src="{% static 'social/notificationsound.wav' %}" type="audio/ogg">
-                    <source src="{% static 'social/notificationsound.wav' %}" type="audio/mpeg">
-                    Your browser does not support the audio element.
-                </audio>
                 <li class="dropdown ml-3 dropleft">
                     <a href="#" class="" data-toggle="dropdown" role="button" aria-haspopup="true"
                         aria-expanded="false"><i class="fas fa-sort-down"
@@ -174,8 +167,7 @@ pagead/js/adsbygoogle.js"></script>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div id="notificationsList" data-url="{% url 'social:load_notifications' %}"
-                        data-getUserUrl="{% url 'userpage:get_user_by_id' %}" data-currUser="{{ user }}">
+                    <div>
                         <div style="margin: 30px auto 30px auto; text-align: center;">
                             <h4>Notifications</h4>
                             {% if user.is_authenticated %}
@@ -311,7 +303,8 @@ pagead/js/adsbygoogle.js"></script>
                         {% csrf_token %}
                         <div class="form-group">
                             <label for="username">Username</label>
-                            <input type="text" name="username" class="form-control" id="username" required maxlength="30">
+                            <input type="text" name="username" class="form-control" id="username" required
+                                maxlength="30">
                         </div>
                         <div class="form-group">
                             <label for="password">Password</label>

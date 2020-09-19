@@ -474,19 +474,6 @@ def leave_group(request, pk):
 # Notifications
 
 
-def load_notifications(request):
-    try:
-        last_notification_id = int(request.GET.get('last_notification_id'))
-    except:
-        last_notification_id = 0
-    if not request.user.is_authenticated:
-        notifications = []
-    else:
-        notifications = Notification.objects.filter(
-            receiver=request.user, is_read=False, id__gt=last_notification_id).order_by('-date')
-    return JsonResponse({'notifications': serialize('json', notifications)})
-
-
 def click_notification(request, pk):
     notification = get_object_or_404(Notification, pk=pk)
     notification.is_read = True

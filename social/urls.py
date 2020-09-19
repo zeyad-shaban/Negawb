@@ -36,7 +36,6 @@ urlpatterns = [
     path('mute_area/<int:pk>/', views.mute_area, name='mute_area'),
 
     # Notifications
-    path('loadnotifications/', views.load_notifications, name='load_notifications'),
     path('click_notification/<int:pk>/', views.click_notification, name='click_notification'),
     path('delete_all_notifications/', views.delete_all_notifications, name='delete_all_notifications'),
     path('read_all_notifications/', views.read_all_notifications, name='read_all_notifications'),

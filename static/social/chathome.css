@@ -1,7 +1,7 @@
 body {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),url('https://cdn.pixabay.com/photo/2015/07/27/19/10/resort-863129_960_720.jpg');
-    background-repeat: no-repeat;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://cdn.pixabay.com/photo/2015/07/27/19/10/resort-863129_960_720.jpg');
     background-size: cover;
+    background-position: center;
 }
 
 #noFriends {
