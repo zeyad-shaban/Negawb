@@ -18,8 +18,23 @@
                 <div class="user_info">
                     <h4>{{ group.title }}</h4>
                     <p style="font-size: 80%;">
+                        {% if group.chat_group.all.last.message_sender == user %}
+                        You:
+                        {% elif group.chat_group.all %}
                         {{group.chat_group.all.last.message_sender.username|truncatechars:50 }}:
-                        {{ group.chat_group.all.last.message|truncatechars:70 }}</p>
+                        {% endif %}
+                        {% if group.chat_group.all.last.message %}
+                        {{ group.chat_group.all.last.message|truncatechars:70 }}
+                        {% elif group.chat_group.all.last.file %}
+                        <i class="far fa-file"></i> Document
+                        {% elif group.chat_group.all.last.video %}
+                        <i class="fas fa-video"></i> Video
+                        {% elif group.chat_group.all.last.audio %}
+                        <i class="fas fa-headphones-alt"></i> Audio
+                        {% elif group.chat_group.all.last.image %}
+                        <i class="far fa-image"></i> Image
+                        {% endif %}
+                    </p>
                 </div>
                 <i class="fas fa-users float-right" style="font-size: 30px; color: white"></i>
             </div>
@@ -77,7 +92,22 @@
                             <div class="user_info">
                                 <h4>{{ chat_box.user_1.username }}</h4>
                                 {% endif %}
-                                <p style="font-size: 80%;">{{ chat_box.message_set.all.last.message|truncatechars:80 }}
+
+                                <p style="font-size: 80%;">
+                                    {% if chat_box.message_set.all.last.message_sender == user %}
+                                    You:
+                                    {% endif %}
+                                    {% if chat_box.message_set.all.last.message %}
+                                    {{ chat_box.message_set.all.last.message|truncatechars:70 }}
+                                    {% elif chat_box.message_set.all.last.file %}
+                                    <i class="far fa-file"></i> Document
+                                    {% elif chat_box.message_set.all.last.video %}
+                                    <i class="fas fa-video"></i> Video
+                                    {% elif chat_box.message_set.all.last.audio %}
+                                    <i class="fas fa-headphones-alt"></i> Audio
+                                    {% elif chat_box.message_set.all.last.image %}
+                                    <i class="far fa-image"></i> Image
+                                    {% endif %}
                                 </p>
                             </div>
                             {% if not chat_box.message_set.all.last.message_sender == user %}
