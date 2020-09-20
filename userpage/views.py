@@ -161,9 +161,23 @@ def acceptrequest(request):
 
 
 def invites(request):
-    friend_requests = FriendRequest.objects.filter(from_user=request.user)
-    group_requests = GroupRequest.objects.filter(request_sender=request.user)
-    return render(request, 'userpage/invites.html', {'group_requests': group_requests, 'friend_requests': friend_requests, })
+    if request.user.is_authenticated:
+        friend_requests = FriendRequest.objects.filter(from_user=request.user)
+        group_requests = GroupRequest.objects.filter(
+            request_sender=request.user)
+        # Forms
+        personal_form = PersonalForm(instance=request.user)
+        privacy_form = UserPrivacyForm(instance=request.user)
+        distraction_free_form = DistractionFreeForm(instance=request.user)
+    else:
+        friend_requests = []
+        group_requests = []
+        # Forms
+        personal_form = PersonalForm()
+        privacy_form = UserPrivacyForm()
+        distraction_free_form = DistractionFreeForm()
+
+    return render(request, 'userpage/invites.html', {'group_requests': group_requests, 'friend_requests': friend_requests, 'personal_form': personal_form, 'privacy_form': privacy_form, 'distraction_free_form': distraction_free_form})
 
 
 @login_required
