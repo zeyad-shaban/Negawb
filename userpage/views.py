@@ -21,8 +21,7 @@ def edit_user(request):
         # Distraction Free
         distraction_free_form = DistractionFreeForm(
             request.POST, instance=request.user)
-        distraction_free = distraction_free_form.save(commit=False)
-        distraction_free.homepage_hashtags = distraction_free.homepage_hashtags.lower()
+        distraction_free = distraction_free_form.save()
         # Privacy
         privacy_form = UserPrivacyForm(
             data=request.POST, files=request.FILES, instance=request.user)

@@ -23,12 +23,8 @@ def signupuser(request):
     else:
         if request.POST.get('password1') == request.POST.get('password2'):
             try:
-                if request.POST.get('homepage_hashtags'):
-                    homepage_hashtags = request.POST.get('homepage_hashtags')
-                else:
-                    homepage_hashtags = None
                 user = User.objects.create_user(
-                    request.POST.get('username'), password=request.POST.get('password1'), homepage_hashtags=homepage_hashtags)
+                    request.POST.get('username'), password=request.POST.get('password1'))
                 user.save()
                 login(request, user)
                 return redirect('set_email_and_phone')
@@ -114,6 +110,8 @@ def confirm_email(request):
         return JsonResponse({'status': 'fail'})
 
 # Confirm phone number
+
+
 @login_required
 def send_phone_code(request):
     request.user.phone_code = None
@@ -121,10 +119,11 @@ def send_phone_code(request):
     confirmation_code = randint(100000, 999999)
 
     # Send to suer
-    
+
     request.user.phone_code = confirmation_code
     request.user.save()
     return JsonResponse({})
+
 
 @login_required
 def confirm_phone(request):

@@ -32,7 +32,7 @@ class UserPrivacyForm(forms.ModelForm):
 class DistractionFreeForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ('homepage', 'hide_recommended_posts', 'hide_comments', 'homepage_hashtags', 'allow_important_friend_messages', 'allow_important_group_message', 'allow_normal_friend_message', 'allow_normal_group_message',
+        fields = ('homepage', 'hide_recommended_posts', 'hide_comments', 'blocked_topics', 'allow_important_friend_messages', 'allow_important_group_message', 'allow_normal_friend_message', 'allow_normal_group_message',
                   'allow_comment_message', 'allow_reply_message', 'allow_invites', 'your_invites',)
         labels = {
             'allow_important_friend_messages': 'Friend\'s important message',
@@ -44,7 +44,7 @@ class DistractionFreeForm(forms.ModelForm):
             'allow_reply_message': 'Replies',
             'allow_invites': '<hr>friend and group Invites',
             'your_invites': 'Your invites',
-            'homepage_hashtags': 'Homepage posts <small class="form-text text-muted mb-3">Separate words with #hashtags <br class="mb-2"> *Leave blank to disable filtering</small>',
+            'blocked_topics': 'Blocked topics <small class="form-text text-muted mb-3">Hold cmd/ctrl for desktop users</small>',
         }
 
 class AdvanceForm(forms.ModelForm):
