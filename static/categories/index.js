@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                 <div class="ml-2">
                                     <div class="h5 m-0">${user.username}</div>
                                     <div class="h7 text-muted">${post.fields.views.length} Views -
-                                        ${postCategory} Topic
+                                        ${postCategory}
                                     </div>
                                 </div>
                             </div>
