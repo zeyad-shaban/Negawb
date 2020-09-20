@@ -22,6 +22,7 @@
     </button>
 </div>
 <ul class="list-group list-group-horizontal fixed-top areas">
+    {% if areas.count > 0 %}
     <li class="list-group-item btn active areaItem">All</li>
     {% for area in areas %}
     <li class="list-group-item btn areaItem">
@@ -30,6 +31,7 @@
         </a>
     </li>
     {% endfor %}
+    {% endif %}
 </ul>
 <br>
 <br>
