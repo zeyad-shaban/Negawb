@@ -372,7 +372,7 @@
                 $('.chat').css('margin-top', $('.areas').height() + 50)
             })
             $('.areas').css('top', $('.menu').height() + 20)
-            $('.chat').css('margin-top', $('.areas').height()+50)
+            $('.chat').css('margin-top', $('.areas').height() + 50)
             const record = document.querySelector('#record');
             // Record voice
             if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
@@ -444,6 +444,23 @@
                                         `)
                                 document.querySelector('#notificationSound')
                                     .play()
+
+                                function changePlayback() {
+                                    $('.audioPlayback').click(function (e) {
+                                        let audios = document
+                                            .querySelectorAll(
+                                                '.messageAudio')
+                                        for (audio of audios) {
+                                            audio.playbackRate = $(this)
+                                                .html()
+                                        }
+                                    })
+                                }
+                                var g = document.createElement('script')
+                                var s = document.getElementsByTagName('script')[
+                                    0]
+                                g.text = changePlayback()
+                                s.parentNode.insertBefore(g, s)
                             },
                             error: function (response) {
                                 alert(

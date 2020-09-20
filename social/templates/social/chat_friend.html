@@ -229,6 +229,24 @@
                                     document.getElementById(
                                             'notificationSound')
                                         .play()
+
+                                    function changePlayback() {
+                                        $('.audioPlayback').click(function (
+                                            e) {
+                                            let audios = document
+                                                .querySelectorAll(
+                                                    '.messageAudio')
+                                            for (audio of audios) {
+                                                audio.playbackRate =
+                                                    $(this).html()
+                                            }
+                                        })
+                                    }
+                                    var g = document.createElement('script')
+                                    var s = document.getElementsByTagName(
+                                        'script')[0]
+                                    g.text = changePlayback()
+                                    s.parentNode.insertBefore(g, s)
                                 },
                                 error: function () {
                                     alert('error occured')

@@ -5,7 +5,6 @@ from PIL import Image
 
 class User(AbstractUser):
     # Advance
-    company_name = models.CharField(max_length=100, blank=True, null=True)
     website = models.URLField(blank=True, null=True)
 
     # Admin stuff
