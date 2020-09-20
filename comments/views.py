@@ -103,7 +103,7 @@ def edit_post(request, pk):
     post = get_object_or_404(Post, pk=pk)
     if request.user == post.user:
         if request.method == 'GET':
-            return render(request, 'comments/edit_post.html', {'post': post, 'categories': Category.objects.all()})
+            return render(request, 'comments/edit_post.html', {'post': post, 'categories': Category.objects.all().order_by('title')})
         else:
             form = PostForm(data=request.POST,
                             files=request.FILES, instance=post)

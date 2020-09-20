@@ -28,7 +28,7 @@ class CategorySitemap(Sitemap):
     priority = 0.7
 
     def items(self):
-        return Category.objects.all()
+        return Category.objects.all().order_by('title')
 
     def location(self, obj):
         return obj.note_full_path

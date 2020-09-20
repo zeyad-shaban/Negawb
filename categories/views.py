@@ -30,7 +30,7 @@ def home(request):
         posts = []
     if page:
         return JsonResponse({'posts': serialize('json', posts)})
-    return render(request, 'categories/index.html', {'posts': posts, 'categories': Category.objects.all()})
+    return render(request, 'categories/index.html', {'posts': posts, 'categories': Category.objects.all().order_by('title')})
 
 # Followed
 

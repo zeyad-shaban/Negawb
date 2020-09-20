@@ -19,7 +19,7 @@ def signupuser(request):
             messages.warning(request, 'You are already logged in')
             return redirect('home')
         else:
-            return render(request, 'users/signupuser.html', {'categories': Category.objects.all()})
+            return render(request, 'users/signupuser.html', {'categories': Category.objects.all().order_by('title')})
     else:
         if request.POST.get('password1') == request.POST.get('password2'):
             try:
