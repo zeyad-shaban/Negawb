@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse
 from categories.models import Category
 from .models import Post, Comment, Reply
 from django.contrib.auth.decorators import login_required
@@ -13,21 +13,14 @@ from django.core.serializers import serialize
 from webpush import send_user_notification
 from django.utils.timezone import now
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-import datetime
 import re
 
 # Post
 
 
 def search_by_hashtags(request):
-    q = request.GET.get('q').lower()
-    q = q.split('#')[1:]
-    query = Post.objects.all().order_by('-post_date')
-    posts_list = []
-    for post in query:
-        for word in q:
-            if post.hashtags and word in post.hashtags:
-                posts_list.append(post)
+    q = request.GET.get('q')
+    posts_list = Post.objects.filter(Q(description__icontains=q))
     paginator = Paginator(posts_list, 5)
     page = request.GET.get('page')
     if not page:
@@ -110,7 +103,7 @@ def edit_post(request, pk):
     post = get_object_or_404(Post, pk=pk)
     if request.user == post.user:
         if request.method == 'GET':
-            return render(request, 'comments/edit_post.html', {'post': post})
+            return render(request, 'comments/edit_post.html', {'post': post, 'categories': Category.objects.all()})
         else:
             form = PostForm(data=request.POST,
                             files=request.FILES, instance=post)

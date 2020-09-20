@@ -62,10 +62,21 @@
 /* Search */
 /* ------------------------------- */
 
+#search{
+    display: block;
+    text-align: right;
+    margin-right: 10%;
+}
+
 #search input{
-    width: 70%;
+    width: 120px;
     margin: 20px auto 20px 33px;
     display: inline-block;
+    transition: width 0.3s;
+}
+
+#search input:focus{
+    width: 200px
 }
 
 #search button{

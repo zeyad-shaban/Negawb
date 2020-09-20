@@ -19,13 +19,13 @@ only, giving users the power to hide unwanted topics{% endblock description %}
 <div id="posts" data-url="{% url 'userpage:get_user_by_id' %}">
     <!-- Search///////////// -->
     <form action="{% url 'comments:search_by_hashtags' %}" method="GET" id="search">
-        <input type="search" name="q" class="form-control" placeholder="#Search by hashtags">
+        <input type="search" name="q" class="form-control" placeholder="Search">
         <button type="submit" class="btn"><i class="fas fa-search"></i></button>
     </form>
     <!-- \\\\\\\\Search -->
 
     <!--- \\\\\\\Add post-->
-    <div class="card gedf-card">
+    <div class="card gedf-card col-md-8" style="margin-right: auto; margin-left: auto;">
         <div class="card-header">
             <a class="nav-link active">Make
                 a post</a>
@@ -61,7 +61,7 @@ only, giving users the power to hide unwanted topics{% endblock description %}
                     </div>
                     <select name="id_category" id="id_category" style="max-width: 153px">
                         <option value="none">other</option>
-                        {% for acategory in all_categories %}
+                        {% for acategory in categories %}
                         <option value="{{ acategory.id }}" selected="selected">{{ acategory.title }}
                         </option>
                         {% endfor %}
@@ -69,8 +69,8 @@ only, giving users the power to hide unwanted topics{% endblock description %}
                 </div>
             </div>
         </form>
+        <div id="uploadedImage"></div>
     </div>
-    <div id="uploadedImage"></div>
 
     <!-- Add post////////////-->
     {% for post in posts %}
