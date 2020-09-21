@@ -25,6 +25,39 @@ body {
     z-index: 1030;
 }
 
+.main-nav ul {
+    white-space: nowrap;
+    overflow-x: auto;
+}
+
+.main-nav ul li {
+    margin-right: 20px;
+}
+
+.main-nav ul li a{
+    text-decoration: none;
+    transition: border-bottom 0.2s;
+    padding-bottom: 10px;
+}
+
+.main-nav ul li a:hover{
+    border-bottom: 1px solid white;
+}
+
+.main-dropdown-menu {
+    position: fixed;
+    top: 0px;
+    left: 300px;
+    margin-top: 60px
+}
+
+@media screen and (max-width: 478px){
+    .main-dropdown-menu{
+        left: 50%;
+    }
+}
+
+
 .scrolled-down {
     transform: translateY(-100%);
     transition: all 0.3s ease-in-out;
@@ -95,18 +128,4 @@ body {
 #loginFloatForm {
     background: rgba(0, 0, 0, 0.6);
     background-size: cover;
-}
-
-#stickyChatBtn {
-    display: none;
-}
-
-@media (max-width: 575px) {
-    #mainChatBtn {
-        display: none;
-    }
-
-    #stickyChatBtn {
-        display: block;
-    }
 }
