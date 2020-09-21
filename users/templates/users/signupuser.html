@@ -1,90 +1,21 @@
 {% extends 'categories/base.html' %}
 {% load static %}
-{% block title %} Sign Up for Dfreemedia | Dfreemedia{% endblock title %}
+{% load socialaccount %}
 
-{% block description %}Create an account or log into Dfreemedia. Enjoy the unique filtering system we provide for both
-posts and friend messages to keep your time and life safe. free 100% free. Be more productive with
-Dfreemedia.{% endblock description %}
+{% block title %} Sign Up for Dfreemedia | Dfreemedia{% endblock title %}
+{% block description %}.{% endblock description %}
 
 {% block content %}
-<style>
-    #floatAuthForm {
-        display: none !important;
-    }
-
-    body {
-        background: url('https://cdn.pixabay.com/photo/2017/12/15/13/51/polynesia-3021072_960_720.jpg');
-        background-size: cover;
-    }
-
-    .box {
-        width: 50%;
-        float: right;
-        padding: 2.5rem;
-        padding-right: 10%;
-        box-sizing: border-box;
-        background: rgba(0, 0, 0, 0.6);
-        border-radius: 0.625rem;
-        color: white;
-    }
-
-    @media screen and (max-width: 914px){
-        .box{
-            width: 100%;
-        }
-    }
-
-    .box h2 {
-        margin: 0 0 1.875rem;
-        padding: 0;
-        text-align: center;
-    }
-
-    .box .inputBox {
-        position: relative;
-    }
-
-    .box a {
-        text-decoration: none;
-        color: white;
-    }
-
-    .box .inputBox input {
-        width: 100%;
-        padding: 0.625rem 0;
-        font-size: 1rem;
-        letter-spacing: 0.062rem;
-        margin-bottom: 1.875rem;
-        border: none;
-        border-bottom: 0.065rem solid #fff;
-        outline: none;
-        background: transparent;
-        color: white;
-    }
-
-    .box .inputBox label {
-        padding: 0.625rem 0;
-        font-size: 1rem;
-        pointer-events: none;
-        transition: 0.5s;
-    }
-
-    .box input[type="submit"] {
-        border: none;
-        outline: none;
-        background-color: #03a9f4;
-        padding: 0.625rem 1.25rem;
-        cursor: pointer;
-        border-radius: 0.312rem;
-        font-size: 1rem;
-    }
-
-    .box input[type="submit"]:hover {
-        background-color: #1cb1f5;
-    }
-</style>
 <div class="box">
     <h2>Join Dfreemedia</h2>
+    <div style="text-align: center;">
+        <a href="{% provider_login_url 'google' %}" class="social-login google-login"><img
+                src="https://cdn.pixabay.com/photo/2015/12/11/11/43/google-1088004_960_720.png" alt="G"> Login with
+            Google</a>
+        <a href="#" class="social-login facebook-login" style="display: none"><img
+                src="https://cdn.pixabay.com/photo/2017/06/22/06/22/facebook-2429746_960_720.png" alt="F"> Login with
+            Facebook</a>
+    </div>
     <form method="POST">
         {% csrf_token %}
         <div class="inputBox">
@@ -130,4 +61,5 @@ Dfreemedia.{% endblock description %}
         });
     });
 </script>
+<link rel="stylesheet" href="{% static 'users/signupuser.css' %}">
 {% endblock content %}

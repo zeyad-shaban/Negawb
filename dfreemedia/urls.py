@@ -37,14 +37,18 @@ sitemaps = {
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', category_views.home, name='home'),
-    path('followed_posts/', category_views.followed_posts, name='followed_posts'),
-    path('followed/', category_views.followed, name='followed'),
-    # PWA
-    path('', include('pwa.urls')),
     # Sitemap
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps},
          name='django.contrib.sitemaps.views.sitemap'),
+    # PWA
+    path('', include('pwa.urls')),
+    # Allauth
+    path('accounts/', include('allauth.urls')),
+
+    # Categories
+    path('', category_views.home, name='home'),
+    path('followed_posts/', category_views.followed_posts, name='followed_posts'),
+    path('followed/', category_views.followed, name='followed'),
     # Chat
     path('chat/', social_views.chat, name='chat'),
     # production
@@ -56,6 +60,7 @@ urlpatterns = [
     path('privacypolicy/', production_views.PrivacyPolicy.as_view(),
          name='privacypolicy'),
     path('cookiepolicy/', production_views.CookiePolicy.as_view(), name='cookiepolicy'),
+    
     # Includes
     path('category/', include('categories.urls'), name='category'),
     path('comments/', include('comments.urls'), name='comments'),

@@ -39,8 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sitemaps',
-    'crispy_forms',
-    'webpush',
+    'django.contrib.sites',
+    # MY APPS
     'categories',
     'users',
     'userpage',
@@ -48,7 +48,16 @@ INSTALLED_APPS = [
     'comments',
     'social',
     'production',
+    # 3RD PARTY PACKAGES
+    'crispy_forms',
+    'webpush',
     'pwa',
+    # allauth
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    # end allauth
     'django_cleanup',
 ]
 
@@ -179,6 +188,27 @@ PWA_APP_DIR = 'ltr'
 PWA_APP_LANG = 'en-US'
 # End PWA
 
+# Allauth
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend'
+)
+
+SITE_ID = 1
+LOGIN_REDIRECT_URL = '/'
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online'
+        }
+    }
+}
+# EndAllauth
 
 # Sms
 

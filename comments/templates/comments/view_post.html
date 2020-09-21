@@ -384,7 +384,6 @@
                         'action': 'addComment'
                     },
                     success: function (response) {
-                        $('.emojionearea-editor').html('')
                         $.ajax({
                             url: "{% url 'userpage:get_user_by_id' %}",
                             data: {
