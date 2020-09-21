@@ -1,6 +1,6 @@
 from django.views import generic
 from django.http import JsonResponse
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login, logout, authenticate
 from django.db import IntegrityError
@@ -19,7 +19,7 @@ def signupuser(request):
             messages.warning(request, 'You are already logged in')
             return redirect('home')
         else:
-            return render(request, 'users/signupuser.html', {'categories': Category.objects.all().order_by('title')})
+            return render(request, 'users/signupuser.html', {'categories': Category.objects.all().order_by('title'),})
     else:
         if request.POST.get('password1') == request.POST.get('password2'):
             try:

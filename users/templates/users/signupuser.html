@@ -1,6 +1,7 @@
 {% extends 'categories/base.html' %}
 {% load static %}
 {% load socialaccount %}
+{% load crispy_forms_tags %}
 
 {% block title %} Sign Up for Dfreemedia | Dfreemedia{% endblock title %}
 {% block description %}.{% endblock description %}
@@ -12,35 +13,82 @@
         <a href="{% provider_login_url 'google' %}" class="social-login google-login"><img
                 src="https://cdn.pixabay.com/photo/2015/12/11/11/43/google-1088004_960_720.png" alt="G"> Login with
             Google</a>
-        <a href="#" class="social-login facebook-login" style="display: none"><img
+        <a href="#" class="social-login facebook-login"><img
                 src="https://cdn.pixabay.com/photo/2017/06/22/06/22/facebook-2429746_960_720.png" alt="F"> Login with
             Facebook</a>
     </div>
-    <form method="POST">
-        {% csrf_token %}
-        <div class="inputBox">
-            <label for="id_username">Username</label>
-            <input type="username" id="id_username" name="username" required
-                onkeyup="this.setAttribute('value', this.value);" maxlength="30">
+    <section>
+        <form method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                <input type="text" class="form-control col-md-10" id="id_username" name="username" maxlength="30"
+                    placeholder="Username" required>
+            </div>
+            <div class="form-group">
+                <input type="password" name="password1" class="form-control col-md-10" id="password1"
+                    placeholder="Password" required>
+            </div>
+            <div class="form-group">
+                <input type="password" name="password2" class="form-control col-md-10" id="password2"
+                    placeholder="Confirm Password" required>
+            </div>
+    </section>
+
+    <section style="width: 364px;">
+        <div class="form-group">
+            <label for="id_homepage">Homepage</label>
+            <select name="homepage" class="select form-control" id="id_homepage">
+                <option value="all_posts" selected>All posts (default)</option>
+                <option value="followed_posts">Followed posts</option>
+                <option value="chat">Chat</option>
+            </select>
         </div>
-        <div class="inputBox">
-            <label for="password1">Password</label>
-            <input type="password" name="password1" id="password1" required>
-            <label for="password2">Confirm password</label>
-            <input type="password" name="password2" id="password2" required>
+        <div class="form-group">
+            <div id="div_id_hide_recommended_posts" class="form-check">
+                <input type="checkbox" name="hide_recommended_posts" class="checkboxinput form-check-input"
+                    id="id_hide_recommended_posts">
+                <label for="id_hide_recommended_posts" class="form-check-label">
+                    Hide recommended posts
+                </label>
+            </div>
         </div>
-        <div style="margin-top: 50px"></div>
-        <div style="margin-top: 40px"></div>
+        <div class="form-group">
+            <div id="div_id_hide_comments" class="form-check"> <input type="checkbox" name="hide_comments"
+                    class="checkboxinput form-check-input" id="id_hide_comments">
+                <label for="id_hide_comments" class="form-check-label">
+                    Hide comments
+                </label> </div>
+        </div>
+        <div id="div_id_blocked_topics" class="form-group"> <label for="id_blocked_topics" class=" requiredField">
+                Blocked topics <small class="form-text text-muted mb-3">Hold cmd/ctrl for desktop users</small></label>
+            <div class="">
+                <select name="blocked_topics" class="selectmultiple form-control" required="" id="id_blocked_topics"
+                    multiple="">
+                    {% for category in categories %}
+                    <option value="category.id">{{ category.title }}</option>
+                    {% endfor %}
+                </select>
+    </section>
+
+    <section>
         <small class="form-text"> <input type="checkbox" name="" id="" class="mr-2" required>I agree
             to <a href="{% url 'termsandconditions' %}" target="_blank">Terms and
                 Conditions</a>, <a href="{% url 'privacypolicy' %}" target="_blank">Privacy
                 Policy</a>, and <a href="{% url 'cookiepolicy' %}" target="_blank">Cookie
                 Policy</a></small>
-        <div style="margin-top: 30px"></div>
         <input type="submit" name="sign-in" value="Sign In">
-    </form>
-    <div style="margin-top: 50px; border-top: 1px solid rgb(83, 83, 83);">
-        <p>Already have an account? <a href="{% url 'loginuser' %}" class="btn text-white">Login</a></p>
+        </form>
+
+    </section>
+    <section>
+        <p><a href="{% url 'loginuser' %}" class="btn btn-success" target="_blank">Login</a></p>
+    </section>
+</div>
+<div class="app-info">
+    <div>
+        <h4><i class="fas fa-cogs"></i> Customize the app to match your needs.</h4>
+        <h4><i class="fas fa-ban" style="color: red"></i> Hide posts that are not relevant.</h4>
+        <h4><i class="far fa-hand-paper"></i> Say goodbye to all distractions.</h4>
     </div>
 </div>
 <script>
@@ -62,4 +110,31 @@
     });
 </script>
 <link rel="stylesheet" href="{% static 'users/signupuser.css' %}">
+<style>
+    .app-info {
+        width: 50%;
+        padding-top: 30px;
+        height: 100vh;
+        background-image:url("{% static 'categories/logo.png' %}");
+        background-size: cover;
+        background-position: center;
+    }
+
+    .app-info div {
+        margin-left: 30px;
+        margin-right: auto;
+        margin-top: 30vh;
+    }
+
+    .app-info div h4 {
+        margin-bottom: 30px;
+        font-weight: 300;
+    }
+
+    @media screen and (max-width: 950px) {
+        .app-info div h4 {
+            font-size: 120%;
+        }
+    }
+</style>
 {% endblock content %}

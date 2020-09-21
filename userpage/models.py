@@ -303,8 +303,7 @@ class User(AbstractUser):
 
     # DISTRACTION FREE
     hide_comments = models.BooleanField(default=False)
-    hide_recommended_posts = models.BooleanField(
-        default=False, blank=True, null=True)
+    hide_recommended_posts = models.BooleanField(default=False)
     blocked_topics = models.ManyToManyField(Category)
     default_home_choices = [
         ('all_posts', 'All posts (default)'),
