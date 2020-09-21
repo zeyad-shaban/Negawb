@@ -26,7 +26,7 @@ def signupuser(request):
                 user = User.objects.create_user(
                     request.POST.get('username'), password=request.POST.get('password1'))
                 user.save()
-                login(request, user)
+                login(request, user, backend='django.contrib.auth.backends.ModelBackend')
                 return redirect('set_email_and_phone')
             except IntegrityError:
                 messages.error(
@@ -67,7 +67,7 @@ def loginuser(request):
                 request, 'The username that you\'ve entered doesn\'t match any account. Or password didn\'t match')
             return redirect('loginuser')
         else:
-            login(request, user)
+            login(request, user, backend='django.contrib.auth.backends.ModelBackend')
             if request.GET.get('next'):
                 return redirect(request.GET.get('next'))
             else:
