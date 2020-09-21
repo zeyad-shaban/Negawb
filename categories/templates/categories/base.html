@@ -100,8 +100,9 @@ pagead/js/adsbygoogle.js"></script>
                         <!-- AddToAny END -->
                     </li>
                     <li>
-                        <button type="button" class="btn" data-toggle="modal" data-target="#feedback">
-                            Feedback
+                        <button type="button" class="btn" data-toggle="modal" data-target="#feedback"
+                            id="write-feedback">
+                            Write a Feedback
                         </button>
                     </li>
                     <li>
@@ -143,7 +144,7 @@ pagead/js/adsbygoogle.js"></script>
         <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="feedbackLabel">Write Feedback</h5>
+                    <h5 class="modal-title" id="feedbackLabel">Write a Feedback</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -155,8 +156,19 @@ pagead/js/adsbygoogle.js"></script>
                             <form method="POST" action="{% url 'feedback' %}" id="feedback-form"
                                 data-csrf_token="{{ csrf_token }}">
                                 {% csrf_token %}
-                                <input type="text" name="name" placeholder="name" id="feedback_name">
-                                <textarea type="text" placeholder="Review" id="feedback_review" name="review"></textarea>
+                                <div class="form-group">
+                                    {% if not user.is_authenticated %}
+                                    <input type="text" name="name" placeholder="Name" id="feedback_name" maxlength="30"
+                                        required>
+                                    {% endif %}
+                                    {% if not user.is_authenticated  or not user.email %}
+                                    <input type="email" name="email" placeholder="Email *Optional*" id="feedback_email">
+                                    {% endif %}
+                                </div>
+                                <div class="from-group">
+                                    <textarea type="text" placeholder="Review" id="feedback_review" name="review"
+                                        required></textarea>
+                                </div>
                                 <button type="submit" id="send_feedback">SEND</button>
                             </form>
                         </div>

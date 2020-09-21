@@ -1,53 +1,57 @@
 {% extends 'categories/base.html' %}
-{% load crispy_forms_tags %}
-{% block title %}Add feedback or report a problem | Dfreemedia{% endblock title %}
+{% block title %}Feedbacks | Dfreemedia{% endblock title %}
 
-
-{% block description %}Having issues with the new social media app Dfreemedia? Report your problem here and we will fix
-it as soon as possible{% endblock description %}
-
+{% block description %}Write a feedback. it just takes 5 minutes and you don't have to login! Feedbacks are very
+valuable to us | Dfreemedia{% endblock description %}
 
 {% block content %}
-<h4>Add FeedBack and report a problem</h4>
-<small class="form-text text-muted">We wil read it as soon as possible</small>
-<form action="" method="post" class="col-lg-6 col-md-7">
-    {% csrf_token %}
-    {{form|crispy}}
-    <input type="submit" value="Submit FeedBack" class="btn btn-success">
-</form>
-<br><br>
-<hr>
-<h3>Feedbacks</h3>
-<small class="text-muted form-text">{{feedbacks.count}}</small>
 
-<div class="card card-default" id="card_contacts">
-    <div id="contacts" class="panel-collapse collapse show" aria-expanded="true">
-        <ul class="list-group pull-down" id="contact-list">
-            {% for feedback in feedbacks %}
-            <li class="list-group-item">
-                <div class="row w-100">
-                    <div class="col-12 col-sm-6 col-md-3 px-0">
-                        <img src="/media/profile_images/DefaultUserImage.jpg" alt="{{ feedback.name }}"
-                            class="img-fluid rounded-circle d-block mx-auto" height="73" width="73">
-                    </div>
-
-                    <div class="col-12 col-sm-6 col-md-9 text-center text-sm-left">
-                        <label class="name lead">{{ feedback.name }}</label> <p class="float-right">{{ feedback.stars }}</p>
-                        <br>
-                        <span class="small text-break">{{ feedback.review|truncatechars:500 }}</span>
-                        {% if feedback.review|length > 500 %}
-                        <a href="{% url 'production:ViewFeedback' feedback.id %}" class="btn btn-link">Read More</a>
-                        {% endif %}
-                    </div>
-                </div>
-            </li>
-            {% endfor %}
-        </ul>
-    </div>
+<div class="submit">
+    <button class="button-blue" onclick="document.querySelector('#write-feedback').click()">WRITE FEEDBACK</button>
+    <div class="ease"></div>
 </div>
+
 <style>
-    #floatAuthForm {
-        display: none;
+    .submit:hover {
+        color: #3498db;
+    }
+
+    .button-blue {
+        font-family: 'Montserrat', Arial, Helvetica, sans-serif;
+        float: left;
+        width: 50%;
+        margin-top: 30px;
+        border: #fbfbfb solid 4px;
+        cursor: pointer;
+        background-color: #3498db;
+        color: white;
+        font-size: 24px;
+        padding-top: 22px;
+        padding-bottom: 22px;
+        -webkit-transition: all 0.3s;
+        -moz-transition: all 0.3s;
+        transition: all 0.3s;
+        font-weight: 700;
+    }
+
+    .button-blue:hover {
+        background-color: #217dbb;
+    }
+
+    .submit:hover .ease {
+        width: 100%;
+        background-color: white;
+    }
+
+    .ease {
+        width: 0px;
+        height: 74px;
+        background-color: #fbfbfb;
+        -webkit-transition: .3s ease;
+        -moz-transition: .3s ease;
+        -o-transition: .3s ease;
+        -ms-transition: .3s ease;
+        transition: .3s ease;
     }
 </style>
 {% endblock content %}

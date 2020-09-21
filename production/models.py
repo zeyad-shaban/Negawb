@@ -16,8 +16,10 @@ class Note(models.Model):
 
 class Feedback(models.Model):
     review = models.TextField()
-    date = models.DateTimeField(auto_now_add=True)
     name = models.CharField(max_length=30)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    email = models.EmailField(null=True, blank=True)
+    date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f'[USER] {self.user} [REVIEW] {self.review[:80]} ★{self.stars}★'

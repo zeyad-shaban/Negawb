@@ -33,18 +33,21 @@ document.addEventListener('DOMContentLoaded', function () {
                 </div>
                         `)
             }
-            $.ajax({
-                url: $('#feedback-form').attr('action'),
-                data: {
-                    csrfmiddlewaretoken: $('#feedback-form').attr('data-csrf_token'),
-                    name: $('#feedback_name').val(),
-                    review: $('#feedback_review').val(),
-                },
-                method: 'post',
-                dataType: 'json',
-                success: response => replaceFeedbackForm(),
-                error: response => replaceFeedbackForm(),
-            })
+            if ($('#feedback_review').val() && $('#feedback_name').val()) {
+                $.ajax({
+                    url: $('#feedback-form').attr('action'),
+                    data: {
+                        csrfmiddlewaretoken: $('#feedback-form').attr('data-csrf_token'),
+                        name: $('#feedback_name').val(),
+                        review: $('#feedback_review').val(),
+                        email: $('#feedback_email').val(),
+                    },
+                    method: 'post',
+                    dataType: 'json',
+                    success: response => replaceFeedbackForm(),
+                    error: response => replaceFeedbackForm(),
+                })
+            }
         })
 
         // Signup msg

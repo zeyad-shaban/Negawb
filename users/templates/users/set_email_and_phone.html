@@ -9,31 +9,58 @@ Set up Email and phone number
 you{% endblock description %}
 
 {% block content %}
-<div class="m-2">
-    <br>
-    <h1 class="row justify-content-center mb-4">Set up email and phone number</h1>
-    <br><br>
-    {% if not user.email and not user.phone %}
-    <div class="alert alert-warning">Without an email address you won't be able to reset your password</div>
-    {% endif %}
-    <br>
-    {% if not user.email %}
-    <br>
-    {% endif %}
-    <span>Email: <input type="email" name="email" id="id_email" class="form-control col-md-6 d-inline ml-2"
-            placeholder="example@gmail.com" style="max-width:250px"></span>
-    <button class="btn btn-success" id="submitEmail">Submit</button>
-    <br>
-    {% if user.email %}
-    <small class="form-text text-muted">Current: {{ user.email }}</small>
-    {% endif %}
-    <div id="loadingEmail"></div>
-    <br>
-    <h4>Enter the six digit code here</h4>
-    <br>
-    <input type="text" name="code" id="id_emailCode" class="form-control" style="max-width: 150px; display: inline"
-        maxlength="6">
-    <button class="btn btn-success" id="submitEmailCode">Confirm</button>
+<style>
+    section {
+        margin-bottom: 80px;
+    }
+
+    #enterEmailCode {
+        display: none;
+    }
+
+    #enterEmailCode h4 {
+        letter-spacing: 1px;
+        word-spacing: 4px;
+        font-weight: 300;
+        margin-bottom: 30px;
+    }
+
+    #id_email {
+        float: left;
+    }
+
+    #submitEmail {
+        display: inline-block;
+        margin-left: 30px;
+        background-color: #0984E3;
+        color: white;
+        letter-spacing: 1px;
+        word-spacing: 4px;
+    }
+</style>
+<div class="container">
+    <section>
+        <h1 class="row justify-content-center mb-4">Set up email</h1>
+        {% if not user.email and not user.phone %}
+        <div class="alert alert-warning">Without an email address you won't be able to reset your password</div>
+        {% endif %}
+    </section>
+    <section>
+        <input type="email" name="email" id="id_email" class="form-control" placeholder="Email" style="max-width:250px">
+        <button class="btn" id="submitEmail">Receive code</button>
+        {% if user.email %}
+        <small class="form-text text-muted">Current: {{ user.email }}</small>
+        {% endif %}
+    </section>
+    <section style="display: inline-block; margin-right: 30px">
+        <div id="loadingEmail"></div>
+    </section>
+    <section id="enterEmailCode">
+        <h4>Enter the six digit code here</h4>
+        <input type="text" name="code" id="id_emailCode" class="form-control" style="max-width: 150px; display: inline"
+            maxlength="6">
+        <button class="btn btn-success" id="submitEmailCode">Confirm</button>
+    </section>
     <!-- <hr>
     <br class="mb-3">
 *Beta*
@@ -50,102 +77,129 @@ you{% endblock description %}
         maxlength="6">
     <button class="btn btn-success" id="submitPhoneCode">Confirm</button>
 </div> -->
-<br>
-<br>
-<a href="{% url 'userpage:posts' %}" class="btn btn-secondary"><i class="fas fa-sign-out-alt"></i> No thanks</a>
+    <a href="{% url 'userpage:posts' %}" class="btn btn-secondary"><i class="fas fa-sign-out-alt"></i> No thanks</a>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        window.addEventListener('load', function () {
-            $('#submitEmail').click(function (e) {
-                function isEmail(email) {
-                    var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-                    return regex.test($('#id_email').val());
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            window.addEventListener('load', function () {
+                document.querySelector('#id_email').onkeyup = function (e) {
+                    if (e.keyCode == 13) {
+                        document.querySelector('#submitEmail').click()
+                    }
                 }
-                if (isEmail()) {
-                    $('#loadingEmail').html(`<div class="spinner-border" role="status">
+
+                $('#submitEmail').click(function (e) {
+                    function isEmail(email) {
+                        var regex =
+                            /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+                        return regex.test($('#id_email').val());
+                    }
+                    if (isEmail()) {
+                        $('#loadingEmail').html(`<div class="spinner-border text-primary" style="width: 100px; height: 100px; font-size: 200%;" role="status">
   <span class="sr-only">Loading...</span>
 </div>`)
+                        e.preventDefault();
+                        $.ajax({
+                            url: "{% url 'send_email_code' %}",
+                            data: {
+                                'email': $('#id_email').val()
+                            },
+                            method: 'get',
+                            dataType: 'json',
+                            success: function (response) {
+                                $('#submitEmail').html('Send again')
+                                $('#loadingEmail').html(
+                                    '<i class="far fa-check-circle" style="color: green; font-size: 100px"></i>'
+                                )
+                                document.querySelector('#enterEmailCode').style
+                                    .display = 'inline-block'
+                            },
+                            error: function (response) {
+                                $('#loadingEmail').html(
+                                    `<i class="far fa-times-circle" style="color: red; font-size: 100px"></i>
+                                <p style="color: red;">Something went wrong</p>
+                                `
+                                )
+                            }
+                        })
+                    } else {
+                        $('#loadingEmail').html(
+                            '<p class="alert alert-danger" style="max-width: 400px">Please enter a valid email address</p>'
+                        )
+                    }
+                })
+                $('#submitEmailCode').click(function (e) {
                     e.preventDefault();
+                    $('#loadingEmail').html(`<div class="spinner-grow text-primary" style="width: 100px; height: 100px; font-size: 200%;" role="status">
+  <span class="sr-only">Loading...</span>
+</div>`)
                     $.ajax({
-                        url: "{% url 'send_email_code' %}",
+                        url: "{% url 'confirm_email' %}",
                         data: {
-                            'email': $('#id_email').val()
+                            'code': $('#id_emailCode').val(),
+                            'email': $('#id_email').val(),
                         },
                         method: 'get',
                         dataType: 'json',
                         success: function (response) {
-                            $('#submitEmail').html('Send again')
                             $('#loadingEmail').html(
+                                `<i class="far fa-check-circle" style="color: green; font-size: 100px"></i>
+                                    <p style="color: green;">Your email was vertified</p>
+                                    `
+                            )
+                            document.querySelector('#enterEmailCode').style
+                                .display = 'none'
+                        },
+                        error: function (err) {
+                            $('#loadingEmail').html(
+                                `<i class="far fa-times-circle" style="color: red; font-size: 100px"></i>
+                                <p style="color: red; text-align: center; max-width: 124px; font-size: 90%;">The code you entered isn't valid. You can request a new one</p>
+                                `
+                            )
+                        },
+                    })
+                })
+                // -----------PHONE-------
+                $('#submitPhone').click(function (e) {
+                    e.preventDefault();
+                    $('#loadingPhone').html(`<div class="spinner-border text-primary" role="status">
+  <span class="sr-only">Loading...</span>
+</div>`)
+                    $.ajax({
+                        url: "{% url 'send_phone_code' %}",
+                        data: {
+                            'phone': $('#id_phone').val(),
+                        },
+                        method: 'get',
+                        dataType: 'json',
+                        success: function (response) {
+                            $('#submitPhone').html('Send again')
+                            $('#loadingPhone').html(
                                 '<i class="far fa-check-circle" style="color: green; font-size: 40px"></i>'
                             )
                         }
                     })
-                } else {
-                    $('#loadingEmail').html(
-                        '<p class="alert alert-danger" style="max-width: 400px">Please enter a valid email address</p>'
-                    )
-                }
-            })
-            $('#submitEmailCode').click(function (e) {
-                e.preventDefault();
-                $.ajax({
-                    url: "{% url 'confirm_email' %}",
-                    data: {
-                        'code': $('#id_emailCode').val(),
-                        'email': $('#id_email').val(),
-                    },
-                    method: 'get',
-                    dataType: 'json',
-                    success: function (response) {
-                        if (response.status == 'success') {
-                            alert('Your email was vertified')
-                        } else {
-                            alert('Wrong code')
+                })
+                $('#submitPhoneCode').click(function (e) {
+                    e.preventDefault();
+                    $.ajax({
+                        url: "{% url 'confirm_phone' %}",
+                        data: {
+                            'code': $('#id_phoneCode').val(),
+                            'phone': $('#id_phone').val(),
+                        },
+                        method: 'get',
+                        dataType: 'json',
+                        success: function (response) {
+                            if (response.status == 'success') {
+                                alert('Your phone number was vertified')
+                            } else {
+                                alert('Wrong code')
+                            }
                         }
-                    }
+                    })
                 })
-            })
-            $('#submitPhone').click(function (e) {
-                e.preventDefault();
-                $('#loadingPhone').html(`<div class="spinner-border" role="status">
-  <span class="sr-only">Loading...</span>
-</div>`)
-                $.ajax({
-                    url: "{% url 'send_phone_code' %}",
-                    data: {
-                        'phone': $('#id_phone').val(),
-                    },
-                    method: 'get',
-                    dataType: 'json',
-                    success: function (response) {
-                        $('#submitPhone').html('Send again')
-                        $('#loadingPhone').html(
-                            '<i class="far fa-check-circle" style="color: green; font-size: 40px"></i>'
-                        )
-                    }
-                })
-            })
-            $('#submitPhoneCode').click(function (e) {
-                e.preventDefault();
-                $.ajax({
-                    url: "{% url 'confirm_phone' %}",
-                    data: {
-                        'code': $('#id_phoneCode').val(),
-                        'phone': $('#id_phone').val(),
-                    },
-                    method: 'get',
-                    dataType: 'json',
-                    success: function (response) {
-                        if (response.status == 'success') {
-                            alert('Your phone number was vertified')
-                        } else {
-                            alert('Wrong code')
-                        }
-                    }
-                })
-            })
+            });
         });
-    });
-</script>
-{% endblock content %}
+    </script>
+    {% endblock content %}

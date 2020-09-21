@@ -32,11 +32,15 @@ def note(request):
 def feedback(request):
     if request.method == 'GET':
         feedbacks = Feedback.objects.all().order_by('-date')
-        return render(request, 'production/feedback.html', {'form': FeedbackForm, 'feedbacks': feedbacks})
+        return render(request, 'production/feedback.html', {'feedbacks': feedbacks})
     else:
         form = FeedbackForm(request.POST)
         feedback = form.save(commit=False)
-        feedback.user = request.user
+        if request.user.is_authenticated:
+            feedback.user = request.user
+            feedback.name = request.user.username
+            if not feedback.email and request.user.email:
+                feedback.email = request.user.email
         feedback.save()
         messages.success(
             request, 'Thank you for your feedback, we we will read it as soon as possible')
@@ -45,24 +49,15 @@ def feedback(request):
 
 def handler404(request, *args, **kwargs):
     return render(request, 'production/404.html')
+
+
 def handler500(request, *args, **kwargs):
     return render(request, 'production/500.html')
-
-
-
-class ViewFeedback(generic.DetailView):
-    model = Feedback
-    template_name = 'production/ViewFeedback.html'
 
 
 def announcements(request):
     announcements = Announcement.objects.all().order_by('-date')
     return render(request, 'production/announcements.html', {'announcements': announcements})
-
-
-class ViewAnnounce(generic.DetailView):
-    model = Announcement
-    template_name = 'production/announce.html'
 
 
 class About(generic.TemplateView):

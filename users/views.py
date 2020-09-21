@@ -19,14 +19,15 @@ def signupuser(request):
             messages.warning(request, 'You are already logged in')
             return redirect('home')
         else:
-            return render(request, 'users/signupuser.html', {'categories': Category.objects.all().order_by('title'),})
+            return render(request, 'users/signupuser.html', {'categories': Category.objects.all().order_by('title'), })
     else:
         if request.POST.get('password1') == request.POST.get('password2'):
             try:
                 user = User.objects.create_user(
                     request.POST.get('username'), password=request.POST.get('password1'))
                 user.save()
-                login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+                login(request, user,
+                      backend='django.contrib.auth.backends.ModelBackend')
                 return redirect('set_email_and_phone')
             except IntegrityError:
                 messages.error(
@@ -107,8 +108,8 @@ def confirm_email(request):
         request.user.save()
         return JsonResponse({'status': 'success'})
     else:
-        return JsonResponse({'status': 'fail'})
-
+        messages.error(request, 'The code you entered isn\'t valid. You can request a new one')
+        return redirect('set_email_and_phone')
 # Confirm phone number
 
 
