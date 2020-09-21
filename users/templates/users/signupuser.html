@@ -1,8 +1,6 @@
 {% extends 'categories/base.html' %}
 {% load static %}
 {% load socialaccount %}
-{% load crispy_forms_tags %}
-
 {% block title %} Sign Up for Dfreemedia | Dfreemedia{% endblock title %}
 {% block description %}.{% endblock description %}
 
@@ -36,14 +34,6 @@
 
     <section style="width: 364px;">
         <div class="form-group">
-            <label for="id_homepage">Homepage</label>
-            <select name="homepage" class="select form-control" id="id_homepage">
-                <option value="all_posts" selected>All posts (default)</option>
-                <option value="followed_posts">Followed posts</option>
-                <option value="chat">Chat</option>
-            </select>
-        </div>
-        <div class="form-group">
             <div id="div_id_hide_recommended_posts" class="form-check">
                 <input type="checkbox" name="hide_recommended_posts" class="checkboxinput form-check-input"
                     id="id_hide_recommended_posts">
@@ -60,7 +50,7 @@
                 </label> </div>
         </div>
         <div id="div_id_blocked_topics" class="form-group"> <label for="id_blocked_topics" class=" requiredField">
-                Blocked topics <small class="form-text text-muted mb-3">Hold cmd/ctrl for desktop users</small></label>
+                Blocked topics <small class="form-text mb-3" style="font-size: 70%">Hold cmd/ctrl for desktop users</small></label>
             <div class="">
                 <select name="blocked_topics" class="selectmultiple form-control" required="" id="id_blocked_topics"
                     multiple="">
@@ -88,7 +78,7 @@
     <div>
         <h4><i class="fas fa-cogs"></i> Customize the app to match your needs.</h4>
         <h4><i class="fas fa-ban" style="color: red"></i> Hide posts that are not relevant.</h4>
-        <h4><i class="far fa-hand-paper"></i> Say goodbye to all distractions.</h4>
+        <h4><i class="far fa-comments"></i> Chat with friends.</h4>
     </div>
 </div>
 <script>
@@ -121,7 +111,7 @@
     }
 
     .app-info div {
-        margin-left: 30px;
+        margin-left: 40px;
         margin-right: auto;
         margin-top: 30vh;
     }
