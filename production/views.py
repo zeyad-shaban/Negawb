@@ -31,7 +31,7 @@ def note(request):
 
 def feedback(request):
     if request.method == 'GET':
-        feedbacks = Feedback.objects.all().order_by('-created_date')
+        feedbacks = Feedback.objects.all().order_by('-date')
         return render(request, 'production/feedback.html', {'form': FeedbackForm, 'feedbacks': feedbacks})
     else:
         form = FeedbackForm(request.POST)

@@ -15,4 +15,4 @@ class FeedbackForm(forms.ModelForm):
         """Meta definition for Feedbackform."""
 
         model = Feedback
-        fields = ('name', 'review', 'stars',)
+        fields = ('name', 'review',)

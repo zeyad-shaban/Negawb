@@ -7,7 +7,7 @@ class NoteAdmin(admin.ModelAdmin):
 
 @admin.register(Feedback)
 class FeedbackAdmin(admin.ModelAdmin):
-    readonly_fields = ('created_date',)
+    readonly_fields = ('date',)
 
 @admin.register(Announcement)
 class AnnouncementAdmin(admin.ModelAdmin):

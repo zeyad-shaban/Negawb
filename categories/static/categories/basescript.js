@@ -16,6 +16,37 @@ document.addEventListener('DOMContentLoaded', function () {
                 last_scroll_top = scroll_top;
             });
         }
+
+        // Feedback
+        $('#send_feedback').click(function (e) {
+            e.preventDefault();
+
+            function replaceFeedbackForm() {
+                $('#feedback-form').html(`
+                <div style="text-align: center;">
+                    <i class="far fa-check-circle" style="font-size: 150px; color: green; margin-bottom: 30px;"></i>
+                    <br>
+                    <p style="font-size: 130%;">Thank you for your time</p>
+                    <p style="font-size: 130%;">Your feedback is <b>very valuable</b> to us!</p>
+                    <br>
+                    <p>You can see your feedback <a href="/feedback">here</a></p>
+                </div>
+                        `)
+            }
+            $.ajax({
+                url: $('#feedback-form').attr('action'),
+                data: {
+                    csrfmiddlewaretoken: $('#feedback-form').attr('data-csrf_token'),
+                    name: $('#feedback_name').val(),
+                    review: $('#feedback_review').val(),
+                },
+                method: 'post',
+                dataType: 'json',
+                success: response => replaceFeedbackForm(),
+                error: response => replaceFeedbackForm(),
+            })
+        })
+
         // Signup msg
         setInterval(() => {
             if ($('#message_area').html()) {

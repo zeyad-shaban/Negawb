@@ -100,7 +100,9 @@ pagead/js/adsbygoogle.js"></script>
                         <!-- AddToAny END -->
                     </li>
                     <li>
-                        <a class="btn" href="{% url 'feedback' %}" class="mb-2">Feedback</a>
+                        <button type="button" class="btn" data-toggle="modal" data-target="#feedback">
+                            Feedback
+                        </button>
                     </li>
                     <li>
                         <a class="btn" href="{% url 'about' %}">About</a>
@@ -109,8 +111,7 @@ pagead/js/adsbygoogle.js"></script>
                         <a class="btn" href="{% url 'faq' %}">FAQ</a>
                     </li>
                     <li>
-                        <a style="color: black; text-decoration: none;"
-                            href="{% url 'production:announcements' %}">Announcements </a>
+                        <a class="btn" href="{% url 'production:announcements' %}">Updates </a>
                     </li>
                     {% if user.is_authenticated %}
                     <li role="separator" class="divider"></li>
@@ -123,7 +124,6 @@ pagead/js/adsbygoogle.js"></script>
                 </ul>
             </li>
         </ul>
-        {% block searchbar %} {% endblock searchbar %}
     </nav>
     <span id="message_area">
         {% if messages %}
@@ -136,6 +136,36 @@ pagead/js/adsbygoogle.js"></script>
         {% endfor %}
         {% endif %}
     </span>
+
+    <!-- Feedback modal -->
+    <div class="modal fade" id="feedback" tabindex="-1" role="dialog" aria-labelledby="feedbackLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="feedbackLabel">Write Feedback</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <div>
+                        <div>
+                            <form method="POST" action="{% url 'feedback' %}" id="feedback-form"
+                                data-csrf_token="{{ csrf_token }}">
+                                {% csrf_token %}
+                                <input type="text" name="name" placeholder="name" id="feedback_name">
+                                <textarea type="text" placeholder="Review" id="feedback_review" name="review"></textarea>
+                                <button type="submit" id="send_feedback">SEND</button>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- notifications modal -->
     <div class="modal fade" id="notifications" tabindex="-1" role="dialog" aria-labelledby="notificationsLabel"

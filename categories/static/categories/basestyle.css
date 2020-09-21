@@ -34,13 +34,13 @@ body {
     margin-right: 20px;
 }
 
-.main-nav ul li a{
+.main-nav ul li a {
     text-decoration: none;
     transition: border-bottom 0.2s;
     padding-bottom: 10px;
 }
 
-.main-nav ul li a:hover{
+.main-nav ul li a:hover {
     border-bottom: 1px solid white;
 }
 
@@ -51,8 +51,8 @@ body {
     margin-top: 60px
 }
 
-@media screen and (max-width: 478px){
-    .main-dropdown-menu{
+@media screen and (max-width: 478px) {
+    .main-dropdown-menu {
         left: 50%;
     }
 }
@@ -90,12 +90,27 @@ body {
     color: black !important;
 }
 
+/* ---------Notifications------- */
 
 #notificationBell {
     font-size: 36px;
     color: rgb(209, 202, 202);
     cursor: pointer
 }
+
+.unRead {
+    color: white;
+    background: red;
+    border-radius: 50% !important;
+    padding: 7px !important;
+}
+
+
+/* ---------------- */
+/* FLOAT FORMS */
+/* ---------------- */
+
+/* ----------Notifications-------------- */
 
 #notificationsContainer img {
     border-radius: 50%;
@@ -116,14 +131,39 @@ body {
     padding-left: 0px;
 }
 
-.unRead {
-    color: white;
-    background: red;
-    border-radius: 50% !important;
-    padding: 7px !important;
+/* ----------Feedback-------------- */
+
+
+#feedback-form input,
+#feedback-form textarea {
+    font-family: "Roboto", sans-serif;
+    outline: 0;
+    background: #f2f2f2;
+    width: 100%;
+    border: 0;
+    margin: 0 0 15px;
+    padding: 15px;
+    box-sizing: border-box;
+    font-size: 14px;
+}
+
+#feedback-form button {
+    font-family: "Roboto", sans-serif;
+    text-transform: uppercase;
+    outline: 0;
+    background: #4CAF50;
+    width: 100%;
+    border: 0;
+    padding: 15px;
+    color: #FFFFFF;
+    font-size: 14px;
+    -webkit-transition: all 0.3 ease;
+    transition: all 0.3 ease;
+    cursor: pointer;
 }
 
 
+/* ----------Auth-------------- */
 #signupFloatForm,
 #loginFloatForm {
     background: rgba(0, 0, 0, 0.6);

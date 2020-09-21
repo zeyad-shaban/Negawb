@@ -16,16 +16,7 @@ class Note(models.Model):
 
 class Feedback(models.Model):
     review = models.TextField()
-    created_date = models.DateTimeField(auto_now_add=True)
-    stars_choices = [
-        ('✭', '✭ Very Bad'),
-        ('✭✭', '✭✭ Bad'),
-        ('✭✭✭', '✭✭✭ Ok'),
-        ('✭✭✭✭', '✭✭✭✭ Good'),
-        ('✭✭✭✭✭', '✭✭✭✭✭ Excellent'),
-    ]
-    stars = models.CharField(
-        max_length=15, choices=stars_choices)
+    date = models.DateTimeField(auto_now_add=True)
     name = models.CharField(max_length=30)
 
     def __str__(self):
