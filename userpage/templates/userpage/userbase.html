@@ -13,10 +13,17 @@
 </style>
 <div style="margin-left: auto; margin-right: auto; width: 90%;">
     <div class="cover">
+        {% if user.is_authenticated %}
         <a href="#">
             <img src="{{user.avatar.url}}" alt="User Image">
         </a>
         <h1>{{ user.username }}</h1>
+        {% else %}
+        <a href="#">
+            <img src="/media/profile_images/DefaultUserImage.jpg" alt="User Image">
+        </a>
+        <h1>Guest</h1>
+        {% endif %}
         <button type="button" class="btn btn-outline-warning float-right mr-5" data-toggle="modal"
             data-target="#editProfile"><i class="fas fa-edit"></i> Edit
             profile</button>

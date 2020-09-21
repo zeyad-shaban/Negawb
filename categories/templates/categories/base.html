@@ -48,10 +48,17 @@ pagead/js/adsbygoogle.js"></script>
             <li class="nav-item">
                 <div><a href="{% url 'userpage:posts' %}" title="Profile">
                         <span>
+                            {% if user.is_authenticated %}
                             <img id="id_nav_avatar" src="{{ user.avatar.url }}" alt="" loading="lazy">
                             <span id="Userusername" data-username="{{user.username}}"
                                 data-pk="{{  user.id }}">{{user.username}}
                             </span>
+                            {% else %}
+                            <img id="id_nav_avatar" src="/media/profile_images/DefaultUserImage.jpg" alt="" loading="lazy">
+                            <span id="Userusername" data-username="Guest"
+                                data-pk="0">Guest
+                            </span>
+                            {% endif %}
                         </span>
                     </a>
                 </div>
