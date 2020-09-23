@@ -11,7 +11,7 @@
         <a href="{% provider_login_url 'google' %}" class="social-login google-login"><img
                 src="https://cdn.pixabay.com/photo/2015/12/11/11/43/google-1088004_960_720.png" alt="G"> Login with
             Google</a>
-        <a href="#" class="social-login facebook-login"><img
+        <a href="#" class="social-login facebook-login" style="display: none;"><img
                 src="https://cdn.pixabay.com/photo/2017/06/22/06/22/facebook-2429746_960_720.png" alt="F"> Login with
             Facebook</a>
     </div>
@@ -50,10 +50,10 @@
                 </label> </div>
         </div>
         <div id="div_id_blocked_topics" class="form-group"> <label for="id_blocked_topics" class=" requiredField">
-                Blocked topics <small class="form-text mb-3" style="font-size: 70%">Hold cmd/ctrl for desktop users</small></label>
+                Blocked topics <small class="form-text mb-3" style="font-size: 70%">Hold cmd/ctrl for desktop
+                    users</small></label>
             <div class="">
-                <select name="blocked_topics" class="selectmultiple form-control" required="" id="id_blocked_topics"
-                    multiple="">
+                <select name="blocked_topics" class="selectmultiple form-control" id="id_blocked_topics" multiple="">
                     {% for category in categories %}
                     <option value="category.id">{{ category.title }}</option>
                     {% endfor %}
@@ -108,6 +108,7 @@
         background-image:url("{% static 'categories/logo.png' %}");
         background-size: cover;
         background-position: center;
+        color: #fff;
     }
 
     .app-info div {

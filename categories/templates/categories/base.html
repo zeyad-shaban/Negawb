@@ -1,6 +1,7 @@
 {% load static %}
 {% load crispy_forms_tags %}
 {% load webpush_notifications %}
+{% load socialaccount %}
 {% load pwa %}
 <!DOCTYPE html>
 <html lang="en">
@@ -41,7 +42,7 @@ pagead/js/adsbygoogle.js"></script>
 
     <nav class="navbar main-nav navbar-expand sticky-top">
         <a class="navbar-brand" href="{% url 'home' %}">
-            <img src="{% static 'categories/favicon.png' %}" width="50" height="50" alt="Website Logo" loading="lazy"
+            <img src="{% static 'categories/favicon.png' %}" width="45" height="45" alt="Website Logo" loading="lazy"
                 title="Dfreemedia">
         </a>
         <ul class="navbar-nav">
@@ -54,9 +55,9 @@ pagead/js/adsbygoogle.js"></script>
                                 data-pk="{{  user.id }}">{{user.username}}
                             </span>
                             {% else %}
-                            <img id="id_nav_avatar" src="/media/profile_images/DefaultUserImage.jpg" alt="" loading="lazy">
-                            <span id="Userusername" data-username="Guest"
-                                data-pk="0">Guest
+                            <img id="id_nav_avatar" src="/media/profile_images/DefaultUserImage.jpg" alt=""
+                                loading="lazy">
+                            <span id="Userusername" data-username="Guest" data-pk="0">Guest
                             </span>
                             {% endif %}
                         </span>
@@ -257,56 +258,256 @@ pagead/js/adsbygoogle.js"></script>
         </div>
     </div>
     <!-- End notifications modal -->
+    {% block content %} {% endblock content %}
     {% if not user.is_authenticated %}
+    <style>
+        #floatAuthForm {
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height: 15vh;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            text-align: center;
+        }
+
+        #appDesc {
+            margin-left: 10vh;
+            margin-top: 0.5%;
+        }
+
+        #authBtns {
+            position: absolute;
+            top: 20%;
+            right: 10px;
+        }
+
+        #login {
+            margin-right: 10px;
+            color: white;
+            border: 2px solid white;
+            border-radius: 30px;
+            background: #1DA1F2;
+        }
+
+        #signup {
+            background-color: #fa8231;
+            border: 2px solid #2194D9;
+            border-radius: 30px;
+            color: #ffffff;
+        }
+
+        @media screen and (max-width: 638px) {
+            #appDesc {
+                display: none;
+            }
+
+            #authBtns {
+                position: static;
+                padding-top: 20px;
+            }
+
+            #login {
+                width: 40%;
+            }
+
+            #signup {
+                width: 40%;
+            }
+        }
+
+        section {
+            margin-bottom: 60px
+        }
+
+        .box {
+            width: 50%;
+            float: right;
+            padding-left: 2rem;
+            box-sizing: border-box;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 80px;
+            color: white;
+        }
+
+        .box h2 {
+            margin: 0 0 1.875rem;
+            padding: 0;
+            text-align: center;
+        }
+
+        .box a {
+            text-decoration: none;
+            color: white;
+        }
+
+
+        .form-group {
+            margin-bottom: 30px !important;
+        }
+
+        input.floatSignup {
+            height: 50px !important;
+            width: 364px !important;
+        }
+
+        input.floatAuthBtn {
+            border: none;
+            background-color: #03a9f4;
+            padding: 10px 50px;
+            color: white;
+            border-radius: 200px;
+            font-size: 140%;
+            margin: 30px auto;
+            transition: background-color 0.2s;
+            letter-spacing: 1px;
+
+        }
+
+        input.floatAuthBtn:hover {
+            background-color: #0392d2;
+        }
+
+
+        /* --------Social login-------------- */
+
+        .social-login {
+            padding: 5px 10px;
+            display: inline-block;
+            margin-bottom: 30px;
+            font-size: 90%;
+            font-weight: 300;
+            text-decoration: none !important;
+            transition: background-color 0.2s;
+            color: white !important
+        }
+
+        .social-login img {
+            width: 30px;
+            height: inherit;
+            justify-content: center;
+        }
+
+        .google-login {
+            background-color: #4c8bf5;
+        }
+
+        .google-login:hover,
+        .google-login:active {
+            background-color: #2c76f3;
+        }
+
+        .facebook-login {
+            background-color: #3a5998;
+            margin-left: 20px
+        }
+
+        .facebook-login:hover,
+        .facebook-login:active {
+            background-color: #314b7f;
+        }
+    </style>
+    <!-- ---------------------STICKY LOGIN/SIGNUP--------------------- -->
+    <div id="floatAuthForm">
+        <div class="float-left" id="appDesc">
+            <h4 style="margin-left: 30px">Why having 5 social media apps?!</h4>
+            <p class="ml-4">Customize Dfreemedia to match your needs.</p>
+        </div>
+        <div id="authBtns">
+            <button type="button" class="btn " data-toggle="modal" data-target="#loginFloatForm"
+                id="login">Login</button>
+            <button type="button" class="btn" data-toggle="modal" data-target="#signupFloatForm" id="signup">Sign
+                Up</button>
+        </div>
+    </div>
+
+    <!-- ---------------------SIGNUP MODAL--------------------- -->
     <div class="modal fade" id="signupFloatForm" tabindex="-1" role="dialog" aria-labelledby="signupFloatFormLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">
-            <div class="modal-content" style="background: #cccccc;">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
+            <div class="modal-content">
                 <div class="modal-body">
-                    <div class="text-center">
-                        <h1>Join Dfreemedia</h1>
-                        <h4>And organize your chat for better life</h4>
-                        <h4>Enable chat only mode for maximum productivity</h4>
-                        <h4>Control posts and notifications you receive</h4>
-                        <h4>Hide comments and recommended posts to help you focus</h4>
-                        <h4>Set up email and phone num. for friends to easily find you</h4>
-                        <p>And much more!</p>
+                    <h2 style="margin: 0 0 1.875rem; text-align: center;">Join Dfreemedia</h2>
+                    <div style="text-align: center;">
+                        <a href="{% provider_login_url 'google' %}" class="social-login google-login"><img
+                                src="https://cdn.pixabay.com/photo/2015/12/11/11/43/google-1088004_960_720.png" alt="G">
+                            Login with
+                            Google</a>
+                        <a href="#" class="social-login facebook-login" style="display: none;"><img
+                                src="https://cdn.pixabay.com/photo/2017/06/22/06/22/facebook-2429746_960_720.png"
+                                alt="F">
+                            Login with
+                            Facebook</a>
                     </div>
+
                     <form method="POST" action="{% url 'signupuser' %}">
                         {% csrf_token %}
-                        <div class="form-group">
-                            <label for="username">Username</label>
-                            <input type="text" name="username" class="form-control" id="username"
-                                aria-describedby="usernameHelp" required maxlength="30">
-                        </div>
-                        <div class="form-group">
-                            <label for="password1">Password</label>
-                            <input type="password" name="password1" class="form-control signupPass" id="password1"
-                                style="float: left; width: 90%;" required>
-                            <i class="fas fa-eye-slash btn" id="toggleSignupPass" style="float: right; width:10%"></i>
-                        </div>
-                        <div class="form-group">
-                            <label for="password2">Confirm Password</label>
-                            <input type="password" name="password2" class="form-control signupPass" id="password2"
-                                required>
-                        </div>
-                        <small class="form-text text-muted mb-2"> <input type="checkbox" name="" id="" class="mr-2"
-                                required>I agree
+                        <section>
+                            <div class="form-group">
+                                <input type="text" class="form-control col-md-10 floatSignup" id="id_username"
+                                    name="username" maxlength="30" placeholder="Username" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="password" name="password1" class="form-control col-md-10 floatSignup"
+                                    id="password1" placeholder="Password" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="password" name="password2" class="form-control col-md-10 floatSignup"
+                                    id="password2" placeholder="Confirm Password" required>
+                            </div>
+                        </section>
+
+                        <section style="width: 364px;">
+                            <div class="form-group">
+                                <div id="div_id_hide_recommended_posts" class="form-check">
+                                    <input type="checkbox" name="hide_recommended_posts"
+                                        class="checkboxinput form-check-input" id="id_hide_recommended_posts">
+                                    <label for="id_hide_recommended_posts" class="form-check-label">
+                                        Hide recommended posts
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div id="div_id_hide_comments" class="form-check"> <input type="checkbox"
+                                        name="hide_comments" class="checkboxinput form-check-input"
+                                        id="id_hide_comments">
+                                    <label for="id_hide_comments" class="form-check-label">
+                                        Hide comments
+                                    </label> </div>
+                            </div>
+                            <div id="div_id_blocked_topics" class="form-group"> <label for="id_blocked_topics"
+                                    class=" requiredField">
+                                    Blocked topics <small class="form-text mb-3" style="font-size: 70%">Hold cmd/ctrl
+                                        for desktop
+                                        users</small></label>
+                                <div class="">
+                                    <select name="blocked_topics" class="selectmultiple form-control"
+                                        id="id_blocked_topics" multiple="">
+                                        {% for category in categories %}
+                                        <option value="category.id">{{ category.title }}</option>
+                                        {% endfor %}
+                                    </select>
+                        </section>
+
+                        <small class="form-text">By clicking sign up I agree
                             to <a href="{% url 'termsandconditions' %}" target="_blank">Terms and
                                 Conditions</a>, <a href="{% url 'privacypolicy' %}" target="_blank">Privacy
                                 Policy</a>, and <a href="{% url 'cookiepolicy' %}" target="_blank">Cookie
                                 Policy</a></small>
-                        <button type="submit" class="btn btn-success btn-block">Sign Up</button>
+                        <input type="submit" name="sign-up" value="SIGN UP" class="floatAuthBtn" id="mainFloatSignupBtn"
+                            style="display: none;">
                     </form>
+                </div>
+                <div class="modal-footer">
+                    <input type="submit" name="sign-up" value="SIGN UP" class="floatAuthBtn"
+                        onclick="document.querySelector('#mainFloatSignupBtn').click()">
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- ---------------------LOGIN MODAL--------------------- -->
     <div class="modal fade" id="loginFloatForm" tabindex="-1" role="dialog" aria-labelledby="loginFloatFormLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">
@@ -376,77 +577,6 @@ pagead/js/adsbygoogle.js"></script>
         });
     </script>
 
-
-    {% endif %}
-    {% block content %} {% endblock content %}
-    {% if not user.is_authenticated %}
-    <style>
-        #floatAuthForm {
-            position: fixed;
-            left: 0;
-            bottom: 0;
-            width: 100%;
-            height: 15vh;
-            background-color: rgba(0, 0, 0, 0.7);
-            color: white;
-            text-align: center;
-        }
-
-        #appDesc {
-            margin-left: 10vh;
-            margin-top: 0.5%;
-        }
-
-        #authBtns {
-            position: absolute;
-            top: 20%;
-            right: 10px;
-        }
-
-        #login {
-            margin-right: 10px;
-            color: white;
-            border: 2px solid white;
-            border-radius: 30px;
-            background: #2B19E6;
-        }
-
-        #signup {
-            background-color: #D9A523;
-            border-radius: 30px
-        }
-
-        @media screen and (max-width: 638px) {
-            #appDesc {
-                display: none;
-            }
-
-            #authBtns {
-                position: static;
-                padding-top: 20px;
-            }
-
-            #login {
-                width: 40%;
-            }
-
-            #signup {
-                width: 40%;
-            }
-        }
-    </style>
-    <div id="floatAuthForm">
-        <div class="float-left" id="appDesc">
-            <h4 style="margin-left: 30px">Why having 5 social media apps?!</h4>
-            <p class="ml-4">Customize Dfreemedia to match your needs.</p>
-        </div>
-        <div id="authBtns">
-            <button type="button" class="btn " data-toggle="modal" data-target="#loginFloatForm"
-                id="login">Login</button>
-            <button type="button" class="btn" data-toggle="modal" data-target="#signupFloatForm" id="signup">Sign
-                Up</button>
-        </div>
-    </div>
     {% endif %}
 
 
