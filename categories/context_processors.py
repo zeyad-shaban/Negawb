@@ -16,6 +16,7 @@ def add_variable_to_context(request):
         unread_notif_count = []
         notifications = []
     return {
+        'categories': Category.objects.all(),
         'notifications': notifications,
         'unread_notif_count': unread_notif_count,
     }

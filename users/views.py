@@ -23,11 +23,21 @@ def signupuser(request):
     else:
         if request.POST.get('password1') == request.POST.get('password2'):
             try:
+                if request.POST.get('hide_comments') == 'on':
+                    hide_comments = True
+                else:
+                    hide_comments = False
+                if request.POST.get('hide_recommended_posts') == 'on':
+                    hide_recommended_posts = True
+                else:
+                    hide_recommended_posts = False
                 user = User.objects.create_user(
-                    request.POST.get('username'), password=request.POST.get('password1'))
+                    request.POST.get('username'), password=request.POST.get('password1'), hide_comments=hide_comments, hide_recommended_posts=hide_recommended_posts)
                 user.save()
-                login(request, user,
-                      backend='django.contrib.auth.backends.ModelBackend')
+                login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+                for topic in request.POST.getlist('blocked_topics'):
+                    user.blocked_topics.add(int(topic))
+
                 return redirect('set_email_and_phone')
             except IntegrityError:
                 messages.error(
@@ -108,7 +118,8 @@ def confirm_email(request):
         request.user.save()
         return JsonResponse({'status': 'success'})
     else:
-        messages.error(request, 'The code you entered isn\'t valid. You can request a new one')
+        messages.error(
+            request, 'The code you entered isn\'t valid. You can request a new one')
         return redirect('set_email_and_phone')
 # Confirm phone number
 

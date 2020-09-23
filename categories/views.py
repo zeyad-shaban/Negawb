@@ -18,7 +18,7 @@ def home(request):
 
     page = request.GET.get('page')
     if request.user.is_authenticated and request.user.blocked_topics:
-        post_list = Post.objects.filter(~Q(category__in=request.user.blocked_topics.all()))
+        post_list = Post.objects.filter(~Q(category__in=request.user.blocked_topics.all())).order_by('-post_date')
     else:
         post_list = Post.objects.all().order_by('-post_date')
     paginator = Paginator(post_list, 5)

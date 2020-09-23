@@ -359,7 +359,7 @@ pagead/js/adsbygoogle.js"></script>
             color: white;
             border-radius: 200px;
             font-size: 140%;
-            margin: 30px auto;
+            margin: 10px auto;
             transition: background-color 0.2s;
             letter-spacing: 1px;
 
@@ -427,6 +427,11 @@ pagead/js/adsbygoogle.js"></script>
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
                 <div class="modal-body">
                     <h2 style="margin: 0 0 1.875rem; text-align: center;">Join Dfreemedia</h2>
                     <div style="text-align: center;">
@@ -481,13 +486,12 @@ pagead/js/adsbygoogle.js"></script>
                                     Blocked topics <small class="form-text mb-3" style="font-size: 70%">Hold cmd/ctrl
                                         for desktop
                                         users</small></label>
-                                <div class="">
-                                    <select name="blocked_topics" class="selectmultiple form-control"
-                                        id="id_blocked_topics" multiple="">
-                                        {% for category in categories %}
-                                        <option value="category.id">{{ category.title }}</option>
-                                        {% endfor %}
-                                    </select>
+                                <br>
+                                <select name="blocked_topics" required="" id="id_blocked_topics" multiple="">
+                                    {% for category in categories %}
+                                    <option value="{{ category.id }}" selected="">{{ category.title }}</option>
+                                    {% endfor %}
+                                </select>
                         </section>
 
                         <small class="form-text">By clicking sign up I agree
@@ -511,37 +515,48 @@ pagead/js/adsbygoogle.js"></script>
     <div class="modal fade" id="loginFloatForm" tabindex="-1" role="dialog" aria-labelledby="loginFloatFormLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">
-            <div class="modal-content" style="background: #CCCCCC;">
+            <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="text-center">
-                        <img src="{% static 'categories/logo.png' %}" alt="Dfreemedia favicon" class="rounded-circle"
-                            height="200" loading="lazy">
-                        <h1>Log into Dfreemedia</h1>
+                    <h2 style="margin: 0 0 1.875rem; text-align: center;">Log In Dfreemedia</h2>
+                    <div style="text-align: center;">
+                        <a href="{% provider_login_url 'google' %}" class="social-login google-login"><img
+                                src="https://cdn.pixabay.com/photo/2015/12/11/11/43/google-1088004_960_720.png" alt="G">
+                            Login with
+                            Google</a>
+                        <a href="#" class="social-login facebook-login" style="display: none;"><img
+                                src="https://cdn.pixabay.com/photo/2017/06/22/06/22/facebook-2429746_960_720.png"
+                                alt="F">
+                            Login with
+                            Facebook</a>
                     </div>
-                    <form method="POST" action="{% url 'loginuser' %}" id="loginForm">
+
+                    <form method="POST" action="{% url 'loginuser' %}">
                         {% csrf_token %}
-                        <div class="form-group">
-                            <label for="username">Username</label>
-                            <input type="text" name="username" class="form-control" id="username" required
-                                maxlength="30">
-                        </div>
-                        <div class="form-group">
-                            <label for="password">Password</label>
-                            <input type="password" name="password" class="form-control" id="loginPass"
-                                style="float: left; width: 90%" required>
-                            <i class="fas fa-eye-slash btn" id="toggleLoginPass" style="float: right; width:10%"></i>
-                        </div>
-                        <button type="submit" class="btn btn-success btn-block">Login</button>
+                        <section>
+                            <div class="form-group">
+                                <input type="text" class="form-control col-md-10 floatSignup" id="id_username"
+                                    name="username" maxlength="30" placeholder="Username" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="password" name="password" class="form-control col-md-10 floatSignup"
+                                    id="password" placeholder="Password" required>
+                            </div>
+                        </section>
+                        <input type="submit" name="log-in" value="LOG IN" class="floatAuthBtn" id="mainFloatLoginBtn"
+                            style="display: none;">
                     </form>
-                    <hr>
                     <div class="text-center">
                         Forgot password? <a href="{% url 'password_reset' %}">reset here</a>
                     </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="submit" name="log-in" value="LOG IN" class="floatAuthBtn"
+                        onclick="document.querySelector('#mainFloatLoginBtn').click()">
                 </div>
             </div>
         </div>
