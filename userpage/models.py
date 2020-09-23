@@ -301,10 +301,15 @@ class User(AbstractUser):
         default='everyone')
     allow_friend_request = models.BooleanField(default=True)
 
-    # DISTRACTION FREE
+    # ---------DISTRACTION FREE-----------
+    # Rated
+    video_rate = models.IntegerField(default=33)
+    image_rate = models.IntegerField(default=33)
+    text_rate = models.IntegerField(default=33)
+    # toggling
     hide_comments = models.BooleanField(default=False)
     hide_recommended_posts = models.BooleanField(default=False)
-    blocked_topics = models.ManyToManyField(Category)
+    blocked_topics = models.ManyToManyField(Category, blank=True)
     default_home_choices = [
         ('all_posts', 'All posts (default)'),
         ('followed_posts', 'Followed posts'),

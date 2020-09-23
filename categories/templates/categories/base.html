@@ -561,36 +561,6 @@ pagead/js/adsbygoogle.js"></script>
             </div>
         </div>
     </div>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            window.addEventListener('load', function () {
-                document.querySelector('#toggleLoginPass').onclick = function (e) {
-                    e.preventDefault();
-                    if ($('#toggleLoginPass').hasClass('fa-eye-slash')) {
-                        $('#loginPass').attr('type', 'text');
-                        $('#toggleLoginPass').removeClass('fa-eye-slash');
-                        $('#toggleLoginPass').addClass('fa-eye');
-                    } else {
-                        $('#loginPass').attr('type', 'password')
-                        $('#toggleLoginPass').removeClass(`fa-eye`)
-                        $('#toggleLoginPass').addClass(`fa-eye-slash`)
-                    }
-                }
-                document.querySelector('#toggleSignupPass').onclick = function (e) {
-                    e.preventDefault();
-                    if ($('#toggleSignupPass').hasClass('fa-eye-slash')) {
-                        $('.signupPass').attr('type', 'text');
-                        $('#toggleSignupPass').removeClass('fa-eye-slash');
-                        $('#toggleSignupPass').addClass('fa-eye');
-                    } else {
-                        $('.signupPass').attr('type', 'password')
-                        $('#toggleSignupPass').removeClass(`fa-eye`)
-                        $('#toggleSignupPass').addClass(`fa-eye-slash`)
-                    }
-                }
-            });
-        });
-    </script>
 
     {% endif %}
 

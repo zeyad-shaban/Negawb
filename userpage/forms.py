@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth import get_user_model as user_model
+from django.forms import widgets
 User = user_model()
 
 
@@ -32,7 +33,7 @@ class UserPrivacyForm(forms.ModelForm):
 class DistractionFreeForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ('homepage', 'hide_recommended_posts', 'hide_comments', 'blocked_topics', 'allow_important_friend_messages', 'allow_important_group_message', 'allow_normal_friend_message', 'allow_normal_group_message',
+        fields = ('video_rate', 'image_rate', 'text_rate', 'homepage', 'hide_recommended_posts', 'hide_comments', 'blocked_topics', 'allow_important_friend_messages', 'allow_important_group_message', 'allow_normal_friend_message', 'allow_normal_group_message',
                   'allow_comment_message', 'allow_reply_message', 'allow_invites', 'your_invites',)
         labels = {
             'allow_important_friend_messages': 'Friend\'s important message',
@@ -45,7 +46,17 @@ class DistractionFreeForm(forms.ModelForm):
             'allow_invites': '<hr>friend and group Invites',
             'your_invites': 'Your invites',
             'blocked_topics': 'Blocked topics <small class="form-text text-muted mb-3">Hold cmd/ctrl for desktop users</small>',
+            'video_rate': '<label for="id_video_rate">Video rate</label>',
+            'image_rate': '<label for="id_image_rate">Image rate</label>',
+            'text_rate': '<label for="id_text_rate">Text rate</label>',
         }
+
+        widgets = {
+            'video_rate': forms.TextInput(attrs={'type': 'range'}),
+            'image_rate': forms.TextInput(attrs={'type': 'range'}),
+            'text_rate': forms.TextInput(attrs={'type': 'range'}),
+        }
+
 
 class AdvanceForm(forms.ModelForm):
     pass

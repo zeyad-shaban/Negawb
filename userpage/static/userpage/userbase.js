@@ -66,5 +66,21 @@ document.addEventListener('DOMContentLoaded', function () {
             coverP.innerHTML = '<i class="fas fa-image"></i>' + $('#id_cover')[0].files[0].name
         }
 
+        // ----------------------------
+        // Select ranges
+        // ----------------------------
+        document.querySelector('#id_video_rate').onchange = function (e) {
+            let value = document.querySelector('#id_video_rate').value
+            document.querySelector('label[for="id_video_rate"]').innerHTML = 'Video rate ' + value
+        }
+        document.querySelector('#id_image_rate').onchange = function (e) {
+            let value = document.querySelector('#id_image_rate').value
+            document.querySelector('label[for="id_image_rate"]').innerHTML = 'Image rate ' + value
+        }
+        document.querySelector('#id_text_rate').onchange = function (e) {
+            let value = document.querySelector('#id_text_rate').value
+            document.querySelector('label[for="id_text_rate"]').innerHTML = 'Text rate ' + value
+        }
+
     })
 })
