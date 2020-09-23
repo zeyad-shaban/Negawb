@@ -260,6 +260,175 @@ pagead/js/adsbygoogle.js"></script>
     <!-- End notifications modal -->
     {% block content %} {% endblock content %}
     {% if not user.is_authenticated %}
+    <!-- ---------------------STICKY LOGIN/SIGNUP--------------------- -->
+    <div id="floatAuthForm">
+        <div class="float-left" id="appDesc">
+            <h4 style="margin-left: 30px">Why having 5 social media apps?!</h4>
+            <p class="ml-4">Customize Dfreemedia to match your needs.</p>
+        </div>
+        <div id="authBtns">
+            <button type="button" class="btn " data-toggle="modal" data-target="#loginFloatForm"
+                id="login">Login</button>
+            <button type="button" class="btn" data-toggle="modal" data-target="#signupFloatForm" id="signup">Sign
+                Up</button>
+        </div>
+    </div>
+
+    <!-- ---------------------SIGNUP MODAL--------------------- -->
+    <div class="modal fade" id="signupFloatForm" tabindex="-1" role="dialog" aria-labelledby="signupFloatFormLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h2 style="margin: 0 0 1.875rem; text-align: center;">Join Dfreemedia</h2>
+                    <div style="text-align: center;">
+                        <a href="{% provider_login_url 'google' %}" class="social-login google-login"><img
+                                src="https://cdn.pixabay.com/photo/2015/12/11/11/43/google-1088004_960_720.png" alt="G">
+                            Login with
+                            Google</a>
+                        <a href="#" class="social-login facebook-login" style="display: none;"><img
+                                src="https://cdn.pixabay.com/photo/2017/06/22/06/22/facebook-2429746_960_720.png"
+                                alt="F">
+                            Login with
+                            Facebook</a>
+                    </div>
+
+                    <form method="POST" action="{% url 'signupuser' %}">
+                        {% csrf_token %}
+                        <section>
+                            <div class="form-group">
+                                <input type="text" class="form-control col-md-10 floatSignup" id="id_username"
+                                    name="username" maxlength="30" placeholder="Username" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="password" name="password1" class="form-control col-md-10 floatSignup"
+                                    id="password1" placeholder="Password" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="password" name="password2" class="form-control col-md-10 floatSignup"
+                                    id="password2" placeholder="Confirm Password" required>
+                            </div>
+                        </section>
+
+                        <section style="width: 364px;">
+                            <label for="id_video_rate">Video rate 50</label>
+                            <input type="range" name="video_rate" value="50" required="" id="id_video_rate">
+                            <br>
+                            <label for="id_image_rate">Image rate 50</label>
+                            <input type="range" name="image_rate" value="50" required="" id="id_image_rate">
+                            <br>
+                            
+                            <label for="id_text_rate">Text rate 50</label>
+                            <input type="range" name="text_rate" value="50" required="" id="id_text_rate">
+                            <br>
+
+                            <div id="div_id_blocked_topics" class="form-group"> <label for="id_blocked_topics"
+                                    class=" requiredField">
+                                    Blocked topics <small class="form-text mb-3" style="font-size: 70%">Hold cmd/ctrl
+                                        for desktop
+                                        users</small></label>
+                                <br>
+                                <select name="blocked_topics" id="id_blocked_topics" multiple="">
+                                    {% for category in categories %}
+                                    <option value="{{ category.id }}">{{ category.title }}</option>
+                                    {% endfor %}
+                                </select>
+                        </section>
+
+                        <small class="form-text">By signing up you agree
+                            to our <a href="{% url 'termsandconditions' %}" target="_blank">Terms and
+                                Conditions</a>, <a href="{% url 'privacypolicy' %}" target="_blank">Privacy
+                                Policy</a>, and <a href="{% url 'cookiepolicy' %}" target="_blank">Cookie
+                                Policy</a></small>
+                        <input type="submit" name="sign-up" value="SIGN UP" class="floatAuthBtn" id="mainFloatSignupBtn"
+                            style="display: none;">
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <input type="submit" name="sign-up" value="SIGN UP" class="floatAuthBtn"
+                        onclick="document.querySelector('#mainFloatSignupBtn').click()">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ---------------------LOGIN MODAL--------------------- -->
+    <div class="modal fade" id="loginFloatForm" tabindex="-1" role="dialog" aria-labelledby="loginFloatFormLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h2 style="margin: 0 0 1.875rem; text-align: center;">Log In Dfreemedia</h2>
+                    <div style="text-align: center;">
+                        <a href="{% provider_login_url 'google' %}" class="social-login google-login"><img
+                                src="https://cdn.pixabay.com/photo/2015/12/11/11/43/google-1088004_960_720.png" alt="G">
+                            Login with
+                            Google</a>
+                        <a href="#" class="social-login facebook-login" style="display: none;"><img
+                                src="https://cdn.pixabay.com/photo/2017/06/22/06/22/facebook-2429746_960_720.png"
+                                alt="F">
+                            Login with
+                            Facebook</a>
+                    </div>
+
+                    <form method="POST" action="{% url 'loginuser' %}">
+                        {% csrf_token %}
+                        <section>
+                            <div class="form-group">
+                                <input type="text" class="form-control col-md-10 floatSignup" id="id_username"
+                                    name="username" maxlength="30" placeholder="Username" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="password" name="password" class="form-control col-md-10 floatSignup"
+                                    id="password" placeholder="Password" required>
+                            </div>
+                        </section>
+                        <input type="submit" name="log-in" value="LOG IN" class="floatAuthBtn" id="mainFloatLoginBtn"
+                            style="display: none;">
+                    </form>
+                    <div class="text-center">
+                        Forgot password? <a href="{% url 'password_reset' %}">reset here</a>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="submit" name="log-in" value="LOG IN" class="floatAuthBtn"
+                        onclick="document.querySelector('#mainFloatLoginBtn').click()">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // -------show signup modal-------------
+        setTimeout(() => {
+            $('#signupFloatForm').modal('show')
+        }, 7000);
+
+        // -----------Select ranges----------
+        console.log('about to add those functions')
+        document.querySelector('#id_video_rate').onchange = function (e) {
+            let value = document.querySelector('#id_video_rate').value
+            document.querySelector('label[for="id_video_rate"]').innerHTML = 'Video rate ' + value
+        }
+        document.querySelector('#id_image_rate').onchange = function (e) {
+            let value = document.querySelector('#id_image_rate').value
+            document.querySelector('label[for="id_image_rate"]').innerHTML = 'Image rate ' + value
+        }
+        document.querySelector('#id_text_rate').onchange = function (e) {
+            let value = document.querySelector('#id_text_rate').value
+            document.querySelector('label[for="id_text_rate"]').innerHTML = 'Text rate ' + value
+        }
+    </script>
     <style>
         #floatAuthForm {
             position: fixed;
@@ -408,160 +577,6 @@ pagead/js/adsbygoogle.js"></script>
             background-color: #314b7f;
         }
     </style>
-    <!-- ---------------------STICKY LOGIN/SIGNUP--------------------- -->
-    <div id="floatAuthForm">
-        <div class="float-left" id="appDesc">
-            <h4 style="margin-left: 30px">Why having 5 social media apps?!</h4>
-            <p class="ml-4">Customize Dfreemedia to match your needs.</p>
-        </div>
-        <div id="authBtns">
-            <button type="button" class="btn " data-toggle="modal" data-target="#loginFloatForm"
-                id="login">Login</button>
-            <button type="button" class="btn" data-toggle="modal" data-target="#signupFloatForm" id="signup">Sign
-                Up</button>
-        </div>
-    </div>
-
-    <!-- ---------------------SIGNUP MODAL--------------------- -->
-    <div class="modal fade" id="signupFloatForm" tabindex="-1" role="dialog" aria-labelledby="signupFloatFormLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <h2 style="margin: 0 0 1.875rem; text-align: center;">Join Dfreemedia</h2>
-                    <div style="text-align: center;">
-                        <a href="{% provider_login_url 'google' %}" class="social-login google-login"><img
-                                src="https://cdn.pixabay.com/photo/2015/12/11/11/43/google-1088004_960_720.png" alt="G">
-                            Login with
-                            Google</a>
-                        <a href="#" class="social-login facebook-login" style="display: none;"><img
-                                src="https://cdn.pixabay.com/photo/2017/06/22/06/22/facebook-2429746_960_720.png"
-                                alt="F">
-                            Login with
-                            Facebook</a>
-                    </div>
-
-                    <form method="POST" action="{% url 'signupuser' %}">
-                        {% csrf_token %}
-                        <section>
-                            <div class="form-group">
-                                <input type="text" class="form-control col-md-10 floatSignup" id="id_username"
-                                    name="username" maxlength="30" placeholder="Username" required>
-                            </div>
-                            <div class="form-group">
-                                <input type="password" name="password1" class="form-control col-md-10 floatSignup"
-                                    id="password1" placeholder="Password" required>
-                            </div>
-                            <div class="form-group">
-                                <input type="password" name="password2" class="form-control col-md-10 floatSignup"
-                                    id="password2" placeholder="Confirm Password" required>
-                            </div>
-                        </section>
-
-                        <section style="width: 364px;">
-                            <div class="form-group">
-                                <div id="div_id_hide_recommended_posts" class="form-check">
-                                    <input type="checkbox" name="hide_recommended_posts"
-                                        class="checkboxinput form-check-input" id="id_hide_recommended_posts">
-                                    <label for="id_hide_recommended_posts" class="form-check-label">
-                                        Hide recommended posts
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div id="div_id_hide_comments" class="form-check"> <input type="checkbox"
-                                        name="hide_comments" class="checkboxinput form-check-input"
-                                        id="id_hide_comments">
-                                    <label for="id_hide_comments" class="form-check-label">
-                                        Hide comments
-                                    </label> </div>
-                            </div>
-                            <div id="div_id_blocked_topics" class="form-group"> <label for="id_blocked_topics"
-                                    class=" requiredField">
-                                    Blocked topics <small class="form-text mb-3" style="font-size: 70%">Hold cmd/ctrl
-                                        for desktop
-                                        users</small></label>
-                                <br>
-                                <select name="blocked_topics" required="" id="id_blocked_topics" multiple="">
-                                    {% for category in categories %}
-                                    <option value="{{ category.id }}" selected="">{{ category.title }}</option>
-                                    {% endfor %}
-                                </select>
-                        </section>
-
-                        <small class="form-text">By clicking sign up I agree
-                            to <a href="{% url 'termsandconditions' %}" target="_blank">Terms and
-                                Conditions</a>, <a href="{% url 'privacypolicy' %}" target="_blank">Privacy
-                                Policy</a>, and <a href="{% url 'cookiepolicy' %}" target="_blank">Cookie
-                                Policy</a></small>
-                        <input type="submit" name="sign-up" value="SIGN UP" class="floatAuthBtn" id="mainFloatSignupBtn"
-                            style="display: none;">
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <input type="submit" name="sign-up" value="SIGN UP" class="floatAuthBtn"
-                        onclick="document.querySelector('#mainFloatSignupBtn').click()">
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ---------------------LOGIN MODAL--------------------- -->
-    <div class="modal fade" id="loginFloatForm" tabindex="-1" role="dialog" aria-labelledby="loginFloatFormLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <h2 style="margin: 0 0 1.875rem; text-align: center;">Log In Dfreemedia</h2>
-                    <div style="text-align: center;">
-                        <a href="{% provider_login_url 'google' %}" class="social-login google-login"><img
-                                src="https://cdn.pixabay.com/photo/2015/12/11/11/43/google-1088004_960_720.png" alt="G">
-                            Login with
-                            Google</a>
-                        <a href="#" class="social-login facebook-login" style="display: none;"><img
-                                src="https://cdn.pixabay.com/photo/2017/06/22/06/22/facebook-2429746_960_720.png"
-                                alt="F">
-                            Login with
-                            Facebook</a>
-                    </div>
-
-                    <form method="POST" action="{% url 'loginuser' %}">
-                        {% csrf_token %}
-                        <section>
-                            <div class="form-group">
-                                <input type="text" class="form-control col-md-10 floatSignup" id="id_username"
-                                    name="username" maxlength="30" placeholder="Username" required>
-                            </div>
-                            <div class="form-group">
-                                <input type="password" name="password" class="form-control col-md-10 floatSignup"
-                                    id="password" placeholder="Password" required>
-                            </div>
-                        </section>
-                        <input type="submit" name="log-in" value="LOG IN" class="floatAuthBtn" id="mainFloatLoginBtn"
-                            style="display: none;">
-                    </form>
-                    <div class="text-center">
-                        Forgot password? <a href="{% url 'password_reset' %}">reset here</a>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <input type="submit" name="log-in" value="LOG IN" class="floatAuthBtn"
-                        onclick="document.querySelector('#mainFloatLoginBtn').click()">
-                </div>
-            </div>
-        </div>
-    </div>
-
     {% endif %}
 
 

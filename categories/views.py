@@ -19,34 +19,33 @@ def home(request):
     page = request.GET.get('page')
     if request.user.is_authenticated and request.user.blocked_topics:
         posts = Post.objects.filter(~Q(category__in=request.user.blocked_topics.all())).order_by('-post_date')
+        posts_list = []
+        video_count = 0
+        image_count = 0
+        txt_count = 0
+        # Posts algorithm
+        while len(posts_list) < len(posts):
+            for post in posts:
+                total = len(posts_list)
+                if post.post_file:
+                    # Video post
+                    if video_count <= total * int(request.user.video_rate) or total <= 0:
+                        video_count += 1
+                        posts_list.append(post)
+
+                elif post.image:
+                    # Image post
+                    if image_count <= total * int(request.user.image_rate) or total <= 0:
+                        image_count += 1
+                        posts_list.append(post)
+                        
+                elif post.description:
+                    # Txt post
+                    if txt_count <= total * int(request.user.text_rate) or total <= 0:
+                        image_count += 1
+                        posts_list.append(post)
     else:
-        posts = Post.objects.all().order_by('-post_date')
-
-    posts_list = []
-    video_count = 0
-    image_count = 0
-    txt_count = 0
-    # Posts algorithm
-    while len(posts_list) < len(posts):
-        for post in posts:
-            total = len(posts_list)
-            if post.post_file:
-                # Video post
-                if video_count <= total * int(request.user.video_rate) or total <= 0:
-                    video_count += 1
-                    posts_list.append(post)
-
-            elif post.image:
-                # Image post
-                if image_count <= total * int(request.user.image_rate) or total <= 0:
-                    image_count += 1
-                    posts_list.append(post)
-                    
-            elif post.description:
-                # Txt post
-                if txt_count <= total * int(request.user.text_rate) or total <= 0:
-                    image_count += 1
-                    posts_list.append(post)
+        posts_list = Post.objects.all().order_by('-post_date')
 
         
     paginator = Paginator(posts_list, 5)

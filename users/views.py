@@ -32,9 +32,10 @@ def signupuser(request):
                 else:
                     hide_recommended_posts = False
                 user = User.objects.create_user(
-                    request.POST.get('username'), password=request.POST.get('password1'), hide_comments=hide_comments, hide_recommended_posts=hide_recommended_posts)
+                    request.POST.get('username'), password=request.POST.get('password1'), hide_comments=hide_comments, hide_recommended_posts=hide_recommended_posts, video_rate=request.POST.get('video_rate'), image_rate=request.POST.get('image_rate'), text_rate=request.POST.get('text_rate'))
                 user.save()
-                login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+                login(request, user,
+                      backend='django.contrib.auth.backends.ModelBackend')
                 for topic in request.POST.getlist('blocked_topics'):
                     user.blocked_topics.add(int(topic))
 

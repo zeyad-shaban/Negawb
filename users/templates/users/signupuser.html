@@ -34,20 +34,16 @@
 
     <section style="width: 364px;">
         <div class="form-group">
-            <div id="div_id_hide_recommended_posts" class="form-check">
-                <input type="checkbox" name="hide_recommended_posts" class="checkboxinput form-check-input"
-                    id="id_hide_recommended_posts">
-                <label for="id_hide_recommended_posts" class="form-check-label">
-                    Hide recommended posts
-                </label>
-            </div>
-        </div>
-        <div class="form-group">
-            <div id="div_id_hide_comments" class="form-check"> <input type="checkbox" name="hide_comments"
-                    class="checkboxinput form-check-input" id="id_hide_comments">
-                <label for="id_hide_comments" class="form-check-label">
-                    Hide comments
-                </label> </div>
+            <label for="id_video_rate">Video rate 50</label>
+            <input type="range" name="video_rate" value="50" required="" id="id_video_rate">
+            <br>
+            <label for="id_image_rate">Image rate 50</label>
+            <input type="range" name="image_rate" value="50" required="" id="id_image_rate">
+            <br>
+
+            <label for="id_text_rate">Text rate 50</label>
+            <input type="range" name="text_rate" value="50" required="" id="id_text_rate">
+            <br>
         </div>
         <div id="div_id_blocked_topics" class="form-group"> <label for="id_blocked_topics" class=" requiredField">
                 Blocked topics <small class="form-text mb-3" style="font-size: 70%">Hold cmd/ctrl for desktop

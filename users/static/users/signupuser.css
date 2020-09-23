@@ -35,7 +35,7 @@ body {
 /* REUSABLE */
 /* ---------------------- */
 
-section{
+section {
     margin-bottom: 60px
 }
 
@@ -53,15 +53,21 @@ section{
 }
 
 
-.form-group{
+.form-group {
     margin-bottom: 30px !important;
 }
 
 input[type="text"],
-input[type="password"]{
+input[type="password"] {
     height: 50px !important;
     width: 364px !important;
 }
+
+input[type="range"] {
+    -webkit-appearance: initial;
+    background: #4bd9f7;
+}
+
 
 .box input[type="submit"] {
     border: none;
