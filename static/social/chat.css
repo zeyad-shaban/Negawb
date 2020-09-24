@@ -309,24 +309,10 @@ input.textarea {
     background: #fafafa;
     border: none;
     outline: none;
-    padding-left: 55px;
+    padding-left: 20px;
     padding-right: 55px;
     color: #666;
     font-weight: 400;
-}
-
-.emojis {
-    position: fixed;
-    display: block;
-    bottom: 8px;
-    left: 7px;
-    width: 34px;
-    height: 34px;
-    background-image: url('https://cdn.pixabay.com/photo/2015/07/09/22/26/warning-838655_960_720.png');
-    background-repeat: no-repeat;
-    background-size: cover;
-    z-index: 100;
-    cursor: pointer;
 }
 
 #send {
