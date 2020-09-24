@@ -93,62 +93,28 @@ def send_friend_message(request, pk):
             user_1=friend, user_2=request.user).first()
     message = Message(chat_box=chat_box, message_sender=request.user,
                       message=request.GET.get('message'))
-    if request.GET.get('is_important') == "True":
-        important_messages_in_last_day = Message.objects.filter(date__gt=now(
-        ) - datetime.timedelta(days=1), is_important=True, chat_box=chat_box, message_sender=request.user)
-        if important_messages_in_last_day.count() >= 3:
-            message = {
-                'text': 'You can only send 3 important messages each day for each chat',
-                'tags': 'error'
-            }
-        else:
-            message.is_important = True
-            # Notification importnat message
-            if message.is_important:
-                if friend.allow_important_friend_messages:
-                    notification = Notification.objects.create(
-                        notification_type='important_friend_message', sender=request.user, url=f'/social/chat_friend/{request.user.id}', content=f'Important message from {friend.username}: {message.message[:100]}')
-                    notification.save()
-                    notification.receiver.add(friend)
-                    for receiver in notification.receiver.all():
-                        if notification.sender.who_see_avatar == 'everyone':
-                            sender_avatar = notification.sender.avatar.url
-                        elif notification.sender.who_see_avatar == 'friends' and receiver in receiver.friends.all():
-                            sender_avatar = notification.sender.avatar.url
-                        else:
-                            sender_avatar = '/media/profile_images/DefaultUserImage.jpg'
-                        payload = {"head": f"An Important message from {notification.sender.username}",
-                                   "body": notification.content,
-                                   "url": notification.url,
-                                   "icon": sender_avatar,
-                                   }
-                        send_user_notification(
-                            user=receiver, payload=payload, ttl=1000)
-                message.is_important = request.GET.get(
-                    'is_important', False)
-    # Normal friend notification
-    else:
-        if friend.allow_normal_friend_message:
-            # !ABSOLUTE PATH
-            notification = Notification.objects.create(
-                notification_type='normal_friend_message', sender=request.user, url=f'/social/chat_friend/{request.user.id}', content=f'a message from {request.user.username}: {message.message[:100]}')
-            notification.save()
-            notification.receiver.add(friend)
-            for receiver in notification.receiver.all():
-                if notification.sender.who_see_avatar == 'everyone':
-                    sender_avatar = notification.sender.avatar.url
-                elif notification.sender.who_see_avatar == 'friends' and receiver in receiver.friends.all():
-                    sender_avatar = notification.sender.avatar.url
-                else:
-                    sender_avatar = '/media/profile_images/DefaultUserImage.jpg'
-                payload = {"head": f"Message from {notification.sender}",
-                           "body": notification.content,
-                           "url": notification.url,
-                           "icon": sender_avatar,
-                           }
-                send_user_notification(
-                    user=receiver, payload=payload, ttl=1000)
-        # End normal friend notification
+    # friend notification
+    if friend.allow_friends_notifications:
+        # !ABSOLUTE PATH
+        notification = Notification.objects.create(
+            type='friend_message', sender=request.user, url=f'/social/chat_friend/{request.user.id}', content=f'a message from {request.user.username}: {message.message[:100]}')
+        notification.save()
+        notification.receiver.add(friend)
+        for receiver in notification.receiver.all():
+            if notification.sender.who_see_avatar == 'everyone':
+                sender_avatar = notification.sender.avatar.url
+            elif notification.sender.who_see_avatar == 'friends' and receiver in receiver.friends.all():
+                sender_avatar = notification.sender.avatar.url
+            else:
+                sender_avatar = '/media/profile_images/DefaultUserImage.jpg'
+            payload = {"head": f"Message from {notification.sender}",
+                        "body": notification.content,
+                        "url": notification.url,
+                        "icon": sender_avatar,
+                        }
+            send_user_notification(
+                user=receiver, payload=payload, ttl=1000)
+    # End normal friend notification
     message.save()
     return JsonResponse({})
 
@@ -245,55 +211,23 @@ def send_group_message(request, pk):
         area = None
     message = GroupMessage(
         group=group, message_sender=request.user, message=request.GET.get('message'), area=area)
-    # Is important?
-    if request.GET.get('is_important') == "True":
-        important_messages_in_last_day = GroupMessage.objects.filter(date__gt=now(
-        ) - datetime.timedelta(days=1), is_important=True, group=group, message_sender=request.user)
-        if important_messages_in_last_day.count() >= 3:
-            message = {
-                'text': 'You can only send 3 important messages each day for each chat',
-                'tags': 'error'
-            }
-        else:
-            message.is_important = True
-            # Important group message notification
-            receivers = [member for member in group.members.filter(
-                Q(allow_important_group_message=True), ~Q(id=request.user.id))]
-            # !ABSOLUTE PATH
-            notification = Notification(notification_type='important_group_message',
-                                        sender=request.user, url=f'/socail/chat_group/{group.id}/', content=message.message[:100])
-            if receivers:
-                notification.save()
-                for receiver in receivers:
-                    if not receiver in area.muted_users.all():
-                        notification.receiver.add(receiver)
-                for receiver in notification.receiver.all():
-                    payload = {"head": f"Important message from {group.title} Group, {notification.sender}",
-                               "body": notification.content,
-                               "url": notification.url,
-                               "icon": group.image.url,
-                               }
-                    send_user_notification(
-                        user=receiver, payload=payload, ttl=1000)
-    else:
-        # Normal group notification
-        receivers = [member for member in group.members.filter(
-            Q(allow_normal_group_message=True), ~Q(id=request.user.id))]
-        notification = Notification(notification_type='normal_group_message',
-                                    sender=request.user, url=f'/socail/chat_group/{group.id}/', content=message.message[:100])
-        if receivers:
-            notification.save()
-            for receiver in receivers:
-                if not receiver in area.muted_users.all():
-                    notification.receiver.add(receiver)
-            for receiver in notification.receiver.all():
-                payload = {"head": f"A message from {group.title} Group, {notification.sender}",
-                           "body": notification.content,
-                           "url": notification.url,
-                           "icon": group.image.url,
-                           }
-                send_user_notification(
-                    user=receiver, payload=payload, ttl=1000)
+    # group notification
+    receivers = [member for member in group.members.filter(
+        Q(allow_groups_notifications=True), ~Q(id=request.user.id))]
+    notification = Notification(type='group_message', sender=request.user, url=f'/social/chat_group/{group.id}/', content=message.message[:100])
+    if receivers:
+        notification.save()
+        for receiver in receivers:
+            if not area or not receiver in area.muted_users.all():
+                notification.receiver.add(receiver)
+        for receiver in notification.receiver.all():
+            payload = {"head": f"A message from {group.title} Group, {notification.sender}",
+                        "body": notification.content,
+                        "url": notification.url,
+                        "icon": group.image.url,
+                        }
+            send_user_notification(
+                user=receiver, payload=payload, ttl=1000)
 
     message.save()
     return JsonResponse({})
@@ -355,7 +289,7 @@ def send_group_invite(request, user_pk, group_pk):
         group_request.save()
         # !ABSOLUTE PATH
         if reciever.allow_invites:
-            notification = Notification(notification_type='invites', sender=request.user,
+            notification = Notification(type='invites', sender=request.user,
                                         url='/user/requests/', content=f'{request.user.username} invited you to join {group.title}')
             notification.save()
             notification.receiver.add(reciever)
@@ -387,7 +321,7 @@ def join_group(request):
     group.members.add(request.user)
     group_request.delete()
     if group_request.request_sender.your_invites:
-        notification = Notification(notification_type='your_invites', sender=request.user,
+        notification = Notification(type='your_invites', sender=request.user,
                                     url=f'/social/chat_group/{group.id}/', content=f'{request.user} joined {group.title}')
         notification.save()
         notification.receiver.add(group_request.request_sender)
@@ -403,7 +337,7 @@ def deny_group(request):
     group_request = get_object_or_404(GroupRequest, pk=pk)
     group_request.delete()
     if group_request.request_sender.your_invites:
-        notification = Notification(notification_type='your_invites', sender=request.user,
+        notification = Notification(type='your_invites', sender=request.user,
                                     url=f'/people/{request.user.id}/', content=f'{request.user} Denied your invite to join {group_request.group.title}')
         notification.save()
         notification.receiver.add(group_request.request_sender)

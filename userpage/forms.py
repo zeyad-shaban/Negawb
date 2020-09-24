@@ -33,18 +33,11 @@ class UserPrivacyForm(forms.ModelForm):
 class DistractionFreeForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ('video_rate', 'image_rate', 'text_rate', 'homepage', 'hide_recommended_posts', 'hide_comments', 'blocked_topics', 'allow_important_friend_messages', 'allow_important_group_message', 'allow_normal_friend_message', 'allow_normal_group_message',
-                  'allow_comment_message', 'allow_reply_message', 'allow_invites', 'your_invites',)
+        fields = ('video_rate', 'image_rate', 'text_rate', 'homepage', 'hide_recommended_posts', 'hide_comments', 'blocked_topics',
+                  'allow_friends_notifications', 'allow_groups_notifications', 'allow_comments_notifications', 'allow_replies_notifications', 'allow_invites', 'your_invites',)
         labels = {
-            'allow_important_friend_messages': 'Friend\'s important message',
-            'allow_important_group_message': 'Group important message',
-            'allow_important_group_message': 'Group important message',
-            'allow_normal_friend_message': 'Friend\'s normal message',
-            'allow_normal_group_message': 'Group normal message',
-            'allow_comment_message': '<hr>Comments',
-            'allow_reply_message': 'Replies',
+            'allow_comments_notifications': '<hr>Allow comments notifications',
             'allow_invites': '<hr>friend and group Invites',
-            'your_invites': 'Your invites',
             'blocked_topics': 'Blocked topics <small class="form-text text-muted mb-3">Hold cmd/ctrl for desktop users</small>',
             'video_rate': '<label for="id_video_rate">Video rate</label>',
             'image_rate': '<label for="id_image_rate">Image rate</label>',

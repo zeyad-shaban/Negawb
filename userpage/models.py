@@ -318,12 +318,10 @@ class User(AbstractUser):
     homepage = models.CharField(
         max_length=25, choices=default_home_choices, default=default_home_choices[0])
     # notifications
-    allow_important_friend_messages = models.BooleanField(default=True)
-    allow_important_group_message = models.BooleanField(default=True)
-    allow_normal_friend_message = models.BooleanField(default=True)
-    allow_normal_group_message = models.BooleanField(default=True)
-    allow_comment_message = models.BooleanField(default=True)
-    allow_reply_message = models.BooleanField(default=True)
+    allow_friends_notifications = models.BooleanField(default=True)
+    allow_groups_notifications = models.BooleanField(default=True)
+    allow_comments_notifications = models.BooleanField(default=True)
+    allow_replies_notifications = models.BooleanField(default=True)
     allow_invites = models.BooleanField(default=True)
     your_invites = models.BooleanField(default=True)
 

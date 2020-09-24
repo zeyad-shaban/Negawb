@@ -98,9 +98,6 @@
 </ol>
 <form action="{% url 'social:send_friend_message' friend.id %}" method="get" id="sendForm">
     <input class="textarea" id="messageInput" type="text" name="message" placeholder="Type here!" />
-    <div class="emojis">
-        <input type="checkbox" name="is_important" id="is_important">
-    </div>
     <div id="send"><i class="far fa-paper-plane" style="font-size:30px; color:white;"></i></div>
 </form>
 

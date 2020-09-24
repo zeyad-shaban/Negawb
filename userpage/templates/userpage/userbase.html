@@ -91,7 +91,7 @@
                             <br>
                             <br>
                             {% for field in distraction_free_form %}
-                            {% if field.html_name == 'allow_important_friend_messages' or field.html_name == 'allow_important_group_message' or field.html_name == 'allow_normal_friend_message' or field.html_name == 'allow_normal_group_message' or field.html_name == 'allow_comment_message' or field.html_name == 'allow_reply_message' or field.html_name == 'allow_invites' or field.html_name == 'your_invites' %}
+                            {% if field.html_name == 'allow_friends_notifications' or field.html_name == 'allow_groups_notifications' or field.html_name == 'allow_comments_notifications' or field.html_name == 'allow_replies_notifications' or field.html_name == 'allow_invites' or field.html_name == 'your_invites' %}
                             <script>
                                 document.addEventListener('DOMContentLoaded', function () {
                                     window.addEventListener('load', function () {

@@ -119,7 +119,7 @@ def denyrequest(request):
     denied_request = get_object_or_404(FriendRequest, pk=pk)
     denied_request.delete()
     if denied_request.from_user.your_invites:
-        notification = Notification(notification_type='your_invites', sender=request.user,
+        notification = Notification(type='your_invites', sender=request.user,
                                     url=f'/people/{request.user.id}/', content=f'{request.user} Denied your friend request')
         notification.save()
         notification.receiver.add(denied_request.from_user)
@@ -148,7 +148,7 @@ def acceptrequest(request):
 
     friend_request.delete()
     if friend_request.from_user.your_invites:
-        notification = Notification(notification_type='your_invites', sender=request.user,
+        notification = Notification(type='your_invites', sender=request.user,
                                     url=f'/people/{request.user.id}/', content=f'{request.user} Accepted your friend request')
         notification.save()
         notification.receiver.add(friend_request.from_user)
@@ -190,7 +190,7 @@ def unfriend(request, pk):
     user.friends.remove(friend)
     friend.friends.remove(user)
     if request.user.your_invites:
-        notification = Notification(notification_type='your_invite', sender=request.user,
+        notification = Notification(type='your_invite', sender=request.user,
                                     url=f"/people/{request.user.id}", content=f'{request.user} Unfriended you')
         notification.save()
         notification.receiver.add(friend)

@@ -26,7 +26,6 @@ class Message(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     message = models.TextField(blank=True, null=True)
     is_read = models.BooleanField(default=False)
-    is_important = models.BooleanField(default=False)
     # File attatchments
     file = models.FileField(
         upload_to='social_group_message_images', blank=True, null=True)
@@ -38,7 +37,7 @@ class Message(models.Model):
         upload_to='social/friend_message_video', blank=True, null=True)
 
     def __str__(self):
-        return f'{self.message_sender} to ({self.chat_box}) ⚠️{self.is_important}⚠️'
+        return f'{self.message_sender} to {self.chat_box}'
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
@@ -114,7 +113,6 @@ class GroupMessage(models.Model):
     audio = models.ImageField(
         upload_to='social/group_audio', null=True, blank=True)
     # Files ////////
-    is_important = models.BooleanField(default=False)
     area = models.ForeignKey(
         Area, on_delete=models.CASCADE, null=True, blank=True, default='')
 
@@ -133,14 +131,10 @@ class GroupMessage(models.Model):
 
 
 class Notification(models.Model):
-    notification_type_choices = [
+    type_choices = [
         # Messages
-        # * important
-        ('important_friend_message', 'important_friend_message'),
-        ('important_group_message', 'important_group_message'),
-        # * noraml
-        ('normal_friend_message', 'normal_friend_message'),
-        ('normal_group_message', 'normal_group_message'),
+        ('friend_message', 'friend_message'),
+        ('group_message', 'group_message'),
         # Society
         ('comment_message', 'comment_message'),
         ('reply_message', 'reply_message'),
@@ -150,8 +144,8 @@ class Notification(models.Model):
         # * you
         ('your_invites', 'your_invites'),
     ]
-    notification_type = models.CharField(
-        max_length=50, choices=notification_type_choices)
+    type = models.CharField(
+        max_length=50, choices=type_choices, default="friend_message")
     receiver = models.ManyToManyField(
         User, related_name="notification_receiver", default=None)
     sender = models.ForeignKey(

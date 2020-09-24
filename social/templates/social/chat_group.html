@@ -104,9 +104,6 @@
 </ol>
 <form action="{% url 'social:send_group_message' group.id %}" method="get" id="sendForm">
     <input class="textarea" id="messageInput" type="text" name="message" placeholder="Type here!" />
-    <div class="emojis">
-        <input type="checkbox" name="is_important" id="is_important">
-    </div>
     <div id="send"><i class="far fa-paper-plane" style="font-size:30px; color:white;"></i></div>
     <select id="id_area_name" name='id_area_name'>
         <option value="None">All</option>
