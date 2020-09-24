@@ -30,6 +30,23 @@
         <p><span id="followersCount">{{ user.followers.count }}</span> Followers</p>
     </div>
 
+    {% if not user.is_authenticated %}
+    <script>
+        document.querySelector('button[data-target="#editProfile"]').onclick = function (e) {
+            setTimeout(() => {
+                for (closeBtn of document.querySelectorAll(
+                        'button[data-dismiss="modal"]')) {
+                    closeBtn.click()
+                }
+                document.querySelector('#signupHeader').innerHTML =
+                    'Oops, it looks like you don\'t have an account!'
+                document.querySelector('#signup').click()
+                document.querySelector('#closeSignup').style.display = 'none';
+            }, 2300);
+        }
+    </script>
+    {% endif %}
+
     <nav id="optionsNavbar">
         <ul>
             <li><a href="{% url 'userpage:posts' %}">{{ user.post_set.count }} Posts</a></li>

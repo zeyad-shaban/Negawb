@@ -268,28 +268,28 @@ pagead/js/adsbygoogle.js"></script>
         </div>
         <div id="authBtns">
             <button type="button" class="btn " data-toggle="modal" data-target="#loginFloatForm"
-                id="login">Login</button>
-            <button type="button" class="btn" data-toggle="modal" data-target="#signupFloatForm" id="signup">Sign
+                id="login">Log in</button>
+            <button type="button" class="btn" data-toggle="modal" data-target="#signupForm" id="signup">Sign
                 Up</button>
         </div>
     </div>
 
     <!-- ---------------------SIGNUP MODAL--------------------- -->
-    <div class="modal fade" id="signupFloatForm" tabindex="-1" role="dialog" aria-labelledby="signupFloatFormLabel"
-        aria-hidden="true">
+    <div class="modal fade" id="signupForm" tabindex="-1" role="dialog" aria-labelledby="signupFloatFormLabel"
+        aria-hidden="true" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="closeSignup">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <h2 style="margin: 0 0 1.875rem; text-align: center;">Join Dfreemedia</h2>
+                    <h2 style="margin: 0 0 1.875rem; text-align: center;" id="signupHeader">Sign up for Dfreemedia</h2>
                     <div style="text-align: center;">
                         <a href="{% provider_login_url 'google' %}" class="social-login google-login"><img
                                 src="https://cdn.pixabay.com/photo/2015/12/11/11/43/google-1088004_960_720.png" alt="G">
-                            Login with
+                            Sign up with
                             Google</a>
                         <a href="#" class="social-login facebook-login" style="display: none;"><img
                                 src="https://cdn.pixabay.com/photo/2017/06/22/06/22/facebook-2429746_960_720.png"
@@ -319,12 +319,15 @@ pagead/js/adsbygoogle.js"></script>
                             <label for="id_video_rate">Video rate 50</label>
                             <input type="range" name="video_rate" value="50" required="" id="id_video_rate">
                             <br>
+                            <br>
                             <label for="id_image_rate">Image rate 50</label>
                             <input type="range" name="image_rate" value="50" required="" id="id_image_rate">
                             <br>
-                            
+                            <br>
+
                             <label for="id_text_rate">Text rate 50</label>
                             <input type="range" name="text_rate" value="50" required="" id="id_text_rate">
+                            <br>
                             <br>
 
                             <div id="div_id_blocked_topics" class="form-group"> <label for="id_blocked_topics"
@@ -345,6 +348,10 @@ pagead/js/adsbygoogle.js"></script>
                                 Conditions</a>, <a href="{% url 'privacypolicy' %}" target="_blank">Privacy
                                 Policy</a>, and <a href="{% url 'cookiepolicy' %}" target="_blank">Cookie
                                 Policy</a></small>
+                        <p>Have an account? <b
+                                onclick="document.getElementById('closeSignup').click(); document.getElementById('login').click();"
+                                style="cursor: pointer; color: rgb(13, 185, 207)">Login</b>
+                        </p>
                         <input type="submit" name="sign-up" value="SIGN UP" class="floatAuthBtn" id="mainFloatSignupBtn"
                             style="display: none;">
                     </form>
@@ -410,10 +417,13 @@ pagead/js/adsbygoogle.js"></script>
 
     <script>
         // -------show signup modal-------------
-        setTimeout(() => {
-            $('#signupFloatForm').modal('show')
-        }, 7000);
-
+        window.onscroll = function (e) {
+            if (window.scrollY >= 3052) {
+                document.querySelector('#closeSignup').style.display = 'none'
+                document.querySelector('#signup').click()
+                document.querySelector('#signupHeader').innerHTML = 'Sign up for Dfreemedia to continue'
+            }
+        }
         // -----------Select ranges----------
         console.log('about to add those functions')
         document.querySelector('#id_video_rate').onchange = function (e) {

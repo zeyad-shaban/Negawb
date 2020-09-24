@@ -163,6 +163,16 @@
         </div>
     </div>
 </div>
+
+{% if not user.is_authenticated %}
+    <script>
+        setTimeout(() => {
+            document.querySelector('#signup').click()
+            document.querySelector('#signupHeader').innerHTML = 'Sign up for Dfreemedia to continue'
+        }, 5000);
+    </script>
+{% endif %}
+    
 <link rel="stylesheet" href="{% static 'social/chathome.css' %}">
 <script src="{% static 'social/chathome.js' %}"></script>
 
