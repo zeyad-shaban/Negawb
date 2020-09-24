@@ -422,10 +422,6 @@
                     }
 
                     // end last message id
-                    let isImportant = "False"
-                    if ($('#is_important').is(':checked')) {
-                        isImportant = "True"
-                    }
                     // Todo
                     $('.chat').append(`
                         <li class="self message" data-pk="${newLastMessageId}">
@@ -446,7 +442,6 @@
                         url: $('#sendForm').attr('action'),
                         data: {
                             'message': messageInput,
-                            'is_important': isImportant,
                             'area': $('#id_area_name').val()
                         },
                         method: 'get',
