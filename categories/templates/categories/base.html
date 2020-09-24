@@ -263,8 +263,8 @@ pagead/js/adsbygoogle.js"></script>
     <!-- ---------------------STICKY LOGIN/SIGNUP--------------------- -->
     <div id="floatAuthForm">
         <div class="float-left" id="appDesc">
-            <h4 style="margin-left: 30px">Why having 5 social media apps?!</h4>
-            <p class="ml-4">Customize Dfreemedia to match your needs.</p>
+            <h4>Don't let control your app?!</h4>
+            <p style="margin-left: 100px;">Customize Dfreemedia to make it perfect for your needs.</p>
         </div>
         <div id="authBtns">
             <button type="button" class="btn " data-toggle="modal" data-target="#loginFloatForm"
@@ -354,6 +354,11 @@ pagead/js/adsbygoogle.js"></script>
                         </p>
                         <input type="submit" name="sign-up" value="SIGN UP" class="floatAuthBtn" id="mainFloatSignupBtn"
                             style="display: none;">
+                            <script>
+                                document.querySelector('#mainFloatSignupBtn').onclick = function(e){
+                                    ga('send', 'event', 'Authentication', 'click', 'Clicked sign up');
+                                }
+                            </script>
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -452,7 +457,6 @@ pagead/js/adsbygoogle.js"></script>
         }
 
         #appDesc {
-            margin-left: 10vh;
             margin-top: 0.5%;
         }
 
