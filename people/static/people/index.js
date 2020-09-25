@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                     `
                                         // Image
                                         if (post.fields.image) {
-                                            output += `<img src="/media/${post.fields.image}" alt="" style="width:80%; height: auto; margin-left: auto; margin-right: auto;">`
+                                            output += `<img src="/media/${post.fields.image}" alt="" style="max-width:100%; height: 40vw; margin-left: auto; margin-right: auto;">`
                                         }
                                         // Video
                                         if (post.fields.post_file) {
@@ -212,7 +212,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     .html()) + 1)
             }
             $.ajax({
-                url: "{% url 'people:follow' view_user.id %}",
+                url: $(this).attr('data-url'),
                 dataType: 'json',
                 success: function (data) {}
             })

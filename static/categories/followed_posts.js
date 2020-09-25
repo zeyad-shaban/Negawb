@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
 
         // Paginator
         let page = 2
+
         function bottomScroll() {
             // homepage posts
             if ($(window).scrollTop() + $(window).height() == $(document).height()) {
@@ -72,7 +73,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
                                     `
                                         // Image
                                         if (post.fields.image) {
-                                            output += `<img src="/media/${post.fields.image}" alt="" style="width:80%; height: auto; margin-left: auto; margin-right: auto;">`
+                                            output += `<img src="/media/${post.fields.image}" alt="" style="max-width:100%; height: 40vw; margin-left: auto; margin-right: auto;">`
                                         }
                                         // Video
                                         if (post.fields.post_file) {

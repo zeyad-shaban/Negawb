@@ -29,20 +29,20 @@ def home(request):
                 total = len(posts_list)
                 if post.post_file:
                     # Video post
-                    if video_count <= total * int(request.user.video_rate) or total <= 0:
+                    if video_count <= total * int(request.user.video_rate)/100 or total <= 0:
                         video_count += 1
                         posts_list.append(post)
 
                 elif post.image:
                     # Image post
-                    if image_count <= total * int(request.user.image_rate) or total <= 0:
+                    if image_count <= total * int(request.user.image_rate)/100 or total <= 0:
                         image_count += 1
                         posts_list.append(post)
                         
                 elif post.description:
                     # Txt post
-                    if txt_count <= total * int(request.user.text_rate) or total <= 0:
-                        image_count += 1
+                    if txt_count <= total * int(request.user.text_rate)/100 or total <= 0:
+                        txt_count += 1
                         posts_list.append(post)
     else:
         posts_list = Post.objects.all().order_by('-post_date')
@@ -67,8 +67,7 @@ def followed_posts(request):
         followed = User.objects.filter(Q(followers=request.user))
     else:
         followed = []
-    posts_list = Post.objects.filter(
-        user__in=followed).order_by('-post_date')
+    posts_list = Post.objects.filter(Q(user__in=followed)).order_by('-post_date')
     paginator = Paginator(posts_list, 5)
     page = request.GET.get('page')
     try:

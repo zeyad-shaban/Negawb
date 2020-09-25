@@ -33,10 +33,12 @@
     <div id="buttons">
         <!-- Follow -->
         {% if user in view_user.followers.all %}
-        <button id="followUser" type="submit" name='submit' class="unfollow"><i class="fas fa-minus"></i>
+        <button id="followUser" type="submit" name='submit' class="unfollow"
+            data-url="{% url 'people:follow' view_user.id %}"><i class="fas fa-minus"></i>
             Unfollow</button>
         {% else %}
-        <button id="followUser" type="submit" name='submit' class="follow"><i class="fas fa-plus"></i>
+        <button id="followUser" type="submit" name='submit' class="follow"
+            data-url="{% url 'people:follow' view_user.id %}"><i class="fas fa-plus"></i>
             Follow</button>
         {% endif %}
 
@@ -94,7 +96,7 @@
                 <!-- Image -->
                 {% if post.image %}
                 <img src="{{ post.image.url }}" alt=""
-                    style="width:80%; height: auto; margin-left: auto; margin-right: auto;" loading="lazy">
+                    style="max-width:100%; height: 40vw; margin-left: auto; margin-right: auto;" loading="lazy">
                 {% endif %}
                 <!-- File -->
                 {% if post.post_file %}
